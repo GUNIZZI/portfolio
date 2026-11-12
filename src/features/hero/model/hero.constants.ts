@@ -14,3 +14,6 @@ export const HERO_TAG_TONE_CLASS = {
     info: 'text-info',
     neutral: 'text-foreground',
 } as const satisfies Record<HeroTagTone, string>;
+
+/** 포인터가 히어로 끝에 닿았을 때 깊이 1 인 낙서가 밀리는 거리(px) */
+export const HERO_PARALLAX_PX = 14;
