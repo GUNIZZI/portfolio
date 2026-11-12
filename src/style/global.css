@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+@import './tokens/color.css';
+@import './tokens/typography.css';
+@import './tokens/layout.css';
+@import './tokens/motion.css';
+@import './tokens/layer.css';
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-background font-sans text-strong antialiased;
+    /* 한글은 어절 단위로 줄을 바꾼다 */
+    word-break: keep-all;
+  }
+
+  a {
+    @apply text-strong no-underline;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-4 outline-ring;
+  }
+
+  ::selection {
+    @apply bg-accent text-accent-foreground;
+  }
+}

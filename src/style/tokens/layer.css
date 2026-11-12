@@ -1,0 +1,35 @@
+/*
+ * 층(z-index) 토큰. 숫자 z-index 를 쓰지 않고 역할로 고른다.
+ */
+
+@theme {
+  --z-index-base: 0;
+  --z-index-raised: 10;
+  --z-index-float: 20;
+  --z-index-header: 100;
+  --z-index-overlay: 200;
+  --z-index-modal: 300;
+  --z-index-cursor: 900;
+}
+
+@utility z-base {
+  z-index: var(--z-index-base);
+}
+@utility z-raised {
+  z-index: var(--z-index-raised);
+}
+@utility z-float {
+  z-index: var(--z-index-float);
+}
+@utility z-header {
+  z-index: var(--z-index-header);
+}
+@utility z-overlay {
+  z-index: var(--z-index-overlay);
+}
+@utility z-modal {
+  z-index: var(--z-index-modal);
+}
+@utility z-cursor {
+  z-index: var(--z-index-cursor);
+}

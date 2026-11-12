@@ -1,0 +1,45 @@
+/*
+ * 모션 토큰 — CSS 쪽. JS 쪽은 같은 폴더의 motion.ts 다.
+ * 두 파일의 값은 __test__/motion.test.ts 가 같은지 검사한다. 한쪽만 고치면 테스트가 깨진다.
+ * 규칙 전문은 docs/motion.md 가 갖는다.
+ */
+
+@theme {
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.64, 0, 0.78, 0);
+  --ease-move: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-base: 400ms;
+  --duration-slow: 800ms;
+  --duration-slower: 1200ms;
+}
+
+@utility duration-instant {
+  transition-duration: var(--duration-instant);
+}
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+}
+@utility duration-slower {
+  transition-duration: var(--duration-slower);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+  }
+}

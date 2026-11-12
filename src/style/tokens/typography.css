@@ -1,0 +1,33 @@
+/*
+ * 글자 토큰. 서체와 크기의 출처는 docs/design.md 2절이 갖는다.
+ * 서체 파일은 app/layout.tsx 가 next/font 로 불러온다.
+ */
+
+@theme inline {
+  --font-sans: var(--font-noto-sans-kr), system-ui, sans-serif;
+  --font-marker: var(--font-permanent-marker), cursive;
+  --font-hand: var(--font-caveat), cursive;
+
+  /* 고정 크기. Tailwind 기본 눈금에 없는 값만 더한다 */
+  --text-2xs: 11px;
+  --text-caption: 13px;
+  --text-body: 15px;
+  --text-lead: 17px;
+  --text-stat: 26px;
+  --text-hand-sm: 28px;
+  --text-hand: 34px;
+
+  /* 화면 폭에 따라 커지는 크기 */
+  --text-hero: clamp(64px, 11vw, 132px);
+  --text-hero--line-height: 0.95;
+  --text-hero-sub: clamp(44px, 6vw, 72px);
+  --text-hero-sub--line-height: 1;
+  --text-greeting: clamp(30px, 4vw, 42px);
+  --text-role: clamp(26px, 3.4vw, 38px);
+  --text-section: clamp(26px, 3.2vw, 36px);
+  --text-contact: clamp(40px, 5vw, 56px);
+  --text-bubble: clamp(15px, 2.3vw, 26px);
+  --text-bubble--line-height: 0.95;
+  --text-note: clamp(18px, 2.6vw, 30px);
+  --text-note--line-height: 1.05;
+}
