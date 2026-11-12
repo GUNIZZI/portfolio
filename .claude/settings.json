@@ -1,50 +1,50 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(: > .git/.commit-skill-token)",
-      "Bash(: > .git/.commit-docs-ok)",
-      "Bash(./.claude/skills/commit/status.sh)",
-      "Bash(./.claude/skills/commit/verify.sh:*)",
-      "Bash(pnpm check)",
-      "Bash(pnpm tc)",
-      "Bash(pnpm lint)",
-      "Bash(pnpm lint:fix)",
-      "Bash(pnpm format)",
-      "Bash(pnpm format:check)",
-      "Bash(pnpm test:*)",
-      "Bash(pnpm build)",
-      "Bash(git status:*)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)"
-    ],
-    "deny": ["Bash(git push:*)", "Bash(git commit --no-verify:*)", "Bash(git commit -n:*)"]
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-commit.py\""
-          }
+    "permissions": {
+        "allow": [
+            "Bash(: > .git/.commit-skill-token)",
+            "Bash(: > .git/.commit-docs-ok)",
+            "Bash(./.claude/skills/commit/status.sh)",
+            "Bash(./.claude/skills/commit/verify.sh:*)",
+            "Bash(pnpm check)",
+            "Bash(pnpm tc)",
+            "Bash(pnpm lint)",
+            "Bash(pnpm lint:fix)",
+            "Bash(pnpm format)",
+            "Bash(pnpm format:check)",
+            "Bash(pnpm test:*)",
+            "Bash(pnpm build)",
+            "Bash(git status:*)",
+            "Bash(git diff:*)",
+            "Bash(git log:*)"
+        ],
+        "deny": ["Bash(git push:*)", "Bash(git commit --no-verify:*)", "Bash(git commit -n:*)"]
+    },
+    "hooks": {
+        "PreToolUse": [
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-commit.py\""
+                    }
+                ]
+            }
+        ],
+        "PostToolUse": [
+            {
+                "matcher": "Write|Edit",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/format.py\""
+                    },
+                    {
+                        "type": "command",
+                        "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_tokens.py\""
+                    }
+                ]
+            }
         ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/format.py\""
-          },
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_tokens.py\""
-          }
-        ]
-      }
-    ]
-  }
+    }
 }

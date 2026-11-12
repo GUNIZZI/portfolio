@@ -6,32 +6,32 @@
 @import './tokens/layer.css';
 
 @layer base {
-  html {
-    color-scheme: dark;
-    scroll-behavior: smooth;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
     html {
-      scroll-behavior: auto;
+        color-scheme: dark;
+        scroll-behavior: smooth;
     }
-  }
 
-  body {
-    @apply bg-background font-sans text-strong antialiased;
-    /* 한글은 어절 단위로 줄을 바꾼다 */
-    word-break: keep-all;
-  }
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
 
-  a {
-    @apply text-strong no-underline;
-  }
+    body {
+        @apply bg-background font-sans text-strong antialiased;
+        /* 한글은 어절 단위로 줄을 바꾼다 */
+        word-break: keep-all;
+    }
 
-  :focus-visible {
-    @apply outline-2 outline-offset-4 outline-ring;
-  }
+    a {
+        @apply text-strong no-underline;
+    }
 
-  ::selection {
-    @apply bg-accent text-accent-foreground;
-  }
+    :focus-visible {
+        @apply outline-2 outline-offset-4 outline-ring;
+    }
+
+    ::selection {
+        @apply bg-accent text-accent-foreground;
+    }
 }

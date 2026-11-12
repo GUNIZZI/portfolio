@@ -30,58 +30,58 @@ const __dirname = path.dirname(__filename);
 const planDir = path.join(__dirname, '../docs/plan');
 
 const escapeHtml = (text) =>
-  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 // Markdown 표의 행을 셀 배열로 바꾼다. 구분선(| --- |)은 버린다.
 const parseTableRows = (lines) =>
-  lines
-    .filter((line) => line.trim().startsWith('|') && !/^\|[\s|:-]+\|$/.test(line.trim()))
-    .map((line) =>
-      line
-        .trim()
-        .slice(1, -1)
-        .split('|')
-        .map((cell) => cell.trim()),
-    );
+    lines
+        .filter((line) => line.trim().startsWith('|') && !/^\|[\s|:-]+\|$/.test(line.trim()))
+        .map((line) =>
+            line
+                .trim()
+                .slice(1, -1)
+                .split('|')
+                .map((cell) => cell.trim()),
+        );
 
 // 제목 줄 다음부터 다음 제목 전까지를 돌려준다
 const sectionLines = (markdown, heading) => {
-  const lines = markdown.split('\n');
-  const start = lines.findIndex((line) => line.replace(/^#+\s*(\d+\.\s*)?/, '') === heading);
-  if (start < 0) return [];
-  const rest = lines.slice(start + 1);
-  const end = rest.findIndex((line) => /^#{1,3}\s/.test(line));
-  return end < 0 ? rest : rest.slice(0, end);
+    const lines = markdown.split('\n');
+    const start = lines.findIndex((line) => line.replace(/^#+\s*(\d+\.\s*)?/, '') === heading);
+    if (start < 0) return [];
+    const rest = lines.slice(start + 1);
+    const end = rest.findIndex((line) => /^#{1,3}\s/.test(line));
+    return end < 0 ? rest : rest.slice(0, end);
 };
 
 // 「구조」 표에서 기획 폴더 목록을 읽는다
 const readPlanFolders = () => {
-  const readme = fs.readFileSync(path.join(planDir, 'README.md'), 'utf-8');
-  const rows = parseTableRows(sectionLines(readme, '구조')).slice(1);
-  return rows.map(([, doc]) => doc?.match(/\]\(\.\/(.+)\/README\.md\)/)?.[1]).filter(Boolean);
+    const readme = fs.readFileSync(path.join(planDir, 'README.md'), 'utf-8');
+    const rows = parseTableRows(sectionLines(readme, '구조')).slice(1);
+    return rows.map(([, doc]) => doc?.match(/\]\(\.\/(.+)\/README\.md\)/)?.[1]).filter(Boolean);
 };
 
 // 「페이지 위치」 표에서 스코프와 라우트를 읽는다
 const readPageScope = (folder) => {
-  const readme = fs.readFileSync(path.join(planDir, folder, 'README.md'), 'utf-8');
-  const table = Object.fromEntries(
-    parseTableRows(sectionLines(readme, '페이지 위치')).map(([k, v]) => [k, v]),
-  );
-  // 구역은 docs/commit.md 「영역」 의 이름과 같다 — 메인 · 작업 · 소개 · 공통 · 관리
-  const parts = [table['구역'], table['페이지명']].map((value) => (value ?? '').trim());
-  return {
-    scope: parts.filter(Boolean),
-    route: (table['라우트'] ?? '').replace(/`/g, ''),
-  };
+    const readme = fs.readFileSync(path.join(planDir, folder, 'README.md'), 'utf-8');
+    const table = Object.fromEntries(
+        parseTableRows(sectionLines(readme, '페이지 위치')).map(([k, v]) => [k, v]),
+    );
+    // 구역은 docs/commit.md 「영역」 의 이름과 같다 — 메인 · 작업 · 소개 · 공통 · 관리
+    const parts = [table['구역'], table['페이지명']].map((value) => (value ?? '').trim());
+    return {
+        scope: parts.filter(Boolean),
+        route: (table['라우트'] ?? '').replace(/`/g, ''),
+    };
 };
 
 const renderNav = (plans) =>
-  plans
-    .map(({ folder, scope, route }) => {
-      const scopeHtml = scope.map(escapeHtml).join(' <span class="sep">&gt;</span> ');
-      return `    <a class="plan" href="./${folder}/wireframe.html" target="view" data-key="${escapeHtml(folder)}"><span class="scope">${scopeHtml}</span><span class="route">${escapeHtml(route)}</span></a>`;
-    })
-    .join('\n');
+    plans
+        .map(({ folder, scope, route }) => {
+            const scopeHtml = scope.map(escapeHtml).join(' <span class="sep">&gt;</span> ');
+            return `    <a class="plan" href="./${folder}/wireframe.html" target="view" data-key="${escapeHtml(folder)}"><span class="scope">${scopeHtml}</span><span class="route">${escapeHtml(route)}</span></a>`;
+        })
+        .join('\n');
 
 const renderPage = (plans) => `<!doctype html>
 <html lang="ko">
@@ -188,13 +188,13 @@ ${renderNav(plans)}
 `;
 
 const plans = readPlanFolders().map((folder) => ({
-  folder,
-  ...readPageScope(folder),
+    folder,
+    ...readPageScope(folder),
 }));
 
 for (const { folder, scope } of plans) {
-  if (scope.length < 2)
-    console.warn(`[plan-index] ${folder}: 「페이지 위치」 표에서 스코프를 다 읽지 못했다`);
+    if (scope.length < 2)
+        console.warn(`[plan-index] ${folder}: 「페이지 위치」 표에서 스코프를 다 읽지 못했다`);
 }
 
 fs.writeFileSync(path.join(planDir, 'index.html'), renderPage(plans));
@@ -204,9 +204,9 @@ const FLOW_START = '<!-- userflow:start -->';
 const FLOW_END = '<!-- userflow:end -->';
 
 const renderFlowBlock = (markdown, scriptPath) => {
-  if (markdown.includes('</script'))
-    throw new Error('userflow.md 에 </script 가 있어 HTML 에 담을 수 없다');
-  return `${FLOW_START}
+    if (markdown.includes('</script'))
+        throw new Error('userflow.md 에 </script 가 있어 HTML 에 담을 수 없다');
+    return `${FLOW_START}
 <!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
 <section class="flow" id="flow">
   <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
@@ -220,22 +220,25 @@ ${FLOW_END}`;
 };
 
 for (const { folder } of plans) {
-  const wireframePath = path.join(planDir, folder, 'wireframe.html');
-  const html = fs.readFileSync(wireframePath, 'utf-8');
-  const start = html.indexOf(FLOW_START);
-  const end = html.indexOf(FLOW_END);
-  if (start < 0 || end < start) {
-    console.warn(
-      `[plan-index] ${folder}/wireframe.html: ${FLOW_START} 표시가 없어 유저 플로우를 넣지 않았다`,
+    const wireframePath = path.join(planDir, folder, 'wireframe.html');
+    const html = fs.readFileSync(wireframePath, 'utf-8');
+    const start = html.indexOf(FLOW_START);
+    const end = html.indexOf(FLOW_END);
+    if (start < 0 || end < start) {
+        console.warn(
+            `[plan-index] ${folder}/wireframe.html: ${FLOW_START} 표시가 없어 유저 플로우를 넣지 않았다`,
+        );
+        continue;
+    }
+    const markdown = fs.readFileSync(path.join(planDir, folder, 'userflow.md'), 'utf-8');
+    const scriptPath = path
+        .relative(path.join(planDir, folder), path.join(planDir, 'userflow.js'))
+        .split(path.sep)
+        .join('/');
+    const block = renderFlowBlock(markdown, scriptPath);
+    fs.writeFileSync(
+        wireframePath,
+        html.slice(0, start) + block + html.slice(end + FLOW_END.length),
     );
-    continue;
-  }
-  const markdown = fs.readFileSync(path.join(planDir, folder, 'userflow.md'), 'utf-8');
-  const scriptPath = path
-    .relative(path.join(planDir, folder), path.join(planDir, 'userflow.js'))
-    .split(path.sep)
-    .join('/');
-  const block = renderFlowBlock(markdown, scriptPath);
-  fs.writeFileSync(wireframePath, html.slice(0, start) + block + html.slice(end + FLOW_END.length));
-  console.warn(`[plan-index] docs/plan/${folder}/wireframe.html — 유저 플로우`);
+    console.warn(`[plan-index] docs/plan/${folder}/wireframe.html — 유저 플로우`);
 }

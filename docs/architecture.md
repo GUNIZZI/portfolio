@@ -10,7 +10,7 @@ Kozipsa(`admin-next/docs/architecture.md`)의 구조를 가져오고, 백엔드�
 ## 원칙
 
 1. **의존은 위에서 아래로만 흐른다.** 역방향 import 를 하지 않는다.
-   - `entities` 가 `features` 를 참조하면 도메인 로직이 특정 화면에 묶여 재사용할 수 없다.(Kozipsa 원칙 2)
+    - `entities` 가 `features` 를 참조하면 도메인 로직이 특정 화면에 묶여 재사용할 수 없다.(Kozipsa 원칙 2)
 2. **애매하면 좁은 범위에 둔다.** 2번째 사용처가 생겼을 때 위로 올린다.(Kozipsa 원칙 3)
 3. **최상위 디렉터리를 새로 만들지 않는다.** `src` 아래 10개가 전부다.(Kozipsa 원칙 4)
 

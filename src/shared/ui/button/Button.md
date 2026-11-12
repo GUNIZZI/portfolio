@@ -12,8 +12,8 @@
 
 ```tsx
 <Button href="#projects">
-  View My Projects
-  <Icon name="arrowRight" size={18} strokeWidth={2.2} />
+    View My Projects
+    <Icon name="arrowRight" size={18} strokeWidth={2.2} />
 </Button>
 ```
 

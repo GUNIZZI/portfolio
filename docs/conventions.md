@@ -27,13 +27,13 @@ export type ProjectFrontmatterType = z.infer<typeof ProjectFrontmatterSchema>;
 
 ```ts
 export interface ProjectResponse {
-  slug: string;
-  frontmatter: ProjectFrontmatterType;
+    slug: string;
+    frontmatter: ProjectFrontmatterType;
 } // 원문
 export interface ProjectData {
-  slug: string;
-  title: string;
-  yearText: string;
+    slug: string;
+    title: string;
+    yearText: string;
 } // 가공본
 ```
 
@@ -59,8 +59,8 @@ export const projectRepository: ProjectRepository = { … };
 import 'server-only';
 
 export async function getProjectList(): Promise<ProjectData[]> {
-  const list = await projectRepository.getProjectList();
-  return list.toSorted(byYearDesc).map(toProjectData);
+    const list = await projectRepository.getProjectList();
+    return list.toSorted(byYearDesc).map(toProjectData);
 }
 ```
 
@@ -135,14 +135,14 @@ ESLint `simple-import-sort` 가 고친다. 순서는 Kozipsa 2.4 와 같다.
 'use client';
 
 interface OwnProps {
-  title: string;
+    title: string;
 }
 
 export default function HeroTitle({ title }: OwnProps) {
-  function hndlPointerMove() {
-    /* ... */
-  }
-  return <h1 className={cn('text-strong', isActive && 'text-accent')}>{title}</h1>;
+    function hndlPointerMove() {
+        /* ... */
+    }
+    return <h1 className={cn('text-strong', isActive && 'text-accent')}>{title}</h1>;
 }
 ```
 
@@ -177,16 +177,16 @@ export { default as Hero } from './ui/Hero';
 
 ```tsx
 <a
-  className={cn(
-    // 배치와 모양
-    'inline-flex items-center gap-2 rounded-full px-5 py-3',
-    // 글자
-    'text-sm font-medium text-strong',
-    // hover
-    'hover:bg-surface',
-    // 모션
-    'transition-colors duration-fast ease-enter',
-  )}
+    className={cn(
+        // 배치와 모양
+        'inline-flex items-center gap-2 rounded-full px-5 py-3',
+        // 글자
+        'text-sm font-medium text-strong',
+        // hover
+        'hover:bg-surface',
+        // 모션
+        'transition-colors duration-fast ease-enter',
+    )}
 />
 ```
 

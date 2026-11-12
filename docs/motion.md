@@ -6,7 +6,7 @@
 ## 원칙
 
 1. **도구는 framer-motion 과 GSAP 2개만 쓴다.**(2026-11-11 사용자 결정)
-   - 다른 모션 라이브러리(Lenis, three 등)를 추가하지 않는다. 필요하면 먼저 컨펌을 받는다.
+    - 다른 모션 라이브러리(Lenis, three 등)를 추가하지 않는다. 필요하면 먼저 컨펌을 받는다.
 2. **값은 토큰으로만 쓴다.** 지속시간·가속도·간격을 숫자로 적지 않는다.
 3. **동작 줄이기 설정을 따른다.** OS 에서 동작 줄이기를 켠 사용자에게는 움직임 없이 최종 상태를 보여 준다.
 4. **`transform` 과 `opacity` 만 움직인다.** `width` · `top` · `margin` 을 애니메이션하면 매 프레임 레이아웃을 다시 계산한다.
@@ -48,8 +48,8 @@
 // framer-motion
 import { DURATION, EASE } from '@/style/tokens/motion';
 const titleVariants = {
-  hidden: { opacity: 0, y: 24 },
-  shown: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE.enter } },
+    hidden: { opacity: 0, y: 24 },
+    shown: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE.enter } },
 };
 ```
 
@@ -79,13 +79,13 @@ gsap.from(el, { y: 24, opacity: 0, duration: DURATION.slow, ease: 'enter' });
 
 ```ts
 useGSAP(
-  () => {
-    const mm = gsap.matchMedia();
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      /* 연출 */
-    });
-  },
-  { scope: rootRef },
+    () => {
+        const mm = gsap.matchMedia();
+        mm.add('(prefers-reduced-motion: no-preference)', () => {
+            /* 연출 */
+        });
+    },
+    { scope: rootRef },
 );
 ```
 

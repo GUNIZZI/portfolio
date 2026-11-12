@@ -6,10 +6,10 @@
 ## 원칙
 
 1. **색은 semantic 유틸리티로만 쓴다.** `bg-background` `text-foreground` `border-border`.
-   - `bg-white` 나 `text-gray-900` 은 토큰을 고쳐도 함께 바뀌지 않는다. hex 를 직접 적지 않는다.
+    - `bg-white` 나 `text-gray-900` 은 토큰을 고쳐도 함께 바뀌지 않는다. hex 를 직접 적지 않는다.
 2. **글자색은 `strong` › `foreground` › `muted` › `decorative` 4계층 안에서 고른다.**
-   - 앞의 3개만 본문 대비 기준(WCAG AA)을 넘도록 값을 정한다. `decorative` 는 읽지 못해도 되는 글자에만 쓴다.
-   - 계층이 더 필요하면 색을 늘리지 않고 크기·굵기로 구분한다.
+    - 앞의 3개만 본문 대비 기준(WCAG AA)을 넘도록 값을 정한다. `decorative` 는 읽지 못해도 되는 글자에만 쓴다.
+    - 계층이 더 필요하면 색을 늘리지 않고 크기·굵기로 구분한다.
 3. **토큰에 없는 값을 적지 않는다.** `z-50` `duration-300` `opacity-50` `rounded-[4px]` 는 값을 정한 근거가 남지 않는다.
 4. **`dark:` 로 색을 나누지 않는다.** 색 값은 토큰에서만 정한다.
 5. **토큰은 `src/style/tokens/` 에만 정의한다.** 앱 CSS 나 컴포넌트에 색 변수를 새로 정의하지 않는다.

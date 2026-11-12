@@ -9,7 +9,7 @@
 
 ```tsx
 <MarkerHeading underline="accent" underlineClassName="w-37.5">
-  MY SKILLS
+    MY SKILLS
 </MarkerHeading>
 ```
 

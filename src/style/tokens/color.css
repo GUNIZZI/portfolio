@@ -5,73 +5,73 @@
  */
 
 :root {
-  /* 면 */
-  --background: #0a0a12;
-  --panel: #10101a;
-  --card: #161624;
-  --chip: #181826;
+    /* 면 */
+    --background: #0a0a12;
+    --panel: #10101a;
+    --card: #161624;
+    --chip: #181826;
 
-  /* 선 */
-  --border: #22223a;
-  --border-card: #26263e;
-  --line: #1e1e30;
-  --divider: #2a2a44;
+    /* 선 */
+    --border: #22223a;
+    --border-card: #26263e;
+    --line: #1e1e30;
+    --divider: #2a2a44;
 
-  /* 글자 */
-  --strong: #f4f4f5;
-  --foreground: #d4d4d8;
-  --muted: #a1a1aa;
-  --decorative: #71717a;
+    /* 글자 */
+    --strong: #f4f4f5;
+    --foreground: #d4d4d8;
+    --muted: #a1a1aa;
+    --decorative: #71717a;
 
-  /* 강조 */
-  --accent: #a3e635;
-  --accent-foreground: #0a0a12;
-  --brand: #9333ea;
-  --brand-soft: #c084fc;
-  --brand-foreground: #ffffff;
-  --badge: #4c1d95;
-  --info: #60a5fa;
+    /* 강조 */
+    --accent: #a3e635;
+    --accent-foreground: #0a0a12;
+    --brand: #9333ea;
+    --brand-soft: #c084fc;
+    --brand-foreground: #ffffff;
+    --badge: #4c1d95;
+    --info: #60a5fa;
 
-  /* 낙서 */
-  --doodle-sky: #38bdf8;
-  --doodle-violet: #a855f7;
-  --doodle-yellow: #facc15;
-  --doodle-blue: #3b82f6;
-  --doodle-indigo: #6366f1;
-  --brush-sky: rgb(56 189 248 / 0.85);
-  --brush-violet: rgb(168 85 247 / 0.85);
-  --dot: rgb(42 42 68 / 0.35);
+    /* 낙서 */
+    --doodle-sky: #38bdf8;
+    --doodle-violet: #a855f7;
+    --doodle-yellow: #facc15;
+    --doodle-blue: #3b82f6;
+    --doodle-indigo: #6366f1;
+    --brush-sky: rgb(56 189 248 / 0.85);
+    --brush-violet: rgb(168 85 247 / 0.85);
+    --dot: rgb(42 42 68 / 0.35);
 
-  --ring: var(--accent);
+    --ring: var(--accent);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-panel: var(--panel);
-  --color-card: var(--card);
-  --color-chip: var(--chip);
-  --color-border: var(--border);
-  --color-border-card: var(--border-card);
-  --color-line: var(--line);
-  --color-divider: var(--divider);
-  --color-strong: var(--strong);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-decorative: var(--decorative);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-brand: var(--brand);
-  --color-brand-soft: var(--brand-soft);
-  --color-brand-foreground: var(--brand-foreground);
-  --color-badge: var(--badge);
-  --color-info: var(--info);
-  --color-doodle-sky: var(--doodle-sky);
-  --color-doodle-violet: var(--doodle-violet);
-  --color-doodle-yellow: var(--doodle-yellow);
-  --color-doodle-blue: var(--doodle-blue);
-  --color-doodle-indigo: var(--doodle-indigo);
-  --color-brush-sky: var(--brush-sky);
-  --color-brush-violet: var(--brush-violet);
-  --color-dot: var(--dot);
-  --color-ring: var(--ring);
+    --color-background: var(--background);
+    --color-panel: var(--panel);
+    --color-card: var(--card);
+    --color-chip: var(--chip);
+    --color-border: var(--border);
+    --color-border-card: var(--border-card);
+    --color-line: var(--line);
+    --color-divider: var(--divider);
+    --color-strong: var(--strong);
+    --color-foreground: var(--foreground);
+    --color-muted: var(--muted);
+    --color-decorative: var(--decorative);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-brand: var(--brand);
+    --color-brand-soft: var(--brand-soft);
+    --color-brand-foreground: var(--brand-foreground);
+    --color-badge: var(--badge);
+    --color-info: var(--info);
+    --color-doodle-sky: var(--doodle-sky);
+    --color-doodle-violet: var(--doodle-violet);
+    --color-doodle-yellow: var(--doodle-yellow);
+    --color-doodle-blue: var(--doodle-blue);
+    --color-doodle-indigo: var(--doodle-indigo);
+    --color-brush-sky: var(--brush-sky);
+    --color-brush-violet: var(--brush-violet);
+    --color-dot: var(--dot);
+    --color-ring: var(--ring);
 }

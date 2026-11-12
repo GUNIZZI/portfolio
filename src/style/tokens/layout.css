@@ -3,14 +3,14 @@
  */
 
 @theme {
-  --container-page: 1240px;
+    --container-page: 1240px;
 
-  --radius-card: 14px;
-  /* 손으로 그린 말풍선의 고르지 않은 모서리 */
-  --radius-blob: 48% 52% 46% 54% / 55% 45% 55% 45%;
+    --radius-card: 14px;
+    /* 손으로 그린 말풍선의 고르지 않은 모서리 */
+    --radius-blob: 48% 52% 46% 54% / 55% 45% 55% 45%;
 }
 
 /* 좌우 여백. 좁은 화면 16px 에서 넓은 화면 40px 까지 */
 @utility px-gutter {
-  padding-inline: clamp(16px, 4vw, 40px);
+    padding-inline: clamp(16px, 4vw, 40px);
 }
