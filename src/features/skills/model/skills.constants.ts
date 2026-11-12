@@ -8,5 +8,10 @@ export const SKILLS = [
     { name: 'Shadcn UI', icon: 'shadcn' },
     { name: 'TanStack', icon: 'tanstack' },
     { name: 'Git', icon: 'git' },
-    { name: 'AWS', icon: 'aws' },
+    { name: 'HTML', icon: 'html' },
+    { name: 'CSS', icon: 'css' },
+    { name: 'JavaScript', icon: 'javascript' },
+    { name: 'Vue 2', icon: 'vue' },
+    { name: 'Vuex', icon: 'vuex' },
+    { name: 'Notion', icon: 'notion' },
 ] as const;
