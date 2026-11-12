@@ -13,14 +13,17 @@ export default async function HomePage() {
     const projects = await getProjectList();
 
     return (
-        <div id="top" className="relative min-h-dvh overflow-x-hidden">
+        <div id="top" className="relative min-h-dvh overflow-x-clip">
             <Backdrop />
             <div className="relative z-raised">
                 <Header />
                 <main>
                     <Hero />
-                    <section id="projects" className="mx-auto max-w-page scroll-mt-6 px-gutter">
-                        <Panel className="flex flex-col gap-10 p-[clamp(20px,3vw,32px)]">
+                    <section
+                        id="projects"
+                        className="mx-auto max-w-page scroll-mt-header px-gutter"
+                    >
+                        <Panel className="flex flex-col gap-15 p-[clamp(20px,5vw,48px)]">
                             <FeaturedProjects projects={projects} />
                             <Skills />
                         </Panel>
