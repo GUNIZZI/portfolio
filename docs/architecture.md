@@ -135,6 +135,7 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 ## 미정리 항목
 
 - feature 는 `hero` · `featuredProjects` · `skills` · `about` · `contact`, widget 은 `header` · `footer` · `backdrop`, entity 는 `project` 하나다.
+- 관리 기능을 구현하면 1절의 데이터 · entity 행과 4절이 바뀐다. 작업 원문이 외부 저장소로 옮겨지고 entity 에 `actions` 가 생긴다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
 
 ## 확인방법
 

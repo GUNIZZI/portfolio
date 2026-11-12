@@ -19,6 +19,13 @@ Kozipsa(`admin-next/apps/kozipsa/docs/plan/`)의 기획 체계를 가져왔다.(
 | 이 사이트는 이렇게 (`/colophon`) | [colophon/](./colophon/README.md)   |
 | 찾을 수 없음 (404)               | [not-found/](./not-found/README.md) |
 
+**관리 화면의 기획은 공개 화면과 따로 둔다.**(2026-11-12 사용자 결정)
+구역은 `관리` 이고 `admin/` 아래에 둔다.
+
+| 대상                 | 문서                        |
+| -------------------- | --------------------------- |
+| 작업 관리 (`/admin`) | [admin/](./admin/README.md) |
+
 **와이어프레임은 [index.html](./index.html) 한 곳에서 모두 본다.**
 왼쪽 메뉴에 기획 문서마다 스코프(`작업 > 목록 · 상세`)와 라우트가 있고, 누르면 오른쪽에 그 와이어프레임이 열린다.
 보고 있는 화면은 주소 해시(`index.html#home/s01a`)에 남는다.
@@ -103,7 +110,7 @@ Kozipsa(`admin-next/apps/kozipsa/docs/plan/`)의 기획 체계를 가져왔다.(
 | 검토 필요 사항     | `No · 항목 · 기획안 · 확인 대상` 4열 표                     |
 
 **「페이지 위치」 표는 `구역` · `페이지명` · `라우트` · `들어오는 곳` 4개 행으로 구성한다.**
-`scripts/build-plan-index.mjs` 가 앞의 3개로 뷰어의 스코프를 만든다. 구역은 `메인` · `작업` · `소개` · `공통` 중 하나다.(근거: `docs/commit.md` 「영역」)
+`scripts/build-plan-index.mjs` 가 앞의 3개로 뷰어의 스코프를 만든다. 구역은 `메인` · `작업` · `소개` · `공통` · `관리` 중 하나다.(근거: `docs/commit.md` 「영역」)
 
 **모션은 `docs/motion.md` 의 토큰 이름으로 적는다.** `DURATION.slow` · `EASE.enter` 처럼 쓴다. 숫자로 적지 않는다.(근거: `docs/motion.md` 원칙 2)
 

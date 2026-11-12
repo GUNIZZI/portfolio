@@ -23,7 +23,7 @@
       <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
       <tbody>
         <tr><td><a href="#s01">S-01</a></td><td>작업 목록 (제안)</td><td>페이지</td><td><code>/work?category=</code></td></tr>
-        <tr><td><a href="#s02">S-02</a></td><td>작업 상세 (제안)</td><td>페이지</td><td><code>/work/[slug]</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>작업 상세 (제안)</td><td>페이지</td><td><code>/work/[id]</code></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -51,7 +51,7 @@ flowchart TD
     D -->|"이전 · 다음 작업"| D
     D -.->|"목록으로"| L
     D -->|"서비스 · 저장소"| EXT[/"외부 사이트 새 탭"/]:::api
-    BAD["없는 slug"]:::warn --> NF(["404"]):::done
+    BAD["없는 id"]:::warn --> NF(["404"]):::done
 ```
 
 - 목록으로 돌아가면 고른 필터가 남아 있다. 주소에 남겼기 때문이다.
@@ -100,7 +100,7 @@ flowchart TD
 </section>
 
 <section class="screen" id="s02">
-  <div class="screen-h"><span class="id">S-02</span><h2>작업 상세 (제안)</h2><span class="route">/work/[slug]</span></div>
+  <div class="screen-h"><span class="id">S-02</span><h2>작업 상세 (제안)</h2><span class="route">/work/[id]</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span><span class="mo abs">썸네일 이어짐</span>
@@ -112,7 +112,7 @@ flowchart TD
       <div class="pf-sec rel"><span class="pf-lab">meta</span><span class="m abs">2</span>
         <div class="dl"><div>역할</div><div>[맡은 일]</div><div>기간</div><div>[2025.03 – 2026.01]</div><div>기술</div><div>Next.js · TanStack Query · Storybook</div><div>링크</div><div>[서비스] · [저장소]</div></div>
       </div>
-      <div class="pf-sec rel"><span class="pf-lab">body · MDX</span><span class="m abs">3</span>
+      <div class="pf-sec rel"><span class="pf-lab">body · Markdown</span><span class="m abs">3</span>
         <div class="pf-stack"><b>개요</b><span class="pf-line"></span><b>문제</b><span class="pf-line"></span><b>해결</b><span class="pf-line"></span><b>결과</b><span class="pf-line"></span><b>회고</b><span class="pf-line"></span></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">pager</span><span class="m abs">4</span>
@@ -122,7 +122,7 @@ flowchart TD
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>상세 머리</b> (제안)<p>제목은 <code>h1</code>. 홈 카드에서 오면 썸네일이 이어진다. 도구 미정</p></div></li>
       <li><span class="m">2</span><div><b>메타</b> (제안)<p>없는 항목은 감춘다. 외부 링크는 새 탭</p></div></li>
-      <li><span class="m">3</span><div><b>본문</b> (제안)<p>MDX. 절은 <code>h2</code>. 순서는 README 「상세」</p></div></li>
+      <li><span class="m">3</span><div><b>본문</b> (제안)<p>Markdown. 절은 <code>h2</code>. 순서는 README 「상세」</p></div></li>
       <li><span class="m">4</span><div><b>이전 · 다음</b> (제안)<p>첫 작업에는 이전, 마지막 작업에는 다음이 없다</p></div></li>
     </ol></aside>
   </div>

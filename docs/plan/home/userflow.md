@@ -13,7 +13,7 @@ flowchart TD
     H -->|"스크롤로 히어로를 지남"| ST["S-02 헤더 고정"]:::screen
     ST -.->|"맨 위로"| H
     H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
-    H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/slug"]):::done
+    H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/id"]):::done
     H -->|"More About Me"| AB(["소개 /about"]):::done
     H -->|"Download Resume"| PDF[/"이력서 PDF 새 탭"/]:::api
     H -->|"GitHub · LinkedIn"| EXT[/"외부 프로필 새 탭"/]:::api

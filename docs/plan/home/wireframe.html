@@ -62,7 +62,7 @@ flowchart TD
     H -->|"스크롤로 히어로를 지남"| ST["S-02 헤더 고정"]:::screen
     ST -.->|"맨 위로"| H
     H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
-    H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/slug"]):::done
+    H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/id"]):::done
     H -->|"More About Me"| AB(["소개 /about"]):::done
     H -->|"Download Resume"| PDF[/"이력서 PDF 새 탭"/]:::api
     H -->|"GitHub · LinkedIn"| EXT[/"외부 프로필 새 탭"/]:::api
@@ -187,7 +187,7 @@ flowchart TD
       <li><span class="m">2</span><div><b>Hero</b> <code>features/hero</code><p>이름은 <code>h1</code>. 등장 연출은 <a href="#s04">S-04</a>, 값은 README 「모션」 표 (제안)</p></div></li>
       <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>View My Projects → <code>#projects</code>. Download Resume → <code>/resume.pdf</code> 새 탭 (제안, 지금 <code>#top</code>)</p></div></li>
       <li><span class="m">4</span><div><b>HeroVisual</b><p>캐릭터는 처음 화면 이미지라 미리 불러온다(<code>loading="eager"</code>). 손글씨는 <code>aria-hidden</code>. 포인터 시차 (제안)</p></div></li>
-      <li><span class="m">5</span><div><b>FeaturedProjects · ProjectCard</b><p>카드는 <code>content/projects.ts</code> 순서. 열기 아이콘 → <code>/work/&lt;slug&gt;</code> (제안). View All Projects → <code>/work</code> (제안)</p></div></li>
+      <li><span class="m">5</span><div><b>FeaturedProjects · ProjectCard</b><p>카드는 <code>content/projects.ts</code> 순서. 열기 아이콘 → <code>/work/&lt;id&gt;</code> (제안). View All Projects → <code>/work</code> (제안)</p></div></li>
       <li><span class="m">6</span><div><b>Skills</b><p>타일 9개. hover 때 아이콘이 흔들린다 (제안)</p></div></li>
       <li><span class="m">7</span><div><b>About</b><p>숫자 3개는 원본 값이고 나중에 바꾼다. More About Me → <code>/about</code> (제안)</p></div></li>
       <li><span class="m">8</span><div><b>Contact</b><p>Get in Touch → <code>mailto:</code>. 메일 주소 버튼 → 복사 후 <a href="#p01">P-01</a> (제안, 지금 <code>mailto:</code>)</p></div></li>

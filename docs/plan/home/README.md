@@ -73,7 +73,7 @@
 | ----------------------- | ----------- | ------------------------------- | -------------------------------------------- |
 | Download Resume         | `#top`      | `/resume.pdf` 를 새 탭으로 연다 | 이력서 PDF 파일                              |
 | View All Projects       | `#projects` | `/work`                         | 작업 목록 페이지([work/](../work/README.md)) |
-| 작업 카드의 열기 아이콘 | `#projects` | `/work/<slug>`                  | 작업 상세 페이지                             |
+| 작업 카드의 열기 아이콘 | `#projects` | `/work/<id>`                    | 작업 상세 페이지                             |
 | More About Me           | `#about`    | `/about`                        | 소개 페이지([about/](../about/README.md))    |
 | GitHub · LinkedIn       | `#top`      | 각 프로필 주소, 새 탭           | 주소                                         |
 
@@ -131,7 +131,7 @@
 | F-02 | 현재 메뉴 표시(제안)     | S-01 · S-02 | 보고 있는 섹션의 메뉴를 강조한다               |
 | F-03 | 헤더 고정(제안)          | S-02        | 히어로를 지나면 헤더를 위에 붙인다             |
 | F-04 | 작업 목록으로 이동(제안) | S-01        | View All Projects → `/work`                    |
-| F-05 | 작업 상세로 이동(제안)   | S-01        | 카드 열기 아이콘 → `/work/<slug>`              |
+| F-05 | 작업 상세로 이동(제안)   | S-01        | 카드 열기 아이콘 → `/work/<id>`                |
 | F-06 | 이력서 내려받기(제안)    | S-01        | Download Resume → PDF 새 탭                    |
 | F-07 | 소개로 이동(제안)        | S-01        | More About Me → `/about`                       |
 | F-08 | 메일 보내기              | S-01        | Get in Touch → `mailto:`                       |
@@ -165,7 +165,7 @@
 | 1   | 현재 메뉴 표시        | 화면 가운데에 걸친 섹션 기준                                       | 사용자                                 |
 | 2   | 헤더 고정             | 히어로를 지나면 위에 붙고 바탕을 흐린다                            | 사용자                                 |
 | 3   | 이력서                | `/resume.pdf` 새 탭                                                | 사용자 · PDF 파일                      |
-| 4   | 작업 목록 · 상세 연결 | `/work` · `/work/<slug>`                                           | [work/](../work/README.md) 채택 여부   |
+| 4   | 작업 목록 · 상세 연결 | `/work` · `/work/<id>`                                             | [work/](../work/README.md) 채택 여부   |
 | 5   | 소개 연결             | `/about`                                                           | [about/](../about/README.md) 채택 여부 |
 | 6   | 외부 프로필 주소      | GitHub · LinkedIn 새 탭                                            | 사용자 · 주소                          |
 | 7   | 메일 주소 복사        | 누르면 복사하고 토스트, 실패하면 `mailto:`                         | 사용자                                 |

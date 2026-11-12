@@ -67,7 +67,7 @@ const readPageScope = (folder) => {
   const table = Object.fromEntries(
     parseTableRows(sectionLines(readme, '페이지 위치')).map(([k, v]) => [k, v]),
   );
-  // 구역은 docs/commit.md 「영역」 의 이름과 같다 — 메인 · 작업 · 소개 · 공통
+  // 구역은 docs/commit.md 「영역」 의 이름과 같다 — 메인 · 작업 · 소개 · 공통 · 관리
   const parts = [table['구역'], table['페이지명']].map((value) => (value ?? '').trim());
   return {
     scope: parts.filter(Boolean),

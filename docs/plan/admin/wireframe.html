@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>작업 관리 와이어프레임</title>
+<link rel="stylesheet" href="../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 로그인</a><a href="#s02">S-02 작업 목록</a><a href="#s03">S-03 작업 등록</a><a href="#s04">S-04 작업 수정</a>
+    <a href="#s05">S-05 목록 상태</a><a href="#p01">P-01 삭제 확인</a><a href="#p02">P-02 순서 변경</a><a href="#p03">P-03 나가기 확인</a><a href="#p04">P-04 토스트</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>작업 관리 (/admin)</h1>
+  <p>포트폴리오에 싣는 작업을 등록 · 수정 · 삭제하고 공개 여부와 순서를 정하는 관리 화면의 와이어프레임이다. 관리자 1명만 들어온다.</p>
+  <p>관리 화면은 디자인 원본이 없다. 여기서는 배치 · 순서 · 상태만 그리고, 모양은 지금의 토큰으로 표와 폼을 단순하게 그린다(제안). 정책과 입력 규칙은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다.</p>
+  <div class="legend">
+    <span><span class="m">1</span> 설명 번호</span>
+    <span>제안 항목은 명세에 (제안) 을 붙였다</span>
+  </div>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>로그인</td><td>페이지</td><td><code>/admin/login</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>작업 목록</td><td>페이지</td><td><code>/admin</code></td></tr>
+        <tr><td><a href="#s03">S-03</a></td><td>작업 등록</td><td>페이지</td><td><code>/admin/projects/new</code></td></tr>
+        <tr><td><a href="#s04">S-04</a></td><td>작업 수정</td><td>페이지</td><td><code>/admin/projects/[id]</code></td></tr>
+        <tr><td><a href="#s05">S-05</a></td><td>목록 상태</td><td>S-02 의 상태</td><td><code>/admin</code></td></tr>
+        <tr><td><a href="#p01">P-01</a></td><td>삭제 확인 창</td><td>확인 창</td><td>S-02 · S-04</td></tr>
+        <tr><td><a href="#p02">P-02</a></td><td>순서 변경 창 (제안)</td><td>다이얼로그</td><td>S-02</td></tr>
+        <tr><td><a href="#p03">P-03</a></td><td>나가기 확인 창 (제안)</td><td>확인 창</td><td>S-03 · S-04</td></tr>
+        <tr><td><a href="#p04">P-04</a></td><td>토스트</td><td>토스트</td><td>S-02 · S-03 · S-04</td></tr>
+      </tbody>
+    </table></div>
+    <p class="spec-note">컴포넌트 이름은 src/shared/ui/ 에 있는 것만 적었다. 지금 있는 것은 Button · Icon · Logo · Panel 이고, 없는 것은 (제안) 을 붙였다.</p>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 작업 관리 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 관리자 동작을 흐름으로 옮겼다.
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다. `제안` 동작이 섞여 있다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    IN["주소 직접 입력 /admin"]:::step --> SS{"세션이 있는가"}:::decision
+    SS -->|"아니요"| LG["S-01 로그인"]:::screen
+    SS -->|"예"| LS["S-02 작업 목록"]:::screen
+    LG -->|"로그인 성공"| LS
+    LS -->|"등록"| NW["S-03 작업 등록"]:::screen
+    LS -->|"제목"| ED["S-04 작업 수정"]:::screen
+    LS -->|"순서 변경"| OD("P-02 순서 변경 창"):::dialog
+    LS -->|"삭제"| DL("P-01 삭제 확인 창"):::dialog
+    NW -.->|"저장 · 취소"| LS
+    ED -.->|"저장 · 취소"| LS
+    OD -.->|"저장 · 취소"| LS
+    DL -.->|"삭제 · 취소"| LS
+    LS -->|"로그아웃"| OUT(["S-01 로그인으로"]):::done
+    LS -->|"저장한 내용"| PUB[/"공개 화면 캐시 지움"/]:::api
+```
+
+- 세션은 `/admin` 아래의 모든 화면에서 서버가 검사한다. 수정 화면의 주소로 바로 들어와도 같다.
+- 공개 화면은 저장한 직후의 내용을 그린다. 흐름은 [홈](../home/userflow.md)에 있다.
+
+## 2. 로그인
+
+```mermaid
+flowchart TD
+    L["S-01 로그인"]:::screen -->|"이메일 · 비밀번호 입력 후 로그인"| A[/"Firebase Auth 로그인"/]:::api
+    A --> OK{"등록한 계정인가"}:::decision
+    OK -->|"아니요"| NO["로그인 실패 안내"]:::warn
+    NO -.-> L
+    OK -->|"예"| SE[/"세션 쿠키 발급"/]:::api
+    SE --> LS(["S-02 작업 목록"]):::done
+```
+
+- 관리자 계정은 Firebase 콘솔에서 Firebase Auth 에 등록한 계정이다. 관리 화면에서는 가입할 수 없다.
+- 로그인 수단은 이메일과 비밀번호다(제안).
+- 로그인에 실패하면 세션을 만들지 않는다. 안내 문구는 [S-01](./wireframe.html#s01)에 있다.
+- 세션이 끝난 뒤 저장을 누르면 저장하지 않고 S-01 로 보낸다. 쓰던 내용은 남지 않는다.
+
+## 3. 작업 등록 · 수정
+
+```mermaid
+flowchart TD
+    F["S-03 등록 · S-04 수정"]:::screen --> IN["항목 입력"]:::step
+    IN --> IMG{"썸네일을 올리는가"}:::decision
+    IMG -->|"예"| CHK{"형식과 크기가 맞는가"}:::decision
+    CHK -->|"아니요"| IE["썸네일 오류 문구"]:::warn
+    IE -.-> IN
+    CHK -->|"예"| UP[/"이미지 저장소에 올림"/]:::api
+    UP --> V
+    IMG -->|"아니요"| V{"필수 항목이 맞는가"}:::decision
+    V -->|"아니요"| FE["항목 오류 문구 · 저장 비활성"]:::warn
+    FE -.-> IN
+    V -->|"예"| SV[/"서버 액션으로 저장"/]:::api
+    SV --> R{"저장했는가"}:::decision
+    R -->|"예"| T("P-04 저장됨 토스트"):::dialog
+    R -->|"아니요"| TE("P-04 실패 토스트"):::dialog
+    TE -.-> IN
+    T --> LS(["S-02 작업 목록"]):::done
+    IN -->|"취소 · 뒤로"| DT{"고친 내용이 있는가"}:::decision
+    DT -->|"아니요"| LS
+    DT -->|"예"| LV("P-03 나가기 확인 창"):::dialog
+    LV -->|"나가기"| LS
+    LV -.->|"계속 작성"| IN
+```
+
+- `id` 는 등록할 때 저장소가 발급한다. 입력받지 않는다.
+- 썸네일은 저장을 누르기 전에 올린다. 저장하지 않고 나가면 올린 파일을 지운다.
+- 저장에 실패하면 입력한 내용을 그대로 둔다.
+
+## 4. 순서 · 공개 바꾸기
+
+```mermaid
+flowchart TD
+    LS["S-02 작업 목록"]:::screen --> W{"무엇을 바꾸는가"}:::decision
+    W -->|"공개 스위치"| SW[/"곧바로 저장"/]:::api
+    SW --> SR{"저장했는가"}:::decision
+    SR -->|"예"| T("P-04 저장됨 토스트"):::dialog
+    SR -->|"아니요"| BK["스위치를 되돌림 · 실패 토스트"]:::warn
+    W -->|"순서 변경"| OD("P-02 순서 변경 창"):::dialog
+    OD --> MV["끌기 · 위 아래 버튼"]:::step
+    MV -->|"저장"| OS[/"순서 저장"/]:::api
+    MV -.->|"취소"| LS
+    OS --> T
+    T --> END(["공개 화면에 반영"]):::done
+```
+
+- 순서를 하나도 바꾸지 않았으면 순서 변경 창의 저장 버튼은 비활성이다.
+
+## 5. 작업 삭제
+
+```mermaid
+flowchart TD
+    S["S-02 목록 · S-04 수정"]:::screen -->|"삭제"| DL("P-01 삭제 확인 창"):::dialog
+    DL -.->|"취소"| S
+    DL -->|"삭제"| RM[/"문서와 썸네일 삭제"/]:::api
+    RM --> R{"지웠는가"}:::decision
+    R -->|"예"| T("P-04 삭제됨 토스트"):::dialog
+    R -->|"아니요"| TE("P-04 실패 토스트"):::dialog
+    TE -.-> S
+    T --> LS(["S-02 작업 목록"]):::done
+```
+
+- 삭제는 되돌릴 수 없다. 공개 화면에서 내리기만 하려면 공개 스위치를 끈다.
+</script>
+<script src="../userflow.js"></script>
+<!-- userflow:end -->
+
+<!-- ============ S-01 로그인 ============ -->
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>로그인</h2><span class="route">/admin/login</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="pf-stack">
+        <span class="rel"><span class="m abs">1</span><b>GUNI</b> <span class="muted small">관리</span></span>
+        <div class="rel"><span class="m abs">2</span><div class="inp val">admin@example.com</div></div>
+        <div class="inp">비밀번호</div>
+        <span class="btn pri">로그인</span>
+        <div class="alert warn rel" role="status"><span class="m abs">3</span><b>⚠ 로그인하지 못했습니다</b>이메일 또는 비밀번호를 확인해 주세요.</div>
+        <span class="rel"><span class="m abs">4</span><span class="btn ghost">사이트로 돌아가기</span></span>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>Logo</b> <code>shared/ui/logo</code><p>공개 화면의 헤더 · 푸터는 그리지 않는다</p></div></li>
+      <li><span class="m">2</span><div><b>이메일 · 비밀번호</b> (제안, 입력 컴포넌트 없음) · <b>Button</b> <code>shared/ui/button</code><p>Firebase Auth 에 등록한 계정으로 로그인한다. 가입 · 비밀번호 찾기는 두지 않는다. 2개를 모두 입력해야 버튼을 누를 수 있다. 로그인하는 동안 비활성</p></div></li>
+      <li><span class="m">3</span><div><b>안내 상자</b> (제안, 컴포넌트 없음)<p>로그인에 실패했을 때만 보인다. <code>role="status"</code>. 세션은 만들지 않는다. 이메일과 비밀번호 중 무엇이 틀렸는지는 알리지 않는다</p></div></li>
+      <li><span class="m">4</span><div><b>사이트로 돌아가기</b><p><code>/</code> 로 간다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>들어올 때</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>세션이 있다</td><td>S-02 로 보낸다</td></tr>
+          <tr><td>세션이 없거나 끝났다</td><td>이 화면을 그린다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-02 작업 목록 ============ -->
+<section class="screen" id="s02">
+  <div class="screen-h"><span class="id">S-02</span><h2>작업 목록</h2><span class="route">/admin</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="ph rel">
+        <span class="m abs">1</span>
+        <div><h4>작업</h4><p>포트폴리오에 싣는 작업을 관리한다</p></div>
+        <span class="sp"></span>
+        <span class="rel"><span class="m abs">2</span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></span>
+      </div>
+      <div class="tbar">
+        <span class="muted">전체 4건 · 공개 3건</span>
+        <span class="sp"></span>
+        <span class="row rel"><span class="m abs">3</span><span class="btn">순서 변경</span><span class="btn pri">등록</span></span>
+      </div>
+      <div class="tw rel"><span class="m abs">4</span>
+        <table>
+          <thead><tr><th class="c">순서</th><th>썸네일</th><th>제목</th><th>분류</th><th>공개</th><th class="c">수정 일시</th><th class="c">삭제</th></tr></thead>
+          <tbody>
+            <tr class="hover"><td class="c muted">1</td><td><span class="thumb"></span></td><td class="title"><b>KOZIPSA 플랫폼 관리 시스템</b></td><td><span class="badge b-type">Enterprise</span></td><td><span class="sw on"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+            <tr><td class="c muted">2</td><td><span class="thumb"></span></td><td class="title"><b>사내 통합 대시보드</b></td><td><span class="badge b-type">Dashboard</span></td><td><span class="sw on"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+            <tr><td class="c muted">4</td><td><span class="muted small">없음</span></td><td class="title"><b>팬을 위한 특별한 공간</b></td><td><span class="badge b-type">Landing Page</span></td><td><span class="sw"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>페이지 머리</b><p>관리 화면은 이 페이지 하나라 메뉴를 두지 않는다</p></div></li>
+      <li><span class="m">2</span><div><b>사이트 보기 · 로그아웃</b><p>사이트 보기는 <code>/</code> 를 새 탭으로 연다. 로그아웃하면 세션을 지우고 <a href="#s01">S-01</a> 로 간다</p></div></li>
+      <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>순서 변경 → <a href="#p02">P-02</a> (제안). 작업이 1건 이하면 비활성. 등록 → <a href="#s03">S-03</a></p></div></li>
+      <li><span class="m">4</span><div><b>표</b> (제안, 컴포넌트 없음)<p>공개 · 비공개를 모두 순서대로 그린다. 검색 · 페이지 나누기 · 정렬은 없다 (제안). 열의 명세는 아래 표</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>열</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>열</th><th>값</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>순서</td><td><code>order</code> 로 매긴 1부터의 번호</td><td>—</td></tr>
+          <tr><td>썸네일</td><td>이미지. 없으면 「없음」</td><td>—</td></tr>
+          <tr><td>제목</td><td><code>title</code></td><td>누르면 <a href="#s04">S-04</a></td></tr>
+          <tr><td>분류</td><td><code>category</code></td><td>—</td></tr>
+          <tr><td>공개</td><td>스위치 (제안, 컴포넌트 없음)</td><td>누르면 곧바로 저장하고 <a href="#p04">P-04</a>. 실패하면 되돌린다</td></tr>
+          <tr><td>수정 일시</td><td><code>updatedAt</code>. <code>2026.11.12 (10:12)</code></td><td>—</td></tr>
+          <tr><td>삭제</td><td>버튼</td><td><a href="#p01">P-01</a></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-03 작업 등록 ============ -->
+<section class="screen" id="s03">
+  <div class="screen-h"><span class="id">S-03</span><h2>작업 등록</h2><span class="route">/admin/projects/new</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="ph"><div><h4>작업 등록</h4><p>새 작업은 비공개로 시작한다. id 는 저장할 때 발급한다</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">제목</div>
+        <div class="fv"><div class="rel"><span class="m abs">1</span><div class="inp val">팬을 위한 특별한 공간</div></div></div>
+        <div class="sepx"></div>
+        <div class="fl req">분류</div>
+        <div class="fv"><div class="rel"><span class="m abs">2</span><div class="inp sel val">Landing Page</div></div><div class="info">ⓘ 목록에 없으면 새로 입력한다</div></div>
+        <div class="sepx"></div>
+        <div class="fl req">요약</div>
+        <div class="fv"><div class="rel"><span class="ferr">요약을 입력해 주세요.</span><span class="m abs r">3</span><div class="inp err">Next.js · Tailwind</div></div></div>
+        <div class="sepx"></div>
+        <div class="fl">상세 주소</div>
+        <div class="fv"><div class="rel"><span class="m abs">4</span><div class="inp">비우면 작업 섹션을 가리킨다</div></div></div>
+        <div class="sepx"></div>
+        <div class="fl">썸네일</div>
+        <div class="fv rel"><span class="m abs">5</span>
+          <div class="drop">클릭하거나 드래그하세요<br/><span class="small">PNG · JPG · WebP (최대 5MB)</span></div>
+          <div class="uploaded"><div class="img-ph">이미지</div><div class="sp"><b>fan-space.png</b><div class="muted small">1.8MB · 436×224</div></div><span class="btn sm ghost">삭제</span></div>
+        </div>
+        <div class="sepx"></div>
+        <div class="fl req">대체 텍스트</div>
+        <div class="fv"><div class="rel"><span class="m abs">6</span><div class="inp val">팬 공간 랜딩 페이지 화면</div></div><div class="info">ⓘ 썸네일이 있을 때만 보이고, 그때는 필수다</div></div>
+        <div class="sepx"></div>
+        <div class="fl">공개</div>
+        <div class="fv"><div class="row rel"><span class="m abs">7</span><span class="sw"></span><span>비공개</span></div></div>
+      </div>
+      <div class="btn-row rel"><span class="m abs">8</span><span class="muted small">필수 항목을 입력해 주세요</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>제목</b> <code>title</code><p>1자 이상</p></div></li>
+      <li><span class="m">2</span><div><b>분류</b> <code>category</code> (제안)<p>이미 있는 분류에서 선택하거나 새로 입력한다</p></div></li>
+      <li><span class="m">3</span><div><b>요약</b> <code>summary</code><p>오류 문구는 입력을 벗어난 뒤에 보여 준다. 그림은 비운 채 벗어난 상태다</p></div></li>
+      <li><span class="m">4</span><div><b>상세 주소</b> <code>href</code><p>선택 항목이다</p></div></li>
+      <li><span class="m">5</span><div><b>썸네일</b> <code>image</code> (제안, 컴포넌트 없음)<p>고르면 바로 올리고 미리보기 · 파일 이름 · 용량 · 크기를 보여 준다. 크기는 파일에서 읽는다. 삭제하면 올린 파일을 지운다</p></div></li>
+      <li><span class="m">6</span><div><b>대체 텍스트</b> <code>image.alt</code><p>썸네일을 지우면 항목도 감춘다</p></div></li>
+      <li><span class="m">7</span><div><b>공개</b> <code>published</code> (스위치 제안)<p>처음 값은 비공개다 (제안)</p></div></li>
+      <li><span class="m">8</span><div><b>Button</b> <code>shared/ui/button</code><p>규칙에 맞지 않으면 등록은 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 취소 → 고친 내용이 있으면 <a href="#p03">P-03</a> (제안)</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>오류 문구 (제안)</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>상황</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td>제목 · 분류 · 요약 · 대체 텍스트</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요.</td></tr>
+          <tr><td>썸네일</td><td>형식이 다르다</td><td>PNG · JPG · WebP 파일만 올릴 수 있습니다.</td></tr>
+          <tr><td>썸네일</td><td>5MB 를 넘는다</td><td>5MB 이하의 파일만 올릴 수 있습니다.</td></tr>
+          <tr><td>썸네일</td><td>올리지 못했다</td><td>파일을 올리지 못했습니다. 다시 시도해 주세요.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">입력 규칙은 README.md 「등록 · 수정」 표가 갖는다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-04 작업 수정 ============ -->
+<section class="screen" id="s04">
+  <div class="screen-h"><span class="id">S-04</span><h2>작업 수정</h2><span class="route">/admin/projects/[id]</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="ph"><div><h4>작업 수정</h4><p>수정 일시 2026.11.12 (10:12)</p></div></div>
+      <div class="form-grid">
+        <div class="fl">입력 항목</div>
+        <div class="fv"><span class="muted">S-03 과 같다. 저장된 값으로 채운다</span></div>
+      </div>
+      <div class="btn-row rel"><span class="m abs">1</span><span class="btn danger">삭제</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">저장</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>Button</b> <code>shared/ui/button</code><p>고친 내용이 없으면 저장은 비활성. 삭제 → <a href="#p01">P-01</a>. 취소는 S-03 과 같다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>들어올 때</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>없는 <code>id</code> 다</td><td>404 를 그린다</td></tr>
+          <tr><td>썸네일을 바꾸고 저장했다</td><td>이전 파일을 지운다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-05 목록 상태 ============ -->
+<section class="screen" id="s05">
+  <div class="screen-h"><span class="id">S-05</span><h2>목록 상태</h2><span class="route">/admin</span></div>
+  <div class="state-grid">
+    <div class="state">
+      <div class="lab">작업 0건</div>
+      <div class="empty"><div class="ic"></div>등록한 작업이 없습니다.</div>
+      <div class="help">등록 버튼은 그대로 둔다. 순서 변경은 비활성</div>
+    </div>
+    <div class="state">
+      <div class="lab">조회 실패</div>
+      <div class="err-page">
+        <b>작업을 불러오지 못했습니다</b>잠시 뒤에 다시 시도해 주세요.
+        <div class="row"><span class="btn sm">다시 시도</span></div>
+      </div>
+    </div>
+    <div class="state">
+      <div class="lab">공개 전환 실패</div>
+      <div class="row"><span class="sw"></span><span>스위치를 누르기 전으로 되돌린다</span></div>
+      <div class="help">P-04 실패 토스트를 띄운다</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P-01 삭제 확인 창 ============ -->
+<section class="screen" id="p01">
+  <div class="screen-h"><span class="id">P-01</span><h2>삭제 확인 창</h2><span class="route">S-02 · S-04</span></div>
+  <div class="dlg-grid">
+    <div class="dlg-stage"><div class="dlg sm" role="alertdialog">
+      <div class="dh"><div><h6>P-01 · 작업을 삭제할까요?</h6><p>「팬을 위한 특별한 공간」 과 썸네일을 지웁니다. 되돌릴 수 없습니다.</p></div></div>
+      <div class="df"><span class="sp"></span><span class="btn focus">취소</span><span class="btn danger">삭제</span></div>
+    </div></div>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>동작</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>컴포넌트</td><td>다이얼로그 (제안, 컴포넌트 없음)</td></tr>
+          <tr><td>처음 포커스</td><td>취소</td></tr>
+          <tr><td>삭제</td><td>문서와 썸네일을 지우고 S-02 로 간다. <a href="#p04">P-04</a> 삭제됨</td></tr>
+          <tr><td>취소 · Esc</td><td>창을 닫고 열었던 버튼으로 포커스를 돌려준다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P-02 순서 변경 창 ============ -->
+<section class="screen" id="p02">
+  <div class="screen-h"><span class="id">P-02</span><h2>순서 변경 창 (제안)</h2><span class="route">S-02</span></div>
+  <div class="dlg-grid">
+    <div class="dlg-stage"><div class="dlg sm" role="dialog">
+      <div class="dh"><div><h6>P-02 · 순서 변경</h6><p>공개 화면에 놓는 차례다. 끌거나 버튼으로 옮긴다.</p></div><span class="x" aria-label="닫기">✕</span></div>
+      <div class="db">
+        <ol class="sortlist">
+          <li><span class="hdl">⋮⋮</span><span class="no">1</span><span class="thumb"></span><span class="tt"><b>KOZIPSA 플랫폼 관리 시스템</b><span>Enterprise</span></span><span class="badge b-on">공개</span><span class="updown"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></span></li>
+          <li class="drag"><span class="hdl">⋮⋮</span><span class="no">2</span><span class="thumb"></span><span class="tt"><b>아파트 관리 시스템 <span class="chg">변경됨</span></b><span>Web App</span></span><span class="badge b-on">공개</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm">↓</span></span></li>
+          <li><span class="hdl">⋮⋮</span><span class="no">3</span><span class="thumb"></span><span class="tt"><b>팬을 위한 특별한 공간</b><span>Landing Page</span></span><span class="badge b-off">비공개</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></span></li>
+        </ol>
+      </div>
+      <div class="df"><span class="muted">1건의 순서를 바꿨다</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri">저장</span></div>
+    </div></div>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>동작</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>목록</td><td>공개 · 비공개를 모두 지금 순서로 그린다</td></tr>
+          <tr><td>옮기기</td><td>행을 끌거나 ↑ · ↓ 버튼. 첫 행의 ↑ 와 끝 행의 ↓ 는 비활성</td></tr>
+          <tr><td>변경됨</td><td>처음 순서와 달라진 행에 붙인다</td></tr>
+          <tr><td>저장</td><td>바뀐 것이 없으면 비활성. 저장하면 창을 닫고 <a href="#p04">P-04</a></td></tr>
+          <tr><td>취소 · ✕ · Esc</td><td>묻지 않고 닫는다. 순서는 바꾸기 전 그대로다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P-03 나가기 확인 창 ============ -->
+<section class="screen" id="p03">
+  <div class="screen-h"><span class="id">P-03</span><h2>나가기 확인 창 (제안)</h2><span class="route">S-03 · S-04</span></div>
+  <div class="dlg-grid">
+    <div class="dlg-stage"><div class="dlg sm" role="alertdialog">
+      <div class="dh"><div><h6>P-03 · 저장하지 않고 나갈까요?</h6><p>고친 내용이 저장되지 않습니다.</p></div></div>
+      <div class="df"><span class="sp"></span><span class="btn focus">계속 작성</span><span class="btn danger">나가기</span></div>
+    </div></div>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>동작</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>띄우는 때</td><td>고친 내용이 있는데 취소를 누르거나 다른 화면으로 가려 할 때</td></tr>
+          <tr><td>나가기</td><td>S-02 로 간다. 저장 전에 올린 썸네일을 지운다</td></tr>
+          <tr><td>계속 작성 · Esc</td><td>창을 닫는다</td></tr>
+          <tr><td>탭을 닫거나 새로 고칠 때</td><td>브라우저의 기본 확인 창을 쓴다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P-04 토스트 ============ -->
+<section class="screen" id="p04">
+  <div class="screen-h"><span class="id">P-04</span><h2>토스트</h2><span class="route">S-02 · S-03 · S-04</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="row rel"><span class="m abs">1</span><span class="toast">✓ 작업을 등록했습니다</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>토스트</b> (제안, 컴포넌트 없음)<p><code>role="status"</code>. 위치와 사라지는 시간은 홈의 P-01 복사됨 토스트와 같이 정한다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>토스트 문구 (제안)</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td>등록</td><td>작업을 등록했습니다</td></tr>
+          <tr><td>수정</td><td>작업을 저장했습니다</td></tr>
+          <tr><td>삭제</td><td>작업을 삭제했습니다</td></tr>
+          <tr><td>공개로 바꿈</td><td>작업을 공개했습니다</td></tr>
+          <tr><td>비공개로 바꿈</td><td>작업을 비공개로 바꿨습니다</td></tr>
+          <tr><td>순서 저장</td><td>순서를 저장했습니다</td></tr>
+          <tr><td>실패</td><td>저장하지 못했습니다. 다시 시도해 주세요</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
