@@ -230,7 +230,8 @@ export default defineConfig([
                                 '슬라이스 내부를 직접 import 하지 않는다. index.ts 로 가져온다.',
                         },
                         {
-                            group: ['gsap', 'gsap/*', '@gsap/react'],
+                            // group 은 경로의 한 마디만 맞아도 걸려 @/shared/util/gsap 까지 막는다. 패키지 이름 전체로 맞춘다
+                            regex: '^(gsap(/.*)?|@gsap/react)$',
                             message:
                                 'GSAP 은 @/shared/util/gsap 에서 가져온다 — docs/motion.md 2.1',
                         },
