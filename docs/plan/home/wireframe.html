@@ -10,19 +10,19 @@
 <header class="top">
   <nav aria-label="화면 바로가기">
     <a href="#flow">유저 플로우</a><a href="#s01a">S-01 홈(데스크톱)</a><a href="#s02">S-02 헤더 고정</a>
-    <a href="#s03">S-03 모바일</a><a href="#s04">S-04 등장 연출 · 동작 줄이기</a><a href="#p01">P-01 복사됨 토스트</a>
+    <a href="#s03">S-03 모바일</a><a href="#s04">S-04 등장 연출 · 동작 줄이기</a>
   </nav>
 </header>
 <main>
 
 <div class="intro">
   <h1>홈 (/)</h1>
-  <p>사이트 첫 화면의 와이어프레임이다. 섹션 구성과 문구는 코드에 있는 그대로이고, 링크 연결 · 모션 · 토스트는 제안이다.</p>
+  <p>사이트 첫 화면의 와이어프레임이다. 섹션 구성과 문구는 코드에 있는 그대로이고, 모션 · 헤더 고정은 채택했지만 아직 구현하지 않은 기획이다.</p>
   <p>시각 디자인은 다시 그리지 않는다. 모양은 디자인 원본 <span class="mono">sample/HYOSUNG 포트폴리오.html</span> 을 따르고, 여기서는 배치 · 순서 · 상태만 그린다. 정책과 모션 표는 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다.</p>
   <div class="legend">
     <span><span class="m">1</span> 설명 번호</span>
     <span class="mo">모션</span>
-    <span>제안 항목은 명세에 (제안) 을 붙였다</span>
+    <span>아직 구현하지 않은 항목은 명세에 (구현 전) 을 붙였다</span>
   </div>
   <div class="spec-block">
     <h4>화면 목록</h4>
@@ -30,10 +30,9 @@
       <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
       <tbody>
         <tr><td><a href="#s01a">S-01</a></td><td>홈</td><td>페이지</td><td><code>/</code></td></tr>
-        <tr><td><a href="#s02">S-02</a></td><td>헤더 고정 (제안)</td><td>S-01 의 스크롤 상태</td><td><code>/</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>헤더 고정 (구현 전)</td><td>S-01 의 스크롤 상태</td><td><code>/</code></td></tr>
         <tr><td><a href="#s03">S-03</a></td><td>모바일 배치</td><td>S-01 의 390px 상태</td><td><code>/</code></td></tr>
-        <tr><td><a href="#s04">S-04</a></td><td>등장 연출 · 동작 줄이기 (제안)</td><td>S-01 의 상태</td><td><code>/</code></td></tr>
-        <tr><td><a href="#p01">P-01</a></td><td>복사됨 토스트 (제안)</td><td>토스트</td><td>S-01 연락 섹션</td></tr>
+        <tr><td><a href="#s04">S-04</a></td><td>등장 연출 · 동작 줄이기 (구현 전)</td><td>S-01 의 상태</td><td><code>/</code></td></tr>
       </tbody>
     </table></div>
     <p class="spec-note">컴포넌트 이름은 src/shared/ui/ 와 src/features/ 에 있는 것만 적었다. 없는 것은 (제안) 을 붙였다.</p>
@@ -50,7 +49,7 @@
 # 홈 — 유저 플로우
 
 [README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다.
-화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다. `제안` 동작이 섞여 있다.
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다. 아직 구현하지 않은 동작이 섞여 있다.([README.md](./README.md) 요구사항 7)
 
 ## 1. 전체 흐름
 
@@ -87,7 +86,7 @@ flowchart TD
     P -->|"아니요(터치)"| NOP["시차 없음"]:::step
 ```
 
-- 등장 연출은 한 번만 실행한다. 다른 페이지에 갔다가 돌아와도 다시 실행하지 않는다(제안). 첫 방문을 위한 연출이라, 매번 나오면 방문자가 기다려야 하기 때문이다.
+- 등장 연출은 한 번만 실행한다. 다른 페이지에 갔다가 돌아와도 다시 실행하지 않는다. 첫 방문을 위한 연출이라, 매번 나오면 방문자가 기다려야 하기 때문이다.
 - 포인터 시차도 동작 줄이기에서는 하지 않는다.
 
 ## 3. 작업 보기
@@ -100,27 +99,21 @@ flowchart TD
     RM -->|"예"| SHOW["카드가 바로 보임"]:::step
     UP --> PICK["카드에 hover · focus"]:::step
     SHOW --> PICK
-    PICK --> HAS{"상세 주소가 있는가"}:::decision
-    HAS -->|"예"| WD(["작업 상세로 이동"]):::done
-    HAS -->|"아니요"| SELF["작업 섹션에 머묾"]:::warn
+    PICK -->|"열기 아이콘"| WD(["작업 상세로 이동"]):::done
 ```
 
-- 상세 주소가 없는 작업은 `href` 가 `#projects` 다.(`src/entities/project/services/project.services.ts`) 작업 상세가 생기면 모든 카드에 주소가 생긴다(제안).
+- 카드의 주소는 `/work/<slug>` 다. 작업 원문에 `href` 가 있으면 그 주소로 간다.(`src/entities/project/services/project.services.ts`)
 
 ## 4. 연락하기
 
 ```mermaid
 flowchart TD
-    C["S-01 연락 섹션"]:::screen --> W{"무엇을 누르는가"}:::decision
-    W -->|"Get in Touch"| MAIL[/"메일 앱"/]:::api
-    W -->|"메일 주소 버튼"| CP{"클립보드에 쓸 수 있는가"}:::decision
-    CP -->|"예"| T("P-01 복사됨 토스트"):::dialog
-    CP -->|"아니요"| MAIL
-    T --> END(["주소를 가져감"]):::done
-    MAIL --> END
+    C["S-01 연락 섹션"]:::screen -->|"Get in Touch 에 마우스 오버 · 초점"| ADDR["문구가 메일 주소로 바뀜"]:::step
+    ADDR -->|"누름"| MAIL[/"메일 앱"/]:::api
+    C -->|"터치 화면에서 누름"| MAIL
 ```
 
-- 메일 주소 버튼의 복사는 `제안` 이다. 지금은 버튼 2개 모두 `mailto:` 다.(`src/features/contact/ui/Contact.tsx`)
+- 연락 버튼은 1개다. 메일 주소 복사는 두지 않는다.([README.md](./README.md) 「이메일」)
 </script>
 <script src="../userflow.js"></script>
 <!-- userflow:end -->
@@ -133,7 +126,7 @@ flowchart TD
       <span class="vp">데스크톱 1280</span>
 
       <div class="pf-sec rel"><span class="pf-lab">header</span><span class="m abs">1</span>
-        <div class="row"><b>GUNI</b><span class="muted small">Frontend Developer</span><span class="sp"></span><span class="pf-chip">Home</span><span class="small">About</span><span class="small">Projects</span><span class="small">Skills</span><span class="small">Contact</span><span class="sp"></span><span class="btn pri">Let's Talk →</span></div>
+        <div class="row"><b>GUNI</b><span class="muted small">Frontend Developer</span><span class="sp"></span><span class="pf-chip">Home</span><span class="small">About</span><span class="small">Projects</span><span class="small">Skills</span><span class="sp"></span><span class="btn pri">Contact →</span></div>
       </div>
 
       <div class="pf-sec rel"><span class="pf-lab">hero</span><span class="m abs">2</span><span class="mo abs">등장 연출</span>
@@ -173,7 +166,7 @@ flowchart TD
       </div>
 
       <div class="pf-sec rel"><span class="pf-lab">#contact</span><span class="m abs">8</span>
-        <div class="row"><span class="pf-h">Get in Touch!</span><span class="sp"></span><span class="btn pri">Get in Touch →</span><span class="btn">✉ h2dlhs@naver.com</span></div>
+        <div class="row"><span class="pf-h">Get in Touch!</span><span class="sp"></span><span class="btn pri">Get in Touch →</span></div>
       </div>
 
       <div class="pf-sec rel"><span class="pf-lab">footer</span><span class="m abs">9</span>
@@ -182,26 +175,26 @@ flowchart TD
     </div>
 
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>Header</b> <code>widgets/header</code><p>메뉴 5개는 같은 페이지의 섹션으로 간다. 보고 있는 섹션 메뉴에 밑줄 (제안, 지금은 Home 고정). Let's Talk → <code>#contact</code></p></div></li>
-      <li><span class="m">2</span><div><b>Hero</b> <code>features/hero</code><p>이름은 <code>h1</code>. 등장 연출은 <a href="#s04">S-04</a>, 값은 README 「모션」 표 (제안)</p></div></li>
+      <li><span class="m">1</span><div><b>Header</b> <code>widgets/header</code><p>메뉴 4개는 같은 페이지의 섹션으로 간다. 보고 있는 섹션 메뉴에 밑줄 (구현 전, 지금은 Home 고정). Contact 버튼 → <code>#contact</code></p></div></li>
+      <li><span class="m">2</span><div><b>Hero</b> <code>features/hero</code><p>이름은 <code>h1</code>. 등장 연출은 <a href="#s04">S-04</a>, 값은 README 「모션」 표 (구현 전)</p></div></li>
       <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>View My Projects → <code>#projects</code>. 이력서 버튼은 두지 않는다</p></div></li>
-      <li><span class="m">4</span><div><b>HeroVisual</b><p>캐릭터는 처음 화면 이미지라 미리 불러온다(<code>loading="eager"</code>). 손글씨는 <code>aria-hidden</code>. 포인터 시차 (제안)</p></div></li>
-      <li><span class="m">5</span><div><b>FeaturedProjects · ProjectCard</b><p>카드는 <code>content/projects.ts</code> 순서. 열기 아이콘 → <code>/work/&lt;id&gt;</code> (제안). View All Projects → <code>/work</code> (제안)</p></div></li>
-      <li><span class="m">6</span><div><b>Skills</b><p>타일 9개. hover 때 아이콘이 흔들린다 (제안)</p></div></li>
-      <li><span class="m">7</span><div><b>About</b><p>숫자 3개는 원본 값이고 나중에 바꾼다. More About Me → <code>/about</code> (제안)</p></div></li>
-      <li><span class="m">8</span><div><b>Contact</b><p>Get in Touch → <code>mailto:</code>. 메일 주소 버튼 → 복사 후 <a href="#p01">P-01</a> (제안, 지금 <code>mailto:</code>)</p></div></li>
-      <li><span class="m">9</span><div><b>Footer</b> <code>widgets/footer</code><p>외부 링크는 새 탭 (제안, 지금 <code>#top</code>). 메뉴 4개는 Skills 를 뺀다</p></div></li>
+      <li><span class="m">4</span><div><b>HeroVisual</b><p>캐릭터는 처음 화면 이미지라 미리 불러온다(<code>loading="eager"</code>). 손글씨는 <code>aria-hidden</code>. 포인터 시차 (구현 전)</p></div></li>
+      <li><span class="m">5</span><div><b>FeaturedProjects · ProjectCard</b><p>카드는 <code>content/projects.ts</code> 순서. 열기 아이콘 → <code>/work/&lt;slug&gt;</code>. View All Projects → <code>/work</code></p></div></li>
+      <li><span class="m">6</span><div><b>Skills</b><p>타일 9개. hover 때 아이콘이 흔들린다 (구현 전)</p></div></li>
+      <li><span class="m">7</span><div><b>About</b><p>숫자 3개는 원본 값이고 나중에 바꾼다. More About Me → <code>/about</code></p></div></li>
+      <li><span class="m">8</span><div><b>Contact</b><p>버튼은 Get in Touch 1개 → <code>mailto:</code>. 마우스 오버 · 초점 때 문구가 메일 주소로 바뀐다.</p></div></li>
+      <li><span class="m">9</span><div><b>Footer</b> <code>widgets/footer</code><p>외부 링크는 새 탭 (구현 전, 지금 <code>#top</code>). 메뉴는 Home · About · Projects · Contact</p></div></li>
     </ol></aside>
   </div>
 </section>
 
 <!-- ============ S-02 헤더 고정 ============ -->
 <section class="screen" id="s02">
-  <div class="screen-h"><span class="id">S-02</span><h2>헤더 고정 (제안)</h2><span class="route">/ · 스크롤 후</span></div>
+  <div class="screen-h"><span class="id">S-02</span><h2>헤더 고정 (구현 전)</h2><span class="route">/ · 스크롤 후</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel pf-sticky"><span class="pf-lab">header · 고정</span><span class="m abs">1</span><span class="mo abs">위에 붙음</span>
-        <div class="row"><b>GUNI</b><span class="sp"></span><span class="small">Home</span><span class="small">About</span><span class="pf-chip">Projects</span><span class="small">Skills</span><span class="small">Contact</span><span class="sp"></span><span class="btn pri">Let's Talk →</span></div>
+        <div class="row"><b>GUNI</b><span class="sp"></span><span class="small">Home</span><span class="small">About</span><span class="pf-chip">Projects</span><span class="small">Skills</span><span class="sp"></span><span class="btn pri">Contact →</span></div>
       </div>
       <div class="pf-sec"><span class="pf-lab">#projects</span><span class="muted small">S-01 과 같다</span></div>
     </div>
@@ -218,7 +211,7 @@ flowchart TD
     <div class="frame phone">
       <span class="vp">모바일 390</span>
       <div class="pf-sec rel"><span class="pf-lab">header</span><span class="m abs">1</span>
-        <div class="pf-stack"><b>GUNI</b><span class="small">Home · About · Projects · Skills · Contact</span><span class="btn pri">Let's Talk →</span></div>
+        <div class="pf-stack"><b>GUNI</b><span class="small">Home · About · Projects · Skills</span><span class="btn pri">Contact →</span></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">hero</span><span class="m abs">2</span>
         <div class="pf-stack"><span class="pf-hand">Hey, I'm</span><span class="pf-display">GUNI</span><span class="btn pri">View My Projects →</span><div class="img-ph pf-hero-img">캐릭터</div></div>
@@ -237,7 +230,7 @@ flowchart TD
 
 <!-- ============ S-04 등장 연출 · 동작 줄이기 ============ -->
 <section class="screen" id="s04">
-  <div class="screen-h"><span class="id">S-04</span><h2>등장 연출 · 동작 줄이기 (제안)</h2><span class="route">/ · 처음 그릴 때</span></div>
+  <div class="screen-h"><span class="id">S-04</span><h2>등장 연출 · 동작 줄이기 (구현 전)</h2><span class="route">/ · 처음 그릴 때</span></div>
   <div class="state-grid">
     <div class="state"><div class="lab">1. 시작</div><div class="pf-stack"><span class="pf-hand">Hey, I'm</span><span class="muted small">이름 · 낙서 · 말풍선이 아직 없다</span></div></div>
     <div class="state"><div class="lab">2. 낙서가 그려짐</div><div class="pf-stack"><span class="mo">선 그리기</span><span class="muted small">왕관 · 밑줄 · 번개</span></div></div>
@@ -249,31 +242,6 @@ flowchart TD
     <div class="spec-block">
       <h4>순서와 값</h4>
       <p class="spec-note">도구 · 토큰 · 동작 줄이기에서 보일 상태는 README.md 「모션」 표가 갖는다. 여기에는 순서만 둔다.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ P-01 복사됨 토스트 ============ -->
-<section class="screen" id="p01">
-  <div class="screen-h"><span class="id">P-01</span><h2>복사됨 토스트 (제안)</h2><span class="route">S-01 연락 섹션</span></div>
-  <div class="wrap">
-    <div class="frame">
-      <div class="row rel"><span class="m abs">1</span><span class="toast">✓ 메일 주소를 복사했어요</span></div>
-    </div>
-    <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>토스트</b> (제안, 컴포넌트 없음)<p>화면 아래 가운데. <code>role="status"</code>. 잠시 뒤 사라진다. 시간은 정하지 않았다</p></div></li>
-    </ol></aside>
-  </div>
-  <div class="spec">
-    <div class="spec-block">
-      <h4>토스트 문구</h4>
-      <div class="spec-tw"><table class="spec-t">
-        <thead><tr><th>상황</th><th>문구</th></tr></thead>
-        <tbody>
-          <tr><td>복사 성공</td><td>메일 주소를 복사했어요</td></tr>
-          <tr><td>복사 실패</td><td>토스트 없이 메일 앱을 연다</td></tr>
-        </tbody>
-      </table></div>
     </div>
   </div>
 </section>

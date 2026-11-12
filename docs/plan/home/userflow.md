@@ -1,7 +1,7 @@
 # 홈 — 유저 플로우
 
 [README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다.
-화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다. `제안` 동작이 섞여 있다.
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다. 아직 구현하지 않은 동작이 섞여 있다.([README.md](./README.md) 요구사항 7)
 
 ## 1. 전체 흐름
 
@@ -38,7 +38,7 @@ flowchart TD
     P -->|"아니요(터치)"| NOP["시차 없음"]:::step
 ```
 
-- 등장 연출은 한 번만 실행한다. 다른 페이지에 갔다가 돌아와도 다시 실행하지 않는다(제안). 첫 방문을 위한 연출이라, 매번 나오면 방문자가 기다려야 하기 때문이다.
+- 등장 연출은 한 번만 실행한다. 다른 페이지에 갔다가 돌아와도 다시 실행하지 않는다. 첫 방문을 위한 연출이라, 매번 나오면 방문자가 기다려야 하기 때문이다.
 - 포인터 시차도 동작 줄이기에서는 하지 않는다.
 
 ## 3. 작업 보기
@@ -51,24 +51,18 @@ flowchart TD
     RM -->|"예"| SHOW["카드가 바로 보임"]:::step
     UP --> PICK["카드에 hover · focus"]:::step
     SHOW --> PICK
-    PICK --> HAS{"상세 주소가 있는가"}:::decision
-    HAS -->|"예"| WD(["작업 상세로 이동"]):::done
-    HAS -->|"아니요"| SELF["작업 섹션에 머묾"]:::warn
+    PICK -->|"열기 아이콘"| WD(["작업 상세로 이동"]):::done
 ```
 
-- 상세 주소가 없는 작업은 `href` 가 `#projects` 다.(`src/entities/project/services/project.services.ts`) 작업 상세가 생기면 모든 카드에 주소가 생긴다(제안).
+- 카드의 주소는 `/work/<slug>` 다. 작업 원문에 `href` 가 있으면 그 주소로 간다.(`src/entities/project/services/project.services.ts`)
 
 ## 4. 연락하기
 
 ```mermaid
 flowchart TD
-    C["S-01 연락 섹션"]:::screen --> W{"무엇을 누르는가"}:::decision
-    W -->|"Get in Touch"| MAIL[/"메일 앱"/]:::api
-    W -->|"메일 주소 버튼"| CP{"클립보드에 쓸 수 있는가"}:::decision
-    CP -->|"예"| T("P-01 복사됨 토스트"):::dialog
-    CP -->|"아니요"| MAIL
-    T --> END(["주소를 가져감"]):::done
-    MAIL --> END
+    C["S-01 연락 섹션"]:::screen -->|"Get in Touch 에 마우스 오버 · 초점"| ADDR["문구가 메일 주소로 바뀜"]:::step
+    ADDR -->|"누름"| MAIL[/"메일 앱"/]:::api
+    C -->|"터치 화면에서 누름"| MAIL
 ```
 
-- 메일 주소 버튼의 복사는 `제안` 이다. 지금은 버튼 2개 모두 `mailto:` 다.(`src/features/contact/ui/Contact.tsx`)
+- 연락 버튼은 1개다. 메일 주소 복사는 두지 않는다.([README.md](./README.md) 「이메일」)
