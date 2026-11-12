@@ -1,9 +1,9 @@
 /** 사이트 정보의 단일 출처. 메타데이터 · 헤더 · 푸터 · 연락 섹션이 함께 읽는다. */
 export const SITE = {
     name: 'GUNI',
-    role: 'Frontend Developer',
-    title: 'GUNI — Frontend Developer',
-    description: 'I build modern, scalable and delightful web experiences.',
+    role: 'Web Frontend Developer',
+    title: 'GUNI — Web Frontend Developer',
+    description: '모던하고 확장성 있으며, 쓰는 즐거움이 있는 웹 경험을 만듭니다.',
     email: 'h2dlhs@naver.com',
     locale: 'ko_KR',
 } as const;
@@ -14,6 +14,5 @@ export const SITE = {
  */
 export const SOCIAL_LINKS = [
     { label: 'GitHub', href: '#top', icon: 'github' },
-    { label: 'LinkedIn', href: '#top', icon: 'linkedin' },
     { label: '이메일', href: `mailto:${SITE.email}`, icon: 'mail' },
 ] as const;

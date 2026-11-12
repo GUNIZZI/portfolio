@@ -9,16 +9,22 @@ export default function Footer() {
             <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-x-8 gap-y-5 px-gutter py-7">
                 <Logo name={SITE.name} role={SITE.role} />
                 <div className="flex gap-2">
-                    {SOCIAL_LINKS.map((link) => (
-                        <a
-                            key={link.label}
-                            href={link.href}
-                            aria-label={link.label}
-                            className="flex size-11 items-center justify-center"
-                        >
-                            <Icon name={link.icon} />
-                        </a>
-                    ))}
+                    {SOCIAL_LINKS.map((link) => {
+                        // 외부 프로필은 새 탭에서 연다. 주소를 받기 전(#top)과 mailto 는 해당하지 않는다
+                        const isExternal = link.href.startsWith('http');
+                        return (
+                            <a
+                                key={link.label}
+                                href={link.href}
+                                aria-label={isExternal ? `${link.label} (새 탭)` : link.label}
+                                target={isExternal ? '_blank' : undefined}
+                                rel={isExternal ? 'noopener noreferrer' : undefined}
+                                className="flex size-11 items-center justify-center"
+                            >
+                                <Icon name={link.icon} />
+                            </a>
+                        );
+                    })}
                 </div>
                 <nav
                     aria-label="하단 메뉴"
