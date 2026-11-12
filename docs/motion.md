@@ -71,9 +71,12 @@ gsap.from(el, { y: 24, opacity: 0, duration: DURATION.slow, ease: 'enter' });
 
 | 도구          | 처리                                                                                         |
 | ------------- | -------------------------------------------------------------------------------------------- |
-| framer-motion | `_app/Providers.tsx` 의 `<MotionConfig reducedMotion="user">` 가 transform 애니메이션을 끈다 |
+| framer-motion | `_app/Providers.tsx` 의 `<MotionConfig skipAnimations>` 가 모든 값을 최종 상태로 바로 그린다 |
 | CSS           | `motion.css` 가 동작 줄이기에서 지속시간 토큰을 `0ms` 로 바꾼다                              |
 | GSAP          | 자동으로 처리되지 않는다. `gsap.matchMedia()` 로 분기해 최종 상태만 적용한다                 |
+
+`reducedMotion="user"` 만으로는 transform 만 멈춘다. 선 그리기(`pathLength`)와 `opacity` 는 계속 움직인다.(`src/_app/Providers.tsx`)
+`animate()` 함수와 포인터를 따라가는 값은 `MotionConfig` 를 거치지 않는다. `useReducedMotion()` 으로 직접 분기한다.(`src/features/about/ui/CountUp.tsx` · `src/features/hero/ui/HeroIntro.tsx`)
 
 **GSAP 코드는 모두 `gsap.matchMedia()` 안에서 만든다.**
 
@@ -111,7 +114,7 @@ e2e 는 `reduced-motion` 프로젝트로 같은 화면을 한 번 더 실행한�
 
 ## 미정리 항목
 
-- 화면에 모션이 아직 없다(design.md 원칙 3). framer-motion 과 GSAP 을 쓰는 곳도 없다.
+- 모션 목록은 `docs/plan/home/README.md` 「모션」 표다. 헤더와 배경의 모션도 그 표에 있다.
 
 ## 확인방법
 

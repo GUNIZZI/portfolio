@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import DrawnPath from '@/shared/ui/drawnPath/DrawnPath';
 import { cn } from '@/shared/util/cn';
 
 const UNDERLINE_CLASS = {
@@ -16,7 +17,7 @@ interface OwnProps {
     className?: string;
 }
 
-/** 마커로 쓴 섹션 제목과 그 아래 손으로 그은 밑줄 */
+/** 마커로 쓴 섹션 제목과 그 아래 손으로 그은 밑줄. 밑줄은 화면에 처음 들어올 때 그려진다 */
 export default function MarkerHeading({
     children,
     underline,
@@ -33,11 +34,10 @@ export default function MarkerHeading({
                     aria-hidden="true"
                     className={cn('h-2.5 w-42.5', underlineClassName)}
                 >
-                    <path
+                    <DrawnPath
                         d="M3 8 C 60 3, 130 2, 197 5"
-                        fill="none"
                         className={UNDERLINE_CLASS[underline]}
-                        strokeWidth="6"
+                        strokeWidth={6}
                         strokeLinecap="round"
                     />
                 </svg>

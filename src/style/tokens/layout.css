@@ -10,6 +10,15 @@
     --radius-blob: 48% 52% 46% 54% / 55% 45% 55% 45%;
 }
 
+/*
+ * 메뉴로 섹션에 갈 때 위에 남기는 거리. 화면 위에 붙은 헤더의 높이에 24px 을 더한다.
+ * --header-height 는 widgets/header 의 HeaderBar 가 잰 값을 넣는다.
+ * html 의 scroll-padding 으로 주면 헤더 안의 버튼에 초점이 갈 때도 화면이 따라 움직인다.
+ */
+@utility scroll-mt-header {
+    scroll-margin-top: calc(var(--header-height, 0px) + 24px);
+}
+
 /* 좌우 여백. 좁은 화면 16px 에서 넓은 화면 40px 까지 */
 @utility px-gutter {
     padding-inline: clamp(16px, 4vw, 40px);

@@ -10,6 +10,8 @@
     --panel: #10101a;
     --card: #161624;
     --chip: #181826;
+    /* 고정 헤더의 반투명 바탕. --background 에 알파 0.8 */
+    --glass: rgb(10 10 18 / 0.8);
 
     /* 선 */
     --border: #22223a;
@@ -50,6 +52,7 @@
     --color-panel: var(--panel);
     --color-card: var(--card);
     --color-chip: var(--chip);
+    --color-glass: var(--glass);
     --color-border: var(--border);
     --color-border-card: var(--border-card);
     --color-line: var(--line);
