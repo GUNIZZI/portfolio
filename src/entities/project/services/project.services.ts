@@ -3,16 +3,13 @@ import 'server-only';
 import type { ProjectData, ProjectResponse } from '../model/project.types';
 import { projectRepository } from '../repositories/project.repositories';
 
-/** 상세 주소가 없는 작업이 가리키는 곳 */
-const FALLBACK_HREF = '#projects';
-
 export function toProjectData(project: ProjectResponse): ProjectData {
   return {
     slug: project.slug,
     title: project.title,
     category: project.category,
     summary: project.summary,
-    href: project.href ?? FALLBACK_HREF,
+    href: project.href ?? `/work/${project.slug}`,
     image: project.image,
   };
 }

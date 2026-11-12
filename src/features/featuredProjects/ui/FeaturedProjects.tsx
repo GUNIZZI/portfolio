@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import type { ProjectData } from '@/entities/project/model/project.types';
 import Icon from '@/shared/ui/icon/Icon';
 import MarkerHeading from '@/shared/ui/markerHeading/MarkerHeading';
@@ -19,13 +21,13 @@ export default function FeaturedProjects({ projects }: OwnProps) {
             <p className="mt-1 text-sm text-foreground">Here are some of my recent projects.</p>
           </div>
         </div>
-        <a
-          href="#projects"
+        <Link
+          href="/work"
           className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent"
         >
           View All Projects
           <Icon name="arrowRight" size={16} strokeWidth={2} />
-        </a>
+        </Link>
       </div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
         {projects.map((project) => (

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import type { ProjectData } from '@/entities/project/model/project.types';
 import Icon from '@/shared/ui/icon/Icon';
@@ -34,9 +35,9 @@ export default function ProjectCard({ project }: OwnProps) {
         </span>
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-base font-bold">{project.title}</h3>
-          <a href={project.href} aria-label={`${project.title} 열기`} className="flex p-1">
+          <Link href={project.href} aria-label={`${project.title} 열기`} className="flex p-1">
             <Icon name="external" size={18} strokeWidth={2} />
-          </a>
+          </Link>
         </div>
         <p className="text-caption text-muted">{project.summary}</p>
       </div>

@@ -1,7 +1,7 @@
 import { getProjectList, toProjectData } from '../project.services';
 
 describe('toProjectData', () => {
-  it('상세 주소가 없으면 작업 섹션을 가리킨다', () => {
+  it('상세 주소가 없으면 작업 상세를 가리킨다', () => {
     const data = toProjectData({
       slug: 'a',
       title: 'A',
@@ -9,7 +9,7 @@ describe('toProjectData', () => {
       summary: 'React',
       image: null,
     });
-    expect(data.href).toBe('#projects');
+    expect(data.href).toBe('/work/a');
   });
 
   it('상세 주소가 있으면 그대로 쓴다', () => {
@@ -18,10 +18,10 @@ describe('toProjectData', () => {
       title: 'A',
       category: 'Web',
       summary: 'React',
-      href: '/work/a',
+      href: 'https://example.com',
       image: null,
     });
-    expect(data.href).toBe('/work/a');
+    expect(data.href).toBe('https://example.com');
   });
 });
 

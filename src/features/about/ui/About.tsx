@@ -59,7 +59,7 @@ export default function About() {
               </span>
             ))}
           </p>
-          <Button href="#about" intent="outlineBrand" size="md" className="self-start">
+          <Button href="/about" intent="outlineBrand" size="md" className="self-start">
             More About Me
             <Icon name="arrowRight" size={16} strokeWidth={2} />
           </Button>
