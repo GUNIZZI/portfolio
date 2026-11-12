@@ -38,17 +38,19 @@ export default function Contact() {
           <br />
           I&apos;d love to hear from you.
         </p>
-        <div className="flex flex-wrap gap-4">
-          <Button href={mailto}>
-            <Icon name="send" size={18} strokeWidth={2} />
-            Get in Touch
-            <Icon name="arrowRight" size={16} strokeWidth={2.2} />
-          </Button>
-          <Button href={mailto} intent="outline">
-            <Icon name="mail" size={20} />
-            {SITE.email}
-          </Button>
-        </div>
+        <Button href={mailto} className="group self-start">
+          <Icon name="send" size={18} strokeWidth={2} />
+          {/* 두 문구를 같은 칸에 겹쳐 둔다. 문구가 바뀌어도 버튼 폭이 변하지 않는다 */}
+          <span className="grid justify-items-center">
+            <span className="col-start-1 row-start-1 group-hover:invisible group-focus-visible:invisible">
+              Get in Touch
+            </span>
+            <span className="invisible col-start-1 row-start-1 group-hover:visible group-focus-visible:visible">
+              {SITE.email}
+            </span>
+          </span>
+          <Icon name="arrowRight" size={16} strokeWidth={2.2} />
+        </Button>
       </div>
 
       <div className="flex min-w-0 flex-[1_1_220px] items-center justify-end gap-3">
