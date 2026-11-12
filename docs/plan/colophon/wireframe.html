@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>이 사이트는 이렇게 와이어프레임</title>
+<link rel="stylesheet" href="../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 콜로폰</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>이 사이트는 이렇게 (/colophon) — 초안</h1>
+  <p>제안으로 채운 초안이다. 헤더 · 푸터는 홈과 같다.</p>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>콜로폰 (제안)</td><td>페이지</td><td><code>/colophon</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 이 사이트는 이렇게 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 초안이라 모든 흐름이 `제안` 이다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    FOOT["푸터 · 이 사이트는 이렇게"]:::step --> C["S-01 콜로폰"]:::screen
+    C -->|"저장소"| GH[/"저장소 새 탭"/]:::api
+    C -.->|"로고"| HOME(["홈"]):::done
+```
+</script>
+<script src="../userflow.js"></script>
+<!-- userflow:end -->
+
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>콜로폰 (제안)</h2><span class="route">/colophon</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span>
+        <div class="row"><span class="pf-h">HOW THIS SITE IS BUILT</span><span class="sp"></span><span class="btn">저장소 ↗</span></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">stack</span><span class="m abs">2</span>
+        <div class="pf-chips"><span class="pf-chip">Next.js 16</span><span class="pf-chip">React 19</span><span class="pf-chip">TypeScript</span><span class="pf-chip">Tailwind v4</span><span class="pf-chip">framer-motion</span><span class="pf-chip">GSAP</span></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">architecture</span><span class="m abs">3</span><span class="mo abs">화살표 그려짐</span>
+        <div class="pf-stack c"><span class="pf-chip">app</span><span>↓</span><span class="pf-chip">widgets</span><span>↓</span><span class="pf-chip">features</span><span>↓</span><span class="pf-chip">entities</span><span>↓</span><span class="pf-chip">shared</span></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">ax</span><span class="m abs">4</span>
+        <div class="dl"><div>CLAUDE.md · docs/</div><div>사람과 AI 가 같은 규칙을 읽는다</div><div>format 훅</div><div>쓰자마자 Prettier</div><div>guard_tokens 훅</div><div>토큰 밖 값을 그 자리에서 알림</div><div>guard-commit 훅</div><div>커밋은 스킬로만</div></div>
+      </div>
+      <div class="pf-sec"><span class="pf-lab">design · plan</span><span class="muted small">디자인 원본 · 토큰 · 폰트 라이선스 · 기획 뷰어</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>머리</b> (제안)<p>저장소 링크는 공개 저장소일 때만</p></div></li>
+      <li><span class="m">2</span><div><b>기술</b> (제안)<p><code>package.json</code> 기준</p></div></li>
+      <li><span class="m">3</span><div><b>구조 그림</b> (제안)<p>SVG. <code>role="img"</code> 와 <code>aria-label</code></p></div></li>
+      <li><span class="m">4</span><div><b>AX 환경</b> (제안)<p>장치마다 무엇을 막는지 한 줄</p></div></li>
+    </ol></aside>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

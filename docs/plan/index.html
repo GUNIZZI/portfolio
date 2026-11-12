@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>화면 설계 모음</title>
+<!-- scripts/build-plan-index.js 가 만든 파일이다. 손으로 고치지 않는다 -->
+<style>
+/* 이름과 값은 wireframe.css 와 같다 */
+:root{
+  --bg:#f4f4f5;      /* 페이지와 iframe 바탕 */
+  --surface:#fff;    /* 왼쪽 메뉴 바탕 */
+  --line:#d4d4d8;    /* 왼쪽 메뉴 오른쪽 경계선 */
+  --text:#18181b;    /* 본문 글자 */
+  --sub:#71717a;     /* 보조 글자: 메뉴 설명 · 라우트 · 부품 견본 */
+  --mute:#a1a1aa;    /* 스코프 사이 구분자(>) */
+  --fill:#f4f4f5;    /* 메뉴 항목 hover 바탕 */
+  --fill2:#e4e4e7;   /* 부품 견본 위 경계선 */
+  --lnbActive:#18181b; /* LNB 활성 항목 바탕 */
+  --lnbActiveText:#fff; /* LNB 활성 항목 글자 */
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;display:grid;grid-template-columns:280px minmax(0,1fr)}
+nav{background:var(--surface);border-right:1px solid var(--line);overflow:auto;padding:16px 12px}
+nav h1{font-size:14px;margin:0 4px 4px}
+nav p{margin:0 4px 16px;color:var(--sub);font-size:11px}
+nav a{color:inherit;text-decoration:none;display:block;border-radius:6px}
+nav a:hover{background:var(--fill)}
+nav a[aria-current="page"]{background:var(--lnbActive);color:var(--lnbActiveText)}
+nav a[aria-current="page"] :is(.route,.sep){color:var(--mute)}
+.plan{padding:6px 8px;margin-bottom:4px}
+.parts{margin-top:16px;padding:6px 8px;border-top:1px solid var(--fill2);color:var(--sub);font-size:12px}
+.scope{display:block;font-weight:700;font-size:13px}
+.scope .sep{color:var(--mute);font-weight:400}
+.route{display:block;color:var(--sub);font-family:ui-monospace,Menlo,monospace;font-size:11px}
+iframe{border:0;width:100%;height:100%;background:var(--bg)}
+@media (max-width:760px){body{grid-template-columns:1fr;grid-template-rows:auto 1fr}nav{max-height:40vh;border-right:0;border-bottom:1px solid var(--line)}}
+</style>
+</head>
+<body>
+  <nav aria-label="화면 설계 목록">
+    <h1>화면 설계 모음</h1>
+    <p>기획 문서 5건 · 목록은 README.md 「구조」 표에서 만든다</p>
+    <a class="plan" href="./home/wireframe.html" target="view" data-key="home"><span class="scope">메인 <span class="sep">&gt;</span> 홈</span><span class="route">/</span></a>
+    <a class="plan" href="./work/wireframe.html" target="view" data-key="work"><span class="scope">작업 <span class="sep">&gt;</span> 목록 · 상세</span><span class="route">/work · /work/[slug]</span></a>
+    <a class="plan" href="./about/wireframe.html" target="view" data-key="about"><span class="scope">소개 <span class="sep">&gt;</span> 소개</span><span class="route">/about</span></a>
+    <a class="plan" href="./colophon/wireframe.html" target="view" data-key="colophon"><span class="scope">공통 <span class="sep">&gt;</span> 이 사이트는 이렇게</span><span class="route">/colophon</span></a>
+    <a class="plan" href="./not-found/wireframe.html" target="view" data-key="not-found"><span class="scope">공통 <span class="sep">&gt;</span> 찾을 수 없음</span><span class="route">없는 모든 주소 (app/not-found.tsx)</span></a>
+    <a class="parts" href="./parts.html" target="view" data-key="parts">부품 견본</a>
+  </nav>
+  <iframe name="view" title="와이어프레임" src="./home/wireframe.html"></iframe>
+  <script>
+  // 주소 해시(#<기획 폴더>[/<화면 ID>])로 보던 화면을 공유한다. 스크립트가 없어도 링크는 그대로 연다
+  (() => {
+    const view = document.querySelector('iframe[name="view"]');
+    const links = [...document.querySelectorAll('nav a[data-key]')];
+    const byKey = new Map(links.map(a => [a.dataset.key, a]));
+
+    const mark = key => {
+      for (const a of links) a.removeAttribute('aria-current');
+      byKey.get(key)?.setAttribute('aria-current', 'page');
+      byKey.get(key)?.scrollIntoView({ block: 'nearest' });
+    };
+
+    // 마지막 마디가 기획 폴더가 아니면 화면 ID 로 본다
+    const parse = () => {
+      const hash = decodeURIComponent(location.hash.slice(1));
+      if (byKey.has(hash)) return { key: hash, anchor: '' };
+      const cut = hash.lastIndexOf('/');
+      const key = hash.slice(0, cut);
+      return byKey.has(key) ? { key, anchor: hash.slice(cut + 1) } : null;
+    };
+
+    const write = (key, anchor) => {
+      history.replaceState(null, '', '#' + key + (anchor ? '/' + anchor : ''));
+      mark(key);
+    };
+
+    const open = () => {
+      const target = parse() ?? { key: links[0].dataset.key, anchor: '' };
+      view.src = byKey.get(target.key).getAttribute('href') + (target.anchor ? '#' + target.anchor : '');
+      mark(target.key);
+    };
+
+    for (const a of links) a.addEventListener('click', () => write(a.dataset.key, ''));
+
+    // 와이어프레임 안에서 옮긴 위치도 주소에 남긴다. file:// 은 iframe 안을 읽지 못해 문서 단위까지만 남는다
+    view.addEventListener('load', () => {
+      try {
+        const win = view.contentWindow;
+        const sync = () => {
+          const a = links.find(link => new URL(link.href).pathname === win.location.pathname);
+          if (a) write(a.dataset.key, win.location.hash.slice(1));
+        };
+        sync();
+        win.addEventListener('hashchange', sync);
+      } catch {}
+    });
+
+    window.addEventListener('hashchange', open);
+    open();
+  })();
+  </script>
+</body>
+</html>

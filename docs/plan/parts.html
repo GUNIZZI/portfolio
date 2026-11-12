@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>와이어프레임 부품 견본</title>
+<link rel="stylesheet" href="./wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="부품 바로가기">
+    <a href="#screen">화면 골격</a><a href="#list">목록</a><a href="#form">폼</a><a href="#alert">안내 상자</a>
+    <a href="#detail">상세</a><a href="#dialog">다이얼로그</a><a href="#state">상태 카드</a><a href="#misc">작은 부품</a><a href="#pf">포트폴리오</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>와이어프레임 부품 견본</h1>
+  <p>wireframe.html 을 그릴 때 이 파일의 마크업을 복사해 쓴다. 스타일은 wireframe.css 하나가 갖는다.</p>
+  <p>여기 없는 부품이 필요하면 wireframe.css 에 클래스를 추가하고 이 파일에도 견본을 둔다. 화면 파일에 <code>&lt;style&gt;</code> 을 두지 않는다.</p>
+</div>
+
+<!-- ============ 화면 골격: section 하나 = 화면 하나 ============ -->
+<section class="screen" id="screen">
+  <div class="screen-h"><span class="id">S-01</span><h2>화면 골격</h2><span class="route">/route/path</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="ph rel">
+        <span class="m abs">1</span>
+        <div><h4>페이지 제목</h4><p>route.tsx 의 description</p></div>
+        <span class="sp"></span>
+        <span class="rel"><span class="m abs">2</span><span class="btn pri">등록</span></span>
+      </div>
+      <p class="muted">화면 내용</p>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>페이지 머리</b><p>명세 한 항목이 한 줄이다.</p></div></li>
+      <li><span class="m">2</span><div><b>등록</b> <code>button</code><p>컴포넌트 이름은 ui/custom/ 에 있는 것만 적는다.</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>명세 표</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>행 하나</td><td>한 줄이다</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">표 아래 보충 설명.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 목록 ============ -->
+<section class="screen" id="list">
+  <div class="screen-h"><span class="id">목록</span><h2>탭 · 요약 카드 · 도구줄 · 표 · 페이지</h2></div>
+  <div class="frame">
+    <div class="tabs" role="tablist">
+      <span class="t on" role="tab" aria-selected="true">탭 A <span class="cnt">1</span></span>
+      <span class="t" role="tab">탭 B <span class="cnt">3</span></span>
+    </div>
+    <div class="summary">
+      <div class="card"><div class="k">지금 게시중</div><div class="v">3 <small>/ 5</small></div><div class="bar"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div><div class="d">보조 설명</div></div>
+      <div class="card"><div class="k">예약</div><div class="v">2 <small>건</small></div><div class="d">보조 설명</div></div>
+    </div>
+    <div class="tbar">
+      <span class="inp sel val w-size">10개 보기</span>
+      <span class="sp"></span>
+      <span class="row">
+        <span class="inp sel val w-size">제목</span>
+        <span class="inp w-search">검색어 입력(제목), 2자 이상</span>
+        <span class="btn" title="검색" aria-label="검색">🔍</span>
+      </span>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th class="c">#</th><th>이미지</th><th>제목</th><th class="c"><span class="hsel">상태</span></th><th class="c sort">등록 일시</th><th>노출</th><th class="c">작성자</th></tr></thead>
+        <tbody>
+          <tr class="hover"><td class="c muted">3</td><td><span class="thumb"></span></td><td class="title">마우스를 올린 행</td><td class="c"><span class="badge b-on">게시중</span></td><td><div class="cell2">2026.11.01<small>(10:12)</small></div></td><td><span class="sw on"></span></td><td class="c">김관리</td></tr>
+          <tr><td class="c"><span class="pin">📌</span></td><td><span class="thumb"></span></td><td class="title"><b>고정 행</b></td><td class="c"><span class="badge b-sch">예약</span></td><td><div class="cell2">2026.11.01 ~ 2026.11.07<small>(7일간)</small></div></td><td><span class="sw"></span></td><td class="c">-</td></tr>
+          <tr><td class="c muted">1</td><td><span class="thumb"></span></td><td class="title">예시 행은 3줄까지</td><td class="c"><span class="badge b-end">종료</span></td><td><div class="cell2">2026.10.01<small>(09:00)</small></div></td><td><span class="sw ro"></span></td><td class="c">이운영</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pg"><span>‹</span><span class="on">1</span><span>2</span><span>›</span></div>
+  </div>
+</section>
+
+<!-- ============ 폼 ============ -->
+<section class="screen" id="form">
+  <div class="screen-h"><span class="id">폼</span><h2>라벨 열 + 값 열</h2></div>
+  <div class="frame">
+    <div class="form-grid">
+      <div class="fl req">입력</div>
+      <div class="fv"><div class="inp val">값<span class="counter">1/30</span></div><div class="info">ⓘ 안내 줄</div></div>
+      <div class="sepx"></div>
+      <div class="fl req">오류</div>
+      <div class="fv"><div class="rel"><span class="ferr">오류 문구는 입력칸 왼쪽 위에 겹친다.</span><div class="inp val err">잘못된 값</div></div></div>
+      <div class="sepx"></div>
+      <div class="fl">읽기 전용</div>
+      <div class="fv"><div class="inp ro">바꿀 수 없는 값</div></div>
+      <div class="sepx"></div>
+      <div class="fl">여러 줄</div>
+      <div class="fv"><div class="ta">여러 줄 입력<div class="counter">6/100</div></div></div>
+      <div class="sepx"></div>
+      <div class="fl">선택</div>
+      <div class="fv"><div class="inp sel val">선택한 값</div></div>
+      <div class="sepx"></div>
+      <div class="fl">라디오</div>
+      <div class="fv"><div class="radios"><label><span class="dot"></span>A</label><label><span class="dot on"></span>B</label></div></div>
+      <div class="sepx"></div>
+      <div class="fl">라디오(비활성)</div>
+      <div class="fv"><div class="radios ro"><label><span class="dot"></span>A</label><label class="on"><span class="dot on"></span>B</label></div></div>
+      <div class="sepx"></div>
+      <div class="fl">체크(배지)</div>
+      <div class="fv"><div class="row"><span class="cb on">✓ 선택</span><span class="cb">미선택</span></div></div>
+      <div class="sepx"></div>
+      <div class="fl">스위치</div>
+      <div class="fv"><div class="row"><span class="sw on"></span><span>노출</span></div></div>
+      <div class="sepx"></div>
+      <div class="fl req">기간</div>
+      <div class="fv"><div class="row"><div class="inp cal val date">2026.11.01 00:00:00</div><span class="muted">~</span><div class="inp cal val date">2026.11.07 23:59:59</div><span class="btn sm">작성일과 같음</span></div></div>
+      <div class="sepx"></div>
+      <div class="fl">파일</div>
+      <div class="fv">
+        <div class="drop">클릭하거나 드래그하세요<br/><span class="small">문서 파일 (파일당 최대 5MB)</span></div>
+        <div class="uploaded"><div class="img-ph">이미지</div><div class="sp"><b>file.png</b><div class="muted small">1.8MB · 1080×1440</div></div><span class="btn sm ghost">삭제</span></div>
+      </div>
+      <div class="sepx"></div>
+      <div class="fl req">본문</div>
+      <div class="fv"><div class="editor"><div class="tb">H · B · I · 목록 · 표 · 이미지 · 링크</div><div class="ed"><div>본문</div><div>미리보기</div></div><div class="ft">2/20,000</div></div></div>
+    </div>
+    <div class="btn-row"><span class="muted small">버튼을 누를 수 없는 이유</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
+  </div>
+</section>
+
+<!-- ============ 안내 상자 ============ -->
+<section class="screen" id="alert">
+  <div class="screen-h"><span class="id">안내</span><h2>안내 상자 · 기간 막대</h2></div>
+  <div class="frame">
+    <div class="alert ok" role="status"><b>성공</b>본문</div>
+    <div class="alert warn" role="status">
+      <b>⚠ 경고</b>본문
+      <div class="timeline" aria-hidden="true"><i style="left:0;width:100%;top:4px"></i><i class="over" style="left:0;width:40%;top:14px"></i><i class="me" style="left:20%;width:50%;top:24px"></i></div>
+      <div class="tl-l"><span>11-01</span><span>11-15</span><span>11-30</span></div>
+      <ul><li><span class="badge b-on">게시중</span>항목<span class="sp"></span><span class="btn sm">보기 ↗</span></li></ul>
+    </div>
+    <div class="alert info">정보</div>
+  </div>
+</section>
+
+<!-- ============ 상세 ============ -->
+<section class="screen" id="detail">
+  <div class="screen-h"><span class="id">상세</span><h2>라벨 · 값 두 쌍</h2></div>
+  <div class="frame">
+    <div class="dl6">
+      <div>제목</div><div class="full"><b>한 줄을 다 쓰는 값</b></div>
+      <div>라벨</div><div>값</div>
+      <div>라벨</div><div><span class="badge b-on">게시중</span></div>
+      <div>등록 일시</div><div>2026.10.28 <small>(13:20:41)</small></div>
+      <div>작성자</div><div><u>이름</u> <small>(id)</small></div>
+    </div>
+    <div class="btn-row"><span class="sp"></span><span class="btn">목록</span><span class="btn pri">수정</span></div>
+  </div>
+</section>
+
+<!-- ============ 다이얼로그 ============ -->
+<section class="screen" id="dialog">
+  <div class="screen-h"><span class="id">P-01</span><h2>다이얼로그</h2></div>
+  <div class="dlg-grid">
+    <div class="dlg-stage"><div class="dlg sm" role="alertdialog">
+      <div class="dh"><div><h6>P-01 · 확인 창 제목</h6><p>본문</p></div></div>
+      <div class="df"><span class="sp"></span><span class="btn focus">취소</span><span class="btn danger">되돌릴 수 없는 동작</span></div>
+    </div></div>
+    <div class="dlg-stage"><div class="dlg sm" role="dialog">
+      <div class="dh"><div><h6>P-02 · 내용이 있는 창</h6><p>설명</p></div><span class="x" aria-label="닫기">✕</span></div>
+      <div class="db">
+        <ol class="sortlist">
+          <li><span class="hdl">⋮⋮</span><span class="no">1</span><span class="thumb"></span><span class="tt"><b>순서 목록 행</b><span>보조 줄</span></span><span class="badge b-on">게시중</span><span class="updown"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></span></li>
+          <li class="drag"><span class="hdl">⋮⋮</span><span class="no">2</span><span class="thumb"></span><span class="tt"><b>끄는 중 <span class="chg">변경됨</span></b><span>보조 줄</span></span><span class="badge b-sch">예약</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></span></li>
+        </ol>
+      </div>
+      <div class="df"><span class="muted">상태 문구</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri">저장</span></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 상태 카드 ============ -->
+<section class="screen" id="state">
+  <div class="screen-h"><span class="id">상태</span><h2>로딩 · 빈 목록 · 오류 화면</h2></div>
+  <div class="state-grid">
+    <div class="state">
+      <div class="lab">로딩</div>
+      <div class="empty"><div class="ic"></div>데이터를 불러오고 있습니다.</div>
+      <div class="help">보충 설명</div>
+    </div>
+    <div class="state">
+      <div class="lab">입력 오류</div>
+      <div class="row"><span class="inp val err w-search">공</span></div>
+      <div class="errt">검색어는 최소 2자 이상 입력해야 합니다.</div>
+    </div>
+    <div class="state">
+      <div class="lab">조회 실패</div>
+      <div class="err-page">
+        <b>오류가 발생했습니다</b>페이지를 로드하는 중 문제가 발생했습니다. 다시 시도해 주세요.
+        <div class="box">서버 문구</div>
+        <div class="row"><span class="btn sm">다시 시도</span><span class="btn sm">다시 로그인</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 작은 부품 ============ -->
+<section class="screen" id="misc">
+  <div class="screen-h"><span class="id">기타</span><h2>버튼 · 배지 · 토스트 · 마커</h2></div>
+  <div class="frame">
+    <div class="row">
+      <span class="btn">기본</span><span class="btn pri">주요</span><span class="btn danger">위험</span><span class="btn ghost">글자만</span><span class="btn dis">비활성</span><span class="btn sm">작게</span><span class="btn focus">포커스</span>
+    </div>
+    <div class="row">
+      <span class="badge b-on">게시중</span><span class="badge b-sch">예약</span><span class="badge b-off">미노출</span><span class="badge b-end">종료</span><span class="badge b-type">유형</span>
+    </div>
+    <div class="row"><span class="toast">✓ 제목 · 설명</span></div>
+    <div class="row">
+      <span class="rel"><span class="m abs">1</span><span class="btn">왼쪽 위 마커</span></span>
+      <span class="rel"><span class="m abs r">2</span><span class="btn">오른쪽 위 마커</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 포트폴리오 부품 ============ -->
+<section class="screen" id="pf">
+  <div class="screen-h"><span class="id">페이지</span><h2>섹션 블록 · 카드 격자 · 타일 · 숫자 · 모션 주석</h2></div>
+  <div class="wrap">
+    <div class="frame">
+      <span class="vp">데스크톱 1280</span>
+      <div class="pf-sec rel"><span class="pf-lab">#hero</span><span class="mo abs">등장 연출</span>
+        <div class="pf-split">
+          <div class="pf-stack"><span class="pf-hand">Hey, I'm</span><span class="pf-display">GUNI</span><span class="pf-under"></span><div class="pf-chips"><span class="pf-chip">Next.js</span><span class="pf-chip">React</span></div><div class="row"><span class="btn pri">View My Projects</span><span class="btn">Download Resume</span></div></div>
+          <div class="img-ph pf-hero-img">캐릭터 일러스트</div>
+        </div>
+      </div>
+      <div class="pf-sec"><span class="pf-lab">#projects</span>
+        <div class="pf-panel pf-stack"><span class="pf-h">FEATURED PROJECTS</span>
+          <div class="pf-grid">
+            <div class="pf-card"><div class="img-ph">썸네일</div><div class="b"><span class="pf-chip">Enterprise</span><b>작업 이름</b><span class="muted">기술</span></div></div>
+            <div class="pf-card"><div class="img-ph">썸네일</div><div class="b"><span class="pf-chip">Dashboard</span><b>작업 이름</b><span class="muted">기술</span></div></div>
+          </div>
+          <div class="pf-tiles"><span class="pf-tile">아이콘</span><span class="pf-tile">아이콘</span><span class="pf-tile">아이콘</span></div>
+        </div>
+      </div>
+      <div class="pf-sec"><span class="pf-lab">#about</span><div class="pf-stats"><div><b>40+</b>숫자</div><div><b>20+</b>숫자</div><div><b>7+</b>숫자</div></div></div>
+    </div>
+    <aside class="notes"><h3>쓰는 법</h3><ol>
+      <li><span class="m">1</span><div><b>.pf-sec</b><p>섹션 하나. .pf-lab 에 섹션 id 를 적는다</p></div></li>
+      <li><span class="m">2</span><div><b>.mo</b><p>움직이는 요소에 붙이는 모션 주석. 명세는 아래 모션 표가 갖는다</p></div></li>
+      <li><span class="m">3</span><div><b>.frame.phone</b><p>모바일 390px 화면</p></div></li>
+      <li><span class="m">4</span><div><b>.pf-hero-img · .pf-wide</b><p>캐릭터(1108:982) · 썸네일(2:1) 비율의 이미지 자리</p></div></li>
+    </ol></aside>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

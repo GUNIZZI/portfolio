@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>소개 와이어프레임</title>
+<link rel="stylesheet" href="../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 소개</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>소개 (/about) — 초안</h1>
+  <p>제안으로 채운 초안이다. 헤더 · 푸터 · 연락 섹션은 홈과 같다.</p>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>소개 (제안)</td><td>페이지</td><td><code>/about</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 소개 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 초안이라 모든 흐름이 `제안` 이다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    HOME["홈 · More About Me"]:::step --> A["S-01 소개"]:::screen
+    NAV["헤더 · About"]:::step --> A
+    A -->|"스크롤"| TL["경력 타임라인"]:::step
+    A -->|"이력서"| PDF[/"이력서 PDF 새 탭"/]:::api
+    A -->|"연락"| C(["메일 앱 · 주소 복사"]):::done
+    A -.->|"로고"| HOME
+```
+
+- 연락의 흐름은 홈과 같다.([home/userflow.md](../home/userflow.md) 4절)
+</script>
+<script src="../userflow.js"></script>
+<!-- userflow:end -->
+
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>소개 (제안)</h2><span class="route">/about</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="pf-sec rel"><span class="pf-lab">intro</span><span class="m abs">1</span>
+        <div class="pf-split">
+          <div class="pf-stack"><span class="pf-h">ABOUT ME</span><span class="pf-under"></span><span class="pf-line"></span><span class="pf-line"></span><span class="btn">Download Resume ↓</span></div>
+          <div class="img-ph pf-hero-img">큰 캐릭터</div>
+        </div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">experience</span><span class="m abs">2</span><span class="mo abs">선이 그려짐</span>
+        <div class="dl"><div>2025 – 현재</div><div><b>[회사]</b> · [역할]<br /><span class="muted">[한 일]</span></div><div>[연도]</div><div><b>[회사]</b> · [역할]<br /><span class="muted">[한 일]</span></div></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">principles</span><span class="m abs">3</span>
+        <div class="pf-grid"><div class="card"><div class="k">01</div><div class="d">규칙과 도구를 먼저</div></div><div class="card"><div class="k">02</div><div class="d">움직임에 이유를</div></div><div class="card"><div class="k">03</div><div class="d">AI 와 함께</div></div></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">skills</span><span class="m abs">4</span>
+        <div class="dl"><div>화면</div><div>React · Next.js</div><div>상태</div><div>Zustand · TanStack Query</div><div>움직임</div><div>framer-motion · GSAP</div></div>
+      </div>
+      <div class="pf-sec"><span class="pf-lab">#contact</span><span class="muted small">홈과 같다</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>인트로</b> (제안)<p>소개 문단은 미정. 이력서는 홈과 같은 PDF</p></div></li>
+      <li><span class="m">2</span><div><b>경력 타임라인</b> (제안)<p><code>ol</code>. 최신부터. 내용은 사용자가 준다</p></div></li>
+      <li><span class="m">3</span><div><b>일하는 방식</b> (제안)<p>3가지. 번호는 읽는 순서라 붙였다. 문구는 미정</p></div></li>
+      <li><span class="m">4</span><div><b>기술 묶음</b> (제안)<p>분야별로 쓴 곳 한 줄씩</p></div></li>
+    </ol></aside>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

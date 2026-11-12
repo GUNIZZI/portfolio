@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>작업 목록 · 상세 와이어프레임</title>
+<link rel="stylesheet" href="../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 작업 목록</a><a href="#s02">S-02 작업 상세</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>작업 목록 · 상세 (/work) — 초안</h1>
+  <p>제안으로 채운 초안이다. 헤더 · 푸터와 섹션 제목 스타일은 홈과 같고, 모양은 디자인 원본 <span class="mono">sample/</span> 을 따른다.</p>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>작업 목록 (제안)</td><td>페이지</td><td><code>/work?category=</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>작업 상세 (제안)</td><td>페이지</td><td><code>/work/[slug]</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 작업 목록 · 상세 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 초안이라 모든 흐름이 `제안` 이다.
+화면 ID 는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    HOME["홈 · View All Projects"]:::step --> L["S-01 작업 목록"]:::screen
+    CARD["홈 · 작업 카드"]:::step --> D["S-02 작업 상세"]:::screen
+    L -->|"카드"| D
+    D -->|"이전 · 다음 작업"| D
+    D -.->|"목록으로"| L
+    D -->|"서비스 · 저장소"| EXT[/"외부 사이트 새 탭"/]:::api
+    BAD["없는 slug"]:::warn --> NF(["404"]):::done
+```
+
+- 목록으로 돌아가면 고른 필터가 남아 있다. 주소에 남겼기 때문이다.
+
+## 2. 분류로 거르기
+
+```mermaid
+flowchart TD
+    L["S-01 작업 목록"]:::screen --> F["필터 버튼"]:::step
+    F --> U["주소의 category 를 바꿈"]:::step
+    U --> RM{"동작 줄이기인가"}:::decision
+    RM -->|"아니요"| MV["카드가 위치를 옮김"]:::step
+    RM -->|"예"| SW["목록이 바로 바뀜"]:::step
+    MV --> END(["걸러진 목록"]):::done
+    SW --> END
+    END -.->|"전체"| L
+```
+</script>
+<script src="../userflow.js"></script>
+<!-- userflow:end -->
+
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>작업 목록 (제안)</h2><span class="route">/work</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span>
+        <div class="pf-stack"><span class="pf-h">ALL PROJECTS</span><span class="pf-under"></span><span class="muted small">지금까지 만든 화면들</span></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">filter</span><span class="m abs">2</span>
+        <div class="row"><span class="cb on">전체</span><span class="cb">Enterprise</span><span class="cb">Dashboard</span><span class="cb">Web App</span><span class="cb">Landing Page</span></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">grid</span><span class="m abs">3</span><span class="mo abs">자리 이동</span>
+        <div class="pf-grid">
+          <div class="pf-card"><div class="img-ph">썸네일</div><div class="b"><span class="pf-chip">Enterprise</span><b>KOZIPSA 플랫폼 관리 시스템</b></div></div>
+          <div class="pf-card"><div class="img-ph">썸네일</div><div class="b"><span class="pf-chip">Dashboard</span><b>사내 통합 대시보드</b></div></div>
+          <div class="pf-card"><div class="img-ph">썸네일</div><div class="b"><span class="pf-chip">Web App</span><b>아파트 관리 시스템</b></div></div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>MarkerHeading</b><p>문구는 미정. 홈의 섹션 제목과 같은 모양</p></div></li>
+      <li><span class="m">2</span><div><b>분류 필터</b> (제안, 컴포넌트 없음)<p>버튼 묶음. 고른 버튼은 <code>aria-pressed</code>. 주소의 <code>category</code> 와 짝</p></div></li>
+      <li><span class="m">3</span><div><b>ProjectCard</b><p>홈과 같은 카드. 누르면 <a href="#s02">S-02</a></p></div></li>
+    </ol></aside>
+  </div>
+</section>
+
+<section class="screen" id="s02">
+  <div class="screen-h"><span class="id">S-02</span><h2>작업 상세 (제안)</h2><span class="route">/work/[slug]</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span><span class="mo abs">썸네일 이어짐</span>
+        <div class="pf-split">
+          <div class="pf-stack"><span class="pf-chip">Enterprise</span><span class="pf-display">KOZIPSA 플랫폼 관리 시스템</span><span class="muted small">Kocom · Admin Platform</span></div>
+          <div class="img-ph pf-wide">머리 이미지</div>
+        </div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">meta</span><span class="m abs">2</span>
+        <div class="dl"><div>역할</div><div>[맡은 일]</div><div>기간</div><div>[2025.03 – 2026.01]</div><div>기술</div><div>Next.js · TanStack Query · Storybook</div><div>링크</div><div>[서비스] · [저장소]</div></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">body · MDX</span><span class="m abs">3</span>
+        <div class="pf-stack"><b>개요</b><span class="pf-line"></span><b>문제</b><span class="pf-line"></span><b>해결</b><span class="pf-line"></span><b>결과</b><span class="pf-line"></span><b>회고</b><span class="pf-line"></span></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">pager</span><span class="m abs">4</span>
+        <div class="row"><span class="btn">← 이전 작업</span><span class="sp"></span><span class="btn">목록으로</span><span class="sp"></span><span class="btn">다음 작업 →</span></div>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>상세 머리</b> (제안)<p>제목은 <code>h1</code>. 홈 카드에서 오면 썸네일이 이어진다. 도구 미정</p></div></li>
+      <li><span class="m">2</span><div><b>메타</b> (제안)<p>없는 항목은 감춘다. 외부 링크는 새 탭</p></div></li>
+      <li><span class="m">3</span><div><b>본문</b> (제안)<p>MDX. 절은 <code>h2</code>. 순서는 README 「상세」</p></div></li>
+      <li><span class="m">4</span><div><b>이전 · 다음</b> (제안)<p>첫 작업에는 이전, 마지막 작업에는 다음이 없다</p></div></li>
+    </ol></aside>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
