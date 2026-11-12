@@ -1,7 +1,7 @@
 # 홈 — 유저 플로우
 
 [README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다.
-화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다. 아직 구현하지 않은 동작이 섞여 있다.([README.md](./README.md) 요구사항 7)
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
 
 ## 1. 전체 흐름
 
@@ -10,12 +10,12 @@ flowchart TD
     IN["첫 진입 · 다른 페이지의 로고"]:::step --> H["S-01 홈"]:::screen
     H -->|"헤더 · 푸터 메뉴"| SEC["같은 페이지의 섹션"]:::step
     SEC -.->|"Home · 로고"| H
-    H -->|"스크롤로 히어로를 지남"| ST["S-02 헤더 고정"]:::screen
+    H -->|"스크롤"| ST["S-02 헤더 고정"]:::screen
     ST -.->|"맨 위로"| H
     H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
     H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/id"]):::done
     H -->|"More About Me"| AB(["소개 /about"]):::done
-    H -->|"GitHub · LinkedIn"| EXT[/"외부 프로필 새 탭"/]:::api
+    H -->|"GitHub"| EXT[/"외부 프로필 새 탭"/]:::api
     H -->|"연락"| C["연락하기"]:::step
 ```
 
@@ -66,3 +66,22 @@ flowchart TD
 ```
 
 - 연락 버튼은 1개다. 메일 주소 복사는 두지 않는다.([README.md](./README.md) 「이메일」)
+
+## 5. 모바일 메뉴
+
+```mermaid
+flowchart TD
+    H["S-03 모바일 홈"]:::screen -->|"메뉴 버튼"| M("P-01 모바일 메뉴"):::dialog
+    M -->|"메뉴 항목"| SEC["같은 페이지의 섹션"]:::step
+    M -->|"Contact"| C["연락 섹션"]:::step
+    M -.->|"메뉴 버튼 · Esc · 패널 밖"| H
+    M --> W{"화면이 넓어졌는가"}:::decision
+    W -.->|"예"| D["S-01 홈"]:::screen
+    SEC -.-> H
+    C -.-> H
+```
+
+- 항목을 누르면 패널을 닫고, 다 닫힌 뒤에 그 섹션으로 이동한다.
+- 화면이 넓어졌는지는 768px 을 기준으로 본다. 넓어지면 패널을 닫고 헤더에 메뉴를 다시 놓는다.
+- `Esc` 로 닫으면 초점이 메뉴 버튼으로 돌아간다.
+- 정책은 [README.md](./README.md) 「모바일 메뉴」 에 있다.
