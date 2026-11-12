@@ -31,7 +31,7 @@ export default function Header() {
         })}
       </nav>
       <Button href="#contact" intent="brand" size="md">
-        Let&apos;s Talk
+        Contact
         <Icon name="arrowRight" size={16} strokeWidth={2} />
       </Button>
     </header>
