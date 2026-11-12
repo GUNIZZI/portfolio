@@ -6,7 +6,7 @@ import { SKILLS } from '../model/skills.constants';
 
 export default function Skills() {
     return (
-        <div id="skills" className="flex scroll-mt-6 flex-col gap-5">
+        <div id="skills" className="flex scroll-mt-header flex-col gap-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
                 <MarkerHeading underline="accent" underlineClassName="w-37.5">
                     MY SKILLS
@@ -19,14 +19,14 @@ export default function Skills() {
                 {SKILLS.map((skill) => (
                     <li
                         key={skill.name}
-                        className="flex flex-col items-center gap-2 rounded-xl border border-border-card bg-card px-2 py-3.5 text-caption"
+                        className="group flex flex-col items-center gap-2 rounded-xl border border-border-card bg-card px-2 py-3.5 text-caption"
                     >
                         <Image
                             src={`/images/skills/${skill.icon}.png`}
                             alt=""
                             width={44}
                             height={44}
-                            className="size-11 rounded-md"
+                            className="size-11 rounded-md group-hover:animate-wiggle"
                         />
                         {skill.name}
                     </li>

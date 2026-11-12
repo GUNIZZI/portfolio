@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import type { ProjectData } from '@/entities/project/model/project.types';
 import Icon from '@/shared/ui/icon/Icon';
+import { cn } from '@/shared/util/cn';
 
 interface OwnProps {
     project: ProjectData;
@@ -10,16 +11,33 @@ interface OwnProps {
 
 export default function ProjectCard({ project }: OwnProps) {
     return (
-        <article className="flex flex-col overflow-hidden rounded-card border border-border-card bg-card">
+        <article
+            className={cn(
+                // 배치와 모양
+                'group flex w-full flex-col overflow-hidden rounded-card border border-border-card bg-card',
+                // hover · 포커스. 동작 줄이기에서는 떠오르지 않고 테두리 색만 바뀐다
+                'hover:border-brand motion-safe:hover:-translate-y-1',
+                'focus-within:border-brand motion-safe:focus-within:-translate-y-1',
+                // 모션
+                'transition-[translate,border-color] duration-fast ease-move',
+            )}
+        >
             {project.image ? (
-                <Image
-                    src={project.image.src}
-                    alt={project.image.alt}
-                    width={project.image.width}
-                    height={project.image.height}
-                    sizes="(max-width: 640px) 100vw, 300px"
-                    className="aspect-[2/1] w-full object-cover"
-                />
+                // 커진 썸네일이 아래 글자를 덮지 않게 이 칸에서 자른다
+                <div className="overflow-hidden">
+                    <Image
+                        src={project.image.src}
+                        alt={project.image.alt}
+                        width={project.image.width}
+                        height={project.image.height}
+                        sizes="(max-width: 640px) 100vw, 300px"
+                        className={cn(
+                            'aspect-[2/1] w-full object-cover',
+                            'motion-safe:group-focus-within:scale-105 motion-safe:group-hover:scale-105',
+                            'transition-[scale] duration-fast ease-move',
+                        )}
+                    />
+                </div>
             ) : (
                 <div
                     role="img"

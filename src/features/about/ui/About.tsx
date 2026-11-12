@@ -6,10 +6,11 @@ import MarkerHeading from '@/shared/ui/markerHeading/MarkerHeading';
 import Panel from '@/shared/ui/panel/Panel';
 
 import { ABOUT_LINES, ABOUT_STATS } from '../model/about.constants';
+import CountUp from './CountUp';
 
 export default function About() {
     return (
-        <section id="about" className="mx-auto mt-6 max-w-page scroll-mt-6 px-gutter">
+        <section id="about" className="mx-auto mt-5 max-w-page scroll-mt-header px-gutter">
             <Panel className="flex flex-wrap items-stretch overflow-hidden">
                 <div className="relative flex min-h-60 min-w-0 flex-[1_1_300px] items-end justify-center pt-4">
                     <p
@@ -50,7 +51,7 @@ export default function About() {
                     </div>
                 </div>
 
-                <div className="flex min-w-0 flex-[2_1_340px] flex-col justify-center gap-4 p-[clamp(24px,3vw,40px)]">
+                <div className="flex min-w-0 flex-[2_1_340px] flex-col justify-center gap-4 p-[clamp(24px,5vw,50px)]">
                     <MarkerHeading underline="brand">ABOUT ME</MarkerHeading>
                     <p className="text-body leading-relaxed text-foreground">
                         {ABOUT_LINES.map((line) => (
@@ -72,7 +73,9 @@ export default function About() {
                             className="flex flex-col items-center gap-1.5 border-l border-divider p-2 text-center"
                         >
                             <Icon name={stat.icon} size={32} strokeWidth={1.6} />
-                            <strong className="text-stat">{stat.value}</strong>
+                            <strong className="text-stat">
+                                <CountUp value={stat.value} suffix={stat.suffix} />
+                            </strong>
                             <span className="text-caption text-foreground">{stat.label}</span>
                         </li>
                     ))}
