@@ -1,0 +1,14 @@
+.next
+out
+build
+coverage
+node_modules
+pnpm-lock.yaml
+next-env.d.ts
+playwright-report
+test-results
+
+# 기획 문서는 줄 구성을 손으로 관리한다 (docs/plan/README.md 3.6)
+docs/plan/**/*.html
+docs/plan/*.js
+docs/plan/*.css
