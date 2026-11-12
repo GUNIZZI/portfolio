@@ -132,25 +132,26 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 낙서 디자인이라 **선이 그려지는** 연출을 공통으로 쓴다.(`src/shared/ui/drawnPath/DrawnPath.tsx`)
 페이지를 처음 그릴 때 실행하는 연출은 히어로에만 둔다. 나머지는 스크롤하거나 방문자가 조작할 때 실행한다.
 
-| 요소             | 계기                | 연출                                       | 도구          | 토큰                                         | 동작 줄이기      |
-| ---------------- | ------------------- | ------------------------------------------ | ------------- | -------------------------------------------- | ---------------- |
-| 히어로 낙서      | 처음 그릴 때 한 번  | 왕관 · 밑줄 · 번개가 선으로 그려진다       | framer-motion | `DURATION.slow` · `EASE.enter`               | 다 그려진 상태   |
-| 히어로 이름      | 처음 그릴 때 한 번  | 마커로 칠하듯 왼쪽부터 드러난다            | framer-motion | `DURATION.slower` · `EASE.enter`             | 보이는 상태      |
-| 말풍선           | 처음 그릴 때 한 번  | 이름 다음에 튀어나온다                     | framer-motion | `SPRING.follow`                              | 보이는 상태      |
-| 히어로 낙서      | 창 안의 포인터 이동 | 포인터 반대쪽으로 살짝 밀린다              | framer-motion | `SPRING.follow`                              | 움직이지 않음    |
-| 헤더             | 스크롤 시작         | 바탕이 반투명으로 바뀐다                   | CSS           | `duration-fast` · `ease-move`                | 바로 바뀜        |
-| 작업 카드        | 화면에 처음 들어옴  | 아래에서 차례로 올라온다(한 번만)          | framer-motion | `DURATION.base` · `STAGGER.base`             | 보이는 상태      |
-| 작업 카드        | hover · focus       | 살짝 떠오르고 썸네일이 커진다              | CSS           | `duration-fast` · `ease-move`                | 색만 바뀜        |
-| 기술 타일        | hover               | 아이콘이 한 번 흔들린다                    | CSS           | `duration-base` · `ease-move`                | 움직이지 않음    |
-| 모바일 메뉴 패널 | 메뉴 버튼           | 위에서 내려오며 드러난다. 닫힐 때는 반대로 | framer-motion | `DURATION.fast` · `EASE.enter` · `EASE.exit` | 바로 열리고 닫힘 |
-| 소개 숫자        | 화면에 처음 들어옴  | 0 부터 세어 올라간다                       | framer-motion | `DURATION.slower`                            | 최종 숫자        |
-| 섹션 제목 밑줄   | 화면에 처음 들어옴  | 선으로 그려진다                            | framer-motion | `DURATION.slow` · `EASE.enter`               | 다 그려진 상태   |
-| 가장자리 붓 자국 | 스크롤              | 본문보다 느리게, 서로 다른 속도로 움직인다 | GSAP          | ScrollTrigger                                | 움직이지 않음    |
+| 요소                | 계기                | 연출                                       | 도구          | 토큰                                         | 동작 줄이기      |
+| ------------------- | ------------------- | ------------------------------------------ | ------------- | -------------------------------------------- | ---------------- |
+| 히어로 낙서         | 처음 그릴 때 한 번  | 왕관 · 밑줄 · 번개가 선으로 그려진다       | framer-motion | `DURATION.slow` · `EASE.enter`               | 다 그려진 상태   |
+| 히어로 이름         | 처음 그릴 때 한 번  | 마커로 칠하듯 왼쪽부터 드러난다            | framer-motion | `DURATION.slower` · `EASE.enter`             | 보이는 상태      |
+| 말풍선              | 처음 그릴 때 한 번  | 이름 다음에 튀어나온다                     | framer-motion | `SPRING.follow`                              | 보이는 상태      |
+| 히어로 낙서         | 창 안의 포인터 이동 | 포인터 반대쪽으로 살짝 밀린다              | framer-motion | `SPRING.follow`                              | 움직이지 않음    |
+| 헤더                | 스크롤 시작         | 바탕이 반투명으로 바뀐다                   | CSS           | `duration-fast` · `ease-move`                | 바로 바뀜        |
+| 작업 카드           | 화면에 처음 들어옴  | 아래에서 차례로 올라온다(한 번만)          | framer-motion | `DURATION.base` · `STAGGER.base`             | 보이는 상태      |
+| 작업 카드           | hover · focus       | 살짝 떠오르고 썸네일이 커진다              | CSS           | `duration-fast` · `ease-move`                | 색만 바뀜        |
+| 기술 타일           | hover               | 아이콘이 한 번 흔들린다                    | CSS           | `duration-base` · `ease-move`                | 움직이지 않음    |
+| 모바일 메뉴 패널    | 메뉴 버튼           | 위에서 내려오며 드러난다. 닫힐 때는 반대로 | framer-motion | `DURATION.fast` · `EASE.enter` · `EASE.exit` | 바로 열리고 닫힘 |
+| 소개 숫자           | 화면에 처음 들어옴  | 0 부터 세어 올라간다                       | framer-motion | `DURATION.slower`                            | 최종 숫자        |
+| 섹션 제목 밑줄      | 화면에 처음 들어옴  | 선으로 그려진다                            | framer-motion | `DURATION.slow` · `EASE.enter`               | 다 그려진 상태   |
+| 배경 붓 자국 · 낙서 | 스크롤              | 본문보다 느리게, 서로 다른 속도로 움직인다 | GSAP          | ScrollTrigger                                | 움직이지 않음    |
 
 - 무한 반복하는 연출은 두지 않는다.(`docs/motion.md` 금지사항, WCAG 2.2.2)
 - 한 요소에 도구 2개를 함께 쓰지 않는다.(`docs/motion.md` 1절)
 - 히어로 낙서는 포인터가 히어로 밖에 있어도 브라우저 창 어디서든 따라 움직인다.(2026-11-12 사용자 결정, `src/features/hero/ui/HeroIntro.tsx`)
 - 붓 자국은 본문의 50~75% 속도로 움직인다. 붓 자국마다 속도가 다르다.(2026-11-12 사용자 결정, `src/widgets/backdrop/Backdrop.tsx`)
+- 배경 낙서는 붓 자국보다 조금씩만 뒤처지거나 앞서 움직인다. 패널 뒤의 낙서는 반투명 패널 너머로 흐리게 비치고 모든 폭에서 그린다. 그 밖의 낙서는 빈 곳이 없는 768px 미만에는 그리지 않는다.(2026-11-12 사용자 결정, `src/widgets/backdrop/model/backdrop.constants.ts`)
 - 등장 연출의 순서는 낙서 → 이름 → 말풍선이다. 이름은 낙서가 반쯤 그려졌을 때 시작한다.(`src/features/hero/model/hero.motions.ts`)
 - 기술 타일에는 초점을 받는 요소가 없어 hover 에만 흔들린다.(`src/features/skills/ui/Skills.tsx`)
 - 작업 카드는 hover · focus 때 테두리가 `brand` 색으로 바뀐다. 동작 줄이기에서는 이 색만 바뀐다.(`src/features/featuredProjects/ui/ProjectCard.tsx`)
