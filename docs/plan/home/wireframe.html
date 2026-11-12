@@ -64,7 +64,6 @@ flowchart TD
     H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
     H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/id"]):::done
     H -->|"More About Me"| AB(["소개 /about"]):::done
-    H -->|"Download Resume"| PDF[/"이력서 PDF 새 탭"/]:::api
     H -->|"GitHub · LinkedIn"| EXT[/"외부 프로필 새 탭"/]:::api
     H -->|"연락"| C["연락하기"]:::step
 ```
@@ -146,7 +145,7 @@ flowchart TD
             <b>Frontend Developer</b>
             <span class="muted small">I build modern, scalable and delightful web experiences.</span>
             <div class="pf-chips"><span class="pf-chip">+ Next.js</span><span class="pf-chip">+ React</span><span class="pf-chip">+ TypeScript</span><span class="pf-chip">+ Zustand</span><span class="muted small">... and more</span></div>
-            <div class="row rel"><span class="m abs">3</span><span class="btn pri">View My Projects →</span><span class="btn">Download Resume ↓</span></div>
+            <div class="row rel"><span class="m abs">3</span><span class="btn pri">View My Projects →</span></div>
             <span class="muted small">Scroll Down</span>
           </div>
           <div class="img-ph pf-hero-img rel"><span class="m abs">4</span><span class="mo abs">포인터 시차</span>캐릭터 일러스트 · 말풍선 · 왕관 · 번개 · 손글씨</div>
@@ -185,7 +184,7 @@ flowchart TD
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>Header</b> <code>widgets/header</code><p>메뉴 5개는 같은 페이지의 섹션으로 간다. 보고 있는 섹션 메뉴에 밑줄 (제안, 지금은 Home 고정). Let's Talk → <code>#contact</code></p></div></li>
       <li><span class="m">2</span><div><b>Hero</b> <code>features/hero</code><p>이름은 <code>h1</code>. 등장 연출은 <a href="#s04">S-04</a>, 값은 README 「모션」 표 (제안)</p></div></li>
-      <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>View My Projects → <code>#projects</code>. Download Resume → <code>/resume.pdf</code> 새 탭 (제안, 지금 <code>#top</code>)</p></div></li>
+      <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>View My Projects → <code>#projects</code>. 이력서 버튼은 두지 않는다</p></div></li>
       <li><span class="m">4</span><div><b>HeroVisual</b><p>캐릭터는 처음 화면 이미지라 미리 불러온다(<code>loading="eager"</code>). 손글씨는 <code>aria-hidden</code>. 포인터 시차 (제안)</p></div></li>
       <li><span class="m">5</span><div><b>FeaturedProjects · ProjectCard</b><p>카드는 <code>content/projects.ts</code> 순서. 열기 아이콘 → <code>/work/&lt;id&gt;</code> (제안). View All Projects → <code>/work</code> (제안)</p></div></li>
       <li><span class="m">6</span><div><b>Skills</b><p>타일 9개. hover 때 아이콘이 흔들린다 (제안)</p></div></li>
@@ -222,7 +221,7 @@ flowchart TD
         <div class="pf-stack"><b>GUNI</b><span class="small">Home · About · Projects · Skills · Contact</span><span class="btn pri">Let's Talk →</span></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">hero</span><span class="m abs">2</span>
-        <div class="pf-stack"><span class="pf-hand">Hey, I'm</span><span class="pf-display">GUNI</span><span class="btn pri">View My Projects →</span><span class="btn">Download Resume ↓</span><div class="img-ph pf-hero-img">캐릭터</div></div>
+        <div class="pf-stack"><span class="pf-hand">Hey, I'm</span><span class="pf-display">GUNI</span><span class="btn pri">View My Projects →</span><div class="img-ph pf-hero-img">캐릭터</div></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">#projects</span><span class="m abs">3</span>
         <div class="pf-stack"><div class="pf-card"><div class="img-ph">썸네일</div><div class="b"><b>작업 이름</b></div></div><span class="muted small">카드가 한 열로 쌓인다</span></div>

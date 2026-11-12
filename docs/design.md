@@ -55,7 +55,7 @@
 
 ```
 헤더      로고 · 메뉴 5개 · Let's Talk
-히어로    Hey, I'm / GUNI / Frontend Developer / 태그 / 버튼 2개   ←→ 캐릭터와 낙서
+히어로    Hey, I'm / GUNI / Frontend Developer / 태그 / 버튼 1개   ←→ 캐릭터와 낙서
 패널      FEATURED PROJECTS(카드 격자) + MY SKILLS(타일 격자)
 소개      캐릭터 · ABOUT ME · 숫자 3개
 연락      Get in Touch! · 버튼 2개 · 손글씨와 브이 캐릭터
@@ -67,12 +67,13 @@
 
 ## 4. 원본에서 바꾼 것
 
-| 원본                           | 구현               | 근거                   |
-| ------------------------------ | ------------------ | ---------------------- |
-| HYOSUNG · HYOSUNG.Lee · 이효성 | GUNI               | 2026-11-12 사용자 결정 |
-| `hello@aadil.dev`              | `h2dlhs@naver.com` | 2026-11-12 사용자 결정 |
-| 메뉴의 Blog, 푸터의 YouTube    | 뺐다               | 2026-11-12 사용자 결정 |
-| © 2025                         | © 2026             | 올해 연도              |
+| 원본                           | 구현               | 근거                                                            |
+| ------------------------------ | ------------------ | --------------------------------------------------------------- |
+| HYOSUNG · HYOSUNG.Lee · 이효성 | GUNI               | 2026-11-12 사용자 결정                                          |
+| `hello@aadil.dev`              | `h2dlhs@naver.com` | 2026-11-12 사용자 결정                                          |
+| 메뉴의 Blog, 푸터의 YouTube    | 뺐다               | 2026-11-12 사용자 결정                                          |
+| 히어로의 Download Resume 버튼  | 뺐다               | 2026-11-12 사용자 결정. 이력서에 연락처가 들어가 공개할 수 없다 |
+| © 2025                         | © 2026             | 올해 연도                                                       |
 
 ## 금지사항
 
@@ -86,5 +87,5 @@
 
 - 소개 섹션의 숫자 3개(40+ · 20+ · 7+)는 원본 값이다. 사용자가 나중에 실제 값으로 바꾼다.
   위치는 `src/features/about/model/about.constants.ts` 다.
-- GitHub · LinkedIn 링크와 이력서 버튼은 아직 페이지 맨 위를 가리킨다(`src/config/site.ts`).
+- GitHub · LinkedIn 링크는 아직 페이지 맨 위를 가리킨다(`src/config/site.ts`).
 - 4번째 작업 카드는 썸네일이 없어 임시 이미지를 표시한다(`content/projects.ts`).

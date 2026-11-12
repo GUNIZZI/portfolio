@@ -63,10 +63,6 @@ export default function Hero() {
             View My Projects
             <Icon name="arrowRight" size={18} strokeWidth={2.2} />
           </Button>
-          <Button href="#top" intent="outline">
-            Download Resume
-            <Icon name="download" size={18} strokeWidth={2} />
-          </Button>
         </div>
 
         <div className="mt-3 flex items-center gap-2 text-caption text-muted">

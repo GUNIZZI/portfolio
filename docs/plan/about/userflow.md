@@ -9,7 +9,6 @@ flowchart TD
     HOME["홈 · More About Me"]:::step --> A["S-01 소개"]:::screen
     NAV["헤더 · About"]:::step --> A
     A -->|"스크롤"| TL["경력 타임라인"]:::step
-    A -->|"이력서"| PDF[/"이력서 PDF 새 탭"/]:::api
     A -->|"연락"| C(["메일 앱 · 주소 복사"]):::done
     A -.->|"로고"| HOME
 ```

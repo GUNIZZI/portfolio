@@ -15,7 +15,6 @@ flowchart TD
     H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
     H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/id"]):::done
     H -->|"More About Me"| AB(["소개 /about"]):::done
-    H -->|"Download Resume"| PDF[/"이력서 PDF 새 탭"/]:::api
     H -->|"GitHub · LinkedIn"| EXT[/"외부 프로필 새 탭"/]:::api
     H -->|"연락"| C["연락하기"]:::step
 ```

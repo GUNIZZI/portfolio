@@ -46,7 +46,6 @@ flowchart TD
     HOME["홈 · More About Me"]:::step --> A["S-01 소개"]:::screen
     NAV["헤더 · About"]:::step --> A
     A -->|"스크롤"| TL["경력 타임라인"]:::step
-    A -->|"이력서"| PDF[/"이력서 PDF 새 탭"/]:::api
     A -->|"연락"| C(["메일 앱 · 주소 복사"]):::done
     A -.->|"로고"| HOME
 ```
@@ -62,7 +61,7 @@ flowchart TD
     <div class="frame">
       <div class="pf-sec rel"><span class="pf-lab">intro</span><span class="m abs">1</span>
         <div class="pf-split">
-          <div class="pf-stack"><span class="pf-h">ABOUT ME</span><span class="pf-under"></span><span class="pf-line"></span><span class="pf-line"></span><span class="btn">Download Resume ↓</span></div>
+          <div class="pf-stack"><span class="pf-h">ABOUT ME</span><span class="pf-under"></span><span class="pf-line"></span><span class="pf-line"></span></div>
           <div class="img-ph pf-hero-img">큰 캐릭터</div>
         </div>
       </div>
@@ -78,7 +77,7 @@ flowchart TD
       <div class="pf-sec"><span class="pf-lab">#contact</span><span class="muted small">홈과 같다</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>인트로</b> (제안)<p>소개 문단은 미정. 이력서는 홈과 같은 PDF</p></div></li>
+      <li><span class="m">1</span><div><b>인트로</b> (제안)<p>소개 문단은 미정</p></div></li>
       <li><span class="m">2</span><div><b>경력 타임라인</b> (제안)<p><code>ol</code>. 최신부터. 내용은 사용자가 준다</p></div></li>
       <li><span class="m">3</span><div><b>일하는 방식</b> (제안)<p>3가지. 번호는 읽는 순서라 붙였다. 문구는 미정</p></div></li>
       <li><span class="m">4</span><div><b>기술 묶음</b> (제안)<p>분야별로 쓴 곳 한 줄씩</p></div></li>
