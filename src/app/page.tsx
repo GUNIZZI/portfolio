@@ -19,7 +19,7 @@ export default async function HomePage() {
                 <HomeDoodles />
             </Backdrop>
             <div className="relative z-raised">
-                <Header />
+                <Header currentHref="/" />
                 <main>
                     <Hero />
                     <section
@@ -34,7 +34,7 @@ export default async function HomePage() {
                     <About />
                     <Contact />
                 </main>
-                <Footer />
+                <Footer isHome />
             </div>
         </div>
     );

@@ -5,18 +5,15 @@ import { type MouseEvent, type ReactNode, useEffect, useId, useRef, useState } f
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 
 import Icon from '@/shared/ui/icon/Icon';
+import Logo from '@/shared/ui/logo/Logo';
 import { cn } from '@/shared/util/cn';
-import { useSectionSpy } from '@/shared/util/useSectionSpy';
-import { NAV_ITEMS } from '@/config/nav';
+import { NAV_ITEMS, type NavHref } from '@/config/nav';
 
 import { menuPanelVariants } from './model/header.motions';
+import NavLink from './NavLink';
 
+/** 페이지 맨 위. 페이지마다 바깥 틀에 이 id 가 있다 */
 const TOP_HREF = '#top';
-
-/** 메뉴가 가리키는 섹션의 id. 페이지 맨 위(#top)는 섹션이 아니라서 뺀다 */
-const SECTION_IDS = NAV_ITEMS.map((item) => item.href)
-    .filter((href) => href !== TOP_HREF)
-    .map((href) => href.slice(1));
 
 /** 헤더에 메뉴를 펼쳐 놓는 폭. Tailwind 의 md 경계(48rem)와 같아야 한다 */
 const WIDE_QUERY = '(min-width: 48rem)';
@@ -25,22 +22,24 @@ const WIDE_QUERY = '(min-width: 48rem)';
 const GLASS_CLASS = 'bg-glass backdrop-blur-md';
 
 interface OwnProps {
-    logo: ReactNode;
+    /** 로고 링크의 이름에 쓴다 */
+    name: string;
+    /** 이 페이지의 메뉴. 페이지가 알려 준다 */
+    currentHref: NavHref;
     action: ReactNode;
 }
 
 /**
  * 헤더의 움직이는 부분.
- * 항상 화면 위에 붙어 있고, 헤더 바로 아래까지 올라온 섹션의 메뉴를 강조한다.
+ * 항상 화면 위에 붙어 있고, 지금 있는 페이지의 메뉴를 강조한다.
  * 좁은 화면에서는 메뉴와 action 을 버튼으로 여닫는 패널에 둔다.
  */
-export default function HeaderBar({ logo, action }: OwnProps) {
+export default function HeaderBar({ name, currentHref, action }: OwnProps) {
     const headerRef = useRef<HTMLElement>(null);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
     /** 패널에서 고른 섹션. 패널이 다 닫힌 뒤에 이동한다 */
     const pendingHrefRef = useRef<string | null>(null);
     const panelId = useId();
-    const { currentId, isPastFirst } = useSectionSpy(SECTION_IDS);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // 맨 위에서는 바탕 없이 두고, 스크롤을 시작하면 반투명 바탕을 깐다
@@ -49,10 +48,6 @@ export default function HeaderBar({ logo, action }: OwnProps) {
     useMotionValueEvent(scrollY, 'change', (latest) => {
         setIsScrolled(latest > 0);
     });
-
-    // 히어로에서는 Home 을, 마지막 메뉴 섹션이 다 지나간 뒤에는 아무것도 강조하지 않는다
-    const fallbackHref = isPastFirst ? null : TOP_HREF;
-    const currentHref = currentId ? `#${currentId}` : fallbackHref;
 
     // 붙은 헤더가 섹션 제목을 가리지 않게 헤더 높이를 알린다. 섹션의 scroll-mt-header 가 읽는다
     useEffect(() => {
@@ -137,7 +132,7 @@ export default function HeaderBar({ logo, action }: OwnProps) {
                 )}
             >
                 <div className="mx-auto flex max-w-page items-center justify-between gap-x-6 px-gutter py-5">
-                    {logo}
+                    <Logo name={name} href={currentHref === '/' ? TOP_HREF : '/'} />
                     <nav
                         aria-label="주 메뉴"
                         className="hidden items-center gap-x-[clamp(12px,3vw,36px)] text-sm font-medium md:flex"
@@ -145,10 +140,10 @@ export default function HeaderBar({ logo, action }: OwnProps) {
                         {NAV_ITEMS.map((item) => {
                             const isCurrent = item.href === currentHref;
                             return (
-                                <a
+                                <NavLink
                                     key={item.href}
                                     href={item.href}
-                                    aria-current={isCurrent ? 'location' : undefined}
+                                    isCurrent={isCurrent}
                                     className={cn(
                                         // 배치와 모양. 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
                                         'border-b-2 border-transparent py-2',
@@ -159,7 +154,7 @@ export default function HeaderBar({ logo, action }: OwnProps) {
                                     )}
                                 >
                                     {item.label}
-                                </a>
+                                </NavLink>
                             );
                         })}
                     </nav>
@@ -199,17 +194,17 @@ export default function HeaderBar({ logo, action }: OwnProps) {
                         {NAV_ITEMS.map((item) => {
                             const isCurrent = item.href === currentHref;
                             return (
-                                <a
+                                <NavLink
                                     key={item.href}
                                     href={item.href}
-                                    aria-current={isCurrent ? 'location' : undefined}
+                                    isCurrent={isCurrent}
                                     className={cn(
                                         'flex min-h-11 items-center',
                                         isCurrent && 'text-accent',
                                     )}
                                 >
                                     {item.label}
-                                </a>
+                                </NavLink>
                             );
                         })}
                         <div className="mt-3 flex">{action}</div>

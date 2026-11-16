@@ -8,8 +8,10 @@
 ```mermaid
 flowchart TD
     IN["첫 진입 · 다른 페이지의 로고"]:::step --> H["S-01 홈"]:::screen
-    H -->|"헤더 · 푸터 메뉴"| SEC["같은 페이지의 섹션"]:::step
+    H -->|"View My Projects · Contact"| SEC["같은 페이지의 섹션"]:::step
     SEC -.->|"Home · 로고"| H
+    H -->|"메뉴 Projects"| WL
+    H -->|"메뉴 About"| AB
     H -->|"스크롤"| ST["S-02 헤더 고정"]:::screen
     ST -.->|"맨 위로"| H
     H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
@@ -72,7 +74,7 @@ flowchart TD
 ```mermaid
 flowchart TD
     H["S-03 모바일 홈"]:::screen -->|"메뉴 버튼"| M("P-01 모바일 메뉴"):::dialog
-    M -->|"메뉴 항목"| SEC["같은 페이지의 섹션"]:::step
+    M -->|"메뉴 항목"| SEC(["그 페이지로 이동"]):::done
     M -->|"Contact"| C["연락 섹션"]:::step
     M -.->|"메뉴 버튼 · Esc · 패널 밖"| H
     M --> W{"화면이 넓어졌는가"}:::decision
@@ -81,7 +83,7 @@ flowchart TD
     C -.-> H
 ```
 
-- 항목을 누르면 패널을 닫고, 다 닫힌 뒤에 그 섹션으로 이동한다.
+- 메뉴 항목을 누르면 패널을 닫고 그 페이지로 간다. Contact 는 패널이 다 닫힌 뒤에 연락 섹션으로 이동한다.
 - 화면이 넓어졌는지는 768px 을 기준으로 본다. 넓어지면 패널을 닫고 헤더에 메뉴를 다시 놓는다.
 - `Esc` 로 닫으면 초점이 메뉴 버튼으로 돌아간다.
 - 정책은 [README.md](./README.md) 「모바일 메뉴」 에 있다.

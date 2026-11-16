@@ -1,15 +1,15 @@
-/** 헤더 메뉴. 한 페이지 안의 섹션으로 이동한다. 연락은 헤더의 Contact 버튼이 맡는다. */
+/**
+ * 헤더 메뉴. 메뉴 하나가 페이지 하나다.(2026-11-16 사용자 결정)
+ * 기술(Skills)은 전용 페이지가 없어 메뉴에 두지 않는다. 연락은 헤더의 Contact 버튼이 맡는다.
+ */
 export const NAV_ITEMS = [
-    { label: 'Home', href: '#top' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'About', href: '#about' },
+    { label: 'Home', href: '/' },
+    { label: 'Projects', href: '/work' },
+    { label: 'About', href: '/about' },
 ] as const;
 
-/** 푸터 메뉴 */
-export const FOOTER_NAV_ITEMS = [
-    { label: 'Home', href: '#top' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Contact', href: '#contact' },
-    { label: 'About', href: '#about' },
-] as const;
+/** 푸터 메뉴. 헤더 메뉴에 연락을 더한 것이다. 연락의 주소는 페이지마다 달라 푸터가 따로 받는다 */
+export const FOOTER_NAV_ITEMS = NAV_ITEMS;
+
+/** 메뉴가 가리키는 페이지의 주소. 페이지가 헤더에 자기 메뉴를 알려 줄 때 쓴다 */
+export type NavHref = (typeof NAV_ITEMS)[number]['href'];
