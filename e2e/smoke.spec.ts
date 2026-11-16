@@ -1,25 +1,4 @@
-import { expect, type Page, test } from '@playwright/test';
-
-/**
- * 부드러운 스크롤이 멈출 때까지 기다린다.
- * 스크롤 도중에 다른 요소를 누르면 Playwright 가 스크롤을 멈춰 세워 섹션이 제자리에 닿지 못한다.
- */
-async function waitForScrollEnd(page: Page) {
-    await page.evaluate(
-        () =>
-            new Promise<void>((resolve) => {
-                let last = window.scrollY;
-                let stillFrames = 0;
-                const tick = () => {
-                    stillFrames = window.scrollY === last ? stillFrames + 1 : 0;
-                    last = window.scrollY;
-                    if (stillFrames > 10) resolve();
-                    else requestAnimationFrame(tick);
-                };
-                tick();
-            }),
-    );
-}
+import { expect, test } from '@playwright/test';
 
 test('홈이 열리고 본문 랜드마크가 있다', async ({ page }) => {
     await page.goto('/');
@@ -56,7 +35,7 @@ test('연락 버튼이 메일 주소로 연결되고, 마우스를 올리면 주
     await expect(button.getByText('Get in Touch')).toBeHidden();
 });
 
-test('메뉴로 섹션에 가면 헤더가 화면 위에 붙고 그 메뉴를 강조한다', async ({ page, isMobile }) => {
+test('메뉴로 페이지를 옮기면 그 페이지의 메뉴를 강조한다', async ({ page, isMobile }) => {
     await page.goto('/');
     const menu = page.getByRole('navigation', { name: '주 메뉴' });
     // 좁은 화면에서는 메뉴가 패널 안에 있어 버튼으로 먼저 연다
@@ -65,26 +44,39 @@ test('메뉴로 섹션에 가면 헤더가 화면 위에 붙고 그 메뉴를 �
     };
 
     await openMenu();
-    await expect(menu.getByRole('link', { name: 'Home' })).toHaveAttribute(
-        'aria-current',
-        'location',
-    );
+    await expect(menu.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'page');
 
-    await menu.getByRole('link', { name: 'Projects' }).click();
-    await expect(
-        page.getByRole('heading', { level: 2, name: 'FEATURED PROJECTS' }),
-    ).toBeInViewport();
+    for (const [name, url, heading] of [
+        ['About', /\/about$/, 'ABOUT ME'],
+        ['Projects', /\/work$/, '작업'],
+    ] as const) {
+        await menu.getByRole('link', { name }).click();
+        await expect(page).toHaveURL(url);
+        await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
+        await openMenu();
+        await expect(menu.getByRole('link', { name })).toHaveAttribute('aria-current', 'page');
+        await expect(menu.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current');
+    }
+
+    await menu.getByRole('link', { name: 'Home' }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'GUNI' })).toBeVisible();
+});
+
+test('헤더는 스크롤해도 화면 위에 붙어 있고, 지금 페이지의 메뉴를 누르면 맨 위로 간다', async ({
+    page,
+    isMobile,
+}) => {
+    await page.goto('/');
+    await page.getByRole('heading', { level: 2, name: 'ABOUT ME' }).scrollIntoViewIfNeeded();
     await expect(page.getByRole('banner')).toBeInViewport();
-    await openMenu();
-    await expect(menu.getByRole('link', { name: 'Projects' })).toHaveAttribute(
-        'aria-current',
-        'location',
-    );
-    await expect(menu.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current');
-    await expect(page.getByRole('banner')).toBeInViewport();
-    await expect(
-        page.getByRole('heading', { level: 2, name: 'FEATURED PROJECTS' }),
-    ).toBeInViewport();
+
+    if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
+    await page
+        .getByRole('navigation', { name: '주 메뉴' })
+        .getByRole('link', { name: 'Home' })
+        .click();
+    await expect(page.getByRole('heading', { level: 1, name: 'GUNI' })).toBeInViewport();
+    await expect(page).toHaveURL(/\/(#top)?$/);
 });
 
 test('소개 숫자가 최종 값으로 끝난다', async ({ page }) => {
@@ -111,29 +103,58 @@ test('좁은 화면에서 메뉴 버튼으로 패널을 열고, 항목을 누르
     await expect(menu).toBeHidden();
     await expect(openButton).toBeFocused();
 
+    // Contact 는 같은 페이지의 연락 섹션으로 간다. 패널이 닫힌 뒤에 이동한다
     await openButton.click();
-    await menu.getByRole('link', { name: 'About' }).click();
+    await menu.getByRole('link', { name: 'Contact' }).click();
     await expect(menu).toBeHidden();
-    await expect(page.getByRole('heading', { level: 2, name: 'ABOUT ME' })).toBeInViewport();
+    await expect(page.getByRole('heading', { level: 2, name: 'Get in Touch!' })).toBeInViewport();
 });
 
-test('메뉴로 간 섹션이 짧아도 그 메뉴를 강조한다', async ({ page, isMobile }) => {
-    await page.goto('/');
-    const menu = page.getByRole('navigation', { name: '주 메뉴' });
-
-    for (const [name, heading] of [
-        ['Skills', 'MY SKILLS'],
-        ['About', 'ABOUT ME'],
-        ['Projects', 'FEATURED PROJECTS'],
-    ] as const) {
-        // 좁은 화면에서는 메뉴가 패널 안에 있어 버튼으로 먼저 연다
-        if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
-        await menu.getByRole('link', { name }).click();
-        await expect(page.getByRole('heading', { level: 2, name: heading })).toBeInViewport();
-        await waitForScrollEnd(page);
-
-        if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
-        await expect(menu.getByRole('link', { name })).toHaveAttribute('aria-current', 'location');
-        if (isMobile) await page.keyboard.press('Escape');
+test('소개 페이지에 제목과 경력이 있고, 최근 경력만 펼쳐져 있다', async ({ page }) => {
+    await page.goto('/about');
+    await expect(page.getByRole('heading', { level: 1, name: 'ABOUT ME' })).toBeVisible();
+    for (const name of ['EXPERIENCE', 'HOW I WORK', 'SKILLS', 'Get in Touch!']) {
+        await expect(page.getByRole('heading', { level: 2, name })).toBeVisible();
     }
+
+    // 2014년 이후에 시작한 회사는 프로젝트가 보이고, 그 이전은 접혀 있다
+    await expect(page.getByText('Ris-K(PaaS)')).toBeVisible();
+    await expect(page.getByText('LG G2 Micro site')).toBeHidden();
+
+    await page.getByText('프로젝트 27개').click();
+    await expect(page.getByText('LG G2 Micro site')).toBeVisible();
+});
+
+test('연락 섹션이 없는 작업 페이지에서 Contact 를 누르면 홈의 연락 섹션으로 간다', async ({
+    page,
+    isMobile,
+}) => {
+    await page.goto('/work');
+    if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
+    const scope = isMobile
+        ? page.getByRole('navigation', { name: '주 메뉴' })
+        : page.getByRole('banner');
+    await scope.getByRole('link', { name: 'Contact' }).click();
+    await expect(page).toHaveURL(/\/#contact$/);
+    await expect(page.getByRole('heading', { level: 2, name: 'Get in Touch!' })).toBeInViewport();
+});
+
+test('홈의 More About Me 로 소개 페이지에 간다', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('link', { name: 'More About Me' }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'ABOUT ME' })).toBeVisible();
+});
+
+test('소개 페이지에서 경력을 한 번에 모두 펼치고 닫는다', async ({ page }) => {
+    await page.goto('/about');
+    await expect(page.getByText('LG G2 Micro site')).toBeHidden();
+
+    await page.getByRole('button', { name: '전체 펼치기' }).click();
+    await expect(page.getByText('LG G2 Micro site')).toBeVisible();
+    await expect(page.getByText('여러 쇼핑몰', { exact: true }).last()).toBeVisible();
+
+    await page.getByRole('button', { name: '전체 닫기' }).click();
+    await expect(page.getByText('LG G2 Micro site')).toBeHidden();
+    await expect(page.getByText('Ris-K(PaaS)')).toBeHidden();
+    await expect(page.getByRole('button', { name: '전체 펼치기' })).toBeVisible();
 });
