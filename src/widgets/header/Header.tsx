@@ -8,7 +8,7 @@ import HeaderBar from './HeaderBar';
 export default function Header() {
     return (
         <HeaderBar
-            logo={<Logo name={SITE.name} role={SITE.role} />}
+            logo={<Logo name={SITE.name} />}
             action={
                 <Button href="#contact" intent="brand" size="md">
                     Contact

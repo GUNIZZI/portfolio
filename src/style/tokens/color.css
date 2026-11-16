@@ -40,7 +40,6 @@
     --doodle-sky: #38bdf8;
     --doodle-violet: #a855f7;
     --doodle-yellow: #facc15;
-    --doodle-blue: #3b82f6;
     --doodle-indigo: #6366f1;
     --brush-sky: rgb(56 189 248 / 0.85);
     --brush-violet: rgb(168 85 247 / 0.85);
@@ -74,7 +73,6 @@
     --color-doodle-sky: var(--doodle-sky);
     --color-doodle-violet: var(--doodle-violet);
     --color-doodle-yellow: var(--doodle-yellow);
-    --color-doodle-blue: var(--doodle-blue);
     --color-doodle-indigo: var(--doodle-indigo);
     --color-brush-sky: var(--brush-sky);
     --color-brush-violet: var(--brush-violet);

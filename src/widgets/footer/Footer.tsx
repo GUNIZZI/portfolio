@@ -7,7 +7,7 @@ export default function Footer() {
     return (
         <footer className="border-t border-line">
             <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-x-8 gap-y-5 px-gutter py-7">
-                <Logo name={SITE.name} role={SITE.role} />
+                <Logo name={SITE.name} />
                 <div className="flex gap-2">
                     {SOCIAL_LINKS.map((link) => {
                         // 외부 프로필은 새 탭에서 연다. 주소를 받기 전(#top)과 mailto 는 해당하지 않는다
