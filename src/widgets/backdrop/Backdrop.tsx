@@ -1,25 +1,23 @@
 'use client';
 
-import { useRef } from 'react';
+import { type ReactNode, useRef } from 'react';
 
-import { cn } from '@/shared/util/cn';
+import DoodleFilter from '@/shared/ui/doodle/DoodleFilter';
 import { gsap, ScrollTrigger, useGSAP } from '@/shared/util/gsap';
 
-import { BRUSHES, DOODLE_SHAPES, DOODLE_TONE_CLASS, DOODLES } from './model/backdrop.constants';
+import { BRUSHES } from './model/backdrop.constants';
 
-const BRUSH_FILTER_ID = 'backdrop-brush';
-
-interface DoodleParts {
-    d: string;
-    drips?: string;
-    dots?: readonly (readonly [number, number, number])[];
+interface OwnProps {
+    /** 이 페이지의 낙서. `shared/ui/doodle` 의 Doodle 을 넣는다 */
+    children?: ReactNode;
 }
 
 /**
- * 페이지 뒤에 깔리는 점 무늬, 가장자리 붓 자국, 흩어진 낙서.
- * 붓 자국과 낙서는 본문과 다른 속도로, 서로 다른 속도로 움직인다. 동작 줄이기에서는 제자리에 둔다.
+ * 페이지 뒤에 깔리는 배경. 점 무늬와 가장자리 붓 자국은 모든 페이지가 같고,
+ * 낙서는 페이지마다 달라 children 으로 받는다.
+ * data-drift 가 붙은 장식은 data-lag 만큼 본문과 다른 속도로 움직인다. 동작 줄이기에서는 제자리에 둔다.
  */
-export default function Backdrop() {
+export default function Backdrop({ children }: OwnProps) {
     const rootRef = useRef<HTMLDivElement>(null);
 
     useGSAP(
@@ -80,84 +78,8 @@ export default function Backdrop() {
                     </svg>
                 </div>
             ))}
-            {/* 붓 질감. 가장자리를 거칠게 흩고(displace), 군데군데 물감이 덜 묻은 줄을 낸다(bristle) */}
-            <svg className="absolute size-0">
-                <defs>
-                    <filter
-                        id={BRUSH_FILTER_ID}
-                        x="-25%"
-                        y="-25%"
-                        width="150%"
-                        height="150%"
-                        primitiveUnits="userSpaceOnUse"
-                    >
-                        <feTurbulence
-                            type="fractalNoise"
-                            baseFrequency="0.55"
-                            numOctaves="2"
-                            seed="7"
-                            result="grain"
-                        />
-                        <feDisplacementMap
-                            in="SourceGraphic"
-                            in2="grain"
-                            scale="2.4"
-                            xChannelSelector="R"
-                            yChannelSelector="G"
-                            result="rough"
-                        />
-                        <feTurbulence
-                            type="fractalNoise"
-                            baseFrequency="0.05 0.32"
-                            numOctaves="1"
-                            seed="11"
-                            result="streak"
-                        />
-                        <feColorMatrix
-                            in="streak"
-                            type="matrix"
-                            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -14 4.6"
-                            result="gaps"
-                        />
-                        <feComposite in="rough" in2="gaps" operator="out" />
-                    </filter>
-                </defs>
-            </svg>
-            {DOODLES.map((doodle) => {
-                const shape: DoodleParts = DOODLE_SHAPES[doodle.shape];
-                const tone = DOODLE_TONE_CLASS[doodle.tone];
-                return (
-                    <div
-                        key={doodle.position}
-                        data-drift
-                        data-lag={doodle.lag}
-                        className={cn('absolute', doodle.position)}
-                    >
-                        <svg viewBox="0 0 48 48" className="block w-full overflow-visible">
-                            <g
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                filter={`url(#${BRUSH_FILTER_ID})`}
-                                className={tone.stroke}
-                            >
-                                <path d={shape.d} strokeWidth="5.5" />
-                                {shape.drips ? <path d={shape.drips} strokeWidth="2.6" /> : null}
-                                {shape.dots?.map(([cx, cy, r]) => (
-                                    <circle
-                                        key={`${cx}-${cy}`}
-                                        cx={cx}
-                                        cy={cy}
-                                        r={r}
-                                        stroke="none"
-                                        className={tone.fill}
-                                    />
-                                ))}
-                            </g>
-                        </svg>
-                    </div>
-                );
-            })}
+            <DoodleFilter />
+            {children}
         </div>
     );
 }

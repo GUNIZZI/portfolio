@@ -5,6 +5,7 @@ import { About } from '@/features/about';
 import { Contact } from '@/features/contact';
 import { FeaturedProjects } from '@/features/featuredProjects';
 import { Hero } from '@/features/hero';
+import { HomeDoodles } from '@/features/homeDoodles';
 import { Skills } from '@/features/skills';
 import { getProjectList } from '@/entities/project/services/project.services';
 import Panel from '@/shared/ui/panel/Panel';
@@ -14,7 +15,9 @@ export default async function HomePage() {
 
     return (
         <div id="top" className="relative min-h-dvh overflow-x-clip">
-            <Backdrop />
+            <Backdrop>
+                <HomeDoodles />
+            </Backdrop>
             <div className="relative z-raised">
                 <Header />
                 <main>
