@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Button from '@/shared/ui/button/Button';
 import DrawnPath from '@/shared/ui/drawnPath/DrawnPath';
 import Icon from '@/shared/ui/icon/Icon';
+import { cn } from '@/shared/util/cn';
 import { SITE } from '@/config/site';
 
 export default function Contact() {
@@ -40,12 +41,30 @@ export default function Contact() {
                 </p>
                 <Button href={mailto} className="group self-start">
                     <Icon name="send" size={18} strokeWidth={2} />
-                    {/* 두 문구를 같은 칸에 겹쳐 둔다. 문구가 바뀌어도 버튼 폭이 변하지 않는다 */}
-                    <span className="grid justify-items-center">
-                        <span className="col-start-1 row-start-1 group-hover:invisible group-focus-visible:invisible">
+                    {/*
+                      두 문구를 같은 칸에 겹쳐 둔다. 문구가 바뀌어도 버튼 폭이 변하지 않는다.
+                      마우스를 올리면 문구가 위로 말려 올라가고 메일 주소가 아래에서 올라온다.
+                      가려진 쪽은 invisible 이라 스크린 리더가 한 번에 하나만 읽는다
+                    */}
+                    <span className="grid justify-items-center overflow-hidden">
+                        <span
+                            className={cn(
+                                'col-start-1 row-start-1',
+                                'group-hover:invisible group-hover:-translate-y-full',
+                                'group-focus-visible:invisible group-focus-visible:-translate-y-full',
+                                'transition-[translate,visibility] duration-fast ease-move',
+                            )}
+                        >
                             Get in Touch
                         </span>
-                        <span className="invisible col-start-1 row-start-1 group-hover:visible group-focus-visible:visible">
+                        <span
+                            className={cn(
+                                'invisible col-start-1 row-start-1 translate-y-full',
+                                'group-hover:visible group-hover:translate-y-0',
+                                'group-focus-visible:visible group-focus-visible:translate-y-0',
+                                'transition-[translate,visibility] duration-fast ease-move',
+                            )}
+                        >
                             {SITE.email}
                         </span>
                     </span>
