@@ -60,7 +60,7 @@ portfolio/
 ```
 app/          라우트. page/layout/error, opengraph-image, sitemap 만. 로직 금지
 _app/         Provider. app/ 만 import 한다
-widgets/      여러 feature 를 조합하는 UI
+widgets/      여러 feature 를 조합하거나 모든 페이지에 붙는 UI. 컴포넌트 + index.ts, 필요하면 model/
 features/     기능 단위. ui/ + model/ + index.ts
 entities/     도메인 데이터. model/ · services/ · repositories/
 shared/       도메인 무관 공용. ui/ · util/
@@ -99,6 +99,11 @@ flowchart TD
 | `features/` | "하나의 섹션·기능 단위인가?"                       |
 | `entities/` | "프로젝트·경력 같은 데이터인가?"                   |
 | `shared/`   | "도메인 무관인가?"                                 |
+
+**위젯도 `model/` 을 가질 수 있다.**(2026-11-16 사용자 결정)
+모션 정의와 상수처럼 마크업과 변경 이유가 다른 것을 `model/` 에 둔다. 파일 이름은 `features` 의 `model/` 과 같은 규칙을 따른다.([conventions.md](./conventions.md) 2절)
+지금은 `widgets/header/model/header.motions.ts` 와 `widgets/backdrop/model/backdrop.constants.ts` 가 있다.
+컴포넌트는 `ui/` 로 나누지 않고 위젯 폴더 바로 아래에 둔다.(`src/widgets/header/`)
 
 **배경은 공통과 페이지 전용으로 나눈다.**(2026-11-16 사용자 결정)
 점 무늬와 가장자리 붓 자국은 모든 페이지가 같아 `widgets/backdrop` 에 둔다.

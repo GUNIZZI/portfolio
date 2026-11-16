@@ -81,7 +81,7 @@ Kozipsa conventions 2절에서 가져왔다.
 | 이벤트 핸들러       | **`hndl`** 접두. `handle` 금지                                                           |
 | entity 파일         | `<entity>.<역할>.ts`. 역할은 `.schemas` `.types` `.services` `.repositories`             |
 | `model/` 파일       | `.schemas.ts` · `.types.ts` · `.utils.ts` · `.constants.ts` · `.contexts.tsx`            |
-| 모션 변형           | `<대상>Variants`(`heroTitleVariants`). 파일은 `model/<feature>.motions.ts`               |
+| 모션 변형           | `<대상>Variants`(`heroTitleVariants`). 파일은 `model/<슬라이스>.motions.ts`. 위젯도 같다 |
 
 `.motions.ts` 접미와 `~Variants` 이름은 이 저장소에서 새로 정했다.(2026-11-11 사용자 결정)
 framer-motion 의 `variants` 정의를 컴포넌트 밖으로 빼 둘 곳이 필요하다.
