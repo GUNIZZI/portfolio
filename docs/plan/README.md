@@ -39,7 +39,8 @@ Kozipsa(`admin-next/apps/kozipsa/docs/plan/`)의 기획 체계를 가져왔다.(
 이 구간은 손으로 고치지 않는다.(근거: `scripts/build-plan-index.mjs` 가 실행마다 구간 전체를 바꾼다)
 `userflow.md` 나 이 표를 고쳤다면 `plan-index` 를 실행한 결과까지 커밋한다.
 
-배포는 아직 하지 않는다. Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다.(2026-11-12 플랜에서 배포를 뒤로 미뤘다)
+사이트는 Vercel 에 배포한다. `main` 에 push 하면 Vercel 이 다시 배포한다.(2026-11-16 사용자가 프로젝트를 연결하고 배포를 확인함)
+Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다. 기획 뷰어(`index.html`)는 따로 배포하지 않는다.
 
 ## 2. 문서 구성
 
