@@ -9,20 +9,21 @@
 <body>
 <header class="top">
   <nav aria-label="화면 바로가기">
-    <a href="#flow">유저 플로우</a><a href="#s01">S-01 소개</a>
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 소개</a><a href="#s02">S-02 이전 경력 펼침</a>
   </nav>
 </header>
 <main>
 
 <div class="intro">
-  <h1>소개 (/about) — 초안</h1>
-  <p>제안으로 채운 초안이다. 헤더 · 푸터 · 연락 섹션은 홈과 같다.</p>
+  <h1>소개 (/about)</h1>
+  <p>코드에 있는 그대로다. 문구는 임시이고 사용자가 바꾼다. 헤더 · 푸터 · 연락 섹션은 홈과 같다.</p>
   <div class="spec-block">
     <h4>화면 목록</h4>
     <div class="spec-tw"><table class="spec-t">
       <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
       <tbody>
-        <tr><td><a href="#s01">S-01</a></td><td>소개 (제안)</td><td>페이지</td><td><code>/about</code></td></tr>
+        <tr><td><a href="#s01">S-01</a></td><td>소개</td><td>페이지</td><td><code>/about</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>이전 경력 펼침</td><td>S-01 의 상태</td><td><code>/about</code></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -37,50 +38,105 @@
 <script type="text/markdown" id="userflow-src">
 # 소개 — 유저 플로우
 
-[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 초안이라 모든 흐름이 `제안` 이다.
+[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다.
 
 ## 1. 전체 흐름
 
 ```mermaid
 flowchart TD
     HOME["홈 · More About Me"]:::step --> A["S-01 소개"]:::screen
-    NAV["헤더 · About"]:::step --> A
+    NAV["헤더 · 푸터의 About"]:::step --> A
     A -->|"스크롤"| TL["경력 타임라인"]:::step
-    A -->|"연락"| C(["메일 앱 · 주소 복사"]):::done
+    A -->|"연락"| C(["메일 앱"]):::done
+    A -->|"헤더 · 푸터 메뉴"| HS(["홈 · 작업 페이지"]):::done
     A -.->|"로고"| HOME
 ```
 
 - 연락의 흐름은 홈과 같다.([home/userflow.md](../home/userflow.md) 4절)
+- 헤더의 About 이 이 페이지다. 홈의 More About Me 로도 들어온다.
+
+## 2. 경력 보기
+
+```mermaid
+flowchart TD
+    A["S-01 소개"]:::screen -->|"스크롤"| TL["경력 타임라인"]:::step
+    TL --> R["최근 2곳 · 프로젝트 목록이 펼쳐져 있음"]:::step
+    TL --> O["이전 4곳 · 회사와 프로젝트 수만 보임"]:::step
+    O -->|"회사를 누름"| OPEN["S-02 프로젝트 목록이 펼쳐짐"]:::screen
+    R -.->|"회사를 누름"| O
+    OPEN -.->|"다시 누름"| O
+    R --> L{"작업 상세가 있는가"}:::decision
+    L -->|"예"| WD(["작업 상세 /work/slug"]):::done
+    L -->|"아니요"| TXT["이름만 표시"]:::step
+```
+
+- 처음부터 펼치는 기준은 시작한 해가 2014년 이후인가다. KOCOM 과 NEWEN AI 가 해당한다.
+- 작업 상세가 있는지는 프로젝트마다 본다. 접힌 회사의 프로젝트도 같다.
+- 정책은 [README.md](./README.md) 「경력」 에 있다.
 </script>
 <script src="../userflow.js"></script>
 <!-- userflow:end -->
 
 <section class="screen" id="s01">
-  <div class="screen-h"><span class="id">S-01</span><h2>소개 (제안)</h2><span class="route">/about</span></div>
+  <div class="screen-h"><span class="id">S-01</span><h2>소개</h2><span class="route">/about</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel"><span class="pf-lab">intro</span><span class="m abs">1</span>
         <div class="pf-split">
-          <div class="pf-stack"><span class="pf-h">ABOUT ME</span><span class="pf-under"></span><span class="pf-line"></span><span class="pf-line"></span></div>
+          <div class="pf-stack"><span class="pf-h">ABOUT ME</span><span class="pf-under"></span><span class="pf-line"></span><span class="pf-line"></span><span class="muted small">디자인 → 플래시 → 마크업 · JS → Vue → React · TS</span><span class="muted small">도구는 바뀌어도 기준은 가져갑니다.</span></div>
           <div class="img-ph pf-hero-img">큰 캐릭터</div>
         </div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">experience</span><span class="m abs">2</span><span class="mo abs">선이 그려짐</span>
-        <div class="dl"><div>2025 – 현재</div><div><b>[회사]</b> · [역할]<br /><span class="muted">[한 일]</span></div><div>[연도]</div><div><b>[회사]</b> · [역할]<br /><span class="muted">[한 일]</span></div></div>
+        <div class="dl">
+          <div>2025 – 현재</div><div><b>KOCOM</b> <span class="pf-chip">재직 중</span><br /><span class="muted">[역할과 한 일 한두 줄]</span><br /><span class="small">Design System · 2025.06</span> <span class="pf-chip">React19</span><span class="pf-chip">Storybook</span><br /><span class="small"><u>KOZIPSA Web Admin</u> · 2025.06</span> <span class="pf-chip">Next15</span><span class="pf-chip">Zustand</span><br /><span class="muted small">… 프로젝트 4개</span></div>
+          <div>2014 – 2025</div><div><b>NEWEN AI</b><br /><span class="muted">[역할과 한 일 한두 줄]</span><br /><span class="small">Ris-K(PaaS) · 2024.06</span> <span class="pf-chip">React18</span><span class="pf-chip">Vite</span><br /><span class="muted small">… 프로젝트 6개</span></div>
+          <div>2009 – 2014</div><div><span class="btn">▸ TRIPLE · 프로젝트 27개</span></div>
+          <div>2008 – 2009</div><div><span class="btn">▸ Braunstone Interactive · 프로젝트 12개</span></div>
+          <div>2006 – 2008</div><div><span class="btn">▸ 알트원 · 프로젝트 5개</span></div>
+          <div>2004 – 2006</div><div><span class="btn">▸ 여러 쇼핑몰 · 프로젝트 1개</span></div>
+        </div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">principles</span><span class="m abs">3</span>
-        <div class="pf-grid"><div class="card"><div class="k">01</div><div class="d">규칙과 도구를 먼저</div></div><div class="card"><div class="k">02</div><div class="d">움직임에 이유를</div></div><div class="card"><div class="k">03</div><div class="d">AI 와 함께</div></div></div>
+        <div class="pf-grid"><div class="card"><div class="k">01</div><div class="d">화면보다 문제를 먼저</div></div><div class="card"><div class="k">02</div><div class="d">디자인과 개발의 언어를 둘 다</div></div><div class="card"><div class="k">03</div><div class="d">오래 쓸 구조를 먼저</div></div><div class="card"><div class="k">04</div><div class="d">혼자 아는 것을 팀이 아는 것으로</div></div></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">skills</span><span class="m abs">4</span>
-        <div class="dl"><div>화면</div><div>React · Next.js</div><div>상태</div><div>Zustand · TanStack Query</div><div>움직임</div><div>framer-motion · GSAP</div></div>
+        <div class="dl">
+          <div>UI · 디자인 시스템</div><div>Shadcn UI · Storybook · UI Kit 설계<br /><span class="muted small">[어디에 썼는지 한 줄]</span></div>
+          <div>프레임워크</div><div>React · Next.js · Vue 2 · Nuxt 2</div>
+          <div>언어 · 마크업</div><div>TypeScript · JavaScript · HTML · CSS</div>
+          <div>상태 · 데이터</div><div>Zustand · Vuex · TanStack</div>
+          <div>스타일</div><div>Tailwind CSS · MUI</div>
+          <div>모션 · 인터랙션</div><div>framer-motion · GSAP</div>
+          <div>데이터 시각화</div><div>D3.js · AmChart</div>
+          <div>구조 · 배포 · 협업</div><div>Monorepo · CI/CD · Git · Notion · AI 협업</div>
+        </div>
       </div>
       <div class="pf-sec"><span class="pf-lab">#contact</span><span class="muted small">홈과 같다</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>인트로</b> (제안)<p>소개 문단은 미정</p></div></li>
-      <li><span class="m">2</span><div><b>경력 타임라인</b> (제안)<p><code>ol</code>. 최신부터. 내용은 사용자가 준다</p></div></li>
-      <li><span class="m">3</span><div><b>일하는 방식</b> (제안)<p>3가지. 번호는 읽는 순서라 붙였다. 문구는 미정</p></div></li>
-      <li><span class="m">4</span><div><b>기술 묶음</b> (제안)<p>분야별로 쓴 곳 한 줄씩</p></div></li>
+      <li><span class="m">1</span><div><b>AboutIntro</b> <code>features/aboutIntro</code><p>페이지 제목은 <code>h1</code>. 소개 문단은 임시 문구. 성장 경로는 <code>ol</code> 이고 지금 하는 일만 강조색</p></div></li>
+      <li><span class="m">2</span><div><b>ExperienceTimeline</b> <code>features/experienceTimeline</code><p><code>ol</code>. 최신부터. 회사 6곳 · 프로젝트 56개. 2014년 이후에 시작한 2곳은 프로젝트 목록을 펼쳐 두고, 이전 4곳은 회사 이름 · 기간 · 프로젝트 수만 보인다 → <a href="#s02">S-02</a>. 밑줄 친 프로젝트는 작업 상세로 가는 링크다. 요약 줄은 문구가 없으면 그리지 않는다. 데이터는 <code>content/experiences.json</code></p></div></li>
+      <li><span class="m">3</span><div><b>WorkPrinciples</b> <code>features/workPrinciples</code><p>4가지. 제품 이해 · 디자인과 개발 사이 · 구조 · 협업. 번호는 읽는 순서라 붙였다. 문구는 초안</p></div></li>
+      <li><span class="m">4</span><div><b>SkillGroups</b> <code>features/skillGroups</code><p>분야 8개. UI · 디자인 시스템이 맨 앞이다. 묶음마다 쓴 곳 한 줄을 붙인다. 묶음 안의 기술 이름은 초안이고 사용자가 더하거나 뺀다</p></div></li>
+    </ol></aside>
+  </div>
+</section>
+
+<!-- ============ S-02 이전 경력 펼침 ============ -->
+<section class="screen" id="s02">
+  <div class="screen-h"><span class="id">S-02</span><h2>이전 경력 펼침</h2><span class="route">/about · 접힌 회사를 누름</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="pf-sec rel"><span class="pf-lab">experience</span><span class="m abs">1</span><span class="mo abs">펼쳐짐</span>
+        <div class="dl">
+          <div>2009 – 2014</div><div><span class="btn">▾ TRIPLE · 프로젝트 27개</span><br /><span class="muted">[역할과 한 일 한두 줄]</span><br /><span class="small">한국N방송 · 2014.06</span> <span class="pf-chip">Markup</span><span class="pf-chip">JS</span><br /><span class="small">LG G2 Micro site · 2013.07</span> <span class="pf-chip">Motion</span><span class="pf-chip">JS</span><br /><span class="muted small">… 나머지 25개</span></div>
+          <div>2008 – 2009</div><div><span class="btn">▸ Braunstone Interactive · 프로젝트 12개</span></div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>접힌 회사</b><p>누르면 그 회사의 프로젝트 목록만 펼쳐진다. 다른 회사는 그대로다. 다시 누르면 접힌다. 여닫는 것은 <code>details</code>. 제목 줄 오른쪽의 「전체 펼치기」 버튼으로 6곳을 한 번에 여닫는다. 펼쳐 둔 회사도 같은 방법으로 접는다. 화살표가 뒤집히고 목록은 높이가 늘어나며 펼쳐진다</p></div></li>
     </ol></aside>
   </div>
 </section>

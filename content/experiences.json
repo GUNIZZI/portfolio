@@ -1,0 +1,338 @@
+[
+    {
+        "slug": "kocom",
+        "company": "KOCOM",
+        "startYear": 2025,
+        "endYear": null,
+        "summary": "프론트엔드 개발. 사내 디자인 시스템을 개발하고, 그 시스템 기반의 KOZIPSA · 홈네트워크 관리 화면을 Next.js 로 구축. 모노레포 구성과 인증, 배포 흐름까지 설계.",
+        "projects": [
+            {
+                "name": "Design System",
+                "date": "2025.06",
+                "tags": ["React19", "Shadcn UI", "Tailwind", "Storybook", "React Table"]
+            },
+            {
+                "name": "KOZIPSA Web Admin",
+                "date": "2025.06",
+                "tags": ["Next15", "Context", "Zustand", "CI/CD"],
+                "workSlug": "kozipsa"
+            },
+            {
+                "name": "HomeNetwork Web Admin",
+                "date": "2025.05",
+                "tags": ["Next15", "Zustand"]
+            },
+            {
+                "name": "KOCOM Web Management",
+                "date": "2025.04",
+                "tags": ["Monorepo", "NextAuth", "SSR", "CSR"]
+            }
+        ]
+    },
+    {
+        "slug": "newen-ai",
+        "company": "NEWEN AI",
+        "startYear": 2014,
+        "endYear": 2025,
+        "summary": "프론트엔드 개발. PaaS 관리 화면과 대시보드를 마크업 · JS 에서 Vue 2, React 로 옮겨 가며 개발. 추후에는 UI Kit 과 구조 설계 진행",
+        "totalProjects": 50,
+        "projects": [
+            {
+                "name": "차세대 Ris-K(PaaS)",
+                "date": "2024.06",
+                "tags": ["PL", "Vite", "React18", "Zustand", "MUI"]
+            },
+            {
+                "name": "UI Kit(Design System)",
+                "date": "2022",
+                "tags": ["PL", "Vue-cli", "Vue2"]
+            },
+            {
+                "name": "PaaS 시스템(고객사 대시보드/고객사,내부 백오피스) 5개+",
+                "date": "2022",
+                "tags": ["PL", "Vue2", "Monorepo"]
+            },
+            {
+                "name": "자사 반응형 웹사이트",
+                "date": "2018",
+                "tags": ["PL", "Vue2", "Nuxt2", "Architecture"]
+            },
+            {
+                "name": "고객사 대시보드(JSP + Vue 2) 5개+",
+                "date": "2018",
+                "tags": ["PL", "Vue2", "Nuxt2", "Architecture"]
+            },
+            {
+                "name": "내부 백오피스 5개+",
+                "date": "2014",
+                "tags": ["PL", "Markup", "JS"]
+            },
+            {
+                "name": "고객사 대시보드 40개+",
+                "date": "2014",
+                "tags": ["PL", "Markup", "JS", "AmChart", "D3js"]
+            }
+        ]
+    },
+    {
+        "slug": "triple",
+        "company": "TRIPLE",
+        "startYear": 2009,
+        "endYear": 2014,
+        "summary": "플래시 개발 · 모션, 마크업 · JS. 기업 사이트와 프로모션, 키오스크 · 전광판 · 키넥트 인터랙티브 콘텐츠를 개발",
+        "projects": [
+            {
+                "name": "한국N방송",
+                "date": "2014.06",
+                "tags": ["Markup", "JS"]
+            },
+            {
+                "name": "삼화플라스틱",
+                "date": "2014.03",
+                "tags": ["Markup", "JS"]
+            },
+            {
+                "name": "인천시 제야의 밤 - 인터렉티브 컨텐츠",
+                "date": "2013.12",
+                "tags": ["FlashMotion", "FlashDev", "Kinect"]
+            },
+            {
+                "name": "위닉스 - 모바일",
+                "date": "2013.09",
+                "tags": ["Markup", "JS"]
+            },
+            {
+                "name": "LG G2 Micro site",
+                "date": "2013.07",
+                "tags": ["Motion", "JS"]
+            },
+            {
+                "name": "일동제약",
+                "date": "2013.05",
+                "tags": ["Markup"]
+            },
+            {
+                "name": "필립스 Avent",
+                "date": "2013.04",
+                "tags": ["Markup", "FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "국립현대미술관",
+                "date": "2013.03",
+                "tags": ["Markup", "FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "국립현대미술관 - 키오스크",
+                "date": "2013.01",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "LG패션 - ILCORSO",
+                "date": "2012.08",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "아산 정주영닷컴",
+                "date": "2012.05",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "중부 발전소 - 여수엑스포 인터렉티브 컨텐츠",
+                "date": "2012.04",
+                "tags": ["FlashMotion", "FlashDev", "Kinect"]
+            },
+            {
+                "name": "삼성엔지니어링 - 키오스크",
+                "date": "2012.01",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "인천공항 입국심사대 - 전광판",
+                "date": "2011.11",
+                "tags": ["FlashMotion", "FlashDev", "Socket"]
+            },
+            {
+                "name": "대성 셀틱 - 플래시 UI",
+                "date": "2011.09",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "삼성 Smart TV - 글로벌 site",
+                "date": "2011.08",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "SM5 디지털브로셔",
+                "date": "2011.06",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "한샘 키친바흐 - 플래시 UI",
+                "date": "2011.04",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "CJ프레시안 - 미디어플레이어",
+                "date": "2011.03",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "밝은눈안과 - 플래시 UI",
+                "date": "2011.01",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "웅진에너지",
+                "date": "2010.10",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "서울예대 - 플래시 UI",
+                "date": "2010.08",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "LG U+ - 플래시 Navigation",
+                "date": "2010.08",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "하나SK카드 - 플래시 UI",
+                "date": "2010.04",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "YF SONATA - 인/익스테리어 UI",
+                "date": "2010.02",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "삼화플라스틱",
+                "date": "2010.01",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "현대자동차 FIFA 월드컵 프로모션",
+                "date": "2009.12",
+                "tags": ["FlashMotion", "FlashDev"]
+            }
+        ]
+    },
+    {
+        "slug": "braunstone-interactive",
+        "company": "Braunstone Interactive",
+        "startYear": 2008,
+        "endYear": 2009,
+        "summary": "플래시 개발. LG · 삼성 등의 제품 사이트와 키오스크, 웹사이트 콘텐츠의 플래시 UI 를 개발",
+        "projects": [
+            {
+                "name": "인천시 UZone - 키오스크",
+                "date": "2009.06",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "행안부 - 주민서비스",
+                "date": "2009.04",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "ViralBlog(자체서비스)",
+                "date": "2009.01",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "LG Cyon",
+                "date": "2008.12",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "신라호텔 Artisee",
+                "date": "2008.12",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "유진로봇 - 교육 컨텐츠 UI",
+                "date": "2008.12",
+                "tags": ["FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "삼성화재 AllLife - 게임",
+                "date": "2008.11",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "LG PRADA Phone",
+                "date": "2008.11",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "삼성전자 ECO/LED TV - 플래시 UI",
+                "date": "2008.10",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "삼성화재",
+                "date": "2008.07",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "삼성전자 TV 메뉴얼",
+                "date": "2008.05",
+                "tags": ["FlashDev"]
+            },
+            {
+                "name": "헉슬리",
+                "date": "2008.05",
+                "tags": ["FlashDev"]
+            }
+        ]
+    },
+    {
+        "slug": "altone",
+        "company": "알트원",
+        "startYear": 2006,
+        "endYear": 2008,
+        "summary": "웹 디자인 · 마크업 · 플래시. 온라인 게임 십이지천 시리즈와 워렌의 웹사이트를 디자인부터 프론트 개발",
+        "projects": [
+            {
+                "name": "십이지천2",
+                "date": "2007",
+                "tags": ["Design", "Markup", "FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "워렌(OBT)",
+                "date": "2007",
+                "tags": ["Design", "Markup", "FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "십이지천1 - 피의서약",
+                "date": "2007",
+                "tags": ["Design", "Markup", "FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "십이지천1",
+                "date": "2006",
+                "tags": ["Design", "Markup", "FlashMotion", "FlashDev"]
+            },
+            {
+                "name": "십이지천 - Global",
+                "date": "2006",
+                "tags": ["Design", "Markup", "FlashMotion", "FlashDev"]
+            }
+        ]
+    },
+    {
+        "slug": "shopping-malls",
+        "company": "여러 쇼핑몰",
+        "startYear": 2004,
+        "endYear": 2006,
+        "summary": "웹 디자인 · 마크업. Cafe24 기반 쇼핑몰 여러 곳을 디자인하고 구축",
+        "projects": [
+            {
+                "name": "여러 쇼핑몰",
+                "date": "2004",
+                "tags": ["Design", "Markup", "Cafe24"]
+            }
+        ]
+    }
+]

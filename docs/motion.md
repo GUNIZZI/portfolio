@@ -9,7 +9,10 @@
     - 다른 모션 라이브러리(Lenis, three 등)를 추가하지 않는다. 필요하면 먼저 컨펌을 받는다.
 2. **값은 토큰으로만 쓴다.** 지속시간·가속도·간격을 숫자로 적지 않는다.
 3. **동작 줄이기 설정을 따른다.** OS 에서 동작 줄이기를 켠 사용자에게는 움직임 없이 최종 상태를 보여 준다.
-4. **`transform` 과 `opacity` 만 움직인다.** `width` · `top` · `margin` 을 애니메이션하면 매 프레임 레이아웃을 다시 계산한다.
+4. **레이아웃을 밀지 않는 속성만 움직인다.** `transform` · `opacity` 가 기본이고 `clip-path` 도 해당한다.(2026-11-16 사용자 결정)
+   `width` · `top` · `margin` 을 애니메이션하면 매 프레임 레이아웃을 다시 계산한다.
+    - `clip-path` 는 버튼의 면이 넓어지는 연출에 쓴다. 폭을 움직이지 않고 가려 둔 면을 드러낸다.(`src/shared/ui/button/Button.tsx`)
+    - 예외가 1곳 있다. 소개의 경력은 회사를 여닫을 때 프로젝트 목록과 회사 요약의 높이를 움직인다.(2026-11-16 사용자 결정, `src/features/experienceTimeline/ui/ExperienceTimeline.tsx`, `docs/plan/about/README.md` 「모션」)
 
 ## 1. 상황별 도구
 
@@ -109,12 +112,13 @@ e2e 는 `reduced-motion` 프로젝트로 같은 화면을 한 번 더 실행한�
 | `import { gsap } from 'gsap'`           | `@/shared/util/gsap`                | 플러그인과 가속도가 등록되지 않는다                    |
 | `useEffect` 안에서 GSAP 생성            | `useGSAP`                           | 정리가 빠져 라우트 이동 뒤에도 ScrollTrigger 가 남는다 |
 | `matchMedia` 분기 없는 GSAP             | `gsap.matchMedia()`                 | 동작 줄이기 사용자에게도 움직인다                      |
-| `width` · `top` 애니메이션              | `scale` · `x` · `y`                 | 매 프레임 레이아웃을 다시 계산한다                     |
+| `width` · `top` 애니메이션              | `scale` · `x` · `y` · `clip-path`   | 매 프레임 레이아웃을 다시 계산한다                     |
 | 한 요소를 framer-motion 과 GSAP 이 함께 | 한 도구만                           | 같은 transform 을 덮어써 위치가 순간적으로 바뀐다      |
 
 ## 미정리 항목
 
-- 모션 목록은 `docs/plan/home/README.md` 「모션」 표다. 헤더와 배경의 모션도 그 표에 있다.
+- 모션 목록은 `docs/plan/home/README.md` 와 `docs/plan/about/README.md` 의 「모션」 표다. 헤더와 배경의 모션은 홈의 표에 있다.
+- 원칙 4 의 예외가 1곳 있다. 소개 경력의 높이 전환이다.
 
 ## 확인방법
 
