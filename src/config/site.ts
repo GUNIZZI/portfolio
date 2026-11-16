@@ -9,10 +9,10 @@ export const SITE = {
 } as const;
 
 /**
- * 외부 링크. 실제 주소가 정해지기 전까지 페이지 맨 위를 가리킨다.
+ * 외부 링크. http 로 시작하는 주소는 푸터가 새 탭으로 연다.
  * icon 은 shared/ui/icon 의 이름이다.
  */
 export const SOCIAL_LINKS = [
-    { label: 'GitHub', href: '#top', icon: 'github' },
+    { label: 'GitHub', href: 'https://github.com/GUNIZZI', icon: 'github' },
     { label: '이메일', href: `mailto:${SITE.email}`, icon: 'mail' },
 ] as const;

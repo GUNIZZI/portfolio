@@ -10,7 +10,7 @@ export default function Footer() {
                 <Logo name={SITE.name} />
                 <div className="flex gap-2">
                     {SOCIAL_LINKS.map((link) => {
-                        // 외부 프로필은 새 탭에서 연다. 주소를 받기 전(#top)과 mailto 는 해당하지 않는다
+                        // 외부 프로필은 새 탭에서 연다. mailto 는 해당하지 않는다
                         const isExternal = link.href.startsWith('http');
                         return (
                             <a
