@@ -9,7 +9,7 @@
     --background: #0a0a12;
     --panel: #10101a;
     --card: #161624;
-    --chip: #181826;
+    --chip: #27273c;
     /* 뒤의 배경 낙서가 비치는 패널. --panel 에 알파 0.5 */
     --panel-glass: rgb(16 16 26 / 0.5);
     /* 고정 헤더의 반투명 바탕. --background 에 알파 0.8 */

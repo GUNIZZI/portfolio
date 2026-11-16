@@ -23,7 +23,7 @@
 | `background`                 | `#0a0a12` | 페이지 바탕                                                                |
 | `panel`                      | `#10101a` | 작업·소개를 묶는 큰 면                                                     |
 | `card`                       | `#161624` | 작업 카드, 기술 타일                                                       |
-| `chip`                       | `#181826` | 히어로 기술 태그                                                           |
+| `chip`                       | `#27273c` | 히어로 기술 태그, 소개의 프로젝트 태그와 기술 이름, 경력 회사 줄의 hover   |
 | `panel-glass`                | 알파 0.5  | 작업·소개를 묶는 반투명 패널                                               |
 | `glass`                      | 알파 0.8  | 화면 위에 붙은 헤더의 바탕                                                 |
 | `strong`                     | `#f4f4f5` | 제목, 링크                                                                 |
@@ -56,7 +56,7 @@
 ## 3. 배치
 
 ```
-헤더      로고 · 메뉴 4개 · Contact 버튼
+헤더      로고 · 메뉴 3개 · Contact 버튼
 히어로    Hey, I'm / GUNI / Web Frontend Developer / 태그 / 버튼 1개   ←→ 캐릭터와 낙서
 패널      FEATURED PROJECTS(카드 격자) + MY SKILLS(타일 격자)
 소개      캐릭터 · ABOUT ME · 숫자 3개
