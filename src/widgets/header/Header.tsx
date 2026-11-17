@@ -1,4 +1,4 @@
-import Button from '@/shared/ui/button/Button';
+import { Button } from '@/shared/ui/button/button';
 import Icon from '@/shared/ui/icon/Icon';
 import type { NavHref } from '@/config/nav';
 import { SITE } from '@/config/site';
@@ -20,9 +20,11 @@ export default function Header({ currentHref }: OwnProps) {
             currentHref={currentHref}
             action={
                 // 연락 섹션은 모든 페이지에 있다(widgets/contact)
-                <Button href="#contact" intent="brand" size="md">
-                    Contact
-                    <Icon name="arrowRight" size={16} strokeWidth={2} />
+                <Button asChild variant="brand" size="md">
+                    <a href="#contact">
+                        Contact
+                        <Icon name="arrowRight" size={16} strokeWidth={2} />
+                    </a>
                 </Button>
             }
         />

@@ -15,10 +15,13 @@ export default function AdminLogin() {
                     <Logo name={SITE.name} href="/" />
                 </div>
                 <Panel className="p-6">
-                    <h1 className="mb-6 text-xl font-bold text-strong">로그인</h1>
+                    <h1 className="mb-6 text-xl font-bold text-strong">Login</h1>
                     <LoginForm />
                 </Panel>
-                <Link href="/" className="self-center text-caption text-muted hover:text-strong">
+                <Link
+                    href="/"
+                    className="self-center text-caption text-muted-foreground hover:text-strong"
+                >
                     사이트로 돌아가기
                 </Link>
             </div>

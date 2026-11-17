@@ -1,4 +1,4 @@
-import Button from '@/shared/ui/button/Button';
+import { Button } from '@/shared/ui/button/button';
 import DrawnPath from '@/shared/ui/drawnPath/DrawnPath';
 import Icon from '@/shared/ui/icon/Icon';
 import { cn } from '@/shared/util/cn';
@@ -41,7 +41,7 @@ export default function Hero() {
                     <DrawnPath
                         trigger="parent"
                         d="M4 14 C 120 4, 260 2, 396 8"
-                        className="stroke-accent"
+                        className="stroke-primary"
                         strokeWidth={9}
                         strokeLinecap="round"
                     />
@@ -67,17 +67,21 @@ export default function Hero() {
                             {tag.label}
                         </li>
                     ))}
-                    <li className="flex items-center px-1 py-1.5 text-muted">... and more</li>
+                    <li className="flex items-center px-1 py-1.5 text-muted-foreground">
+                        ... and more
+                    </li>
                 </ul>
 
                 <div className="mt-2 flex flex-wrap gap-4">
-                    <Button href="#projects">
-                        View My Projects
-                        <Icon name="arrowRight" size={18} strokeWidth={2.2} />
+                    <Button asChild>
+                        <a href="#projects">
+                            View My Projects
+                            <Icon name="arrowRight" size={18} strokeWidth={2.2} />
+                        </a>
                     </Button>
                 </div>
 
-                <div className="mt-3 flex items-center gap-2 text-caption text-muted">
+                <div className="mt-3 flex items-center gap-2 text-caption text-muted-foreground">
                     <svg
                         width="18"
                         height="24"

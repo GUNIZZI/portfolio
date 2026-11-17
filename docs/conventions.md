@@ -122,6 +122,22 @@ ESLint `simple-import-sort` 가 고친다. 순서는 Kozipsa 2.4 와 같다.
 4. 상대경로
 ```
 
+### 2.5 shadcn 을 바탕으로 한 컴포넌트
+
+`shared/ui` 에서 shadcn 을 바탕으로 한 컴포넌트는 shadcn 의 이름 규칙을 따른다.(2026-11-17 사용자 결정. Kozipsa `packages/ui` 와 같은 형태다)
+
+| 대상       | 규칙                                              | 예                                       |
+| ---------- | ------------------------------------------------- | ---------------------------------------- |
+| 파일       | 소문자. 컴포넌트마다 폴더를 두고 문서를 옆에 둔다 | `button/button.tsx` · `button/button.md` |
+| export     | named export                                      | `export { Button, buttonVariants }`      |
+| props 타입 | `ComponentProps<'button'>` 에 변형을 더한 타입    | `ButtonProps`                            |
+| 색 클래스  | shadcn 이름 그대로([theme.md](./theme.md) 1.1절)  | `bg-primary` · `text-muted-foreground`   |
+
+- 새로 받을 때는 `pnpm dlx shadcn@latest add <이름>` 으로 받아 `<이름>/<이름>.tsx` 로 옮긴다.(`components.json`)
+- 받은 파일의 `cn` import 는 `@/shared/util/cn` 으로 고친다. CLI 가 `"cn"` 으로 적는다.(2026-11-17 `button` 을 받을 때 확인)
+- 받은 파일에서 `dark:` 분기와 숫자 `opacity-*` 를 걷어 낸다. 훅이 커밋을 막는다.(`.claude/hooks/guard_tokens.py`)
+- shadcn 에 없는 컴포넌트(Icon · Panel · Doodle 등)는 위 2절의 규칙 그대로다.
+
 ## 3. 날짜
 
 `date-fns` 를 추가하기 전까지는 `Intl.DateTimeFormat` 을 쓴다. 표시 포맷은 점(`.`)으로 구분한다(`2026.11`).(Kozipsa 3절)
@@ -142,7 +158,7 @@ export default function HeroTitle({ title }: OwnProps) {
     function hndlPointerMove() {
         /* ... */
     }
-    return <h1 className={cn('text-strong', isActive && 'text-accent')}>{title}</h1>;
+    return <h1 className={cn('text-strong', isActive && 'text-primary')}>{title}</h1>;
 }
 ```
 
@@ -158,7 +174,7 @@ export { default as Hero } from './ui/Hero';
 
 ### 4.2 색
 
-글자색은 `strong` › `foreground` › `muted` › `decorative` 4계층 안에서 고른다.
+글자색은 `strong` › `foreground` › `muted-foreground` › `decorative` 4계층 안에서 고른다.
 기준은 [theme.md](./theme.md) 에 있다.
 
 ### 4.3 클래스 줄 나누기

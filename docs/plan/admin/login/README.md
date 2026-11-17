@@ -52,7 +52,7 @@
 
 - `/admin` 아래의 모든 화면은 로그인한 관리자만 볼 수 있다. 서버에서 세션을 검사한다.
 - 로그인하지 않고 들어오면 [S-01 로그인](./wireframe.html#s01)으로 보낸다. 들어오려던 주소는 기억하지 않는다.(`src/proxy.ts`)
-- 검사는 2번 한다. 쿠키가 없으면 페이지를 그리기 전에 보내고, 쿠키가 있으면 페이지가 값을 검증한다.(`docs/architecture.md` 4.1절)
+- 검사는 2번 한다. 쿠키가 없으면 페이지를 그리기 전에 보내고, 쿠키가 있으면 페이지가 값을 검증한다.(`docs/architecture.md` 4.2절)
 - 관리 화면은 검색 색인에서 뺀다.(`src/app/admin/layout.tsx`)
 
 ### 로그인
@@ -87,7 +87,7 @@
 
 ## 모션
 
-연출을 두지 않는다. 로그인 · 로그아웃 버튼은 hover 와 포커스에서 색만 바로 바뀐다.(요구사항 4, `src/shared/ui/button/Button.md` 「연출 없이 쓰기」)
+연출을 두지 않는다. 로그인 · 로그아웃 버튼은 hover 와 포커스에서 색만 바로 바뀐다.(요구사항 4, `src/shared/ui/button/button.md` 「연출 없이 쓰기」)
 
 ## 반응형
 
@@ -120,7 +120,7 @@
 
 ## 접근성 · 성능 고려
 
-- 이메일과 비밀번호에 `label` 을 잇는다.(`src/shared/ui/input/Input.md`)
+- 이메일과 비밀번호에 `label` 을 잇는다.(`src/shared/ui/input/input.md`)
 - 안내 상자는 `role="status"` 로 알린다. 문구가 없을 때도 요소를 둔다. 나중에 생긴 `role="status"` 는 스크린 리더가 읽지 않는다.(`src/features/adminAuth/ui/LoginForm.tsx`)
 - 이메일에는 `autocomplete="username"`, 비밀번호에는 `autocomplete="current-password"` 를 단다. 비밀번호 관리 도구가 채울 수 있다.
 - 로그인 화면에는 공개 화면의 헤더 · 푸터 · 배경을 싣지 않는다.

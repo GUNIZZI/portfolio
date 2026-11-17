@@ -4,8 +4,8 @@ import { type ChangeEvent, useActionState, useState } from 'react';
 
 import { login } from '@/entities/session/actions/session.actions';
 import { LOGIN_STATUS, type LoginStateData } from '@/entities/session/model/session.types';
-import Button from '@/shared/ui/button/Button';
-import Input from '@/shared/ui/input/Input';
+import { Button } from '@/shared/ui/button/button';
+import { Input } from '@/shared/ui/input/input';
 
 import { LOGIN_NOTICE } from '../model/adminAuth.constants';
 
@@ -29,28 +29,31 @@ export default function LoginForm() {
     }
 
     return (
-        <form action={formAction} className="flex flex-col gap-5">
+        <form action={formAction} className="flex flex-col gap-2">
             <Input
-                label="이메일"
                 name="email"
                 type="email"
+                size="md"
                 autoComplete="username"
                 value={email}
                 onChange={hndlEmailChange}
+                placeholder="이메일"
             />
             <Input
-                label="비밀번호"
                 name="password"
                 type="password"
+                size="md"
                 autoComplete="current-password"
                 value={password}
                 onChange={hndlPasswordChange}
+                placeholder="비밀번호"
             />
             <Button
                 type="submit"
+                size="lg"
                 effect="none"
                 disabled={!isFilled || isPending}
-                className="justify-center"
+                className="mt-3 justify-center"
             >
                 {isPending ? '로그인하는 중' : '로그인'}
             </Button>
@@ -59,7 +62,9 @@ export default function LoginForm() {
                 {notice && !isPending ? (
                     <div className="rounded-card border border-border-card bg-card px-4 py-3">
                         <p className="text-body font-semibold text-strong">{notice.title}</p>
-                        <p className="mt-1 text-caption text-muted">{notice.description}</p>
+                        <p className="mt-1 text-caption text-muted-foreground">
+                            {notice.description}
+                        </p>
                     </div>
                 ) : null}
             </div>

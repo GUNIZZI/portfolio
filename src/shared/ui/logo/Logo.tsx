@@ -1,18 +1,32 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { cn } from '@/shared/util/cn';
+
+/** 로고의 높이. 폭은 그림의 비율(1312:364)을 따른다 */
+const LOGO_SIZE_CLASS = {
+    /** 28px */
+    sm: 'h-7',
+    /** 40px. 헤더와 푸터 */
+    md: 'h-10',
+    /** 48px */
+    lg: 'h-12',
+} as const;
+
 interface OwnProps {
     /** 링크의 이름에 쓴다. 로고 그림 안의 글자는 스크린 리더가 읽지 못한다 */
     name: string;
     /** 누르면 가는 곳. 홈에서는 페이지 맨 위(#top), 다른 페이지에서는 홈(/) */
     href?: string;
+    /** 로고의 높이 단계 */
+    size?: keyof typeof LOGO_SIZE_CLASS;
 }
 
 /**
  * 가로형 로고. G 심볼 · 이름 · 직함이 그림 한 장(public/images/logo/logo.svg)에 들어 있다.
  * 헤더와 푸터가 함께 쓴다.
  */
-export default function Logo({ name, href = '#top' }: OwnProps) {
+export default function Logo({ name, href = '#top', size = 'md' }: OwnProps) {
     const image = (
         // SVG 는 이미지 최적화를 거치지 않는다. 벡터라 크기를 줄여 내려 줄 것이 없다
         <Image
@@ -22,7 +36,7 @@ export default function Logo({ name, href = '#top' }: OwnProps) {
             height={40}
             unoptimized
             loading="eager"
-            className="h-10 w-auto"
+            className={cn(LOGO_SIZE_CLASS[size], 'w-auto')}
         />
     );
     const label = `${name} 홈으로`;

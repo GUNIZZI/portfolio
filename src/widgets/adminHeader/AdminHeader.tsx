@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { House } from 'lucide-react';
+
 import { LogoutButton } from '@/features/adminAuth';
 import Logo from '@/shared/ui/logo/Logo';
 import { cn } from '@/shared/util/cn';
@@ -21,8 +23,8 @@ interface OwnProps {
 export default function AdminHeader({ currentHref }: OwnProps) {
     return (
         <header className="border-b border-line bg-panel">
-            <div className="mx-auto flex max-w-page flex-wrap items-center gap-x-8 gap-y-3 px-gutter py-4">
-                <Logo name={SITE.name} href={ADMIN_NAV_ITEMS[0].href} />
+            <div className="mx-auto flex max-w-page flex-wrap items-center gap-x-10 gap-y-3 px-gutter py-4">
+                <Logo name={SITE.name} href={ADMIN_NAV_ITEMS[0].href} size="md" />
                 <nav
                     aria-label="관리 메뉴"
                     className="flex items-center gap-x-6 text-sm font-medium"
@@ -38,9 +40,9 @@ export default function AdminHeader({ currentHref }: OwnProps) {
                                     // 배치와 모양. 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
                                     'border-b-2 border-transparent py-2',
                                     // 글자
-                                    'text-muted hover:text-strong',
+                                    'text-muted-foreground hover:text-strong',
                                     // 상태
-                                    isCurrent && 'border-accent text-accent hover:text-accent',
+                                    isCurrent && 'border-primary text-primary hover:text-primary',
                                 )}
                             >
                                 {item.label}
@@ -48,17 +50,18 @@ export default function AdminHeader({ currentHref }: OwnProps) {
                         );
                     })}
                 </nav>
-                <div className="ml-auto flex items-center gap-x-5">
+                <div className="ml-auto flex items-center gap-3">
                     <a
                         href="/"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-sm text-muted hover:text-strong"
+                        className="text-sm text-muted-foreground hover:text-strong"
+                        title="사이트 보기 (새 탭)"
                     >
-                        사이트 보기
-                        <span aria-hidden="true"> ↗</span>
+                        <House className="size-4" />
                         <span className="sr-only"> (새 탭)</span>
                     </a>
+                    {/* <Separator orientation="vertical" className="h-3! bg-foreground/50" /> */}
                     <LogoutButton />
                 </div>
             </div>

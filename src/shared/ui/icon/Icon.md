@@ -18,3 +18,8 @@
 ## 이 컴포넌트를 고칠 때
 
 새 아이콘은 `ICONS` 에 한 항목을 더한다. 파일을 따로 만들지 않는다.
+
+## lucide-react
+
+관리 화면은 `lucide-react` 의 아이콘을 바로 가져와 쓴다.(2026-11-17 사용자 결정, `src/features/aboutEditor/ui/ListField.tsx`)
+크기는 `className="size-4"` 처럼 유틸리티로 주고, 색은 감싸는 요소의 글자색을 따른다.

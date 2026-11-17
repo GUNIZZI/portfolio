@@ -157,11 +157,11 @@
 
 - 지금의 entity `experience` 가 읽는다. 저장소만 바뀌고 `actions` 가 생긴다.(`src/entities/experience/`)
 - 프로젝트 연결에 보여 줄 프로젝트 목록은 entity `project` 에서 읽는다.
-- 쓰기는 서버에서 세션을 다시 검사하고 zod 스키마로 검증한다.(`docs/architecture.md` 4절 · 4.1절)
+- 쓰기는 서버에서 세션을 다시 검사하고 zod 스키마로 검증한다.(`docs/architecture.md` 4절 · 4.2절)
 
 ## 접근성 · 성능 고려
 
-- 입력마다 `label` 을 잇고, 오류 문구는 `aria-describedby` 로 입력에 잇는다.(`src/shared/ui/input/Input.md`)
+- 입력마다 `label` 을 잇고, 오류 문구는 `role="alert"` 로 입력 아래에 적는다.(`src/shared/ui/field/field.md`)
 - 줄을 더하고 빼고 옮기는 버튼에는 어느 줄의 버튼인지 이름에 넣는다.
 - 줄을 옮기면 옮긴 줄의 버튼에 포커스를 남긴다. 줄을 빼면 그다음 줄로 포커스를 보낸다.
 - 삭제 확인 창은 처음 포커스를 취소에 둔다.

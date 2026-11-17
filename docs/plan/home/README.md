@@ -133,7 +133,7 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 
 ### 임시 값
 
-- 소개 섹션의 숫자 3개는 원본 값이다. 사용자가 나중에 바꾼다.(`src/features/about/model/about.constants.ts`)
+- 소개 섹션의 숫자 3개는 원본 값이다. 사용자가 관리 화면의 소개에서 바꾼다.([소개 관리 기획](../admin/about/README.md))
 - 4번째 작업 카드는 썸네일이 없어 임시 이미지를 표시한다.(`content/projects.ts`)
 
 ## 모션
@@ -164,7 +164,7 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 - 히어로 낙서는 포인터가 히어로 밖에 있어도 브라우저 창 어디서든 따라 움직인다.(2026-11-12 사용자 결정, `src/features/hero/ui/HeroIntro.tsx`)
 - 붓 자국은 본문의 50~75% 속도로 움직인다. 붓 자국마다 속도가 다르다.(2026-11-12 사용자 결정, `src/widgets/backdrop/Backdrop.tsx`)
 - 배경 낙서는 붓 자국보다 조금씩만 뒤처지거나 앞서 움직인다. 패널 뒤의 낙서는 반투명 패널 너머로 흐리게 비치고 모든 폭에서 그린다. 그 밖의 낙서는 빈 곳이 없는 768px 미만에는 그리지 않는다.(2026-11-12 사용자 결정, `src/features/homeDoodles/model/homeDoodles.constants.ts`)
-- 주요 버튼은 헤더의 Contact, 히어로의 View My Projects, 소개의 More About Me, 연락의 Get in Touch 다. 모두 `shared/ui/button` 이라 연출이 같다.(2026-11-16 사용자 결정, `src/shared/ui/button/Button.tsx`)
+- 주요 버튼은 헤더의 Contact, 히어로의 View My Projects, 소개의 More About Me, 연락의 Get in Touch 다. 모두 `shared/ui/button` 이라 연출이 같다.(2026-11-16 사용자 결정, `src/shared/ui/button/button.tsx`)
 - 등장 연출의 순서는 낙서 → 이름 → 말풍선이다. 이름은 낙서가 반쯤 그려졌을 때 시작한다.(`src/features/hero/model/hero.motions.ts`)
 - 기술 타일에는 초점을 받는 요소가 없어 hover 에만 흔들린다.(`src/features/skills/ui/Skills.tsx`)
 - 작업 카드는 hover · focus 때 `brand` 색 테두리 선이 그려진다. 위로 떠오르지 않는다.(2026-11-16 사용자 결정, `src/features/featuredProjects/ui/ProjectCard.tsx`)
@@ -204,13 +204,13 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 
 ## 데이터
 
-| 데이터      | 읽는 곳                                         | 항목                                                         |
-| ----------- | ----------------------------------------------- | ------------------------------------------------------------ |
-| 작업 목록   | `content/projects.ts` → `entities/project`      | `slug` · `title` · `category` · `summary` · `href` · `image` |
-| 사이트 정보 | `src/config/site.ts`                            | 이름 · 직함 · 소개 한 줄 · 메일 · 외부 링크                  |
-| 메뉴        | `src/config/nav.ts`                             | 라벨 · 주소                                                  |
-| 기술        | `src/features/skills/model/skills.constants.ts` | 이름 · 아이콘 파일                                           |
-| 소개        | `src/features/about/model/about.constants.ts`   | 소개 문장 · 숫자 3개(값 · 뒤에 붙는 글자)                    |
+| 데이터      | 읽는 곳                                                                                | 항목                                                         |
+| ----------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 작업 목록   | `content/projects.ts` → `entities/project`                                             | `slug` · `title` · `category` · `summary` · `href` · `image` |
+| 사이트 정보 | `src/config/site.ts`                                                                   | 이름 · 직함 · 소개 한 줄 · 메일 · 외부 링크                  |
+| 메뉴        | `src/config/nav.ts`                                                                    | 라벨 · 주소                                                  |
+| 기술        | `src/features/skills/model/skills.constants.ts`                                        | 이름 · 아이콘 파일                                           |
+| 소개        | 저장소 → `entities/about`. 아이콘 이름만 `src/features/about/model/about.constants.ts` | 소개 문장 · 숫자 3개(값 · 뒤에 붙는 글자)                    |
 
 ## 접근성 · 성능 고려
 
