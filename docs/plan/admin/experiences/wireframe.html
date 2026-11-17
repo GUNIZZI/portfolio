@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>경력 관리 와이어프레임</title>
+<link rel="stylesheet" href="../../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 경력 목록</a><a href="#s02">S-02 경력 등록</a><a href="#s03">S-03 경력 수정</a><a href="#s04">S-04 예외 상태</a><a href="#p01">P-01 삭제 확인</a><a href="#p02">P-02 토스트</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>경력 관리 (/admin/experiences)</h1>
+  <p>소개 페이지의 경력 타임라인을 관리하는 화면의 와이어프레임이다. 회사마다 등록하고, 그 회사에서 한 프로젝트 목록을 함께 고친다.</p>
+  <p>관리 화면은 디자인 원본이 없다. 여기서는 배치 · 순서 · 상태만 그리고, 모양은 지금의 토큰으로 표와 폼을 단순하게 그린다. 정책과 입력 규칙은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. GNB 의 명세는 대시보드 와이어프레임(<span class="mono">../dashboard/wireframe.html</span>)에 있다.</p>
+  <div class="legend">
+    <span><span class="m">1</span> 설명 번호</span>
+  </div>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>경력 목록</td><td>페이지</td><td><code>/admin/experiences</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>경력 등록</td><td>페이지</td><td><code>/admin/experiences/new</code></td></tr>
+        <tr><td><a href="#s03">S-03</a></td><td>경력 수정</td><td>페이지</td><td><code>/admin/experiences/[id]</code></td></tr>
+        <tr><td><a href="#s04">S-04</a></td><td>예외 상태</td><td>S-01 의 상태</td><td><code>/admin/experiences</code></td></tr>
+        <tr><td><a href="#p01">P-01</a></td><td>삭제 확인 창</td><td>확인 창</td><td>S-01 · S-03</td></tr>
+        <tr><td><a href="#p02">P-02</a></td><td>토스트</td><td>토스트</td><td>S-01 · S-02 · S-03</td></tr>
+      </tbody>
+    </table></div>
+    <p class="spec-note">컴포넌트 이름은 src/shared/ui/ 와 src/widgets/ 에 있는 것만 적었다. 없는 것은 을 붙였다.</p>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 경력 관리 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 관리자 동작을 흐름으로 옮겼다.
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    IN["GNB 의 경력"]:::step --> SS{"세션이 있는가"}:::decision
+    SS -->|"아니요"| LG(["로그인으로"]):::done
+    SS -->|"예"| LS["S-01 경력 목록"]:::screen
+    LS -->|"등록"| NW["S-02 경력 등록"]:::screen
+    LS -->|"회사 이름"| ED["S-03 경력 수정"]:::screen
+    LS -->|"삭제"| DL("P-01 삭제 확인 창"):::dialog
+    NW -.->|"저장 · 취소"| LS
+    ED -.->|"저장 · 취소"| LS
+    DL -.->|"삭제 · 취소"| LS
+    LS -->|"저장한 내용"| PUB[/"공개 화면 캐시 지움"/]:::api
+    LS -->|"GNB 의 메뉴 · 로고"| OUT(["누른 화면으로"]):::done
+```
+
+- 세션 검사와 로그인은 [로그인의 흐름](../login/userflow.md)과 같다.
+- 등록 · 수정 화면에서 저장하지 않은 내용이 있어도 GNB 를 누르면 묻지 않고 옮긴다.
+- 경력이 0건이거나 읽지 못하면 S-04 예외 상태를 그린다.
+
+## 2. 경력 등록 · 수정
+
+```mermaid
+flowchart TD
+    F["S-02 등록 · S-03 수정"]:::screen --> IN["회사 항목 입력"]:::step
+    IN --> PR{"프로젝트 목록을 고치는가"}:::decision
+    PR -->|"더하기"| AD["맨 위에 빈 줄을 더함"]:::step
+    PR -->|"빼기"| RM["그 줄을 뺌"]:::step
+    PR -->|"위 · 아래"| MV["그 줄을 옮김"]:::step
+    PR -->|"프로젝트 연결"| LK[/"등록된 프로젝트 목록"/]:::api
+    AD -.-> IN
+    RM -.-> IN
+    MV -.-> IN
+    LK -.-> IN
+    PR -->|"아니요"| V{"필수 항목이 맞는가"}:::decision
+    V -->|"아니요"| FE["항목 오류 문구 · 저장 비활성"]:::warn
+    FE -.-> IN
+    V -->|"예"| SV[/"서버 액션으로 저장"/]:::api
+    SV --> R{"저장했는가"}:::decision
+    R -->|"예"| T("P-02 저장됨 토스트"):::dialog
+    R -->|"아니요"| TE("P-02 실패 토스트"):::dialog
+    TE -.-> IN
+    T --> LS(["S-01 경력 목록"]):::done
+    IN -->|"취소 · 뒤로 · GNB"| LS
+```
+
+- `id` 는 등록할 때 저장소가 발급한다. 입력받지 않는다.
+- 프로젝트 목록을 고친 것은 저장을 눌러야 반영한다. 줄을 빼는 데는 확인 창을 띄우지 않는다.
+- 프로젝트 연결에는 공개 · 비공개 프로젝트를 모두 보여 준다. 고르지 않아도 저장할 수 있다.
+- 재직 중을 켜면 떠난 해 입력이 없어진다.
+- 취소하거나 다른 화면으로 가면 묻지 않고 나간다. 고친 내용은 남지 않는다. 취소였다면 경력 목록으로 간다.
+- 세션이 끝난 뒤 저장을 누르면 저장하지 않고 로그인으로 보낸다. 입력하던 내용은 남지 않는다.
+
+## 3. 경력 삭제
+
+```mermaid
+flowchart TD
+    S["S-01 목록 · S-03 수정"]:::screen -->|"삭제"| DL("P-01 삭제 확인 창"):::dialog
+    DL -.->|"취소"| S
+    DL -->|"삭제"| RM[/"회사와 프로젝트 목록 삭제"/]:::api
+    RM --> R{"지웠는가"}:::decision
+    R -->|"예"| T("P-02 삭제됨 토스트"):::dialog
+    R -->|"아니요"| TE("P-02 실패 토스트"):::dialog
+    TE -.-> S
+    T --> LS(["S-01 경력 목록"]):::done
+```
+
+- 삭제는 되돌릴 수 없다.
+- 경력을 지워도 이어 둔 프로젝트는 지우지 않는다.
+</script>
+<script src="../../userflow.js"></script>
+<!-- userflow:end -->
+
+<!-- ============ S-01 경력 목록 ============ -->
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>경력 목록</h2><span class="route">/admin/experiences</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t on">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
+      <div class="ph"><div><h4>경력</h4><p>소개 페이지의 경력 타임라인을 관리한다</p></div></div>
+      <div class="tbar">
+        <span class="muted">전체 6곳</span>
+        <span class="sp"></span>
+        <span class="row rel"><span class="m abs">2</span><span class="btn pri">등록</span></span>
+      </div>
+      <div class="tw rel"><span class="m abs">3</span>
+        <table>
+          <thead><tr><th>회사</th><th class="c">기간</th><th class="c">프로젝트</th><th class="c">수정 일시</th><th class="c">삭제</th></tr></thead>
+          <tbody>
+            <tr class="hover"><td class="title"><b>KOCOM</b></td><td class="c">2025 – 현재</td><td class="c">4개</td><td><div class="cell2">2026.11.17<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+            <tr><td class="title"><b>NEWEN AI</b></td><td class="c">2014 – 2025</td><td class="c">7개 <small>(실제 50개+)</small></td><td><div class="cell2">2026.11.17<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+            <tr><td class="title"><b>TRIPLE</b></td><td class="c">2009 – 2014</td><td class="c">12개</td><td><div class="cell2">2026.11.17<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>명세는 대시보드 와이어프레임(../dashboard/wireframe.html)의 「GNB」 표가 갖는다. 이 화면과 등록 · 수정 화면에서는 「경력」 을 강조한다</p></div></li>
+      <li><span class="m">2</span><div><b>Button</b> <code>shared/ui/button</code><p>등록 → <a href="#s02">S-02</a></p></div></li>
+      <li><span class="m">3</span><div><b>표</b> (컴포넌트 없음)<p>들어간 해가 늦은 회사부터 그린다. 검색 · 페이지 나누기 · 정렬 · 순서 변경은 없다. 열의 명세는 아래 표. 예시의 회사 이름과 숫자는 그림용이다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>열</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>열</th><th>값</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>회사</td><td><code>company</code></td><td>누르면 <a href="#s03">S-03</a></td></tr>
+          <tr><td>기간</td><td><code>startYear</code> – <code>endYear</code>. 재직 중이면 「현재」</td><td>—</td></tr>
+          <tr><td>프로젝트</td><td>목록에 적은 개수. <code>totalProjects</code> 가 있으면 괄호로 함께 적는다</td><td>—</td></tr>
+          <tr><td>수정 일시</td><td><code>updatedAt</code>. <code>2026.11.17 (10:12)</code></td><td>—</td></tr>
+          <tr><td>삭제</td><td>버튼</td><td><a href="#p01">P-01</a></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-02 경력 등록 ============ -->
+<section class="screen" id="s02">
+  <div class="screen-h"><span class="id">S-02</span><h2>경력 등록</h2><span class="route">/admin/experiences/new</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="tabs rel"><b>GUNI</b><span class="t">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t on">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
+      <div class="ph"><div><h4>경력 등록</h4><p>id 는 저장할 때 발급한다</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">회사</div>
+        <div class="fv"><div class="rel"><span class="m abs">1</span><div class="inp val">KOCOM</div></div></div>
+        <div class="sepx"></div>
+        <div class="fl req">기간</div>
+        <div class="fv"><div class="row rel"><span class="m abs">2</span><div class="inp val">2025</div><span class="muted">~</span><div class="inp ro">떠난 해</div><span class="cb on">✓ 재직 중</span></div></div>
+        <div class="sepx"></div>
+        <div class="fl">요약</div>
+        <div class="fv"><div class="rel"><span class="m abs">3</span><div class="ta">프론트엔드 개발. 사내 디자인 시스템을 개발하고 …</div></div><div class="info">ⓘ 비우면 공개 화면이 요약 줄을 그리지 않는다</div></div>
+        <div class="sepx"></div>
+        <div class="fl">실제 프로젝트 수</div>
+        <div class="fv"><div class="rel"><span class="m abs">4</span><div class="inp">목록에 대표만 적었을 때만 입력한다</div></div></div>
+        <div class="sepx"></div>
+        <div class="fl">프로젝트 목록</div>
+        <div class="fv rel"><span class="m abs">5</span>
+          <div class="row"><span class="btn sm">프로젝트 더하기</span><span class="muted small">3개</span></div>
+          <div class="tw">
+            <table>
+              <thead><tr><th>이름</th><th>시기</th><th>기술 태그</th><th>프로젝트 연결</th><th class="c">순서</th><th class="c">빼기</th></tr></thead>
+              <tbody>
+                <tr><td><div class="inp val">Design System</div></td><td><div class="inp val">2025.06</div></td><td><div class="inp val">React19, Shadcn UI, Tailwind</div></td><td><div class="inp sel">잇지 않음</div></td><td class="c"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
+                <tr><td><div class="inp val">KOZIPSA Web Admin</div></td><td><div class="inp val">2025.06</div></td><td><div class="inp val">Next15, Context, Zustand</div></td><td><div class="inp sel val">KOZIPSA 플랫폼 관리 시스템</div></td><td class="c"><span class="btn sm">↑</span><span class="btn sm">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
+                <tr><td><div class="inp val">HomeNetwork Web Admin</div></td><td><div class="rel"><span class="ferr">2025.06 또는 2022 처럼 입력해 주세요.</span><div class="inp val err">25.5</div></div></td><td><div class="inp val">Next15</div></td><td><div class="inp sel">잇지 않음</div></td><td class="c"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row rel"><span class="m abs">6</span><span class="muted small">시기를 확인해 주세요</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>회사</b> <code>company</code> · <b>Input</b> <code>shared/ui/input</code><p>1자 이상</p></div></li>
+      <li><span class="m">2</span><div><b>기간</b> <code>startYear</code> · <code>endYear</code><p>4자리 숫자. 재직 중을 켜면 떠난 해는 비활성이고 값을 비운다. 떠난 해는 들어간 해보다 앞설 수 없다</p></div></li>
+      <li><span class="m">3</span><div><b>요약</b> <code>summary</code><p>선택 항목이다</p></div></li>
+      <li><span class="m">4</span><div><b>실제 프로젝트 수</b> <code>totalProjects</code><p>선택 항목이다. 1 이상의 숫자. 공개 화면은 <code>50개+</code> 로 적는다</p></div></li>
+      <li><span class="m">5</span><div><b>프로젝트 목록</b> <code>projects</code> (컴포넌트 없음)<p>더하면 맨 위에 빈 줄이 생긴다. ↑ · ↓ 로 옮기고 빼기로 뺀다. 확인 창은 띄우지 않는다. 0건이어도 저장할 수 있다. 줄의 명세는 아래 표</p></div></li>
+      <li><span class="m">6</span><div><b>Button</b> <code>shared/ui/button</code><p>규칙에 맞지 않으면 등록은 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 취소 → 묻지 않고 <a href="#s01">S-01</a> 로 간다. 고친 내용은 버린다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>프로젝트 목록의 줄</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>열</th><th>값</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>이름</td><td><code>name</code>. 필수</td><td>—</td></tr>
+          <tr><td>시기</td><td><code>date</code>. 필수. <code>2025.06</code> 또는 <code>2022</code></td><td>—</td></tr>
+          <tr><td>기술 태그</td><td><code>tags</code>. 선택</td><td>입력 방식은 정하지 않았다. 그림은 쉼표로 나눠 적는 안이다. README.md 검토 필요 사항의 「기술 태그 입력 방식」</td></tr>
+          <tr><td>프로젝트 연결</td><td><code>projectId</code>. 선택</td><td>등록된 프로젝트를 순서대로 보여 준다. 비공개에는 「비공개」 를 붙인다. 처음 값은 「잇지 않음」</td></tr>
+          <tr><td>순서</td><td>↑ · ↓ 버튼</td><td>첫 줄의 ↑ 와 끝 줄의 ↓ 는 비활성</td></tr>
+          <tr><td>빼기</td><td>버튼</td><td>그 줄을 뺀다. 저장하기 전에는 반영하지 않는다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="spec-block">
+      <h4>오류 문구 (초안)</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>상황</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td>회사 · 프로젝트 이름</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요.</td></tr>
+          <tr><td>들어간 해 · 떠난 해</td><td>4자리 숫자가 아니다</td><td>연도 4자리를 입력해 주세요.</td></tr>
+          <tr><td>떠난 해</td><td>들어간 해보다 앞선다</td><td>떠난 해는 들어간 해보다 앞설 수 없습니다.</td></tr>
+          <tr><td>실제 프로젝트 수</td><td>1 이상의 숫자가 아니다</td><td>1 이상의 숫자를 입력해 주세요.</td></tr>
+          <tr><td>시기</td><td>형식이 다르다</td><td>2025.06 또는 2022 처럼 입력해 주세요.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">입력 규칙은 README.md 「경력 등록 · 수정」 표가 갖는다. 문구는 초안이다. README.md 검토 필요 사항의 「문구」</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-03 경력 수정 ============ -->
+<section class="screen" id="s03">
+  <div class="screen-h"><span class="id">S-03</span><h2>경력 수정</h2><span class="route">/admin/experiences/[id]</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="tabs rel"><b>GUNI</b><span class="t">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t on">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
+      <div class="ph"><div><h4>경력 수정</h4><p>수정 일시 2026.11.17 (10:12)</p></div></div>
+      <div class="form-grid">
+        <div class="fl">입력 항목</div>
+        <div class="fv"><span class="muted">S-02 과 같다. 저장된 값으로 채운다</span></div>
+      </div>
+      <div class="btn-row rel"><span class="m abs">1</span><span class="btn danger">삭제</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">저장</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>Button</b> <code>shared/ui/button</code><p>고친 내용이 없으면 저장은 비활성. 삭제 → <a href="#p01">P-01</a>. 취소는 S-02 과 같다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>들어올 때</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>없는 <code>id</code> 다</td><td>404 를 그린다</td></tr>
+          <tr><td>이어 둔 프로젝트가 삭제됐다</td><td>그 줄의 프로젝트 연결을 「잇지 않음」 으로 그린다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-04 예외 상태 ============ -->
+<section class="screen" id="s04">
+  <div class="screen-h"><span class="id">S-04</span><h2>예외 상태</h2><span class="route">/admin/experiences</span></div>
+  <div class="state-grid">
+    <div class="state">
+      <div class="lab">경력 0건</div>
+      <div class="empty"><div class="ic"></div>등록한 경력이 없습니다.</div>
+      <div class="help">등록 버튼은 그대로 둔다</div>
+    </div>
+    <div class="state">
+      <div class="lab">조회 실패</div>
+      <div class="err-page">
+        <b>경력을 불러오지 못했습니다</b>잠시 뒤에 다시 시도해 주세요.
+        <div class="row"><span class="btn sm">다시 시도</span></div>
+      </div>
+      <div class="help">GNB 는 그대로 둔다</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P-01 삭제 확인 창 ============ -->
+<section class="screen" id="p01">
+  <div class="screen-h"><span class="id">P-01</span><h2>삭제 확인 창</h2><span class="route">S-01 · S-03</span></div>
+  <div class="dlg-grid">
+    <div class="dlg-stage"><div class="dlg sm" role="alertdialog">
+      <div class="dh"><div><h6>P-01 · 경력을 삭제할까요?</h6><p>「KOCOM」 과 그 안의 프로젝트 목록을 지웁니다. 되돌릴 수 없습니다.</p></div></div>
+      <div class="df"><span class="sp"></span><span class="btn focus">취소</span><span class="btn danger">삭제</span></div>
+    </div></div>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>동작</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>컴포넌트</td><td>다이얼로그 (컴포넌트 없음)</td></tr>
+          <tr><td>처음 포커스</td><td>취소</td></tr>
+          <tr><td>삭제</td><td>회사와 프로젝트 목록을 지우고 S-01 로 간다. <a href="#p02">P-02</a> 삭제됨. 이어 둔 프로젝트는 지우지 않는다</td></tr>
+          <tr><td>취소 · Esc</td><td>창을 닫고 열었던 버튼으로 포커스를 돌려준다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P-02 토스트 ============ -->
+<section class="screen" id="p02">
+  <div class="screen-h"><span class="id">P-02</span><h2>토스트</h2><span class="route">S-01 · S-02 · S-03</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="row rel"><span class="m abs">1</span><span class="toast">✓ 경력을 등록했습니다</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>토스트</b> (컴포넌트 없음)<p><code>role="status"</code>. 모양 · 위치 · 사라지는 시간은 프로젝트 관리 와이어프레임(../wireframe.html)의 토스트와 같다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>토스트 문구 (초안)</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td>등록</td><td>경력을 등록했습니다</td></tr>
+          <tr><td>수정</td><td>경력을 저장했습니다</td></tr>
+          <tr><td>삭제</td><td>경력을 삭제했습니다</td></tr>
+          <tr><td>실패</td><td>저장하지 못했습니다. 다시 시도해 주세요</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">문구는 프로젝트 관리의 문구에서 낱말만 바꾼 초안이다. README.md 검토 필요 사항의 「문구」</p>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

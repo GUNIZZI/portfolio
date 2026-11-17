@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>로그인 와이어프레임</title>
+<link rel="stylesheet" href="../../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 로그인</a><a href="#s02">S-02 로그인 상태</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>로그인 (/admin · /admin/login)</h1>
+  <p>관리 화면에 들어오는 곳의 와이어프레임이다. 관리자 1명이 이메일과 비밀번호로 로그인한다.</p>
+  <p>이미 구현한 화면이다. 여기서는 배치 · 순서 · 상태만 그린다. 정책은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. 로그아웃 버튼은 프로젝트 관리 와이어프레임(<span class="mono">../wireframe.html</span>)의 프로젝트 목록에 있다.</p>
+  <div class="legend">
+    <span><span class="m">1</span> 설명 번호</span>
+  </div>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>로그인</td><td>페이지</td><td><code>/admin/login</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>로그인 상태</td><td>S-01 의 상태</td><td><code>/admin/login</code></td></tr>
+      </tbody>
+    </table></div>
+    <p class="spec-note"><code>/admin</code> 은 화면을 그리지 않고 보내기만 한다. 컴포넌트 이름은 src/shared/ui/ 와 src/features/adminAuth/ 에 있는 것만 적었다.</p>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 로그인 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 관리자 동작을 흐름으로 옮겼다.
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    IN["주소 직접 입력 /admin · /admin/login"]:::step --> SS{"세션이 있는가"}:::decision
+    SS -->|"아니요"| LG["S-01 로그인"]:::screen
+    SS -->|"예"| PJ(["대시보드로"]):::done
+    DEEP["관리 화면의 주소로 바로 들어옴"]:::step --> SS2{"세션이 있는가"}:::decision
+    SS2 -->|"아니요"| LG
+    SS2 -->|"예"| PAGE(["그 화면으로"]):::done
+    LG -->|"로그인 성공"| PJ
+    LG -->|"로고 · 사이트로 돌아가기"| HOME(["공개 화면의 홈으로"]):::done
+```
+
+- 세션은 `/admin` 아래의 모든 화면에서 서버가 검사한다.
+- `/admin` 은 화면을 그리지 않는다. 세션에 따라 로그인이나 대시보드로 보낸다.
+- 로그인하지 않고 관리 화면의 주소로 들어와도, 로그인한 뒤에는 대시보드로 간다. 들어오려던 주소는 기억하지 않는다.
+- 대시보드부터의 흐름은 [대시보드](../dashboard/userflow.md)에 있다.
+
+## 2. 로그인
+
+```mermaid
+flowchart TD
+    L["S-01 로그인"]:::screen --> IN["이메일 · 비밀번호 입력"]:::step
+    IN --> FILL{"2개를 모두 입력했는가"}:::decision
+    FILL -->|"아니요"| DIS["로그인 버튼 비활성"]:::warn
+    DIS -.-> IN
+    FILL -->|"예"| A[/"서버가 Firebase Auth 에 확인"/]:::api
+    A --> REACH{"Firebase 에 닿았는가"}:::decision
+    REACH -->|"아니요"| FAIL["S-02 실패 안내"]:::warn
+    FAIL -.-> IN
+    REACH -->|"예"| OK{"관리자 계정인가"}:::decision
+    OK -->|"아니요"| NO["S-02 거절 안내"]:::warn
+    NO -.-> IN
+    OK -->|"예"| SE[/"세션 쿠키 발급"/]:::api
+    SE --> PJ(["대시보드로"]):::done
+```
+
+- 관리자 계정은 Firebase 콘솔에서 Firebase Auth 에 등록한 계정이다. 로그인 화면에서는 가입할 수 없다.
+- 「관리자 계정인가」 는 2가지를 본다. 이메일과 비밀번호가 맞고, 그 계정의 UID 가 `ADMIN_UID` 와 같아야 한다.
+- 거절과 실패 모두 세션을 만들지 않는다. 입력한 값은 그대로 둔다.
+- 확인하는 동안 로그인 버튼은 비활성이다.
+
+## 3. 로그아웃
+
+```mermaid
+flowchart TD
+    PJ["관리 화면"]:::step -->|"로그아웃"| DEL[/"세션 쿠키 지움"/]:::api
+    DEL --> L(["S-01 로그인"]):::done
+```
+
+- 로그아웃 버튼은 관리 화면마다 페이지 머리에 있다.([대시보드 와이어프레임](../dashboard/wireframe.html#s01))
+- 확인 창을 거치지 않는다.
+
+## 4. 세션이 끝남
+
+```mermaid
+flowchart TD
+    USE["관리 화면을 쓰는 중"]:::step --> T{"로그인한 지 2시간이 지났는가"}:::decision
+    T -->|"아니요"| KEEP(["그대로 쓴다"]):::done
+    T -->|"예"| ACT["화면을 옮기거나 저장을 누름"]:::step
+    ACT --> L(["S-01 로그인"]):::done
+```
+
+- 세션은 쓰는 동안에도 늘어나지 않는다.
+- 저장을 누른 것이면 저장하지 않고 보낸다. 입력하던 내용은 남지 않는다.
+- 시간이 다 됐다고 미리 알리지 않는다.
+</script>
+<script src="../../userflow.js"></script>
+<!-- userflow:end -->
+
+<!-- ============ S-01 로그인 ============ -->
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>로그인</h2><span class="route">/admin/login</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="pf-stack">
+        <span class="rel"><span class="m abs">1</span><b>GUNI</b></span>
+        <b>로그인</b>
+        <div class="rel"><span class="m abs">2</span><div class="inp val">admin@example.com</div></div>
+        <div class="inp">비밀번호</div>
+        <span class="rel"><span class="m abs">3</span><span class="btn pri dis" aria-disabled="true">로그인</span></span>
+        <span class="rel"><span class="m abs">4</span><span class="btn ghost">사이트로 돌아가기</span></span>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>Logo</b> <code>shared/ui/logo</code><p>누르면 <code>/</code> 로 간다. 공개 화면의 헤더 · 푸터 · 배경은 그리지 않는다</p></div></li>
+      <li><span class="m">2</span><div><b>Input</b> <code>shared/ui/input</code><p>이메일 · 비밀번호 순이다. 이름은 「이메일」 「비밀번호」 다. 가입 · 비밀번호 찾기는 두지 않는다</p></div></li>
+      <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>2개를 모두 입력해야 누를 수 있다. 그림은 비밀번호를 비운 상태다. 연출 없는 변형(<code>effect="none"</code>)을 쓴다. 누른 뒤의 상태는 <a href="#s02">S-02</a></p></div></li>
+      <li><span class="m">4</span><div><b>사이트로 돌아가기</b><p><code>/</code> 로 간다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>들어올 때</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>주소</th><th>상황</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td><code>/admin/login</code></td><td>세션이 없거나 끝났다</td><td>이 화면을 그린다</td></tr>
+          <tr><td><code>/admin/login</code></td><td>세션이 있다</td><td>대시보드(<code>/admin/dashboard</code>)로 보낸다</td></tr>
+          <tr><td><code>/admin</code></td><td>세션이 없거나 끝났다</td><td><code>/admin/login</code> 으로 보낸다</td></tr>
+          <tr><td><code>/admin</code></td><td>세션이 있다</td><td>대시보드로 보낸다</td></tr>
+          <tr><td>그 밖의 <code>/admin/…</code></td><td>세션이 없거나 끝났다</td><td><code>/admin/login</code> 으로 보낸다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-02 로그인 상태 ============ -->
+<section class="screen" id="s02">
+  <div class="screen-h"><span class="id">S-02</span><h2>로그인 상태</h2><span class="route">/admin/login</span></div>
+  <div class="state-grid">
+    <div class="state">
+      <div class="lab">로그인하는 중</div>
+      <div class="row"><span class="btn pri dis" aria-disabled="true">로그인하는 중</span></div>
+      <div class="help">버튼은 비활성이다. 안내 상자가 있었다면 감춘다</div>
+    </div>
+    <div class="state">
+      <div class="lab">거절</div>
+      <div class="alert warn" role="status"><b>로그인하지 못했습니다</b>이메일 또는 비밀번호를 확인해 주세요.</div>
+      <div class="help">등록한 계정이 아니거나, 비밀번호가 다르거나, 관리자가 아닌 계정이다. 무엇이 틀렸는지는 알리지 않는다</div>
+    </div>
+    <div class="state">
+      <div class="lab">실패</div>
+      <div class="alert warn" role="status"><b>로그인하지 못했습니다</b>잠시 후 다시 시도해 주세요.</div>
+      <div class="help">Firebase 에 닿지 못했거나 설정이 잘못됐다. 원인은 서버 로그에 남긴다</div>
+    </div>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>안내 상자</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>자리</td><td>로그인 버튼 아래</td></tr>
+          <tr><td>알림</td><td><code>role="status"</code>. 문구가 없을 때도 요소를 둔다</td></tr>
+          <tr><td>입력한 값</td><td>거절 · 실패 모두 그대로 둔다</td></tr>
+          <tr><td>세션</td><td>만들지 않는다</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">문구는 src/features/adminAuth/model/adminAuth.constants.ts 에 있다.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

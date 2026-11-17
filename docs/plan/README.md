@@ -22,9 +22,13 @@ Kozipsa(`admin-next/apps/kozipsa/docs/plan/`)의 기획 체계를 가져왔다.(
 **관리 화면의 기획은 공개 화면과 따로 둔다.**(2026-11-12 사용자 결정)
 구역은 `관리` 이고 `admin/` 아래에 둔다.
 
-| 대상                 | 문서                        |
-| -------------------- | --------------------------- |
-| 작업 관리 (`/admin`) | [admin/](./admin/README.md) |
+| 대상                               | 문서                                                |
+| ---------------------------------- | --------------------------------------------------- |
+| 로그인 (`/admin` · `/admin/login`) | [admin/login/](./admin/login/README.md)             |
+| 대시보드 (`/admin/dashboard`)      | [admin/dashboard/](./admin/dashboard/README.md)     |
+| 프로젝트 관리 (`/admin/projects`)  | [admin/](./admin/README.md)                         |
+| 소개 관리 (`/admin/about`)         | [admin/about/](./admin/about/README.md)             |
+| 경력 관리 (`/admin/experiences`)   | [admin/experiences/](./admin/experiences/README.md) |
 
 **와이어프레임은 [index.html](./index.html) 한 곳에서 모두 본다.**
 왼쪽 메뉴에 기획 문서마다 스코프(`작업 > 목록 · 상세`)와 라우트가 있고, 누르면 오른쪽에 그 와이어프레임이 열린다.

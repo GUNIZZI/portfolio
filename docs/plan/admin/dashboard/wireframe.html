@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>대시보드 와이어프레임</title>
+<link rel="stylesheet" href="../../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 대시보드</a><a href="#s02">S-02 대시보드 아래쪽</a><a href="#s03">S-03 예외 상태</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>대시보드 (/admin/dashboard)</h1>
+  <p>사이트의 방문 통계를 한 화면에서 보는 관리 화면의 와이어프레임이다. Google Analytics 가 모은 값을 읽어 요약한다. 고치는 기능은 없다.</p>
+  <p>관리 화면은 디자인 원본이 없다. 여기서는 배치 · 순서 · 상태만 그리고, 모양은 지금의 토큰으로 단순하게 그린다. 정책은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. 그림의 숫자는 그림용이다.</p>
+  <div class="legend">
+    <span><span class="m">1</span> 설명 번호</span>
+  </div>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>대시보드</td><td>페이지. 1차 블록 4개</td><td><code>/admin/dashboard</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>대시보드 아래쪽</td><td>S-01 에 이어지는 부분. 2차 블록 4개</td><td><code>/admin/dashboard</code></td></tr>
+        <tr><td><a href="#s03">S-03</a></td><td>예외 상태</td><td>S-01 · S-02 의 상태</td><td><code>/admin/dashboard</code></td></tr>
+      </tbody>
+    </table></div>
+    <p class="spec-note">컴포넌트 이름은 src/shared/ui/ 에 있는 것만 적었다. 지금 있는 것은 Button · Icon · Input · Logo · Panel 이고, 없는 것은 을 붙였다. 그래프 컴포넌트는 없다.</p>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 대시보드 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 관리자 동작을 흐름으로 옮겼다.
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    IN["로그인 · 관리 화면의 메뉴"]:::step --> SS{"세션이 있는가"}:::decision
+    SS -->|"아니요"| LG(["로그인으로"]):::done
+    SS -->|"예"| GA[/"GA 에서 값을 받음"/]:::api
+    GA --> D["S-01 대시보드"]:::screen
+    D -->|"스크롤"| D2["S-02 대시보드 아래쪽"]:::screen
+    D -->|"기간 · 새로 고침"| GA
+    D -->|"프로젝트 제목"| ED(["프로젝트 수정으로"]):::done
+    D -->|"GA 콘솔 · Vercel 사용량"| EXT[/"외부 화면을 새 탭으로"/]:::api
+    D -->|"메뉴"| MENU(["프로젝트 · 소개 · 경력으로"]):::done
+```
+
+- 세션 검사와 로그인은 [로그인의 흐름](../login/userflow.md)과 같다. 로그인하면 이 화면으로 온다.
+- S-02 는 2차에 더하는 블록이다. 1차에는 S-01 만 있다.
+- 이 화면에는 저장하는 동작이 없다.
+
+## 2. 기간 바꾸기 · 새로 고침
+
+```mermaid
+flowchart TD
+    D["S-01 대시보드"]:::screen --> W{"무엇을 누르는가"}:::decision
+    W -->|"7일 · 30일 · 90일"| URL["주소의 기간을 바꿈"]:::step
+    URL --> C{"1시간 안에 받은 값이 있는가"}:::decision
+    C -->|"예"| SHOW["간직한 값으로 그림"]:::step
+    C -->|"아니요"| GA[/"GA 에서 값을 받음"/]:::api
+    W -->|"새로 고침"| DROP["간직한 값을 버림"]:::step
+    DROP --> GA
+    GA --> R{"받았는가"}:::decision
+    R -->|"예"| SHOW
+    R -->|"아니요"| KEEP["S-03 받지 못함 안내"]:::warn
+    SHOW -.-> D
+    KEEP -.-> D
+```
+
+- 기간을 바꾸면 지금 접속자를 뺀 모든 블록이 함께 바뀐다.
+- 값은 기간마다 따로 간직한다. 30일의 값이 있어도 7일은 처음에 새로 받는다.
+- 새로 고침은 지금 고른 기간의 값만 버린다.
+- 받는 동안 블록은 불러오는 상태를 그린다. 새로 고침 버튼은 비활성이다.
+
+## 3. 데이터를 받지 못함
+
+```mermaid
+flowchart TD
+    GA[/"GA 에서 값을 받음"/]:::api --> R{"받았는가"}:::decision
+    R -->|"모두 받음"| E{"모인 값이 있는가"}:::decision
+    E -->|"예"| D(["S-01 대시보드"]):::done
+    E -->|"아니요"| EMPTY["S-03 데이터 없음"]:::warn
+    R -->|"일부만 받음"| PART["S-03 그 블록만 오류"]:::warn
+    R -->|"하나도 받지 못함"| OLD{"간직하던 값이 있는가"}:::decision
+    OLD -->|"예"| STALE["간직하던 값 + 받지 못함 안내"]:::warn
+    OLD -->|"아니요"| ERR["S-03 GA 연결 실패"]:::warn
+    PART -.->|"다시 시도"| GA
+    STALE -.->|"새로 고침"| GA
+    ERR -.->|"다시 시도"| GA
+```
+
+- 받지 못해도 메뉴는 그대로 둔다. 다른 관리 화면은 그대로 쓸 수 있다.
+- 데이터 없음은 오류가 아니다. 추적 코드를 넣은 직후에 이 상태다.
+- 블록 하나만 받지 못하면 그 블록만 오류로 그린다.
+</script>
+<script src="../../userflow.js"></script>
+<!-- userflow:end -->
+
+<!-- ============ S-01 대시보드 ============ -->
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>대시보드</h2><span class="route">/admin/dashboard</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t on">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
+      <div class="ph"><div><h4>대시보드</h4><p>사이트의 방문 통계를 본다</p></div></div>
+      <div class="tbar">
+        <span class="row rel"><span class="m abs">2</span><span class="btn sm">7일</span><span class="btn sm focus">30일</span><span class="btn sm">90일</span></span>
+        <span class="muted small">2026.10.18 ~ 2026.11.16</span>
+        <span class="sp"></span>
+        <span class="row rel"><span class="m abs">3</span><span class="muted small">기준 2026.11.17 (10:12)</span><span class="btn sm">새로 고침</span></span>
+      </div>
+      <div class="alert info rel"><span class="m abs">4</span>GA 의 통계는 하루쯤 늦게 반영됩니다. 광고 차단 도구를 쓰는 방문은 세어지지 않습니다.</div>
+      <div class="summary rel"><span class="m abs">5</span>
+        <div class="card"><div class="k">방문자</div><div class="v">128 <small>명</small></div><div class="d">▲ 12% 직전 30일보다</div></div>
+        <div class="card"><div class="k">세션</div><div class="v">173 <small>번</small></div><div class="d">▲ 8%</div></div>
+        <div class="card"><div class="k">조회수</div><div class="v">542 <small>번</small></div><div class="d">▼ 3%</div></div>
+        <div class="card"><div class="k">평균 참여 시간</div><div class="v">1 <small>분</small> 42 <small>초</small></div><div class="d">—</div></div>
+      </div>
+      <div class="ph rel"><span class="m abs">6</span><div><h4>방문자 추이</h4><p>일별 방문자와 조회수</p></div><span class="sp"></span><span class="btn sm ghost">표로 보기</span></div>
+      <div class="img-ph pf-wide">꺾은선 그래프 · 가로 날짜 · 선 2개(방문자, 조회수)</div>
+      <div class="ph rel"><span class="m abs">7</span><div><h4>페이지별 조회수</h4><p>공개 화면의 메뉴 4개</p></div></div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>페이지</th><th>주소</th><th class="c">조회수</th><th>비율</th></tr></thead>
+          <tbody>
+            <tr><td class="title"><b>홈</b></td><td class="muted">/</td><td class="c">231</td><td><div class="card"><div class="bar"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div></div></td></tr>
+            <tr><td class="title"><b>프로젝트 목록</b></td><td class="muted">/work</td><td class="c">96</td><td><div class="card"><div class="bar"><i class="f"></i><i></i><i></i><i></i><i></i></div></div></td></tr>
+            <tr><td class="title"><b>소개</b></td><td class="muted">/about</td><td class="c">74</td><td><div class="card"><div class="bar"><i class="f"></i><i></i><i></i><i></i><i></i></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ph rel"><span class="m abs">8</span><div><h4>프로젝트별 조회수</h4><p>프로젝트 상세의 조회수</p></div></div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>프로젝트</th><th>공개</th><th class="c">조회수</th><th class="c">평균 참여 시간</th></tr></thead>
+          <tbody>
+            <tr class="hover"><td class="title"><b>KOZIPSA 플랫폼 관리 시스템</b></td><td><span class="badge b-on">공개</span></td><td class="c">58</td><td class="c">2분 10초</td></tr>
+            <tr><td class="title"><b>사내 통합 대시보드</b></td><td><span class="badge b-on">공개</span></td><td class="c">31</td><td class="c">1분 05초</td></tr>
+            <tr><td class="title"><b>팬을 위한 특별한 공간</b></td><td><span class="badge b-off">비공개</span></td><td class="c">0</td><td class="c">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="btn-row rel"><span class="m abs">9</span><span class="muted small">전송량은 Vercel 에서 본다</span><span class="sp"></span><span class="btn ghost">GA 콘솔 ↗</span><span class="btn ghost">Vercel 사용량 ↗</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>로그인을 뺀 모든 관리 화면의 맨 위에 같은 모양으로 둔다. 왼쪽부터 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃이다. 항목의 명세는 아래 「GNB」 표</p></div></li>
+      <li><span class="m">2</span><div><b>기간</b> (컴포넌트 없음)<p>7일 · 30일 · 90일. 처음 값은 30일이다. 오늘은 넣지 않는다. 옆에 기간의 첫날과 끝날을 적는다. 고른 값은 주소에 남긴다</p></div></li>
+      <li><span class="m">3</span><div><b>기준 시각 · Button</b> <code>shared/ui/button</code><p>값을 받은 시각을 적는다. 새로 고침은 간직한 값을 버리고 다시 받는다. 받는 동안 비활성</p></div></li>
+      <li><span class="m">4</span><div><b>안내 상자</b> (컴포넌트 없음)<p>항상 보인다. 닫지 못한다</p></div></li>
+      <li><span class="m">5</span><div><b>요약 카드</b> (컴포넌트 없음)<p>4개다. 증감은 직전 기간과 견준 비율이고 기호와 숫자를 함께 적는다. 직전 기간이 0이면 「—」. 증감의 색은 정하지 않았다. README.md 검토 필요 사항 12번</p></div></li>
+      <li><span class="m">6</span><div><b>방문자 추이</b> (그래프 컴포넌트 없음)<p>꺾은선 그래프다. 값이 없는 날은 0으로 그린다. 표로 보기를 누르면 같은 값을 표로 그린다. 그려지는 연출은 없다</p></div></li>
+      <li><span class="m">7</span><div><b>페이지별 조회수</b> (컴포넌트 없음)<p>홈 · 소개 · 프로젝트 목록 · 이 사이트는 이렇게 4개다. 조회수가 많은 순이다. 비율은 가로 막대로 그리고 숫자도 함께 적는다. 그림은 3줄까지만 그렸다</p></div></li>
+      <li><span class="m">8</span><div><b>프로젝트별 조회수</b> (컴포넌트 없음)<p>공개 · 비공개를 모두 조회수가 많은 순으로 그린다. 조회수가 0이어도 적는다. 제목을 누르면 프로젝트 수정으로 간다. 삭제한 프로젝트는 그리지 않는다</p></div></li>
+      <li><span class="m">9</span><div><b>외부 링크</b><p>GA 콘솔과 Vercel 사용량 화면을 새 탭으로 연다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>GNB</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>내용</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>로고</td><td><b>Logo</b> <code>shared/ui/logo</code></td><td>대시보드로 간다</td></tr>
+          <tr><td>메뉴</td><td>대시보드 · 프로젝트 · 소개 · 경력. <code>nav</code> 이고 이름은 「관리 메뉴」 다</td><td><code>/admin/dashboard</code> · <code>/admin/projects</code> · <code>/admin/about</code> · <code>/admin/experiences</code> 로 간다</td></tr>
+          <tr><td>지금 화면의 메뉴</td><td>밑줄과 강조색으로 나타내고 <code>aria-current="page"</code> 를 단다</td><td>등록 · 수정 화면은 자기가 속한 메뉴를 강조한다. 프로젝트 등록에서는 「프로젝트」 다</td></tr>
+          <tr><td>사이트 보기</td><td>글자 링크</td><td><code>/</code> 를 새 탭으로 연다</td></tr>
+          <tr><td>로그아웃</td><td><b>Button</b> <code>shared/ui/button</code>. 연출 없는 변형이다</td><td>세션을 지우고 로그인으로 간다. 확인 창을 거치지 않는다</td></tr>
+          <tr><td>자리</td><td>페이지 제목 위의 한 줄</td><td>스크롤하면 함께 올라간다. 화면 위에 붙지 않는다</td></tr>
+          <tr><td>좁은 화면</td><td>한 줄에 들어가지 않으면 줄을 바꾼다</td><td>메뉴를 버튼으로 접지 않는다</td></tr>
+          <tr><td>저장하지 않은 내용이 있을 때</td><td>소개 수정 · 경력 등록 · 경력 수정 · 프로젝트 등록 · 프로젝트 수정</td><td>메뉴 · 로고를 눌러도 묻지 않고 옮긴다. 고친 내용은 남지 않는다</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">다른 관리 화면의 와이어프레임은 GNB 를 같은 모양으로 그리고 이 표를 가리킨다. 연출은 두지 않는다.</p>
+    </div>
+    <div class="spec-block">
+      <h4>들어올 때</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td>주소에 기간이 없다</td><td>30일로 그린다</td></tr>
+          <tr><td><code>?days=7</code> · <code>?days=90</code></td><td>그 기간으로 그린다</td></tr>
+          <tr><td>3가지가 아닌 값이다</td><td>30일로 그린다</td></tr>
+          <tr><td>1시간 안에 받은 값이 있다</td><td>GA 를 다시 부르지 않고 그 값으로 그린다</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-02 대시보드 아래쪽 ============ -->
+<section class="screen" id="s02">
+  <div class="screen-h"><span class="id">S-02</span><h2>대시보드 아래쪽</h2><span class="route">/admin/dashboard</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <p class="muted">S-01 의 프로젝트별 조회수 아래에 이어진다. 2차에 더한다. 외부 링크 줄은 맨 아래로 내려간다</p>
+      <div class="alert ok rel" role="status"><span class="m abs">1</span><b>지금 접속자 2명</b>최근 30분</div>
+      <div class="ph rel"><span class="m abs">2</span><div><h4>유입 경로</h4><p>어디서 왔는지</p></div></div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>갈래</th><th class="c">세션</th><th>비율</th></tr></thead>
+          <tbody>
+            <tr><td class="title"><b>직접 입력</b></td><td class="c">92</td><td><div class="card"><div class="bar"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div></div></td></tr>
+            <tr><td class="title"><b>외부 링크</b></td><td class="c">48</td><td><div class="card"><div class="bar"><i class="f"></i><i class="f"></i><i></i><i></i><i></i></div></div></td></tr>
+            <tr><td class="title"><b>검색</b></td><td class="c">33</td><td><div class="card"><div class="bar"><i class="f"></i><i></i><i></i><i></i><i></i></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>외부 링크를 보낸 사이트</th><th class="c">세션</th></tr></thead>
+          <tbody>
+            <tr><td class="title">github.com</td><td class="c">27</td></tr>
+            <tr><td class="title">example.com</td><td class="c">12</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ph rel"><span class="m abs">3</span><div><h4>주요 행동</h4><p>보고 나서 누른 것</p></div></div>
+      <div class="summary">
+        <div class="card"><div class="k">메일 버튼</div><div class="v">6 <small>번</small></div><div class="d">▲ 2번</div></div>
+        <div class="card"><div class="k">GitHub 링크</div><div class="v">19 <small>번</small></div><div class="d">▼ 4번</div></div>
+      </div>
+      <div class="ph rel"><span class="m abs">4</span><div><h4>방문 환경</h4><p>기기와 국가</p></div></div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>기기</th><th class="c">세션</th><th>비율</th></tr></thead>
+          <tbody>
+            <tr><td class="title"><b>데스크톱</b></td><td class="c">131</td><td><div class="card"><div class="bar"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div></div></td></tr>
+            <tr><td class="title"><b>모바일</b></td><td class="c">40</td><td><div class="card"><div class="bar"><i class="f"></i><i></i><i></i><i></i><i></i></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>국가</th><th class="c">세션</th></tr></thead>
+          <tbody>
+            <tr><td class="title">대한민국</td><td class="c">158</td></tr>
+            <tr><td class="title">미국</td><td class="c">9</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>지금 접속자</b> (컴포넌트 없음)<p>최근 30분에 사이트를 본 사람 수다. 기간과 상관없다. 화면을 열 때마다 받는다. 자리는 기간 줄 바로 아래다</p></div></li>
+      <li><span class="m">2</span><div><b>유입 경로</b> (컴포넌트 없음)<p>직접 입력 · 검색 · 외부 링크 · 소셜을 세션이 많은 순으로 그린다. 외부 링크는 보낸 사이트 상위 5개를 함께 적는다</p></div></li>
+      <li><span class="m">3</span><div><b>주요 행동</b> (컴포넌트 없음)<p>연락 섹션의 메일 버튼과 푸터의 GitHub 링크를 누른 횟수다. 증감은 직전 기간과 견준 횟수다. 공개 화면에 클릭 이벤트를 심어야 값이 생긴다. README.md 「수집」</p></div></li>
+      <li><span class="m">4</span><div><b>방문 환경</b> (컴포넌트 없음)<p>기기는 데스크톱 · 모바일 · 태블릿의 비율, 국가는 세션이 많은 순으로 상위 5개다</p></div></li>
+    </ol></aside>
+  </div>
+</section>
+
+<!-- ============ S-03 예외 상태 ============ -->
+<section class="screen" id="s03">
+  <div class="screen-h"><span class="id">S-03</span><h2>예외 상태</h2><span class="route">/admin/dashboard</span></div>
+  <div class="state-grid">
+    <div class="state">
+      <div class="lab">불러오는 중</div>
+      <div class="empty"><div class="ic"></div>통계를 불러오고 있습니다.</div>
+      <div class="help">블록마다 따로 그린다. 먼저 받은 블록부터 값으로 바뀐다. 새로 고침은 비활성</div>
+    </div>
+    <div class="state">
+      <div class="lab">데이터 없음</div>
+      <div class="empty"><div class="ic"></div>아직 모인 데이터가 없습니다.</div>
+      <div class="help">오류가 아니다. 추적 코드를 넣은 직후에 이 상태다. 요약 카드는 0으로 그린다</div>
+    </div>
+    <div class="state">
+      <div class="lab">GA 연결 실패</div>
+      <div class="err-page">
+        <b>통계를 불러오지 못했습니다</b>잠시 뒤에 다시 시도해 주세요.
+        <div class="row"><span class="btn sm">다시 시도</span></div>
+      </div>
+      <div class="help">간직하던 값도 없을 때다. 메뉴는 그대로 둔다</div>
+    </div>
+    <div class="state">
+      <div class="lab">블록 하나만 실패</div>
+      <div class="err-page">
+        <b>이 항목을 불러오지 못했습니다</b>
+        <div class="row"><span class="btn sm">다시 시도</span></div>
+      </div>
+      <div class="help">그 블록의 자리에만 그린다. 나머지 블록은 그대로다</div>
+    </div>
+    <div class="state">
+      <div class="lab">새로 고침 실패</div>
+      <div class="alert warn" role="status"><b>새 통계를 받지 못했습니다</b>이전에 받은 값을 보여 주고 있습니다.</div>
+      <div class="help">간직하던 값을 그대로 그린다. 기준 시각은 이전 시각 그대로다</div>
+    </div>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>문구 (초안)</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td>항상 보이는 안내</td><td>GA 의 통계는 하루쯤 늦게 반영됩니다. 광고 차단 도구를 쓰는 방문은 세어지지 않습니다.</td></tr>
+          <tr><td>불러오는 중</td><td>통계를 불러오고 있습니다.</td></tr>
+          <tr><td>데이터 없음</td><td>아직 모인 데이터가 없습니다.</td></tr>
+          <tr><td>GA 연결 실패</td><td>통계를 불러오지 못했습니다 · 잠시 뒤에 다시 시도해 주세요.</td></tr>
+          <tr><td>블록 하나만 실패</td><td>이 항목을 불러오지 못했습니다</td></tr>
+          <tr><td>새로 고침 실패</td><td>새 통계를 받지 못했습니다 · 이전에 받은 값을 보여 주고 있습니다.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">문구는 정하지 않았다. README.md 검토 필요 사항 11번</p>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
