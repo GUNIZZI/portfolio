@@ -1,8 +1,8 @@
 import { Backdrop } from '@/widgets/backdrop';
+import { Contact } from '@/widgets/contact';
 import { Footer } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
 import { About } from '@/features/about';
-import { Contact } from '@/features/contact';
 import { FeaturedProjects } from '@/features/featuredProjects';
 import { Hero } from '@/features/hero';
 import { HomeDoodles } from '@/features/homeDoodles';

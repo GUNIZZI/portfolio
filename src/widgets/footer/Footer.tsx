@@ -8,13 +8,11 @@ import { SITE, SOCIAL_LINKS } from '@/config/site';
 interface OwnProps {
     /** 홈인가. 홈에서는 로고와 Home 이 페이지 맨 위로 간다 */
     isHome?: boolean;
-    /** Contact 가 가는 곳. 연락 섹션이 없는 페이지에서는 홈의 연락 섹션(/#contact)을 준다 */
-    contactHref?: string;
 }
 
 const LINK_CLASS = 'py-2';
 
-export default function Footer({ isHome = false, contactHref = '#contact' }: OwnProps) {
+export default function Footer({ isHome = false }: OwnProps) {
     return (
         <footer className="border-t border-line">
             <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-x-8 gap-y-5 px-gutter py-7">
@@ -53,15 +51,10 @@ export default function Footer({ isHome = false, contactHref = '#contact' }: Own
                             </Link>
                         ),
                     )}
-                    {contactHref.startsWith('#') ? (
-                        <a href={contactHref} className={LINK_CLASS}>
-                            Contact
-                        </a>
-                    ) : (
-                        <Link href={contactHref} className={LINK_CLASS}>
-                            Contact
-                        </Link>
-                    )}
+                    {/* 연락 섹션은 모든 페이지에 있다(widgets/contact) */}
+                    <a href="#contact" className={LINK_CLASS}>
+                        Contact
+                    </a>
                 </nav>
             </div>
             <div className="mx-auto flex max-w-page flex-wrap justify-between gap-2 border-t border-line px-gutter pt-4 pb-7 text-caption text-muted">

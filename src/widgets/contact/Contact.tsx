@@ -6,6 +6,10 @@ import Icon from '@/shared/ui/icon/Icon';
 import { cn } from '@/shared/util/cn';
 import { SITE } from '@/config/site';
 
+/**
+ * 연락 섹션. 모든 페이지의 푸터 위에 붙는다.(2026-11-16 사용자 결정)
+ * 헤더의 Contact 버튼과 푸터의 Contact 가 이 섹션(#contact)으로 온다
+ */
 export default function Contact() {
     const mailto = `mailto:${SITE.email}`;
 
