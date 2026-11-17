@@ -15,6 +15,8 @@ interface OwnProps {
     /** 밑줄 길이 클래스 — w-37.5 처럼 준다 */
     underlineClassName?: string;
     className?: string;
+    /** 제목의 단계. 페이지 제목이면 h1 을 준다 */
+    as?: 'h1' | 'h2';
 }
 
 /** 마커로 쓴 섹션 제목과 그 아래 손으로 그은 밑줄. 밑줄은 화면에 처음 들어올 때 그려진다 */
@@ -23,10 +25,13 @@ export default function MarkerHeading({
     underline,
     underlineClassName,
     className,
+    as: Heading = 'h2',
 }: OwnProps) {
     return (
         <div className="flex flex-col">
-            <h2 className={cn('font-marker text-section font-normal', className)}>{children}</h2>
+            <Heading className={cn('font-marker text-section font-normal', className)}>
+                {children}
+            </Heading>
             {underline ? (
                 <svg
                     viewBox="0 0 200 12"
