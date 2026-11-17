@@ -1,14 +1,20 @@
 import Image from 'next/image';
 
-import Button from '@/shared/ui/button/Button';
+import type { AboutHomeData } from '@/entities/about/model/about.types';
+import { Button } from '@/shared/ui/button/button';
 import Icon from '@/shared/ui/icon/Icon';
 import MarkerHeading from '@/shared/ui/markerHeading/MarkerHeading';
 import Panel from '@/shared/ui/panel/Panel';
 
-import { ABOUT_LINES, ABOUT_STATS } from '../model/about.constants';
+import { ABOUT_STAT_ICONS } from '../model/about.constants';
 import CountUp from './CountUp';
 
-export default function About() {
+interface OwnProps {
+    /** 소개 문단과 숫자 3개. 페이지가 저장소에서 읽어 넘긴다 */
+    about: AboutHomeData;
+}
+
+export default function About({ about }: OwnProps) {
     return (
         <section id="about" className="mx-auto mt-5 max-w-page scroll-mt-header px-gutter">
             <Panel className="flex flex-wrap items-stretch overflow-hidden">
@@ -54,25 +60,31 @@ export default function About() {
                 <div className="flex min-w-0 flex-[2_1_340px] flex-col justify-center gap-4 p-[clamp(24px,5vw,50px)]">
                     <MarkerHeading underline="brand">ABOUT ME</MarkerHeading>
                     <p className="text-body leading-relaxed text-foreground">
-                        {ABOUT_LINES.map((line) => (
+                        {about.lines.map((line) => (
                             <span key={line} className="block">
                                 {line}
                             </span>
                         ))}
                     </p>
-                    <Button href="/about" intent="outlineBrand" size="md" className="self-start">
-                        More About Me
-                        <Icon name="arrowRight" size={16} strokeWidth={2} />
+                    <Button asChild variant="outlineBrand" size="md" className="self-start">
+                        <a href="/about">
+                            More About Me
+                            <Icon name="arrowRight" size={16} strokeWidth={2} />
+                        </a>
                     </Button>
                 </div>
 
                 <ul className="grid min-w-0 flex-[1_1_320px] grid-cols-3 items-center p-6">
-                    {ABOUT_STATS.map((stat) => (
+                    {about.stats.map((stat, index) => (
                         <li
                             key={stat.label}
                             className="flex flex-col items-center gap-1.5 border-l border-divider p-2 text-center"
                         >
-                            <Icon name={stat.icon} size={32} strokeWidth={1.6} />
+                            <Icon
+                                name={ABOUT_STAT_ICONS[index] ?? ABOUT_STAT_ICONS[0]}
+                                size={32}
+                                strokeWidth={1.6}
+                            />
                             <strong className="text-stat">
                                 <CountUp value={stat.value} suffix={stat.suffix} />
                             </strong>

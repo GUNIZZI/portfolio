@@ -16,13 +16,13 @@ Kozipsa(`admin-next/docs/architecture.md`)의 구조를 가져오고, 백엔드�
 
 ## 1. Kozipsa 와 다른 점
 
-| 항목          | Kozipsa                                   | 이 저장소                                                   | 이유                                                                   |
-| ------------- | ----------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
-| 저장소        | pnpm + Turborepo 모노레포                 | 단일 앱                                                     | 앱이 하나라 공용 패키지로 나눌 대상이 없다                             |
-| 데이터        | 백엔드 API                                | `content/` 의 로컬 파일, 로그인은 Firebase Auth             | 작업은 아직 로컬 파일이다. 로그인만 먼저 붙였다(2026-11-17)            |
-| entity        | model · actions · services · repositories | model · services · repositories, 변경 요청이 있으면 actions | 서버 액션이 필요한 entity 만 `actions` 를 둔다(2026-11-12 사용자 결정) |
-| 디자인 시스템 | `packages/ui` + Storybook                 | `src/shared/ui` + `src/style/tokens`                        | UI 를 함께 쓸 다른 앱이 없다                                           |
-| 상태          | Zustand · TanStack Query                  | 쓰지 않는다                                                 | 전역 상태와 서버 상태가 없다                                           |
+| 항목          | Kozipsa                                   | 이 저장소                                                   | 이유                                                                          |
+| ------------- | ----------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 저장소        | pnpm + Turborepo 모노레포                 | 단일 앱                                                     | 앱이 하나라 공용 패키지로 나눌 대상이 없다                                    |
+| 데이터        | 백엔드 API                                | `content/` 의 로컬 파일과 Firestore, 로그인은 Firebase Auth | 소개 문구는 Firestore 로 옮겼다. 작업과 경력은 아직 로컬 파일이다(2026-11-17) |
+| entity        | model · actions · services · repositories | model · services · repositories, 변경 요청이 있으면 actions | 서버 액션이 필요한 entity 만 `actions` 를 둔다(2026-11-12 사용자 결정)        |
+| 디자인 시스템 | `packages/ui` + Storybook                 | `src/shared/ui` + `src/style/tokens`                        | UI 를 함께 쓸 다른 앱이 없다                                                  |
+| 상태          | Zustand · TanStack Query                  | 쓰지 않는다                                                 | 전역 상태와 서버 상태가 없다                                                  |
 
 따로 적지 않은 것은 2026-11-11 플랜 승인 때 정했다.
 
@@ -38,13 +38,13 @@ portfolio/
     ├── app/          App Router 라우트
     ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact, adminHeader)
     ├── features/     기능 단위 (hero, featuredProjects, …)
-    ├── entities/     도메인 데이터 (project, experience, session)
+    ├── entities/     도메인 데이터 (project, experience, session, about)
     ├── shared/       앱 공용 (ui/, util/)
     ├── config/       사이트 정보, 내비게이션
     ├── style/        global.css, tokens/
     ├── asset/        코드가 import 하는 정적 자원 (SVG 등)
     ├── types/        .d.ts 앰비언트 선언
-    └── proxy.ts      요청을 페이지보다 먼저 받는 Next 의 파일. 관리 화면의 1차 검사 (4.1절)
+    └── proxy.ts      요청을 페이지보다 먼저 받는 Next 의 파일. 관리 화면의 1차 검사 (4.2절)
 ```
 
 ### 2.1 그림 파일을 두는 곳
@@ -84,6 +84,7 @@ flowchart TD
 ```
 
 **`entities` 끼리도 서로 import 하지 않는다.** 조합이 필요하면 상위인 `features` 에서 합친다.(Kozipsa 3절)
+**예외는 `session` 하나다.** 변경 요청을 받는 서버 액션은 세션을 다시 검사해야 하므로, entity 는 `session` 을 import 할 수 있다.(`eslint.config.mjs` 의 `boundaries/dependencies`, `src/entities/about/actions/about.actions.ts`)
 
 **`features` 끼리, `widgets` 끼리도 서로 import 하지 않는다.** 슬라이스 사이의 조합은 한 단계 위에서 한다.
 
@@ -121,6 +122,10 @@ widgets/        ← 여러 기능을 조합하거나 모든 페이지에 붙는 
 features/*/ui   ← 특정 기능에서만 쓰는 UI
 ```
 
+`shared/ui` 의 Button · Input · Textarea · Separator · Label · Field 는 shadcn 을 바탕으로 한다.(`components.json`, 2026-11-17 사용자 결정) 파일 이름과 export 는 [conventions.md](./conventions.md) 2.5절을 따른다.
+
+`shared/ui/size` 는 컴포넌트가 아니다. Button · Input · Textarea 가 함께 읽는 크기 눈금을 둔다.(`src/shared/ui/size/size.constants.ts`, 2026-11-17 사용자 결정)
+
 ## 4. Entity 계층
 
 목적은 **원문을 읽는 위치를 `repositories` 한 곳으로 고정**하는 것이다. 원문은 `content/` 의 파일이거나 외부 저장소다.
@@ -142,13 +147,22 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 **변경 요청은 `actions` 의 서버 액션으로 받는다.**(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 요구사항 7)
 파일 첫 줄에 `'use server';` 를 둔다. 클라이언트 컴포넌트가 entity 에서 직접 가져올 수 있는 것은 서버 액션과 `model` 뿐이다.
-지금은 `session` 에만 있다.(`src/entities/session/actions/session.actions.ts`)
+지금은 `session` 과 `about` 에 있다.(`src/entities/session/actions/` · `src/entities/about/actions/`)
 
 ```
 폼(클라이언트) → <e>.actions.ts → <e>.services.ts → <e>.repositories.ts → 저장소
 ```
 
-### 4.1 세션
+### 4.1 저장소
+
+Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src/shared/util/firebaseAdmin.ts`)
+
+- 읽은 결과는 `services` 가 `'use cache'` 로 캐시하고 태그를 붙인다. 공개 화면이 요청마다 저장소를 부르지 않는다.(`src/entities/about/services/about.services.ts`)
+- 저장한 서버 액션이 그 태그의 캐시를 지운다. 공개 화면은 저장한 직후의 내용을 그린다.(`src/entities/about/actions/about.actions.ts`)
+- 저장한 시각은 서버가 기록한다. 캐시에 담을 수 있게 문자열로 바꿔 읽는다.(`src/entities/about/repositories/about.repositories.ts`)
+- 빌드할 때도 저장소를 읽는다. 빌드하는 곳에 환경 변수 5개가 있어야 한다.(`src/shared/util/serverEnv.ts`)
+
+### 4.2 세션
 
 관리 화면의 로그인 상태는 entity `session` 이 다룬다. 저장소는 Firebase Auth 다.(2026-11-17 사용자 결정)
 
@@ -182,10 +196,10 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 ## 미정리 항목
 
-- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` 다.
+- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` 다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
-- widget 은 `header` · `footer` · `backdrop` · `contact` · `adminHeader`, entity 는 `project` · `experience` · `session` 이다.
-- 관리 기능은 로그인까지 구현했다(2026-11-17). 작업 원문은 아직 `content/` 에 있다. 저장소로 옮기면 1절의 데이터 행과 4절이 다시 바뀐다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
+- widget 은 `header` · `footer` · `backdrop` · `contact` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` 이다.
+- 관리 기능은 로그인과 소개까지 구현했다(2026-11-17). 작업과 경력의 원문은 아직 `content/` 에 있다. 저장소로 옮기면 1절의 데이터 행과 4절이 다시 바뀐다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
 
 ## 확인방법
 

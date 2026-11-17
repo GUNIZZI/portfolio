@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
+import { io } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -45,6 +46,9 @@ export async function verifyAdminSession(cookie: string | undefined): Promise<Se
 /** 지금 요청의 세션을 읽는다. 한 요청 안에서는 한 번만 검증한다 */
 export const getSession = cache(async (): Promise<SessionData | null> => {
     const cookieStore = await cookies();
+    // 쿠키는 프리페치용 사전 렌더에서도 읽히는데, 검증은 안에서 Date.now() 로 만료를 따진다.
+    // io() 로 검증을 사전 렌더에서 빼고 실제 요청에서만 돌린다
+    await io();
     return verifyAdminSession(cookieStore.get(SESSION_COOKIE_NAME)?.value);
 });
 

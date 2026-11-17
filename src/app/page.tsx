@@ -7,11 +7,12 @@ import { FeaturedProjects } from '@/features/featuredProjects';
 import { Hero } from '@/features/hero';
 import { HomeDoodles } from '@/features/homeDoodles';
 import { Skills } from '@/features/skills';
+import { getAboutHome } from '@/entities/about/services/about.services';
 import { getProjectList } from '@/entities/project/services/project.services';
 import Panel from '@/shared/ui/panel/Panel';
 
 export default async function HomePage() {
-    const projects = await getProjectList();
+    const [projects, about] = await Promise.all([getProjectList(), getAboutHome()]);
 
     return (
         <div id="top" className="relative min-h-dvh overflow-x-clip">
@@ -31,7 +32,7 @@ export default async function HomePage() {
                             <Skills />
                         </Panel>
                     </section>
-                    <About />
+                    <About about={about} />
                     <Contact />
                 </main>
                 <Footer isHome />

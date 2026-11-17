@@ -206,6 +206,15 @@ export default defineConfig([
                             from: { element: { type: 'entities' } },
                             allow: { to: { element: { types: ['content', ...BASE] } } },
                         },
+                        // 변경 요청은 세션을 다시 검사한다. entity 의 actions 만 session 의 세션 검사를 부를 수 있다
+                        {
+                            from: { element: { type: 'entities' } },
+                            allow: {
+                                to: {
+                                    element: { type: 'entities', captured: { slice: 'session' } },
+                                },
+                            },
+                        },
                         {
                             from: { element: { types: ['shared', 'config'] } },
                             allow: { to: { element: { types: BASE } } },

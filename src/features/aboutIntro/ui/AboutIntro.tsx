@@ -1,13 +1,17 @@
 import Image from 'next/image';
 
+import type { AboutIntroData } from '@/entities/about/model/about.types';
 import DrawnPath from '@/shared/ui/drawnPath/DrawnPath';
 import Icon from '@/shared/ui/icon/Icon';
 import { cn } from '@/shared/util/cn';
 
-import { ABOUT_INTRO_LINES, GROWTH_PATH, GROWTH_PATH_NOTE } from '../model/aboutIntro.constants';
-
 /** 소개 페이지의 첫 화면. 페이지 제목, 소개 문단, 성장 경로, 캐릭터 */
-export default function AboutIntro() {
+interface OwnProps {
+    /** 소개 문단 · 성장 경로 · 그 아래 한 줄. 페이지가 저장소에서 읽어 넘긴다 */
+    intro: AboutIntroData;
+}
+
+export default function AboutIntro({ intro }: OwnProps) {
     return (
         <section className="mx-auto flex max-w-page flex-wrap items-center gap-x-10 gap-y-8 px-gutter pt-6 pb-4">
             <div className="flex min-w-0 flex-[1_1_440px] flex-col gap-5">
@@ -35,16 +39,16 @@ export default function AboutIntro() {
                 </div>
 
                 <div className="flex max-w-140 flex-col gap-3 text-lead leading-relaxed text-foreground">
-                    {ABOUT_INTRO_LINES.map((line) => (
+                    {intro.lines.map((line) => (
                         <p key={line}>{line}</p>
                     ))}
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <h2 className="text-caption font-semibold text-muted">지나온 길</h2>
+                    <h2 className="text-caption font-semibold text-muted-foreground">지나온 길</h2>
                     <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-caption">
-                        {GROWTH_PATH.map((step, index) => {
-                            const isLast = index === GROWTH_PATH.length - 1;
+                        {intro.growthPath.map((step, index) => {
+                            const isLast = index === intro.growthPath.length - 1;
                             return (
                                 <li key={step} className="flex items-center gap-1.5">
                                     <span
@@ -52,7 +56,7 @@ export default function AboutIntro() {
                                             'rounded-lg px-3 py-1.5 font-medium',
                                             // 지금 하는 일만 강조색으로 둔다
                                             isLast
-                                                ? 'bg-accent font-bold text-accent-foreground'
+                                                ? 'bg-primary font-bold text-primary-foreground'
                                                 : 'bg-chip',
                                         )}
                                     >
@@ -70,7 +74,9 @@ export default function AboutIntro() {
                             );
                         })}
                     </ol>
-                    <p className="text-caption text-muted">{GROWTH_PATH_NOTE}</p>
+                    {intro.growthPathNote ? (
+                        <p className="text-caption text-muted-foreground">{intro.growthPathNote}</p>
+                    ) : null}
                 </div>
             </div>
 
