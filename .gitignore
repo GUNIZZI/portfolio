@@ -49,3 +49,6 @@ next-env.d.ts
 .claude/settings.local.json
 *.bak
 __pycache__/
+
+# 참고용 원본(캐릭터 시트 등). 사이트에서 쓰지 않고 용량이 커서 저장소에 올리지 않는다
+/sample/
