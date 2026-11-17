@@ -39,7 +39,7 @@ export default function ProjectExplorer({ items }: OwnProps) {
                 </div>
 
                 <div className="flex min-w-0 flex-[1_1_320px] justify-center">
-                    <div className="relative aspect-[640/470] w-full max-w-110">
+                    <div className="relative flex aspect-[640/470] w-full max-w-110 items-center justify-center">
                         {/* 소개의 색 면은 보라다. 여기는 하늘색으로 두고 반대로 기울여 두 페이지를 구분한다 */}
                         <div
                             aria-hidden="true"
@@ -48,10 +48,11 @@ export default function ProjectExplorer({ items }: OwnProps) {
                         <Image
                             src="/images/characters/project.png"
                             alt="윙크하며 엄지를 든 개발자 캐릭터 일러스트"
-                            fill
-                            sizes="(max-width: 920px) 100vw, 440px"
+                            // 원본이 276×219 로 작다. 틀에 맞춰 늘리면 흐려져서 원본 크기를 넘기지 않는다
+                            width={276}
+                            height={219}
                             loading="eager"
-                            className="z-raised object-contain"
+                            className="z-raised h-auto max-w-full"
                         />
                         <p
                             aria-hidden="true"
