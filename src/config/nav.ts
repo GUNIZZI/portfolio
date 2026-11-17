@@ -13,3 +13,14 @@ export const FOOTER_NAV_ITEMS = NAV_ITEMS;
 
 /** 메뉴가 가리키는 페이지의 주소. 페이지가 헤더에 자기 메뉴를 알려 줄 때 쓴다 */
 export type NavHref = (typeof NAV_ITEMS)[number]['href'];
+
+/** 관리 화면의 메뉴. 순서와 주소는 docs/plan/admin/dashboard/README.md 요구사항 6 */
+export const ADMIN_NAV_ITEMS = [
+    { label: '대시보드', href: '/admin/dashboard' },
+    { label: '프로젝트', href: '/admin/projects' },
+    { label: '소개', href: '/admin/about' },
+    { label: '경력', href: '/admin/experiences' },
+] as const;
+
+/** 관리 메뉴가 가리키는 페이지의 주소 */
+export type AdminNavHref = (typeof ADMIN_NAV_ITEMS)[number]['href'];

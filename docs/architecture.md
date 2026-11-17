@@ -36,7 +36,7 @@ portfolio/
 └── src/
     ├── _app/         Provider·전역 리스너
     ├── app/          App Router 라우트
-    ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact)
+    ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact, adminHeader)
     ├── features/     기능 단위 (hero, featuredProjects, …)
     ├── entities/     도메인 데이터 (project, experience, session)
     ├── shared/       앱 공용 (ui/, util/)
@@ -162,6 +162,8 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 - 비밀번호는 서버에서 Firebase Auth REST 로 확인한다. 브라우저에는 Firebase SDK 를 싣지 않는다.
 - `src/proxy.ts` 는 쿠키가 있는지만 본다. 값의 검증은 페이지의 `AdminGuard`(`src/features/adminAuth`)와 서버 액션이 `requireSession` 으로 한다.
+- `/admin` 은 화면을 그리지 않는다. 세션이 있으면 대시보드로, 없으면 로그인으로 보낸다.(`src/features/adminAuth/ui/AdminEntry.tsx`)
+- 관리 화면의 머리는 `widgets/adminHeader` 다. 메뉴 항목은 `src/config/nav.ts` 의 `ADMIN_NAV_ITEMS` 에 있다.
 - 쿠키는 `services` 의 `getSession` 이 읽고, `actions` 가 쓰고 지운다.(`src/entities/session/`)
 - 쿠키를 읽는 컴포넌트는 `<Suspense>` 안에 둔다. `cacheComponents` 가 켜져 있어 밖에서 읽으면 빌드가 실패한다.(`next.config.ts`)
 
@@ -182,7 +184,7 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 - feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` 다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
-- widget 은 `header` · `footer` · `backdrop` · `contact`, entity 는 `project` · `experience` · `session` 이다.
+- widget 은 `header` · `footer` · `backdrop` · `contact` · `adminHeader`, entity 는 `project` · `experience` · `session` 이다.
 - 관리 기능은 로그인까지 구현했다(2026-11-17). 작업 원문은 아직 `content/` 에 있다. 저장소로 옮기면 1절의 데이터 행과 4절이 다시 바뀐다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
 
 ## 확인방법

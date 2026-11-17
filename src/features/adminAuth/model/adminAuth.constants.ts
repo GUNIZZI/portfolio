@@ -1,4 +1,4 @@
-/** 로그인에 실패했을 때의 안내 문구. docs/plan/admin/wireframe.html S-01 */
+/** 로그인에 실패했을 때의 안내 문구. docs/plan/admin/login/wireframe.html S-02 */
 export const LOGIN_NOTICE = {
     REJECTED: {
         title: '로그인하지 못했습니다',

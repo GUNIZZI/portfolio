@@ -13,7 +13,7 @@ import { LOGIN_STATUS, type LoginStateData } from '../model/session.types';
 import { createAdminSession } from '../services/session.services';
 
 /**
- * 로그인한다. 성공하면 세션 쿠키를 심고 작업 목록으로 보낸다.
+ * 로그인한다. 성공하면 세션 쿠키를 심고 대시보드로 보낸다.
  * 실패하면 세션을 만들지 않고 상태만 돌려준다. 이메일과 비밀번호 중 무엇이 틀렸는지는 알리지 않는다.
  */
 export async function login(_prev: LoginStateData, formData: FormData): Promise<LoginStateData> {
