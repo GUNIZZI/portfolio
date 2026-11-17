@@ -5,23 +5,19 @@ import type { ProjectData } from '@/entities/project/model/project.types';
 import Icon from '@/shared/ui/icon/Icon';
 import { cn } from '@/shared/util/cn';
 
+import ProjectCardFrame from './ProjectCardFrame';
+
 interface OwnProps {
     project: ProjectData;
 }
 
+/**
+ * 작업 카드. 카드 전체가 상세로 가는 링크다.
+ * 글자와 이미지는 서버에서 그리고, hover 연출만 ProjectCardFrame 이 맡는다
+ */
 export default function ProjectCard({ project }: OwnProps) {
     return (
-        <article
-            className={cn(
-                // 배치와 모양
-                'group flex w-full flex-col overflow-hidden rounded-card border border-border-card bg-card',
-                // hover · 포커스. 동작 줄이기에서는 떠오르지 않고 테두리 색만 바뀐다
-                'hover:border-brand motion-safe:hover:-translate-y-1',
-                'focus-within:border-brand motion-safe:focus-within:-translate-y-1',
-                // 모션
-                'transition-[translate,border-color] duration-fast ease-move',
-            )}
-        >
+        <ProjectCardFrame>
             {project.image ? (
                 // 커진 썸네일이 아래 글자를 덮지 않게 이 칸에서 자른다
                 <div className="overflow-hidden">
@@ -53,16 +49,20 @@ export default function ProjectCard({ project }: OwnProps) {
                 </span>
                 <div className="flex items-center justify-between gap-2">
                     <h3 className="text-base font-bold">{project.title}</h3>
+                    {/*
+                      카드 어디를 눌러도 상세로 간다. 링크는 하나만 두고, 보이지 않는 면(after)을 카드 전체로 넓힌다.
+                      카드를 통째로 링크로 감싸면 스크린 리더가 카드 안의 글자를 전부 링크 이름으로 읽는다
+                    */}
                     <Link
                         href={project.href}
                         aria-label={`${project.title} 열기`}
-                        className="flex p-1"
+                        className="flex p-1 after:absolute after:inset-0"
                     >
                         <Icon name="external" size={18} strokeWidth={2} />
                     </Link>
                 </div>
                 <p className="text-caption text-muted">{project.summary}</p>
             </div>
-        </article>
+        </ProjectCardFrame>
     );
 }

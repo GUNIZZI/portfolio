@@ -63,7 +63,7 @@
 | 3    | 대표 작업 | `projects` | `features/featuredProjects` |
 | 4    | 기술      | `skills`   | `features/skills`           |
 | 5    | 소개      | `about`    | `features/about`            |
-| 6    | 연락      | `contact`  | `features/contact`          |
+| 6    | 연락      | `contact`  | `widgets/contact`           |
 | 7    | 푸터      | —          | `widgets/footer`            |
 
 페이지 맨 위는 `#top` 이다. 홈에서는 로고와 헤더의 Home 이 이곳을 가리킨다.
@@ -75,7 +75,8 @@
     - 처음에는 홈 안의 섹션으로 가는 메뉴 4개였다. 소개 페이지가 생기면서 About 을 눌러도 그 페이지에 가지 못해 바꿨다.
     - Skills 는 메뉴에서 뺐다. 기술 전용 페이지가 없고, 홈과 소개 페이지에 섹션으로 들어 있다.
 - 연락 섹션으로는 헤더 오른쪽의 Contact 버튼으로 간다. 메뉴에는 Contact 를 두지 않는다.(2026-11-12 사용자 결정)
-    - 연락 섹션이 없는 페이지(`/work`)에서는 Contact 가 홈의 연락 섹션(`/#contact`)으로 간다.
+    - **연락 섹션은 모든 페이지의 푸터 위에 있다.**(2026-11-16 사용자 결정) Contact 는 어느 페이지에서든 그 페이지의 연락 섹션(`#contact`)으로 간다.
+    - 모든 페이지에 붙는 것이라 feature 가 아니라 위젯이다.(`src/widgets/contact/`, `docs/architecture.md` 3.1)
 - 푸터 메뉴는 Home · Projects · About · Contact 다. 앞의 3개는 헤더와 같은 페이지로 간다.
 - **현재 메뉴 표시**: 지금 있는 페이지의 메뉴에 밑줄과 강조색을 준다.(`src/widgets/header/HeaderBar.tsx`)
     - 어느 메뉴인지는 페이지가 헤더에 직접 알려 준다. 작업 상세(`/work/<slug>`)도 Projects 를 강조한다.(`src/widgets/header/Header.tsx` 의 `currentHref`)
@@ -106,15 +107,17 @@
 
 다른 페이지로 가는 링크다.
 
-| 요소                    | 목적지         | 근거                                                    |
-| ----------------------- | -------------- | ------------------------------------------------------- |
-| View All Projects       | `/work`        | `src/features/featuredProjects/ui/FeaturedProjects.tsx` |
-| 작업 카드의 열기 아이콘 | `/work/<slug>` | `src/entities/project/services/project.services.ts`     |
-| More About Me           | `/about`       | `src/features/about/ui/About.tsx`                       |
+| 요소              | 목적지         | 근거                                                    |
+| ----------------- | -------------- | ------------------------------------------------------- |
+| View All Projects | `/work`        | `src/features/featuredProjects/ui/FeaturedProjects.tsx` |
+| 작업 카드         | `/work/<slug>` | `src/entities/project/services/project.services.ts`     |
+| More About Me     | `/about`       | `src/features/about/ui/About.tsx`                       |
 
+- **작업 카드는 어디를 눌러도 상세로 간다.**(2026-11-16 사용자 결정) 처음에는 열기 아이콘만 링크였다.
+    - 링크는 하나이고, 누를 수 있는 면만 카드 전체로 넓혔다. 스크린 리더는 「<작업 이름> 열기」 로 읽는다.(`src/features/featuredProjects/ui/ProjectCard.tsx`)
 - 작업 원문에 `href` 가 있으면 카드는 그 주소로 간다.
 - 카드 주소의 `slug` 는 저장소를 연동하면 `id` 로 바뀐다.([admin/](../admin/README.md) 요구사항 10)
-- 소개 페이지는 만들었다.([about/](../about/README.md)) 작업 목록과 상세에는 아직 제목만 있다.([work/](../work/README.md))
+- 소개 페이지와 작업 목록 · 상세를 만들었다.([about/](../about/README.md) · [work/](../work/README.md)) 작업 상세의 본문은 아직 임시 문구다.
 
 **GitHub 는 프로필 주소(`https://github.com/GUNIZZI`)로 새 탭에서 연다.**(2026-11-16 사용자 결정, `src/config/site.ts`)
 LinkedIn 은 두지 않는다.(요구사항 8)
@@ -123,7 +126,7 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 ### 이메일
 
 - 연락 버튼은 `Get in Touch` 1개다. 메일 주소 버튼은 따로 두지 않는다.(2026-11-12 사용자 결정)
-- 버튼에 마우스를 올리거나 키보드로 초점을 주면 문구가 메일 주소로 바뀐다. 버튼 폭은 변하지 않는다.(`src/features/contact/ui/Contact.tsx`)
+- 버튼에 마우스를 올리거나 키보드로 초점을 주면 문구가 메일 주소로 바뀐다. 버튼 폭은 변하지 않는다.(`src/widgets/contact/Contact.tsx`)
 - 터치 화면에서는 문구가 바뀌지 않는다. 마우스 오버가 없기 때문이다.
 - 누르면 `mailto:` 로 메일 앱을 연다.
 - 메일 주소 복사와 복사됨 토스트는 두지 않는다. 채택했다가, 메일 주소 버튼을 없애면서 함께 뺐다.(2026-11-12 사용자 결정)
@@ -138,22 +141,23 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 낙서 디자인이라 **선이 그려지는** 연출을 공통으로 쓴다.(`src/shared/ui/drawnPath/DrawnPath.tsx`)
 페이지를 처음 그릴 때 실행하는 연출은 히어로에만 둔다. 나머지는 스크롤하거나 방문자가 조작할 때 실행한다.
 
-| 요소                | 계기                | 연출                                                                                 | 도구          | 토큰                                         | 동작 줄이기      |
-| ------------------- | ------------------- | ------------------------------------------------------------------------------------ | ------------- | -------------------------------------------- | ---------------- |
-| 히어로 낙서         | 처음 그릴 때 한 번  | 왕관 · 밑줄 · 번개가 선으로 그려진다                                                 | framer-motion | `DURATION.slow` · `EASE.enter`               | 다 그려진 상태   |
-| 히어로 이름         | 처음 그릴 때 한 번  | 마커로 칠하듯 왼쪽부터 드러난다                                                      | framer-motion | `DURATION.slower` · `EASE.enter`             | 보이는 상태      |
-| 말풍선              | 처음 그릴 때 한 번  | 이름 다음에 튀어나온다                                                               | framer-motion | `SPRING.follow`                              | 보이는 상태      |
-| 히어로 낙서         | 창 안의 포인터 이동 | 포인터 반대쪽으로 살짝 밀린다                                                        | framer-motion | `SPRING.follow`                              | 움직이지 않음    |
-| 헤더                | 스크롤 시작         | 바탕이 반투명으로 바뀐다                                                             | CSS           | `duration-fast` · `ease-move`                | 바로 바뀜        |
-| 작업 카드           | 화면에 처음 들어옴  | 아래에서 차례로 올라온다(한 번만)                                                    | framer-motion | `DURATION.base` · `STAGGER.base`             | 보이는 상태      |
-| 작업 카드           | hover · focus       | 살짝 떠오르고 썸네일이 커진다                                                        | CSS           | `duration-fast` · `ease-move`                | 색만 바뀜        |
-| 기술 타일           | hover               | 아이콘이 한 번 흔들린다                                                              | CSS           | `duration-base` · `ease-move`                | 움직이지 않음    |
-| 주요 버튼           | hover · focus       | 다른 색의 면이 밀려 들어와 덮고, 면이 오른쪽으로 넓어지고, 화살표가 조금 늦게 밀린다 | CSS           | `duration-fast` · `ease-move`                | 색만 바뀜        |
-| 연락 버튼 문구      | hover · focus       | 문구가 위로 말려 올라가고 메일 주소가 아래에서 올라온다                              | CSS           | `duration-fast` · `ease-move`                | 바로 바뀜        |
-| 모바일 메뉴 패널    | 메뉴 버튼           | 위에서 내려오며 드러난다. 닫힐 때는 반대로                                           | framer-motion | `DURATION.fast` · `EASE.enter` · `EASE.exit` | 바로 열리고 닫힘 |
-| 소개 숫자           | 화면에 처음 들어옴  | 0 부터 세어 올라간다                                                                 | framer-motion | `DURATION.slower`                            | 최종 숫자        |
-| 섹션 제목 밑줄      | 화면에 처음 들어옴  | 선으로 그려진다                                                                      | framer-motion | `DURATION.slow` · `EASE.enter`               | 다 그려진 상태   |
-| 배경 붓 자국 · 낙서 | 스크롤              | 본문보다 느리게, 서로 다른 속도로 움직인다                                           | GSAP          | ScrollTrigger                                | 움직이지 않음    |
+| 요소                | 계기                      | 연출                                                                                                                        | 도구            | 토큰                                                     | 동작 줄이기      |
+| ------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------- | -------------------------------------------------------- | ---------------- |
+| 히어로 낙서         | 처음 그릴 때 한 번        | 왕관 · 밑줄 · 번개가 선으로 그려진다                                                                                        | framer-motion   | `DURATION.slow` · `EASE.enter`                           | 다 그려진 상태   |
+| 히어로 이름         | 처음 그릴 때 한 번        | 마커로 칠하듯 왼쪽부터 드러난다                                                                                             | framer-motion   | `DURATION.slower` · `EASE.enter`                         | 보이는 상태      |
+| 말풍선              | 처음 그릴 때 한 번        | 이름 다음에 튀어나온다                                                                                                      | framer-motion   | `SPRING.follow`                                          | 보이는 상태      |
+| 히어로 낙서         | 창 안의 포인터 이동       | 포인터 반대쪽으로 살짝 밀린다                                                                                               | framer-motion   | `SPRING.follow`                                          | 움직이지 않음    |
+| 헤더                | 스크롤 시작               | 바탕이 반투명으로 바뀐다                                                                                                    | CSS             | `duration-fast` · `ease-move`                            | 바로 바뀜        |
+| 작업 카드           | 화면에 처음 들어옴        | 아래에서 차례로 올라온다(한 번만)                                                                                           | framer-motion   | `DURATION.base` · `STAGGER.base`                         | 보이는 상태      |
+| 작업 카드           | hover · focus             | 테두리 선이 마우스가 들어온 쪽에서 맞은편으로 그려지고 썸네일이 커진다. 나가면 나간 쪽으로 지워진다. 자리는 움직이지 않는다 | CSS + 방향 판정 | 선 `duration-base` · 썸네일 `duration-fast`, `ease-move` | 선이 바로 나타남 |
+| 나머지 작업 카드    | 다른 카드에 hover · focus | 흐려지고 어두워진다                                                                                                         | CSS             | `duration-base` · `ease-move`                            | 바로 흐려짐      |
+| 기술 타일           | hover                     | 아이콘이 한 번 흔들린다                                                                                                     | CSS             | `duration-base` · `ease-move`                            | 움직이지 않음    |
+| 주요 버튼           | hover · focus             | 다른 색의 면이 밀려 들어와 덮고, 면이 오른쪽으로 넓어지고, 화살표가 조금 늦게 밀린다                                        | CSS             | `duration-fast` · `ease-move`                            | 색만 바뀜        |
+| 연락 버튼 문구      | hover · focus             | 문구가 위로 말려 올라가고 메일 주소가 아래에서 올라온다                                                                     | CSS             | `duration-fast` · `ease-move`                            | 바로 바뀜        |
+| 모바일 메뉴 패널    | 메뉴 버튼                 | 위에서 내려오며 드러난다. 닫힐 때는 반대로                                                                                  | framer-motion   | `DURATION.fast` · `EASE.enter` · `EASE.exit`             | 바로 열리고 닫힘 |
+| 소개 숫자           | 화면에 처음 들어옴        | 0 부터 세어 올라간다                                                                                                        | framer-motion   | `DURATION.slower`                                        | 최종 숫자        |
+| 섹션 제목 밑줄      | 화면에 처음 들어옴        | 선으로 그려진다                                                                                                             | framer-motion   | `DURATION.slow` · `EASE.enter`                           | 다 그려진 상태   |
+| 배경 붓 자국 · 낙서 | 스크롤                    | 본문보다 느리게, 서로 다른 속도로 움직인다                                                                                  | GSAP            | ScrollTrigger                                            | 움직이지 않음    |
 
 - 무한 반복하는 연출은 두지 않는다.(`docs/motion.md` 금지사항, WCAG 2.2.2)
 - 한 요소에 도구 2개를 함께 쓰지 않는다.(`docs/motion.md` 1절)
@@ -163,7 +167,12 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 - 주요 버튼은 헤더의 Contact, 히어로의 View My Projects, 소개의 More About Me, 연락의 Get in Touch 다. 모두 `shared/ui/button` 이라 연출이 같다.(2026-11-16 사용자 결정, `src/shared/ui/button/Button.tsx`)
 - 등장 연출의 순서는 낙서 → 이름 → 말풍선이다. 이름은 낙서가 반쯤 그려졌을 때 시작한다.(`src/features/hero/model/hero.motions.ts`)
 - 기술 타일에는 초점을 받는 요소가 없어 hover 에만 흔들린다.(`src/features/skills/ui/Skills.tsx`)
-- 작업 카드는 hover · focus 때 테두리가 `brand` 색으로 바뀐다. 동작 줄이기에서는 이 색만 바뀐다.(`src/features/featuredProjects/ui/ProjectCard.tsx`)
+- 작업 카드는 hover · focus 때 `brand` 색 테두리 선이 그려진다. 위로 떠오르지 않는다.(2026-11-16 사용자 결정, `src/features/featuredProjects/ui/ProjectCard.tsx`)
+    - 완성된 테두리를 마스크로 가렸다가 드러낸다. 마스크의 방향은 마우스가 들어온 쪽을 따른다. 변 4개와 모서리 4개, 8방향으로 가른다.(`src/features/featuredProjects/model/featuredProjects.utils.ts`)
+    - 키보드로 초점이 들어올 때와 터치 화면에서는 방향이 없어 왼쪽 위에서 시작한다.
+    - 선에서는 바깥으로 보라색 빛이 12px 번진다. 빛도 선과 함께 그려진다.(2026-11-16 사용자 결정, `shadow-glow`)
+    - 카드 하나에 마우스나 초점이 가면 나머지 카드는 흐려지고 어두워진다. 보고 있는 카드만 또렷하게 남는다.(2026-11-16 사용자 결정)
+    - 작업 목록 페이지의 카드도 같은 컴포넌트라 같이 바뀐다.
 
 ## 반응형
 
@@ -185,7 +194,7 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 | F-02 | 현재 메뉴 표시     | S-01 · S-02 | 지금 있는 페이지의 메뉴를 강조한다                |
 | F-03 | 헤더 고정          | S-01 · S-02 | 헤더를 항상 화면 위에 붙여 둔다                   |
 | F-04 | 작업 목록으로 이동 | S-01        | View All Projects → `/work`                       |
-| F-05 | 작업 상세로 이동   | S-01        | 카드 열기 아이콘 → `/work/<slug>`                 |
+| F-05 | 작업 상세로 이동   | S-01        | 작업 카드 → `/work/<slug>`                        |
 | F-06 | 소개로 이동        | S-01        | More About Me → `/about`                          |
 | F-07 | 메일 보내기        | S-01        | Get in Touch → `mailto:`. 마우스를 올리면 주소    |
 | F-08 | 외부 프로필 열기   | S-01        | GitHub 새 탭                                      |

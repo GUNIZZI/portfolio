@@ -32,7 +32,7 @@ export default function FeaturedProjects({ projects }: OwnProps) {
                     <Icon name="arrowRight" size={16} strokeWidth={2} />
                 </Link>
             </div>
-            <ProjectGrid className="grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
+            <ProjectGrid className="group/cards grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
                 {projects.map((project) => (
                     <ProjectCard key={project.slug} project={project} />
                 ))}
