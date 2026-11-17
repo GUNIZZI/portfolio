@@ -1,4 +1,4 @@
-import type { AnchorHTMLAttributes } from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -12,6 +12,7 @@ import { cn } from '@/shared/util/cn';
  * 넓어지는 것은 폭을 바꾸지 않고, 처음부터 오른쪽으로 더 길게 깔아 둔 면을 clip-path 로 가렸다가 드러낸다.
  * 폭을 움직이면 매 프레임 레이아웃을 다시 계산하고 옆의 요소를 민다.(docs/motion.md 원칙 4)
  * 동작 줄이기에서는 색만 바로 바뀌고, 넓어지거나 밀리지 않는다.
+ * effect 가 none 이면 언제나 색만 바로 바뀐다. 연출을 두지 않는 관리 화면이 쓴다.
  */
 const buttonVariants = cva(
     [
@@ -19,10 +20,8 @@ const buttonVariants = cva(
         'group/button relative inline-flex rounded-full',
         // 글자
         'text-body',
-        // 누름
-        'motion-safe:active:scale-95',
-        // 모션
-        'transition-[scale,color] duration-fast ease-move',
+        // 비활성. 마우스에 반응하지 않아 hover 연출도 멈춘다
+        'disabled:pointer-events-none disabled:text-muted',
     ],
     {
         variants: {
@@ -46,8 +45,13 @@ const buttonVariants = cva(
                 md: 'min-h-11 px-5 text-sm',
                 lg: 'min-h-12 px-6.5',
             },
+            effect: {
+                // 누르면 눌리고, 글자색이 면을 따라 바뀐다
+                sweep: 'transition-[scale,color] duration-fast ease-move motion-safe:active:scale-95',
+                none: '',
+            },
         },
-        defaultVariants: { intent: 'accent', size: 'lg' },
+        defaultVariants: { intent: 'accent', size: 'lg', effect: 'sweep' },
     },
 );
 
@@ -64,6 +68,8 @@ const surfaceVariants = cva(
         'group-hover/button:before:translate-x-0 group-focus-visible/button:before:translate-x-0',
         'motion-safe:group-hover/button:[clip-path:inset(0_round_999px)]',
         'motion-safe:group-focus-visible/button:[clip-path:inset(0_round_999px)]',
+        // 비활성
+        'group-disabled/button:bg-chip',
         // 모션
         'transition-[clip-path] duration-fast ease-move',
     ],
@@ -82,29 +88,108 @@ const surfaceVariants = cva(
     },
 );
 
-interface OwnProps
-    extends AnchorHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof buttonVariants> {
+/** 움직이지 않는 면. 버튼과 크기가 같고, hover · 포커스 때 덮는 색이 바로 나타난다 */
+const staticSurfaceVariants = cva(
+    [
+        // 배치와 모양
+        'absolute overflow-hidden rounded-full',
+        // 덮는 면. 평소에는 그리지 않는다
+        'before:absolute before:inset-0 before:hidden before:rounded-full',
+        // hover · 포커스
+        'group-hover/button:before:block group-focus-visible/button:before:block',
+        // 비활성
+        'group-disabled/button:bg-chip',
+    ],
+    {
+        variants: {
+            intent: {
+                accent: 'inset-0 bg-accent before:bg-strong',
+                brand: 'inset-0 bg-brand before:bg-accent',
+                // 채울 때 버튼의 테두리(2px)까지 덮는다
+                outline: '-inset-0.5 before:bg-strong',
+                outlineBrand: '-inset-0.5 before:bg-brand',
+            },
+        },
+        defaultVariants: { intent: 'accent' },
+    },
+);
+
+type ButtonVariant = VariantProps<typeof buttonVariants>;
+
+interface LinkAttributes extends AnchorHTMLAttributes<HTMLAnchorElement>, ButtonVariant {
     href: string;
 }
 
-/** 링크 모양 버튼. 페이지 안 이동과 mailto 에 쓴다 */
-export default function Button({ intent, size, className, children, ...rest }: OwnProps) {
+interface ActionAttributes extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariant {
+    href?: undefined;
+}
+
+/** href 가 있으면 링크, 없으면 버튼이다 */
+type OwnProps = LinkAttributes | ActionAttributes;
+
+interface ContentAttributes {
+    intent: ButtonVariant['intent'];
+    effect: ButtonVariant['effect'];
+    children: ReactNode;
+}
+
+/** 버튼의 면과 그 위의 글자 · 아이콘 */
+function ButtonContent({ intent, effect, children }: ContentAttributes) {
+    const isStatic = effect === 'none';
+
     return (
-        <a className={cn(buttonVariants({ intent, size }), className)} {...rest}>
-            <span aria-hidden="true" className={surfaceVariants({ intent })} />
+        <>
+            <span
+                aria-hidden="true"
+                className={
+                    isStatic ? staticSurfaceVariants({ intent }) : surfaceVariants({ intent })
+                }
+            />
             {/* 글자와 아이콘. 면보다 뒤에 오는 요소라 z-index 없이 위에 그려진다 */}
             <span
                 className={cn(
                     'relative inline-flex items-center gap-2.5',
-                    // 맨 끝의 아이콘이 면이 넓어진 만큼, 조금 늦게 따라 밀린다
-                    '[&>svg:last-child]:transition-[translate] [&>svg:last-child]:duration-fast [&>svg:last-child]:ease-move',
-                    'motion-safe:group-hover/button:[&>svg:last-child]:translate-x-3',
-                    'motion-safe:group-focus-visible/button:[&>svg:last-child]:translate-x-3',
-                    'group-hover/button:[&>svg:last-child]:[transition-delay:var(--duration-instant)]',
+                    !isStatic && [
+                        // 맨 끝의 아이콘이 면이 넓어진 만큼, 조금 늦게 따라 밀린다
+                        '[&>svg:last-child]:transition-[translate] [&>svg:last-child]:duration-fast [&>svg:last-child]:ease-move',
+                        'motion-safe:group-hover/button:[&>svg:last-child]:translate-x-3',
+                        'motion-safe:group-focus-visible/button:[&>svg:last-child]:translate-x-3',
+                        'group-hover/button:[&>svg:last-child]:[transition-delay:var(--duration-instant)]',
+                    ],
                 )}
             >
                 {children}
             </span>
-        </a>
+        </>
+    );
+}
+
+/**
+ * 버튼. href 를 주면 링크(a)로, 주지 않으면 button 으로 그린다.
+ * 링크는 페이지 안 이동과 mailto 에, button 은 폼 제출과 동작에 쓴다.
+ */
+export default function Button(props: OwnProps) {
+    if (props.href !== undefined) {
+        const { intent, size, effect, className, children, ...rest } = props;
+        return (
+            <a className={cn(buttonVariants({ intent, size, effect }), className)} {...rest}>
+                <ButtonContent intent={intent} effect={effect}>
+                    {children}
+                </ButtonContent>
+            </a>
+        );
+    }
+
+    const { intent, size, effect, className, children, type = 'button', ...rest } = props;
+    return (
+        <button
+            type={type}
+            className={cn(buttonVariants({ intent, size, effect }), className)}
+            {...rest}
+        >
+            <ButtonContent intent={intent} effect={effect}>
+                {children}
+            </ButtonContent>
+        </button>
     );
 }
