@@ -31,36 +31,38 @@ export default function PrinciplesForm({ data }: OwnProps) {
             isPending={form.isPending}
             onSave={form.save}
         >
-            {value.items.map((item, index) => {
-                const order = index + 1;
-                return (
-                    // 자리를 key 로 쓴다. 4개로 고정이고 순서를 바꾸지 않는다
-                    <fieldset
-                        key={index}
-                        className="flex items-center gap-4 rounded-xl bg-card p-4"
-                    >
-                        {/* <legend className="text-body font-semibold text-strong">{order}번째</legend> */}
-                        <p className="text-caption text-muted-foreground">{order}번째</p>
-                        <div className="flex flex-1 flex-col gap-1">
-                            <TextField
-                                value={item.title}
-                                onChange={(event) => {
-                                    hndlChange(index, 'title', event.target.value);
-                                }}
-                                error={requiredError('제목', item.title)}
-                            />
-                            <TextField
-                                isMultiline
-                                value={item.description}
-                                onChange={(event) => {
-                                    hndlChange(index, 'description', event.target.value);
-                                }}
-                                error={requiredError('설명', item.description)}
-                            />
-                        </div>
-                    </fieldset>
-                );
-            })}
+            <div className="flex flex-col gap-3">
+                {value.items.map((item, index) => {
+                    const order = index + 1;
+                    return (
+                        // 자리를 key 로 쓴다. 4개로 고정이고 순서를 바꾸지 않는다
+                        <fieldset
+                            key={index}
+                            className="flex items-center gap-4 rounded-xl bg-card p-4"
+                        >
+                            {/* <legend className="text-body font-semibold text-strong">{order}번째</legend> */}
+                            <p className="text-caption text-muted-foreground">{order}번째</p>
+                            <div className="flex flex-1 flex-col gap-1">
+                                <TextField
+                                    value={item.title}
+                                    onChange={(event) => {
+                                        hndlChange(index, 'title', event.target.value);
+                                    }}
+                                    error={requiredError('제목', item.title)}
+                                />
+                                <TextField
+                                    isMultiline
+                                    value={item.description}
+                                    onChange={(event) => {
+                                        hndlChange(index, 'description', event.target.value);
+                                    }}
+                                    error={requiredError('설명', item.description)}
+                                />
+                            </div>
+                        </fieldset>
+                    );
+                })}
+            </div>
         </SectionShell>
     );
 }

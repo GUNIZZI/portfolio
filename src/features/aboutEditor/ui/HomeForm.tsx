@@ -46,7 +46,7 @@ export default function HomeForm({ data }: OwnProps) {
                 items={value.lines}
                 onChange={hndlLinesChange}
                 min={1}
-                addLabel="문단 더하기"
+                addLabel="+ 문단 더하기"
             />
             <Separator />
             <div>

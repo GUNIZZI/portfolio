@@ -49,7 +49,7 @@ export default function SectionShell({
                     </p>
                 </div>
                 {children}
-                <div className="-mx-6 -mb-6 flex flex-wrap items-center justify-end gap-4 rounded-b-xl border-t border-line p-10">
+                <div className="flex flex-wrap items-center justify-end gap-4 rounded-b-xl py-5">
                     <Button
                         type="submit"
                         size="lg"

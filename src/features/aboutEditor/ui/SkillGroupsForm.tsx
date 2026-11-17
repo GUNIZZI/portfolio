@@ -32,39 +32,41 @@ export default function SkillGroupsForm({ data }: OwnProps) {
             isPending={form.isPending}
             onSave={form.save}
         >
-            {value.items.map((group, index) => {
-                return (
-                    // 자리를 key 로 쓴다. 8개로 고정이고 순서를 바꾸지 않는다
-                    <div key={index} className="flex flex-col gap-1 rounded-xl bg-card p-4">
-                        <TextField
-                            afterLabel="이름"
-                            size="xl"
-                            value={group.name}
-                            onChange={(event) => {
-                                hndlChange(index, { name: event.target.value });
-                            }}
-                            error={requiredError('이름', group.name)}
-                        />
-                        <TextField
-                            afterLabel="내용"
-                            value={group.usage}
-                            onChange={(event) => {
-                                hndlChange(index, { usage: event.target.value });
-                            }}
-                            error={requiredError('쓴 곳', group.usage)}
-                        />
-                        <ChipListField
-                            items={group.items}
-                            onChange={(items) => {
-                                hndlChange(index, { items });
-                            }}
-                            min={1}
-                            addLabel="Skill 이름"
-                            isNested
-                        />
-                    </div>
-                );
-            })}
+            <div className="flex flex-col gap-3">
+                {value.items.map((group, index) => {
+                    return (
+                        // 자리를 key 로 쓴다. 8개로 고정이고 순서를 바꾸지 않는다
+                        <div key={index} className="flex flex-col gap-1 rounded-xl bg-card p-4">
+                            <TextField
+                                afterLabel="이름"
+                                size="xl"
+                                value={group.name}
+                                onChange={(event) => {
+                                    hndlChange(index, { name: event.target.value });
+                                }}
+                                error={requiredError('이름', group.name)}
+                            />
+                            <TextField
+                                afterLabel="내용"
+                                value={group.usage}
+                                onChange={(event) => {
+                                    hndlChange(index, { usage: event.target.value });
+                                }}
+                                error={requiredError('쓴 곳', group.usage)}
+                            />
+                            <ChipListField
+                                items={group.items}
+                                onChange={(items) => {
+                                    hndlChange(index, { items });
+                                }}
+                                min={1}
+                                addLabel="Skill 이름"
+                                isNested
+                            />
+                        </div>
+                    );
+                })}
+            </div>
         </SectionShell>
     );
 }
