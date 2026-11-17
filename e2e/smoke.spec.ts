@@ -48,7 +48,7 @@ test('메뉴로 페이지를 옮기면 그 페이지의 메뉴를 강조한다',
 
     for (const [name, url, heading] of [
         ['About', /\/about$/, 'ABOUT ME'],
-        ['Projects', /\/work$/, '작업'],
+        ['Projects', /\/work$/, 'ALL PROJECTS'],
     ] as const) {
         await menu.getByRole('link', { name }).click();
         await expect(page).toHaveURL(url);
@@ -125,18 +125,23 @@ test('소개 페이지에 제목과 경력이 있고, 최근 경력만 펼쳐져
     await expect(page.getByText('LG G2 Micro site')).toBeVisible();
 });
 
-test('연락 섹션이 없는 작업 페이지에서 Contact 를 누르면 홈의 연락 섹션으로 간다', async ({
+test('어느 페이지에서든 Contact 를 누르면 그 페이지의 연락 섹션으로 간다', async ({
     page,
     isMobile,
 }) => {
-    await page.goto('/work');
-    if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
-    const scope = isMobile
-        ? page.getByRole('navigation', { name: '주 메뉴' })
-        : page.getByRole('banner');
-    await scope.getByRole('link', { name: 'Contact' }).click();
-    await expect(page).toHaveURL(/\/#contact$/);
-    await expect(page.getByRole('heading', { level: 2, name: 'Get in Touch!' })).toBeInViewport();
+    for (const path of ['/', '/about', '/work', '/work/kozipsa']) {
+        await page.goto(path);
+        if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
+        const scope = isMobile
+            ? page.getByRole('navigation', { name: '주 메뉴' })
+            : page.getByRole('banner');
+        await scope.getByRole('link', { name: 'Contact' }).click();
+        await expect(
+            page.getByRole('heading', { level: 2, name: 'Get in Touch!' }),
+        ).toBeInViewport();
+        // 다른 페이지로 옮기지 않는다
+        expect(new URL(page.url()).pathname).toBe(path);
+    }
 });
 
 test('홈의 More About Me 로 소개 페이지에 간다', async ({ page }) => {
@@ -157,4 +162,51 @@ test('소개 페이지에서 경력을 한 번에 모두 펼치고 닫는다', a
     await expect(page.getByText('LG G2 Micro site')).toBeHidden();
     await expect(page.getByText('Ris-K(PaaS)')).toBeHidden();
     await expect(page.getByRole('button', { name: '전체 펼치기' })).toBeVisible();
+});
+
+test('작업 목록을 분류로 거르면 주소에 남고, 그 주소로 열면 같은 목록이 나온다', async ({
+    page,
+}) => {
+    await page.goto('/work');
+    const cards = page.getByRole('main').getByRole('article');
+    await expect(cards).toHaveCount(4);
+
+    await page.getByRole('button', { name: 'Dashboard' }).click();
+    await expect(cards).toHaveCount(1);
+    await expect(page).toHaveURL(/\/work\?category=Dashboard$/);
+    await expect(page.getByRole('button', { name: 'Dashboard' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+    );
+
+    await page.goto('/work?category=Enterprise');
+    await expect(cards).toHaveCount(1);
+    await expect(page.getByRole('heading', { level: 3, name: /KOZIPSA/ })).toBeVisible();
+
+    await page.getByRole('button', { name: '전체' }).click();
+    await expect(cards).toHaveCount(4);
+    await expect(page).toHaveURL(/\/work$/);
+});
+
+test('작업 카드에서 상세로 가면 본문과 메타가 있고, 다음 작업으로 넘어간다', async ({ page }) => {
+    await page.goto('/work');
+    await page.getByRole('link', { name: /KOZIPSA.*열기/ }).click();
+    await expect(page).toHaveURL(/\/work\/kozipsa$/);
+    await expect(page.getByRole('heading', { level: 1, name: /KOZIPSA/ })).toBeVisible();
+    for (const name of ['개요', '문제', '해결', '결과', '회고']) {
+        await expect(page.getByRole('heading', { level: 2, name })).toBeVisible();
+    }
+    await expect(page.getByText('프론트엔드 개발')).toBeVisible();
+
+    // 첫 작업이라 이전은 없고 다음만 있다
+    const pager = page.getByRole('navigation', { name: '다른 작업' });
+    await expect(pager.getByRole('link')).toHaveCount(1);
+    await pager.getByRole('link', { name: /다음 작업/ }).click();
+    await expect(page).toHaveURL(/\/work\/dashboard$/);
+    await expect(page.getByRole('heading', { level: 1, name: '사내 통합 대시보드' })).toBeVisible();
+});
+
+test('없는 작업의 주소로 들어오면 찾을 수 없다고 알린다', async ({ page }) => {
+    await page.goto('/work/none');
+    await expect(page.getByRole('heading', { name: '찾을 수 없음' })).toBeVisible();
 });
