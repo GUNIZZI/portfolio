@@ -16,15 +16,15 @@ Kozipsa(`admin-next/docs/architecture.md`)의 구조를 가져오고, 백엔드�
 
 ## 1. Kozipsa 와 다른 점
 
-| 항목          | Kozipsa                                   | 이 저장소                            | 이유                                       |
-| ------------- | ----------------------------------------- | ------------------------------------ | ------------------------------------------ |
-| 저장소        | pnpm + Turborepo 모노레포                 | 단일 앱                              | 앱이 하나라 공용 패키지로 나눌 대상이 없다 |
-| 데이터        | 백엔드 API                                | `content/` 의 로컬 파일              | 서버 데이터가 없다                         |
-| entity        | model · actions · services · repositories | model · services · repositories      | 서버 액션으로 부를 변경 요청이 없다        |
-| 디자인 시스템 | `packages/ui` + Storybook                 | `src/shared/ui` + `src/style/tokens` | UI 를 함께 쓸 다른 앱이 없다               |
-| 상태          | Zustand · TanStack Query                  | 쓰지 않는다                          | 전역 상태와 서버 상태가 없다               |
+| 항목          | Kozipsa                                   | 이 저장소                                                   | 이유                                                                   |
+| ------------- | ----------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 저장소        | pnpm + Turborepo 모노레포                 | 단일 앱                                                     | 앱이 하나라 공용 패키지로 나눌 대상이 없다                             |
+| 데이터        | 백엔드 API                                | `content/` 의 로컬 파일, 로그인은 Firebase Auth             | 작업은 아직 로컬 파일이다. 로그인만 먼저 붙였다(2026-11-17)            |
+| entity        | model · actions · services · repositories | model · services · repositories, 변경 요청이 있으면 actions | 서버 액션이 필요한 entity 만 `actions` 를 둔다(2026-11-12 사용자 결정) |
+| 디자인 시스템 | `packages/ui` + Storybook                 | `src/shared/ui` + `src/style/tokens`                        | UI 를 함께 쓸 다른 앱이 없다                                           |
+| 상태          | Zustand · TanStack Query                  | 쓰지 않는다                                                 | 전역 상태와 서버 상태가 없다                                           |
 
-모두 2026-11-11 플랜 승인 때 정했다.
+따로 적지 않은 것은 2026-11-11 플랜 승인 때 정했다.
 
 ## 2. 디렉터리
 
@@ -38,12 +38,13 @@ portfolio/
     ├── app/          App Router 라우트
     ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact)
     ├── features/     기능 단위 (hero, featuredProjects, …)
-    ├── entities/     도메인 데이터 (project, experience)
+    ├── entities/     도메인 데이터 (project, experience, session)
     ├── shared/       앱 공용 (ui/, util/)
     ├── config/       사이트 정보, 내비게이션
     ├── style/        global.css, tokens/
     ├── asset/        코드가 import 하는 정적 자원 (SVG 등)
-    └── types/        .d.ts 앰비언트 선언
+    ├── types/        .d.ts 앰비언트 선언
+    └── proxy.ts      요청을 페이지보다 먼저 받는 Next 의 파일. 관리 화면의 1차 검사 (4.1절)
 ```
 
 ### 2.1 그림 파일을 두는 곳
@@ -62,7 +63,7 @@ app/          라우트. page/layout/error, opengraph-image, sitemap 만. 로직
 _app/         Provider. app/ 만 import 한다
 widgets/      여러 feature 를 조합하거나 모든 페이지에 붙는 UI. 컴포넌트 + index.ts, 필요하면 model/
 features/     기능 단위. ui/ + model/ + index.ts
-entities/     도메인 데이터. model/ · services/ · repositories/
+entities/     도메인 데이터. model/ · services/ · repositories/, 필요하면 actions/
 shared/       도메인 무관 공용. ui/ · util/
 config · style · asset · types   어느 계층에서나 import 할 수 있다
 ```
@@ -122,21 +123,47 @@ features/*/ui   ← 특정 기능에서만 쓰는 UI
 
 ## 4. Entity 계층
 
-목적은 **파일을 읽는 위치를 `repositories` 한 곳으로 고정**하는 것이다.
+목적은 **원문을 읽는 위치를 `repositories` 한 곳으로 고정**하는 것이다. 원문은 `content/` 의 파일이거나 외부 저장소다.
 원문 형식이 바뀌어도 `repositories` 만 고치면 된다.
 
 ```
 page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → content/
 ```
 
-| 계층           | 책임                                             | 금지            |
-| -------------- | ------------------------------------------------ | --------------- |
-| `services`     | 가공(정렬, 날짜 포맷, 화면용 `~Data` 로 변환)    | 직접 파일 읽기  |
-| `repositories` | `interface` 선언과 구현. 파일 읽기와 스키마 검증 | 가공            |
-| `model`        | zod 스키마, 타입                                 | 파일 읽기, 가공 |
+| 계층           | 책임                                             | 금지             |
+| -------------- | ------------------------------------------------ | ---------------- |
+| `services`     | 가공(정렬, 날짜 포맷, 화면용 `~Data` 로 변환)    | 직접 파일 읽기   |
+| `repositories` | `interface` 선언과 구현. 원문 읽기와 스키마 검증 | 가공             |
+| `model`        | zod 스키마, 타입                                 | 파일 읽기, 가공  |
+| `actions`      | 서버 액션. 입력 검증, 쿠키 쓰기, 화면 이동       | 저장소 직접 호출 |
 
 **entity 는 서버에서만 실행한다.** `services` 와 `repositories` 첫 줄에 `import 'server-only';` 를 둔다.
 클라이언트 컴포넌트에는 `page` 가 가공된 `~Data` 를 prop 으로 넘긴다.
+
+**변경 요청은 `actions` 의 서버 액션으로 받는다.**(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 요구사항 7)
+파일 첫 줄에 `'use server';` 를 둔다. 클라이언트 컴포넌트가 entity 에서 직접 가져올 수 있는 것은 서버 액션과 `model` 뿐이다.
+지금은 `session` 에만 있다.(`src/entities/session/actions/session.actions.ts`)
+
+```
+폼(클라이언트) → <e>.actions.ts → <e>.services.ts → <e>.repositories.ts → 저장소
+```
+
+### 4.1 세션
+
+관리 화면의 로그인 상태는 entity `session` 이 다룬다. 저장소는 Firebase Auth 다.(2026-11-17 사용자 결정)
+
+| 하는 일                                  | 위치                                                |
+| ---------------------------------------- | --------------------------------------------------- |
+| 비밀번호 확인, 세션 쿠키 값 발급 · 검증  | `src/entities/session/repositories/`                |
+| 관리자 판별(`ADMIN_UID` 와 같은 UID 만)  | `src/entities/session/services/session.services.ts` |
+| 쿠키 쓰기 · 지우기                       | `src/entities/session/actions/session.actions.ts`   |
+| 쿠키가 없으면 로그인으로 보내는 1차 검사 | `src/proxy.ts`                                      |
+| Firebase Admin 초기화, 환경 변수 검증    | `src/shared/util/firebaseAdmin.ts` · `serverEnv.ts` |
+
+- 비밀번호는 서버에서 Firebase Auth REST 로 확인한다. 브라우저에는 Firebase SDK 를 싣지 않는다.
+- `src/proxy.ts` 는 쿠키가 있는지만 본다. 값의 검증은 페이지의 `AdminGuard`(`src/features/adminAuth`)와 서버 액션이 `requireSession` 으로 한다.
+- 쿠키는 `services` 의 `getSession` 이 읽고, `actions` 가 쓰고 지운다.(`src/entities/session/`)
+- 쿠키를 읽는 컴포넌트는 `<Suspense>` 안에 둔다. `cacheComponents` 가 켜져 있어 밖에서 읽으면 빌드가 실패한다.(`next.config.ts`)
 
 **`repositories` 는 `interface` 를 먼저 선언하고, JSDoc 은 interface 멤버에만 단다.**(Kozipsa 4절)
 
@@ -153,10 +180,10 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 ## 미정리 항목
 
-- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles` 다.
+- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` 다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
-- widget 은 `header` · `footer` · `backdrop` · `contact`, entity 는 `project` · `experience` 다.
-- 관리 기능을 구현하면 1절의 데이터 · entity 행과 4절이 바뀐다. 작업 원문이 외부 저장소로 옮겨지고 entity 에 `actions` 가 생긴다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
+- widget 은 `header` · `footer` · `backdrop` · `contact`, entity 는 `project` · `experience` · `session` 이다.
+- 관리 기능은 로그인까지 구현했다(2026-11-17). 작업 원문은 아직 `content/` 에 있다. 저장소로 옮기면 1절의 데이터 행과 4절이 다시 바뀐다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
 
 ## 확인방법
 
