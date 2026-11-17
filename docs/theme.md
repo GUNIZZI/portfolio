@@ -18,26 +18,27 @@
 
 토큰 파일: `src/style/tokens/color.css`
 
-| 유틸리티                                                           | 용도                                              |
-| ------------------------------------------------------------------ | ------------------------------------------------- |
-| `background`                                                       | 페이지 바탕                                       |
-| `panel` · `card` · `chip`                                          | 면. 뒤로 갈수록 한 단계씩 밝다                    |
-| `panel-glass`                                                      | 뒤의 배경이 비치는 패널(`panel` 에 알파 0.5)      |
-| `glass`                                                            | 고정 헤더의 반투명 바탕(알파 0.8)                 |
-| `border` · `border-card`                                           | 패널과 카드의 테두리                              |
-| `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다      |
-| `strong`                                                           | 제목, 링크                                        |
-| `foreground`                                                       | 본문                                              |
-| `muted`                                                            | 보조 설명                                         |
-| `decorative`                                                       | 읽지 못해도 되는 글자                             |
-| `accent` · `accent-foreground`                                     | 주 강조와 그 위 글자                              |
-| `brand` · `brand-soft` · `brand-foreground`                        | 보조 강조, 연한 보조 강조, 그 위 글자             |
-| `badge`                                                            | 작업 분류 표시                                    |
-| `info`                                                             | 히어로 태그의 파란 기호                           |
-| `doodle-sky` · `doodle-violet` · `doodle-yellow` · `doodle-indigo` | 낙서. `doodle-indigo` 는 임시 썸네일의 그라데이션 |
-| `brush-sky` · `brush-violet`                                       | 가장자리 붓 자국(알파 0.85)                       |
-| `dot`                                                              | 배경 점 무늬                                      |
-| `ring`                                                             | 포커스 표시                                       |
+| 유틸리티                                                           | 용도                                                      |
+| ------------------------------------------------------------------ | --------------------------------------------------------- |
+| `background`                                                       | 페이지 바탕                                               |
+| `panel` · `card` · `chip`                                          | 면. 뒤로 갈수록 한 단계씩 밝다                            |
+| `panel-glass`                                                      | 뒤의 배경이 비치는 패널(`panel` 에 알파 0.5)              |
+| `glass`                                                            | 고정 헤더의 반투명 바탕(알파 0.8)                         |
+| `glow`                                                             | 작업 카드의 테두리 선에서 번지는 빛(`brand` 에 알파 0.65) |
+| `border` · `border-card`                                           | 패널과 카드의 테두리                                      |
+| `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다              |
+| `strong`                                                           | 제목, 링크                                                |
+| `foreground`                                                       | 본문                                                      |
+| `muted`                                                            | 보조 설명                                                 |
+| `decorative`                                                       | 읽지 못해도 되는 글자                                     |
+| `accent` · `accent-foreground`                                     | 주 강조와 그 위 글자                                      |
+| `brand` · `brand-soft` · `brand-foreground`                        | 보조 강조, 연한 보조 강조, 그 위 글자                     |
+| `badge`                                                            | 작업 분류 표시                                            |
+| `info`                                                             | 히어로 태그의 파란 기호                                   |
+| `doodle-sky` · `doodle-violet` · `doodle-yellow` · `doodle-indigo` | 낙서. `doodle-indigo` 는 임시 썸네일의 그라데이션         |
+| `brush-sky` · `brush-violet`                                       | 가장자리 붓 자국(알파 0.85)                               |
+| `dot`                                                              | 배경 점 무늬                                              |
+| `ring`                                                             | 포커스 표시                                               |
 
 값과 대비 수치의 근거는 [design.md](./design.md) 1절에 있다.
 이름을 늘리거나 바꿀 때는 이 표를 함께 고친다.
@@ -53,6 +54,7 @@
 | `max-w-page`       | 1240px                                         |
 | `px-gutter`        | 16–40px, 화면 폭에 따라                        |
 | `scroll-mt-header` | 붙은 헤더의 높이 + 24px. 메뉴로 갈 섹션에 준다 |
+| `shadow-glow`      | 선 바깥으로 번지는 빛. 16px, 색은 `glow`       |
 | `rounded-card`     | 14px                                           |
 | `rounded-blob`     | 손으로 그린 말풍선의 고르지 않은 모서리        |
 
