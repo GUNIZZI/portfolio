@@ -5,7 +5,7 @@
 
 이 문서는 **신규 화면 기획**이다.(`../../README.md` 3.1)
 요구사항에 없어 기획안으로 채웠던 항목은 사용자가 모두 채택했다.(요구사항 7) 정하지 않은 것은 [검토 필요 사항](#검토-필요-사항)에 「미정」 으로 남아 있다.
-구현은 아직 하지 않았다. 지금 코드는 각 feature 의 `model/` 상수를 읽는다. 관리 화면에는 제목만 있다.(`src/app/admin/about/page.tsx`)
+구현했다(2026-11-17). 소개 문구를 저장소로 옮겼고, 공개 화면과 관리 화면이 entity `about` 으로 읽고 쓴다.(`src/entities/about/` · `src/features/aboutEditor/`)
 로그인과 세션은 [로그인 기획](../login/README.md)을, GNB 는 [대시보드 기획](../dashboard/README.md)의 「GNB」 를 그대로 따른다.
 경력은 [경력 관리 기획](../experiences/README.md)이 따로 다룬다.
 
@@ -65,7 +65,7 @@
 - **섹션마다 저장 버튼을 둔다.** 저장하는 문서가 섹션마다 1개이기 때문이다. 다른 섹션에 고친 내용이 있어도 누른 섹션만 저장한다.
 - **일하는 방식은 4개, 기술 묶음은 8개, 숫자는 3개로 고정한다.** 개수는 소개 기획이 정했다.([소개 기획](../../about/README.md) 「일하는 방식」 · 「기술」) 내용만 고친다.
 - **숫자의 아이콘은 입력받지 않는다.** 아이콘은 코드에 있는 이름으로 고른다.(`src/shared/ui/icon/Icon.tsx`)
-- **소개 문단 · 성장 경로 · 묶음 안의 기술 이름은 더하고 빼고 순서를 바꿀 수 있다.** 지금 값이 길이가 다른 목록이다.(`src/features/skillGroups/model/skillGroups.constants.ts`)
+- **소개 문단 · 성장 경로 · 묶음 안의 기술 이름은 더하고 빼고 순서를 바꿀 수 있다.** 지금 값이 길이가 다른 목록이다.(`src/entities/about/model/about.schemas.ts`)
 - 소개 문단은 1줄 이상, 성장 경로는 2개 이상, 묶음 안의 기술 이름은 1개 이상이어야 한다.
 - 필수 항목이 비었으면 그 섹션의 저장 버튼을 누를 수 없고, 항목마다 오류 문구를 보여 준다.
 - 저장하면 화면에 머물고 [P-01 토스트](./wireframe.html#p01)를 띄운다.
@@ -82,8 +82,8 @@
 
 ### 기존 내용 이전
 
-- 지금의 소개 문구는 스크립트로 저장소에 한 번 옮긴다. 관리 기능 가운데 가장 먼저 한다.(요구사항 8)
-- 옮긴 뒤 아래 상수를 지운다.
+- 소개 문구는 스크립트로 저장소에 한 번 옮겼다(2026-11-17). 관리 기능 가운데 가장 먼저 한다.(요구사항 8)
+- 옮긴 뒤 아래 상수를 지웠다.
     - `src/features/aboutIntro/model/aboutIntro.constants.ts`
     - `src/features/workPrinciples/model/workPrinciples.constants.ts`
     - `src/features/skillGroups/model/skillGroups.constants.ts`
@@ -136,13 +136,13 @@
 | 읽기 | 서버 `page` → `services` → `repositories` → 저장소               |
 | 쓰기 | 폼 → `actions`(서버 액션) → `services` → `repositories` → 저장소 |
 
-- **소개 내용은 entity 하나를 새로 둔다.** 이름은 `about` 이다.
-- 쓰기는 서버에서 세션을 다시 검사하고 zod 스키마로 검증한다.(`docs/architecture.md` 4절 · 4.1절)
+- 소개 내용은 entity `about` 이 다룬다.(`src/entities/about/README.md`)
+- 쓰기는 서버에서 세션을 다시 검사하고 zod 스키마로 검증한다.(`docs/architecture.md` 4절 · 4.2절)
 - 소개 페이지와 홈의 feature 는 상수를 읽지 않고, `page` 가 읽어 넘긴 값을 그린다.(`docs/architecture.md` 4절)
 
 ## 접근성 · 성능 고려
 
-- 입력마다 `label` 을 잇고, 오류 문구는 `aria-describedby` 로 입력에 잇는다.(`src/shared/ui/input/Input.md`)
+- 입력마다 `label` 을 잇고, 오류 문구는 `role="alert"` 로 입력 아래에 적는다.(`src/shared/ui/field/field.md`)
 - 줄을 더하고 빼고 옮기는 버튼에는 어느 줄의 버튼인지 이름에 넣는다.
 - 줄을 옮기면 옮긴 줄의 버튼에 포커스를 남긴다. 줄을 빼면 그다음 줄로 포커스를 보낸다.
 - 토스트는 `role="status"` 로 알린다.
