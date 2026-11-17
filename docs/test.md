@@ -32,7 +32,8 @@ e2e 프로젝트는 `chromium` · `reduced-motion` · `mobile` 3개다.(`playwri
 
 ## 미정리 항목
 
-- e2e 는 `e2e/smoke.spec.ts` 하나다.
+- e2e 는 `e2e/smoke.spec.ts`(공개 화면)와 `e2e/admin.spec.ts`(관리 화면)다.
+- 로그인에 성공하는 흐름은 e2e 에 없다. 실제 Firebase 계정이 있어야 한다.
 
 ## 확인방법
 
