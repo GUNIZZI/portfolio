@@ -27,7 +27,7 @@
 아래 5개는 **어디서 무엇을 하든** 지킨다.
 
 - **색은 semantic 유틸리티로만 쓴다.** hex 와 `bg-white` · `text-gray-*` 를 쓰지 않는다.
-- **글자색은 `strong` › `foreground` › `muted` › `decorative` 4계층 안에서 고른다.**
+- **글자색은 `strong` › `foreground` › `muted-foreground` › `decorative` 4계층 안에서 고른다.**
 - **토큰에 없는 값을 적지 않는다.** `z-50` `duration-300` `opacity-50` `rounded-[4px]` 대신 이름 있는 토큰.
 - **`dark:` 로 색을 나누지 않는다.** 색 값은 토큰에서만 정한다.
 - **토큰은 `src/style/tokens/` 에만 정의한다.**

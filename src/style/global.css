@@ -32,6 +32,6 @@
     }
 
     ::selection {
-        @apply bg-accent text-accent-foreground;
+        @apply bg-primary text-primary-foreground;
     }
 }

@@ -50,7 +50,7 @@ export default function ProjectFilterGridView({ items, categories, selected, onS
                                 'min-h-11 shrink-0 rounded-full border px-4 text-sm font-semibold',
                                 // 상태
                                 isSelected
-                                    ? 'border-accent bg-accent text-accent-foreground'
+                                    ? 'border-primary bg-primary text-primary-foreground'
                                     : 'border-border-card bg-card text-strong hover:border-brand',
                                 // 모션
                                 'transition-colors duration-fast ease-move',

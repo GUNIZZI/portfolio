@@ -26,7 +26,7 @@ export default function ExperienceTimeline({ experiences }: OwnProps) {
         <section id="experience" className="mx-auto mt-10 max-w-page scroll-mt-header px-gutter">
             <Panel className="flex flex-col gap-8 p-[clamp(20px,5vw,48px)]">
                 <div className="flex flex-wrap items-end justify-between gap-3">
-                    <MarkerHeading underline="accent">EXPERIENCE</MarkerHeading>
+                    <MarkerHeading underline="primary">EXPERIENCE</MarkerHeading>
                     <ExperienceToggleAll listId={LIST_ID} />
                 </div>
 
@@ -73,10 +73,10 @@ export default function ExperienceTimeline({ experiences }: OwnProps) {
                                                 재직 중
                                             </span>
                                         ) : null}
-                                        <span className="text-caption text-muted tabular-nums md:hidden">
+                                        <span className="text-caption text-muted-foreground tabular-nums md:hidden">
                                             {experience.periodText}
                                         </span>
-                                        <span className="ml-auto flex items-center gap-2 text-caption text-muted">
+                                        <span className="ml-auto flex items-center gap-2 text-caption text-muted-foreground">
                                             프로젝트 {experience.projectCountText}
                                             <Icon
                                                 name="arrowRight"
@@ -96,7 +96,7 @@ export default function ExperienceTimeline({ experiences }: OwnProps) {
                                                     // 배치와 모양
                                                     'block w-full overflow-clip',
                                                     // 글자
-                                                    'text-xs leading-relaxed text-muted',
+                                                    'text-xs leading-relaxed text-muted-foreground',
                                                     // 상태
                                                     'invisible -mt-1 h-0',
                                                     'group-open:visible group-open:mt-0 group-open:h-auto',
@@ -116,13 +116,13 @@ export default function ExperienceTimeline({ experiences }: OwnProps) {
                                                     key={`${project.name}-${project.dateText}`}
                                                     className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-line py-2.5 last:border-b-0"
                                                 >
-                                                    <span className="w-16 shrink-0 text-caption text-muted tabular-nums">
+                                                    <span className="w-16 shrink-0 text-caption text-muted-foreground tabular-nums">
                                                         {project.dateText}
                                                     </span>
                                                     {project.href ? (
                                                         <Link
                                                             href={project.href}
-                                                            className="inline-flex min-w-0 items-center gap-1 text-body font-semibold text-accent"
+                                                            className="inline-flex min-w-0 items-center gap-1 text-body font-semibold text-primary"
                                                         >
                                                             {project.name}
                                                             <Icon

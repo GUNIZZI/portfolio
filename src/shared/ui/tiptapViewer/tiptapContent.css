@@ -68,7 +68,7 @@
         color: var(--strong);
     }
     s {
-        color: var(--muted);
+        color: var(--muted-foreground);
     }
 
     ul,
@@ -90,7 +90,7 @@
         }
     }
     li::marker {
-        color: var(--accent);
+        color: var(--primary);
     }
 
     /* 인용. 왼쪽에 둥근 4px 막대 */
@@ -141,7 +141,7 @@
     }
 
     a {
-        color: var(--accent);
+        color: var(--primary);
         text-decoration: underline;
         text-underline-offset: 3px;
     }

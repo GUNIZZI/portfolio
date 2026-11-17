@@ -34,15 +34,17 @@ export default function TimelineMarker({ startYearText, endYearText }: OwnProps)
                         // 글자
                         'block font-marker text-stat leading-none',
                         // 상태
-                        isPassed ? 'text-accent' : 'text-muted',
-                        'motion-reduce:text-accent',
+                        isPassed ? 'text-primary' : 'text-muted-foreground',
+                        'motion-reduce:text-primary',
                         // 모션
                         'transition-colors duration-base ease-move',
                     )}
                 >
                     {startYearText}
                 </span>
-                <span className="mt-1 block text-2xs text-muted tabular-nums">– {endYearText}</span>
+                <span className="mt-1 block text-2xs text-muted-foreground tabular-nums">
+                    – {endYearText}
+                </span>
             </p>
             <span
                 ref={dotRef}
@@ -51,8 +53,8 @@ export default function TimelineMarker({ startYearText, endYearText }: OwnProps)
                     // 배치와 모양
                     'absolute top-5.5 left-0 z-raised size-3 rounded-full border-2 md:left-24',
                     // 상태
-                    isPassed ? 'border-accent bg-accent' : 'border-divider bg-panel',
-                    'motion-reduce:border-accent motion-reduce:bg-accent',
+                    isPassed ? 'border-primary bg-primary' : 'border-divider bg-panel',
+                    'motion-reduce:border-primary motion-reduce:bg-primary',
                     // 모션
                     'transition-colors duration-base ease-move',
                 )}

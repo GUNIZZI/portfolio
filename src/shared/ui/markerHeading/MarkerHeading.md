@@ -3,14 +3,14 @@
 마커 폰트로 쓴 섹션 제목(기본 `h2`)과 그 아래 손으로 그은 밑줄이다.
 밑줄은 화면에 처음 들어올 때 선으로 그려진다.(`DrawnPath`)
 
-| prop                 | 값                                   | 기본     |
-| -------------------- | ------------------------------------ | -------- |
-| `underline`          | `accent` · `brand`. 없으면 안 그린다 | 없음     |
-| `underlineClassName` | 밑줄 길이(`w-37.5` 처럼)             | `w-42.5` |
-| `as`                 | `h1` · `h2`. 페이지 제목이면 `h1`    | `h2`     |
+| prop                 | 값                                    | 기본     |
+| -------------------- | ------------------------------------- | -------- |
+| `underline`          | `primary` · `brand`. 없으면 안 그린다 | 없음     |
+| `underlineClassName` | 밑줄 길이(`w-37.5` 처럼)              | `w-42.5` |
+| `as`                 | `h1` · `h2`. 페이지 제목이면 `h1`     | `h2`     |
 
 ```tsx
-<MarkerHeading underline="accent" underlineClassName="w-37.5">
+<MarkerHeading underline="primary" underlineClassName="w-37.5">
     MY SKILLS
 </MarkerHeading>
 ```

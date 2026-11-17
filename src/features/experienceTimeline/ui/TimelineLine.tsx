@@ -48,7 +48,7 @@ export default function TimelineLine() {
         >
             <motion.div
                 style={{ scaleY }}
-                className="size-full origin-top bg-accent motion-reduce:scale-y-100!"
+                className="size-full origin-top bg-primary motion-reduce:scale-y-100!"
             />
         </div>
     );

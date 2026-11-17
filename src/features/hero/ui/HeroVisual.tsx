@@ -59,7 +59,7 @@ export default function HeroVisual() {
                         // 배치와 모양
                         'absolute top-[4%] left-0 z-float flex aspect-[1.1/1] w-1/4 -rotate-12 items-center justify-center rounded-blob bg-doodle-sky',
                         // 글자
-                        'text-center font-hand text-bubble font-bold whitespace-pre-line text-accent-foreground',
+                        'text-center font-hand text-bubble font-bold whitespace-pre-line text-primary-foreground',
                     )}
                 >
                     {'Build\nBetter\nTogether!'}

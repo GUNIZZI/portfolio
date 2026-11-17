@@ -26,7 +26,7 @@ export default function FeaturedProjects({ projects }: OwnProps) {
                 </div>
                 <Link
                     href="/work"
-                    className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent"
+                    className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-primary"
                 >
                     View All Projects
                     <Icon name="arrowRight" size={16} strokeWidth={2} />

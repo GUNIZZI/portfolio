@@ -22,7 +22,7 @@ export default function ProjectDetail({ project }: OwnProps) {
         <article className="mx-auto flex max-w-page flex-col gap-10 px-gutter pt-6 pb-16">
             <Link
                 href="/work"
-                className="inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-semibold text-accent"
+                className="inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-semibold text-primary"
             >
                 <Icon name="arrowRight" size={16} strokeWidth={2} className="rotate-180" />
                 All Projects
@@ -67,7 +67,9 @@ export default function ProjectDetail({ project }: OwnProps) {
                     {project.body ? (
                         <TiptapViewer content={project.body} />
                     ) : (
-                        <p className="text-body text-muted">아직 작성한 내용이 없습니다.</p>
+                        <p className="text-body text-muted-foreground">
+                            아직 작성한 내용이 없습니다.
+                        </p>
                     )}
                 </Panel>
                 <ProjectMeta project={project} />

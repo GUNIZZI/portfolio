@@ -8,14 +8,14 @@ interface OwnProps {
     project: ProjectDetailData;
 }
 
-const TERM_CLASS = 'text-2xs font-semibold text-muted';
+const TERM_CLASS = 'text-2xs font-semibold text-muted-foreground';
 
 /**
  * 단계마다의 표시. 깊이 맡을수록 색이 짙다.
  * 색만으로 뜻을 전하지 않는다. 단계 이름을 항상 글자로 함께 적는다
  */
 const SCOPE_LEVEL_CLASS: Record<ProjectScopeLevel, string> = {
-    sole: 'bg-accent font-bold text-accent-foreground',
+    sole: 'bg-primary font-bold text-primary-foreground',
     lead: 'bg-brand font-semibold text-brand-foreground',
     part: 'bg-chip text-strong',
 };
@@ -113,7 +113,7 @@ export default function ProjectMeta({ project }: OwnProps) {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             aria-label={`${link.label} (새 탭)`}
-                                            className="inline-flex min-h-11 items-center gap-1.5 text-body font-semibold text-accent"
+                                            className="inline-flex min-h-11 items-center gap-1.5 text-body font-semibold text-primary"
                                         >
                                             {link.label}
                                             <Icon name="external" size={14} strokeWidth={2} />

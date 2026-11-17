@@ -8,11 +8,11 @@ export default function Skills() {
     return (
         <div id="skills" className="flex scroll-mt-header flex-col gap-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
-                <MarkerHeading underline="accent" underlineClassName="w-37.5">
+                <MarkerHeading underline="primary" underlineClassName="w-37.5">
                     MY SKILLS
                 </MarkerHeading>
                 <p className="text-sm font-medium">
-                    Tools I <span className="text-accent">work with</span>
+                    Tools I <span className="text-primary">work with</span>
                 </p>
             </div>
             <ul className="grid grid-cols-[repeat(auto-fill,minmax(96px,1fr))] gap-3">

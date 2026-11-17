@@ -148,7 +148,7 @@ export default function HeaderBar({ name, currentHref, action }: OwnProps) {
                                         // 배치와 모양. 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
                                         'border-b-2 border-transparent py-2',
                                         // 상태
-                                        isCurrent && 'border-accent text-accent',
+                                        isCurrent && 'border-primary text-primary',
                                         // 모션
                                         'transition-colors duration-fast ease-move',
                                     )}
@@ -200,7 +200,7 @@ export default function HeaderBar({ name, currentHref, action }: OwnProps) {
                                     isCurrent={isCurrent}
                                     className={cn(
                                         'flex min-h-11 items-center',
-                                        isCurrent && 'text-accent',
+                                        isCurrent && 'text-primary',
                                     )}
                                 >
                                     {item.label}

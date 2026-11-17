@@ -61,7 +61,7 @@ export default function ProjectCard({ project }: OwnProps) {
                         <Icon name="external" size={18} strokeWidth={2} />
                     </Link>
                 </div>
-                <p className="text-caption text-muted">{project.summary}</p>
+                <p className="text-caption text-muted-foreground">{project.summary}</p>
             </div>
         </ProjectCardFrame>
     );

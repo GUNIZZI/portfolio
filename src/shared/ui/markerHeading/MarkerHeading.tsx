@@ -4,7 +4,7 @@ import DrawnPath from '@/shared/ui/drawnPath/DrawnPath';
 import { cn } from '@/shared/util/cn';
 
 const UNDERLINE_CLASS = {
-    accent: 'stroke-accent',
+    primary: 'stroke-primary',
     brand: 'stroke-brand',
 } as const;
 

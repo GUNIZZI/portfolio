@@ -26,7 +26,7 @@ export default function ProjectPager({ prev, next }: OwnProps) {
         <nav aria-label="다른 작업" className="flex flex-wrap gap-4">
             {prev ? (
                 <Link href={prev.href} className={CARD_CLASS}>
-                    <span className="flex items-center gap-1.5 text-caption text-muted">
+                    <span className="flex items-center gap-1.5 text-caption text-muted-foreground">
                         <Icon name="arrowRight" size={14} strokeWidth={2} className="rotate-180" />
                         이전 작업
                     </span>
@@ -38,7 +38,7 @@ export default function ProjectPager({ prev, next }: OwnProps) {
             )}
             {next ? (
                 <Link href={next.href} className={cn(CARD_CLASS, 'items-end text-right')}>
-                    <span className="flex items-center gap-1.5 text-caption text-muted">
+                    <span className="flex items-center gap-1.5 text-caption text-muted-foreground">
                         다음 작업
                         <Icon name="arrowRight" size={14} strokeWidth={2} />
                     </span>

@@ -28,7 +28,7 @@ export default function ProjectExplorer({ items }: OwnProps) {
                     >
                         Take a look!
                     </span>
-                    <MarkerHeading as="h1" underline="accent" className="text-hero-sub">
+                    <MarkerHeading as="h1" underline="primary" className="text-hero-sub">
                         ALL PROJECTS
                     </MarkerHeading>
                     <div className="flex max-w-140 flex-col gap-3 text-lead leading-relaxed text-foreground">

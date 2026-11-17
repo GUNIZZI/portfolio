@@ -61,7 +61,7 @@ CHECKS = [
     (
         re.compile(r"\b(?:bg|text|border|fill|stroke|ring|from|via|to|divide|outline|shadow|accent|caret|decoration|placeholder)-(?:%s)-\d{2,3}\b" % PALETTE),
         "Tailwind 기본 팔레트 색",
-        "docs/theme.md 1절 — background·surface·border·strong·foreground·muted·decorative",
+        "docs/theme.md 1절 — background·surface·border·strong·foreground·muted-foreground·decorative",
     ),
     (
         re.compile(r"\b(?:bg|text|border|fill|stroke|ring|divide|outline|placeholder)-(?:white|black)\b"),

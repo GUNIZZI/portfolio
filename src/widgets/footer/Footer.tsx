@@ -57,7 +57,7 @@ export default function Footer({ isHome = false }: OwnProps) {
                     </a>
                 </nav>
             </div>
-            <div className="mx-auto flex max-w-page flex-wrap justify-between gap-2 border-t border-line px-gutter pt-4 pb-7 text-caption text-muted">
+            <div className="mx-auto flex max-w-page flex-wrap justify-between gap-2 border-t border-line px-gutter pt-4 pb-7 text-caption text-muted-foreground">
                 <span>© 2026 {SITE.name}. All rights reserved.</span>
                 <span className="flex items-center gap-2">
                     Make better web, for a brighter tomorrow.

@@ -13,7 +13,9 @@ describe('cn', () => {
     });
 
     it('토큰 글자 크기와 글자색을 함께 남긴다', () => {
-        expect(cn('text-body', 'text-accent-foreground')).toBe('text-body text-accent-foreground');
+        expect(cn('text-body', 'text-primary-foreground')).toBe(
+            'text-body text-primary-foreground',
+        );
         expect(cn('text-bubble font-bold', 'text-strong')).toBe(
             'text-bubble font-bold text-strong',
         );

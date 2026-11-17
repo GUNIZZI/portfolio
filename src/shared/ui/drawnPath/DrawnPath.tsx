@@ -19,7 +19,7 @@ const drawnPathVariants: Variants = {
 
 interface OwnProps {
     d: string;
-    /** 선 색 클래스 — stroke-accent 처럼 준다 */
+    /** 선 색 클래스 — stroke-primary 처럼 준다 */
     className?: string;
     strokeWidth: number;
     strokeLinecap?: 'round' | 'butt' | 'square';

@@ -47,7 +47,7 @@ export default function ExperienceToggleAll({ listId }: OwnProps) {
             type="button"
             aria-controls={listId}
             onClick={hndlClick}
-            className="inline-flex min-h-11 items-center text-sm font-semibold text-accent"
+            className="inline-flex min-h-11 items-center text-sm font-semibold text-primary"
         >
             {isAllOpen ? '전체 닫기' : '전체 펼치기'}
         </button>

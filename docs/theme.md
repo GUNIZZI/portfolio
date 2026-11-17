@@ -7,7 +7,7 @@
 
 1. **색은 semantic 유틸리티로만 쓴다.** `bg-background` `text-foreground` `border-border`.
     - `bg-white` 나 `text-gray-900` 은 토큰을 고쳐도 함께 바뀌지 않는다. hex 를 직접 적지 않는다.
-2. **글자색은 `strong` › `foreground` › `muted` › `decorative` 4계층 안에서 고른다.**
+2. **글자색은 `strong` › `foreground` › `muted-foreground` › `decorative` 4계층 안에서 고른다.**
     - 앞의 3개만 본문 대비 기준(WCAG AA)을 넘도록 값을 정한다. `decorative` 는 읽지 못해도 되는 글자에만 쓴다.
     - 계층이 더 필요하면 색을 늘리지 않고 크기·굵기로 구분한다.
 3. **토큰에 없는 값을 적지 않는다.** `z-50` `duration-300` `opacity-50` `rounded-[4px]` 는 값을 정한 근거가 남지 않는다.
@@ -29,16 +29,34 @@
 | `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다              |
 | `strong`                                                           | 제목, 링크                                                |
 | `foreground`                                                       | 본문                                                      |
-| `muted`                                                            | 보조 설명                                                 |
+| `muted-foreground`                                                 | 보조 설명                                                 |
 | `decorative`                                                       | 읽지 못해도 되는 글자                                     |
-| `accent` · `accent-foreground`                                     | 주 강조와 그 위 글자                                      |
+| `primary` · `primary-foreground`                                   | 주 강조(연두)와 그 위 글자                                |
 | `brand` · `brand-soft` · `brand-foreground`                        | 보조 강조, 연한 보조 강조, 그 위 글자                     |
 | `badge`                                                            | 작업 분류 표시                                            |
 | `info`                                                             | 히어로 태그의 파란 기호                                   |
+| `destructive`                                                      | 지우기처럼 되돌릴 수 없는 동작                            |
 | `doodle-sky` · `doodle-violet` · `doodle-yellow` · `doodle-indigo` | 낙서. `doodle-indigo` 는 임시 썸네일의 그라데이션         |
 | `brush-sky` · `brush-violet`                                       | 가장자리 붓 자국(알파 0.85)                               |
 | `dot`                                                              | 배경 점 무늬                                              |
 | `ring`                                                             | 포커스 표시                                               |
+
+### 1.1 shadcn 이름
+
+색 이름은 shadcn 의 것을 따른다.(2026-11-17 사용자 결정) `npx shadcn add` 로 받은 컴포넌트의 색 클래스가 그대로 맞는다.
+아래 이름은 shadcn 컴포넌트가 쓰며, 값은 위 표의 토큰을 가리킨다.(`src/style/tokens/color.css`)
+
+| 유틸리티                             | 가리키는 값           | shadcn 에서의 뜻                |
+| ------------------------------------ | --------------------- | ------------------------------- |
+| `secondary` · `secondary-foreground` | `chip` · `strong`     | 눈에 덜 띄는 버튼의 면과 글자   |
+| `muted`                              | `chip`                | 가라앉은 면                     |
+| `accent` · `accent-foreground`       | `chip` · `strong`     | hover 때 깔리는 면과 그 위 글자 |
+| `popover` · `popover-foreground`     | `card` · `foreground` | 떠 있는 면과 그 위 글자         |
+| `card-foreground`                    | `foreground`          | 카드 위 글자                    |
+| `input`                              | `border-card`         | 입력의 테두리                   |
+
+- `accent` 는 강조색이 아니다. 연두 강조색은 `primary` 다.(`src/style/tokens/color.css`)
+- `muted` 는 면이고, 글자색은 `muted-foreground` 다.(`src/style/tokens/color.css`)
 
 값과 대비 수치의 근거는 [design.md](./design.md) 1절에 있다.
 이름을 늘리거나 바꿀 때는 이 표를 함께 고친다.
@@ -87,7 +105,7 @@
 
 ## 미정리 항목
 
-- 없다. 앞의 3계층과 `accent` 는 AA 를 넘는다(design.md 1절).
+- 없다. 앞의 3계층과 `primary` 는 AA 를 넘는다(design.md 1절).
 
 ## 확인방법
 

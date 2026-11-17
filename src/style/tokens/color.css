@@ -26,17 +26,19 @@
     /* 글자 */
     --strong: #f4f4f5;
     --foreground: #d4d4d8;
-    --muted: #a1a1aa;
+    --muted-foreground: #a1a1aa;
     --decorative: #71717a;
 
     /* 강조 */
-    --accent: #a3e635;
-    --accent-foreground: #0a0a12;
+    --primary: #a3e635;
+    --primary-foreground: #0a0a12;
     --brand: #9333ea;
     --brand-soft: #c084fc;
     --brand-foreground: #ffffff;
     --badge: #4c1d95;
     --info: #60a5fa;
+    /* 지우기처럼 되돌릴 수 없는 동작 */
+    --destructive: #f87171;
 
     /* 낙서 */
     --doodle-sky: #38bdf8;
@@ -47,7 +49,21 @@
     --brush-violet: rgb(168 85 247 / 0.85);
     --dot: rgb(42 42 68 / 0.35);
 
-    --ring: var(--accent);
+    --ring: var(--primary);
+
+    /*
+     * shadcn 컴포넌트가 쓰는 이름. 값은 위의 토큰을 가리킨다.
+     * 이름과 뜻은 shadcn 의 것을 따른다. accent 는 강조색이 아니라 hover 때 깔리는 면이다.
+     */
+    --card-foreground: var(--foreground);
+    --popover: var(--card);
+    --popover-foreground: var(--foreground);
+    --secondary: var(--chip);
+    --secondary-foreground: var(--strong);
+    --muted: var(--chip);
+    --accent: var(--chip);
+    --accent-foreground: var(--strong);
+    --input: var(--border-card);
 }
 
 @theme inline {
@@ -64,15 +80,16 @@
     --color-divider: var(--divider);
     --color-strong: var(--strong);
     --color-foreground: var(--foreground);
-    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
     --color-decorative: var(--decorative);
-    --color-accent: var(--accent);
-    --color-accent-foreground: var(--accent-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
     --color-brand: var(--brand);
     --color-brand-soft: var(--brand-soft);
     --color-brand-foreground: var(--brand-foreground);
     --color-badge: var(--badge);
     --color-info: var(--info);
+    --color-destructive: var(--destructive);
     --color-doodle-sky: var(--doodle-sky);
     --color-doodle-violet: var(--doodle-violet);
     --color-doodle-yellow: var(--doodle-yellow);
@@ -81,4 +98,13 @@
     --color-brush-violet: var(--brush-violet);
     --color-dot: var(--dot);
     --color-ring: var(--ring);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-input: var(--input);
 }

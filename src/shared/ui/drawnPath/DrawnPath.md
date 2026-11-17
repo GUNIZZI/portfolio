@@ -6,7 +6,7 @@
 | prop             | 값                             | 기본     |
 | ---------------- | ------------------------------ | -------- |
 | `d`              | 선의 모양                      | 필수     |
-| `className`      | 선 색(`stroke-accent` 처럼)    | 없음     |
+| `className`      | 선 색(`stroke-primary` 처럼)   | 없음     |
 | `strokeWidth`    | 선 굵기                        | 필수     |
 | `strokeLinecap`  | 선 끝 모양                     | 없음     |
 | `strokeLinejoin` | 꺾이는 곳 모양                 | 없음     |
@@ -14,7 +14,7 @@
 
 ```tsx
 <svg viewBox="0 0 200 12" aria-hidden="true">
-    <DrawnPath d="M3 8 C 60 3, 130 2, 197 5" className="stroke-accent" strokeWidth={6} />
+    <DrawnPath d="M3 8 C 60 3, 130 2, 197 5" className="stroke-primary" strokeWidth={6} />
 </svg>
 ```
 
