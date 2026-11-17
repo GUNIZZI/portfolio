@@ -1,7 +1,7 @@
 # Doodle
 
 붓과 스프레이로 그린 거리 낙서 하나다. 페이지 배경(`widgets/backdrop`)에 놓는다.
-페이지마다 자기 낙서를 따로 갖는다.(2026-11-16 사용자 결정) 홈은 `features/homeDoodles`, 소개는 `features/aboutDoodles` 가 쓴다.
+페이지마다 자기 낙서를 따로 갖는다.(2026-11-16 사용자 결정) 홈은 `features/homeDoodles`, 소개는 `features/aboutDoodles`, 작업은 `features/workDoodles` 가 쓴다.
 
 | prop        | 값                                                         | 기본 |
 | ----------- | ---------------------------------------------------------- | ---- |

@@ -36,7 +36,7 @@ portfolio/
 └── src/
     ├── _app/         Provider·전역 리스너
     ├── app/          App Router 라우트
-    ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop)
+    ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact)
     ├── features/     기능 단위 (hero, featuredProjects, …)
     ├── entities/     도메인 데이터 (project, experience)
     ├── shared/       앱 공용 (ui/, util/)
@@ -107,7 +107,7 @@ flowchart TD
 
 **배경은 공통과 페이지 전용으로 나눈다.**(2026-11-16 사용자 결정)
 점 무늬와 가장자리 붓 자국은 모든 페이지가 같아 `widgets/backdrop` 에 둔다.
-낙서는 페이지의 섹션 배치에 맞춰 자리를 잡으므로 페이지마다 따로 둔다. 홈은 `features/homeDoodles`, 소개는 `features/aboutDoodles` 다.
+낙서는 페이지의 섹션 배치에 맞춰 자리를 잡으므로 페이지마다 따로 둔다. 홈은 `features/homeDoodles`, 소개는 `features/aboutDoodles`, 작업은 `features/workDoodles` 다.
 `app` 의 페이지가 `<Backdrop>` 안에 그 페이지의 낙서를 넣어 조합한다. 낙서 하나를 그리는 것은 `shared/ui/doodle` 이다.
 
 ### 3.2 공통 컴포넌트를 두는 곳
@@ -153,8 +153,9 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 ## 미정리 항목
 
-- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 두 페이지가 함께 쓰는 `contact` 다.
-- widget 은 `header` · `footer` · `backdrop`, entity 는 `project` · `experience` 다.
+- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles` 다.
+- 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
+- widget 은 `header` · `footer` · `backdrop` · `contact`, entity 는 `project` · `experience` 다.
 - 관리 기능을 구현하면 1절의 데이터 · entity 행과 4절이 바뀐다. 작업 원문이 외부 저장소로 옮겨지고 entity 에 `actions` 가 생긴다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
 
 ## 확인방법

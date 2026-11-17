@@ -53,9 +53,9 @@ GUNI 가 어떤 개발자인지 홈보다 자세히 보여 주는 페이지다. 
 | 2    | 경력 타임라인 | 최신부터. 회사 · 기간 · 요약, 그 아래 프로젝트 목록. 「경력」 절 |
 | 3    | 일하는 방식   | 4가지. 「일하는 방식」 절                                        |
 | 4    | 기술          | 분야별 묶음 8개. 「기술」 절                                     |
-| 5    | 연락          | 홈의 연락 섹션과 같은 부품                                       |
+| 5    | 연락          | 모든 페이지에 붙는 연락 섹션(`widgets/contact`)                  |
 
-- 섹션마다 feature 하나다. `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups`, 연락은 홈과 같은 `contact` 다.(`src/app/about/page.tsx`)
+- 섹션마다 feature 하나다. `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups`, 연락은 모든 페이지에 붙는 위젯 `contact` 다.(`src/app/about/page.tsx`)
 - 헤더와 푸터는 홈과 같다. 메뉴의 About 이 이 페이지이고, 여기서는 About 을 강조한다.([home/](../home/README.md) 「메뉴」)
 - 배경은 공통 배경에 이 페이지의 낙서를 넣는다.(`src/features/aboutDoodles/`) 글이 많은 페이지라 홈보다 적게 둔다.
 - 타임라인은 순서가 있는 정보라 프로젝트마다 시기를 앞에 둔다.

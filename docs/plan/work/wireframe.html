@@ -15,15 +15,15 @@
 <main>
 
 <div class="intro">
-  <h1>작업 목록 · 상세 (/work) — 초안</h1>
-  <p>제안으로 채운 초안이다. 헤더 · 푸터와 섹션 제목 스타일은 홈과 같고, 모양은 디자인 원본 <span class="mono">sample/</span> 을 따른다.</p>
+  <h1>작업 목록 · 상세 (/work)</h1>
+  <p>코드에 있는 그대로다. 헤더 · 푸터와 섹션 제목 스타일은 홈과 같다. 케이스 스터디의 내용은 임시 문구다.</p>
   <div class="spec-block">
     <h4>화면 목록</h4>
     <div class="spec-tw"><table class="spec-t">
       <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
       <tbody>
-        <tr><td><a href="#s01">S-01</a></td><td>작업 목록 (제안)</td><td>페이지</td><td><code>/work?category=</code></td></tr>
-        <tr><td><a href="#s02">S-02</a></td><td>작업 상세 (제안)</td><td>페이지</td><td><code>/work/[id]</code></td></tr>
+        <tr><td><a href="#s01">S-01</a></td><td>작업 목록</td><td>페이지</td><td><code>/work?category=</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>작업 상세</td><td>페이지</td><td><code>/work/[id]</code></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -38,8 +38,7 @@
 <script type="text/markdown" id="userflow-src">
 # 작업 목록 · 상세 — 유저 플로우
 
-[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 초안이라 모든 흐름이 `제안` 이다.
-화면 ID 는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
+[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 화면 ID 는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
 
 ## 1. 전체 흐름
 
@@ -51,10 +50,10 @@ flowchart TD
     D -->|"이전 · 다음 작업"| D
     D -.->|"목록으로"| L
     D -->|"서비스 · 저장소"| EXT[/"외부 사이트 새 탭"/]:::api
-    BAD["없는 id"]:::warn --> NF(["404"]):::done
+    BAD["없는 id"]:::warn --> NF(["찾을 수 없음 화면"]):::done
 ```
 
-- 목록으로 돌아가면 고른 필터가 남아 있다. 주소에 남겼기 때문이다.
+- 상세 위의 All Projects 는 필터를 고르지 않은 전체 목록으로 간다. 브라우저의 뒤로 가기로 돌아가면 고른 필터가 남아 있다.
 
 ## 2. 분류로 거르기
 
@@ -74,11 +73,11 @@ flowchart TD
 <!-- userflow:end -->
 
 <section class="screen" id="s01">
-  <div class="screen-h"><span class="id">S-01</span><h2>작업 목록 (제안)</h2><span class="route">/work</span></div>
+  <div class="screen-h"><span class="id">S-01</span><h2>작업 목록</h2><span class="route">/work</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span>
-        <div class="pf-stack"><span class="pf-h">ALL PROJECTS</span><span class="pf-under"></span><span class="muted small">지금까지 만든 화면들</span></div>
+        <div class="pf-stack"><span class="pf-hand">Take a look!</span><span class="pf-h">ALL PROJECTS</span><span class="pf-under"></span><span class="pf-line"></span><span class="pf-line"></span><span class="muted small">[오른쪽: 캐릭터]</span></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">filter</span><span class="m abs">2</span>
         <div class="row"><span class="cb on">전체</span><span class="cb">Enterprise</span><span class="cb">Dashboard</span><span class="cb">Web App</span><span class="cb">Landing Page</span></div>
@@ -92,38 +91,38 @@ flowchart TD
       </div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>MarkerHeading</b><p>문구는 미정. 홈의 섹션 제목과 같은 모양</p></div></li>
-      <li><span class="m">2</span><div><b>분류 필터</b> (제안, 컴포넌트 없음)<p>버튼 묶음. 고른 버튼은 <code>aria-pressed</code>. 주소의 <code>category</code> 와 짝</p></div></li>
-      <li><span class="m">3</span><div><b>ProjectCard</b><p>홈과 같은 카드. 누르면 <a href="#s02">S-02</a></p></div></li>
+      <li><span class="m">1</span><div><b>MarkerHeading</b><p>페이지 제목이라 <code>h1</code>. 홈의 섹션 제목과 같은 모양</p></div></li>
+      <li><span class="m">2</span><div><b>ProjectFilterGrid</b> <code>features/projectExplorer</code><p>버튼 묶음. 고른 버튼은 <code>aria-pressed</code>. 주소의 <code>category</code> 와 짝. 좁은 화면에서는 가로로 민다</p></div></li>
+      <li><span class="m">3</span><div><b>ProjectCard</b> <code>features/featuredProjects</code><p>홈과 같은 카드. 카드 어디를 눌러도 <a href="#s02">S-02</a>.</p></div></li>
     </ol></aside>
   </div>
 </section>
 
 <section class="screen" id="s02">
-  <div class="screen-h"><span class="id">S-02</span><h2>작업 상세 (제안)</h2><span class="route">/work/[id]</span></div>
+  <div class="screen-h"><span class="id">S-02</span><h2>작업 상세</h2><span class="route">/work/[id]</span></div>
   <div class="wrap">
     <div class="frame">
-      <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span><span class="mo abs">썸네일 이어짐</span>
+      <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span>
         <div class="pf-split">
           <div class="pf-stack"><span class="pf-chip">Enterprise</span><span class="pf-display">KOZIPSA 플랫폼 관리 시스템</span><span class="muted small">Kocom · Admin Platform</span></div>
           <div class="img-ph pf-wide">머리 이미지</div>
         </div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">meta</span><span class="m abs">2</span>
-        <div class="dl"><div>역할</div><div>[맡은 일]</div><div>기간</div><div>[2025.03 – 2026.01]</div><div>기술</div><div>Next.js · TanStack Query · Storybook</div><div>링크</div><div>[서비스] · [저장소]</div></div>
+        <div class="dl"><div>팀</div><div>[프론트엔드 2명 · 디자이너 1명 · 백엔드 3명]</div><div>역할</div><div>[프론트엔드 리드]</div><div>맡은 범위</div><div>디자인 <span class="pf-chip">참여</span> 퍼블리싱 <span class="pf-chip">전담</span> 개발 <span class="pf-chip">주도</span></div><div>기간</div><div>[2025.03 – 2026.01]</div><div>기술</div><div>Next.js · TanStack Query · Storybook</div><div>링크</div><div>[서비스] · [저장소]</div></div>
       </div>
-      <div class="pf-sec rel"><span class="pf-lab">body · Markdown</span><span class="m abs">3</span>
+      <div class="pf-sec rel"><span class="pf-lab">body · Tiptap</span><span class="m abs">3</span>
         <div class="pf-stack"><b>개요</b><span class="pf-line"></span><b>문제</b><span class="pf-line"></span><b>해결</b><span class="pf-line"></span><b>결과</b><span class="pf-line"></span><b>회고</b><span class="pf-line"></span></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">pager</span><span class="m abs">4</span>
-        <div class="row"><span class="btn">← 이전 작업</span><span class="sp"></span><span class="btn">목록으로</span><span class="sp"></span><span class="btn">다음 작업 →</span></div>
+        <div class="row"><span class="btn">← 이전 작업</span><span class="sp"></span><span class="btn">다음 작업 →</span></div>
       </div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>상세 머리</b> (제안)<p>제목은 <code>h1</code>. 홈 카드에서 오면 썸네일이 이어진다. 도구 미정</p></div></li>
-      <li><span class="m">2</span><div><b>메타</b> (제안)<p>없는 항목은 감춘다. 외부 링크는 새 탭</p></div></li>
-      <li><span class="m">3</span><div><b>본문</b> (제안)<p>Markdown. 절은 <code>h2</code>. 순서는 README 「상세」</p></div></li>
-      <li><span class="m">4</span><div><b>이전 · 다음</b> (제안)<p>첫 작업에는 이전, 마지막 작업에는 다음이 없다</p></div></li>
+      <li><span class="m">1</span><div><b>ProjectDetail</b> <code>features/projectDetail</code><p>제목은 <code>h1</code>. 위에 목록으로 가는 All Projects. 이미지는 목록의 썸네일과 같은 그림</p></div></li>
+      <li><span class="m">2</span><div><b>메타</b><p>팀 · 역할 · 맡은 범위를 앞에 둔다. 맡은 범위는 영역 4개(기획 · 디자인 · 퍼블리싱 · 개발) 가운데 손댄 것만, 단계 3개(전담 · 주도 · 참여)로 적는다. 퍼센트는 쓰지 않는다. 본문 오른쪽 옆에 두고 스크롤해도 따라온다. 좁은 화면에서는 본문 위. 없는 항목은 감춘다. 외부 링크는 새 탭</p></div></li>
+      <li><span class="m">3</span><div><b>TiptapViewer</b> <code>shared/ui/tiptapViewer</code><p>Tiptap 에디터의 HTML. 절은 <code>h2</code>. 순서는 README 「상세」. 지금은 임시 문구</p></div></li>
+      <li><span class="m">4</span><div><b>이전 · 다음</b><p>첫 작업에는 이전, 마지막 작업에는 다음이 없다</p></div></li>
     </ol></aside>
   </div>
 </section>
