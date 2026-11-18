@@ -148,7 +148,12 @@ export default function HeaderBar({ name, action }: OwnProps) {
     }
 
     return (
-        <header ref={headerRef} className="sticky top-0 z-header">
+        <header
+            ref={headerRef}
+            // 페이지 전환에서 헤더를 본문과 따로 찍어 제자리에 둔다 (src/style/viewTransition.css)
+            style={{ viewTransitionName: 'site-header' }}
+            className="sticky top-0 z-header"
+        >
             {/* 바탕을 header 가 아니라 막대에 준다. 흐림 효과는 겹쳐 쓸 수 없어 패널과 형제로 둔다 */}
             <div
                 className={cn(

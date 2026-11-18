@@ -7,12 +7,14 @@
 
 1. **도구는 framer-motion 과 GSAP 2개만 쓴다.**(2026-11-11 사용자 결정)
     - 다른 모션 라이브러리(Lenis, three 등)를 추가하지 않는다. 필요하면 먼저 컨펌을 받는다.
-    - 예외가 1곳 있다. 로더는 CSS 애니메이션으로 돈다. 화면의 연출이 아니라 진행 중임을 알리는 표시다.(2026-11-18 사용자 결정, `src/shared/ui/loader/Loader.tsx`)
+    - 예외가 2곳 있다. 로더는 CSS 애니메이션으로 돈다. 화면의 연출이 아니라 진행 중임을 알리는 표시다.(2026-11-18 사용자 결정, `src/shared/ui/loader/Loader.tsx`)
+    - 페이지 전환은 React 의 `<ViewTransition>` 이 시작하고 브라우저가 CSS 애니메이션으로 움직인다. 나가는 화면을 붙잡아 둘 수 있는 것이 브라우저의 화면 전환뿐이다.(2026-11-18 사용자 결정, `src/widgets/pageTransition/PageTransition.tsx` · `src/style/viewTransition.css`)
 2. **값은 토큰으로만 쓴다.** 지속시간·가속도·간격을 숫자로 적지 않는다.
 3. **동작 줄이기 설정을 따른다.** OS 에서 동작 줄이기를 켠 사용자에게는 움직임 없이 최종 상태를 보여 준다.
 4. **레이아웃을 밀지 않는 속성만 움직인다.** `transform` · `opacity` 가 기본이고 `clip-path` 도 해당한다.(2026-11-16 사용자 결정)
    `width` · `top` · `margin` 을 애니메이션하면 매 프레임 레이아웃을 다시 계산한다.
     - `clip-path` 는 버튼의 면이 넓어지는 연출에 쓴다. 폭을 움직이지 않고 가려 둔 면을 드러낸다.(`src/shared/ui/button/button.tsx`)
+    - `filter` 는 페이지 전환에서 화면이 번지는 연출에 쓴다. 레이아웃을 다시 계산하지 않는다.(2026-11-18 사용자 결정, `src/style/viewTransition.css`)
     - 예외가 1곳 있다. 소개의 경력은 회사를 여닫을 때 프로젝트 목록과 회사 요약의 높이를 움직인다.(2026-11-16 사용자 결정, `src/features/experienceTimeline/ui/ExperienceTimeline.tsx`, `docs/plan/about/README.md` 「모션」)
 
 ## 1. 상황별 도구
@@ -23,6 +25,7 @@
 | 스크롤 진행에 묶인 연출 (핀 고정, 가로 스크롤, 스크럽) | GSAP + ScrollTrigger             |
 | 여러 요소를 정해진 순서로 잇는 긴 시퀀스 (인트로)      | GSAP 타임라인                    |
 | 색·배경 같은 단순 hover 전환                           | CSS `transition` + 토큰 유틸리티 |
+| 페이지 전환                                            | `<ViewTransition>` + CSS         |
 
 **한 요소에 도구 2개를 함께 쓰지 않는다.** 서로 같은 `transform` 을 덮어써서 위치가 순간적으로 바뀐다.
 
@@ -96,6 +99,9 @@ useGSAP(
 );
 ```
 
+페이지 전환의 시간은 `src/style/viewTransition.css` 위쪽의 전용 변수(`--page-out-duration` · `--page-in-duration`)가 정한다. 기본값은 지속시간 토큰이고, 동작 줄이기에서는 그 파일이 두 값을 `0ms` 로 되돌린다.
+화면 전환을 지원하지 않는 브라우저에서도 연출 없이 바로 바뀐다.
+
 e2e 는 `reduced-motion` 프로젝트로 같은 화면을 한 번 더 실행한다.(`playwright.config.ts`)
 
 ## 4. 성능
@@ -120,6 +126,7 @@ e2e 는 `reduced-motion` 프로젝트로 같은 화면을 한 번 더 실행한�
 
 - 모션 목록은 `docs/plan/home/README.md` 와 `docs/plan/about/README.md` 의 「모션」 표다. 헤더와 배경의 모션은 홈의 표에 있다.
 - 원칙 4 의 예외가 1곳 있다. 소개 경력의 높이 전환이다.
+- 원칙 1 의 예외가 1곳 더 있다. 페이지 전환이다. 값은 지속시간 · 가속도 토큰으로 적었다.(`src/style/viewTransition.css`)
 - 원칙 1 과 2 의 예외가 1곳 있다. 로더의 회전이다. 한 바퀴의 시간(1초 · 2초 · 4초)을 지속시간 토큰이 아닌 값으로 `src/style/tokens/motion.css` 에 적었다.
 
 ## 확인방법

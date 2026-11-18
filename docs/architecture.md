@@ -36,7 +36,7 @@ portfolio/
 └── src/
     ├── _app/         Provider·전역 리스너
     ├── app/          App Router 라우트
-    ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact, adminHeader)
+    ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact, pageTransition, adminHeader)
     ├── features/     기능 단위 (hero, featuredProjects, …)
     ├── entities/     도메인 데이터 (project, experience, session, about)
     ├── shared/       앱 공용 (ui/, util/)

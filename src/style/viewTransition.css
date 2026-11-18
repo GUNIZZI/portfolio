@@ -1,0 +1,75 @@
+/*
+ * 페이지 전환. 이전 화면이 초점이 풀리듯 번지며 사라지고, 새 화면이 초점이 맞듯 또렷해지며 나타난다.
+ * React 의 <ViewTransition> 이 시작하고 브라우저가 CSS 로 움직인다 (docs/motion.md 원칙 1 의 예외).
+ * 시작하는 표식은 widgets/pageTransition 이, 본문과 헤더의 이름은 (site) 레이아웃과 widgets/header/HeaderBar.tsx 가 갖는다.
+ */
+
+/*
+ * 페이지 전환에서만 쓰는 값. 여기서 조정한다.
+ * 시간을 토큰 대신 숫자(예: 300ms)로 적어도 된다. 동작 줄이기는 바로 아래에서 0ms 로 되돌린다
+ */
+:root {
+    /* 이전 화면이 사라지는 시간 */
+    --page-out-duration: var(--duration-fast);
+    /* 새 화면이 나타나는 시간. 이전 화면이 다 사라진 뒤에 시작한다 */
+    --page-in-duration: var(--duration-base);
+    /* 번지는 정도. 두 화면이 같다 */
+    --page-blur: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --page-out-duration: 0ms;
+        --page-in-duration: 0ms;
+    }
+}
+
+/* 시작하는 표식. 그릴 것이 없어 움직이지 않는다 */
+::view-transition-group(.page-transition) {
+    display: none;
+}
+
+/*
+ * 본문. React 는 <ViewTransition> 밖의 변화에는 문서 전체(root)를 움직이지 않는다.
+ * 그래서 (site) 레이아웃의 틀에 이름을 주어 이전 화면과 새 화면을 찍는다 (src/app/(site)/layout.tsx).
+ * 이전 화면이 다 사라진 뒤에 새 화면이 나타난다. 두 화면이 겹치지 않아 섞는 방식을 끈다
+ */
+::view-transition-old(site-page),
+::view-transition-new(site-page) {
+    mix-blend-mode: normal;
+}
+::view-transition-old(site-page) {
+    animation: page-blur-out var(--page-out-duration) var(--ease-exit) both;
+}
+::view-transition-new(site-page) {
+    animation: page-blur-in var(--page-in-duration) var(--ease-enter) var(--page-out-duration) both;
+}
+/* 틀의 위치와 크기는 이전 화면이 사라진 시점에 한 번에 바뀐다. 스크롤해 둔 이전 화면이 제자리에서 사라진다 */
+::view-transition-group(site-page) {
+    animation-duration: calc(var(--page-out-duration) * 2);
+    animation-timing-function: steps(2, jump-none);
+}
+
+/* 헤더는 제자리에 둔다 */
+::view-transition-group(site-header),
+::view-transition-new(site-header) {
+    animation: none;
+}
+::view-transition-old(site-header) {
+    display: none;
+}
+
+/* 레이아웃을 밀지 않는 filter 와 opacity 만 움직인다 (docs/motion.md 원칙 4) */
+@keyframes page-blur-out {
+    to {
+        opacity: 0;
+        filter: blur(var(--page-blur));
+    }
+}
+
+@keyframes page-blur-in {
+    from {
+        opacity: 0;
+        filter: blur(var(--page-blur));
+    }
+}

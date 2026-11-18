@@ -4,6 +4,7 @@
 @import './tokens/layout.css';
 @import './tokens/motion.css';
 @import './tokens/layer.css';
+@import './viewTransition.css';
 
 @layer base {
     html {
