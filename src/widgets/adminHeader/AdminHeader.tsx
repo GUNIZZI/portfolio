@@ -1,61 +1,26 @@
-import Link from 'next/link';
-
 import { House } from 'lucide-react';
 
 import { LogoutButton } from '@/features/adminAuth';
 import Logo from '@/shared/ui/logo/Logo';
 import ThemeToggle from '@/shared/ui/themeToggle/ThemeToggle';
-import { cn } from '@/shared/util/cn';
-import { ADMIN_NAV_ITEMS, type AdminNavHref } from '@/config/nav';
+import { ADMIN_NAV_ITEMS } from '@/config/nav';
 import { SITE } from '@/config/site';
 
-interface OwnProps {
-    /**
-     * 이 페이지의 메뉴. 강조해서 보여 준다.
-     * 등록 · 수정처럼 메뉴에 없는 페이지는 자기가 속한 메뉴를 알려 준다
-     */
-    currentHref: AdminNavHref;
-}
+import AdminNav from './AdminNav';
 
 /**
  * 관리 화면의 머리. 로그인을 뺀 모든 관리 화면에 같은 모양으로 붙는다.
- * 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃 · 테마 버튼이 있다. 연출은 두지 않는다.
+ * 레이아웃이 한 번 그리고, 화면을 옮겨도 그대로 남는다.(src/app/admin/(panel)/layout.tsx)
+ * 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃 · 테마 버튼이 있다. 메뉴의 밑줄이 옮겨 가는 것 말고는 연출을 두지 않는다.
  */
-export default function AdminHeader({ currentHref }: OwnProps) {
+export default function AdminHeader() {
     return (
         <header className="border-b border-line bg-panel">
             <div className="mx-auto flex max-w-page flex-wrap items-center gap-x-10 gap-y-3 px-gutter py-4">
                 <Logo name={SITE.name} href={ADMIN_NAV_ITEMS[0].href} size="md" />
-                <nav
-                    aria-label="관리 메뉴"
-                    // 좁은 화면에서는 메뉴만 아랫줄로 내려 고르게 벌려 놓는다. 윗줄에는 로고와 사이트 보기 · 로그아웃이 남는다
-                    className={cn(
-                        'order-last flex w-full items-center justify-evenly gap-x-6 text-sm font-medium',
-                        'md:order-0 md:w-auto md:justify-start',
-                    )}
-                >
-                    {ADMIN_NAV_ITEMS.map((item) => {
-                        const isCurrent = item.href === currentHref;
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                aria-current={isCurrent ? 'page' : undefined}
-                                className={cn(
-                                    // 배치와 모양. 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
-                                    'border-b-2 border-transparent py-2',
-                                    // 글자
-                                    'text-muted-foreground hover:text-strong',
-                                    // 상태
-                                    isCurrent && 'border-primary text-primary hover:text-primary',
-                                )}
-                            >
-                                {item.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
+                <AdminNav />
                 <div className="ml-auto flex items-center gap-3">
+                    <ThemeToggle effect="none" />
                     <a
                         href="/"
                         target="_blank"
@@ -68,7 +33,6 @@ export default function AdminHeader({ currentHref }: OwnProps) {
                     </a>
                     {/* <Separator orientation="vertical" className="h-3! bg-foreground/50" /> */}
                     <LogoutButton />
-                    <ThemeToggle effect="none" />
                 </div>
             </div>
         </header>

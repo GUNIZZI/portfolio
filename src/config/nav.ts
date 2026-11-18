@@ -21,6 +21,3 @@ export const ADMIN_NAV_ITEMS = [
     { label: '소개', href: '/admin/about' },
     { label: '경력', href: '/admin/experiences' },
 ] as const;
-
-/** 관리 메뉴가 가리키는 페이지의 주소 */
-export type AdminNavHref = (typeof ADMIN_NAV_ITEMS)[number]['href'];

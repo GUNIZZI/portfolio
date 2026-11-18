@@ -5,7 +5,7 @@
 
 이 문서는 **신규 화면 기획**이다.(`../../README.md` 3.1)
 요구사항에 없어 기획안으로 채웠던 항목은 사용자가 모두 채택했다.(요구사항 5) 정하지 않은 것은 [검토 필요 사항](#검토-필요-사항)에 「미정」 으로 남아 있다.
-구현은 아직 하지 않았다. 지금 코드는 `content/experiences.json` 을 읽는다. 관리 화면에는 제목만 있다.(`src/app/admin/experiences/page.tsx`)
+구현은 아직 하지 않았다. 지금 코드는 `content/experiences.json` 을 읽는다. 관리 화면에는 제목만 있다.(`src/app/admin/(panel)/experiences/page.tsx`)
 로그인과 세션은 [로그인 기획](../login/README.md)을, GNB 는 [대시보드 기획](../dashboard/README.md)의 「GNB」 를 그대로 따른다.
 소개 문구는 [소개 관리 기획](../about/README.md)이 따로 다룬다.
 

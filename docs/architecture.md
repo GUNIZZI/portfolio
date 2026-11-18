@@ -178,6 +178,8 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 - `src/proxy.ts` 는 쿠키가 있는지만 본다. 값의 검증은 페이지의 `AdminGuard`(`src/features/adminAuth`)와 서버 액션이 `requireSession` 으로 한다.
 - `/admin` 은 화면을 그리지 않는다. 세션이 있으면 대시보드로, 없으면 로그인으로 보낸다.(`src/features/adminAuth/ui/AdminEntry.tsx`)
 - 관리 화면의 머리는 `widgets/adminHeader` 다. 메뉴 항목은 `src/config/nav.ts` 의 `ADMIN_NAV_ITEMS` 에 있다.
+- 머리는 페이지가 아니라 레이아웃이 그린다. 로그인을 뺀 관리 화면을 `(panel)` 로 묶어, 메뉴를 옮겨도 머리는 남고 본문만 바뀐다.(`src/app/admin/(panel)/layout.tsx`)
+- 레이아웃은 화면을 옮길 때 다시 실행되지 않는다. 그래서 레이아웃과 페이지가 각각 `AdminGuard` 를 두고, 강조할 메뉴는 `AdminNav` 가 주소에서 읽는다.(`src/widgets/adminHeader/AdminNav.tsx`)
 - 쿠키는 `services` 의 `getSession` 이 읽고, `actions` 가 쓰고 지운다.(`src/entities/session/`)
 - 쿠키를 읽는 컴포넌트는 `<Suspense>` 안에 둔다. `cacheComponents` 가 켜져 있어 밖에서 읽으면 빌드가 실패한다.(`next.config.ts`)
 

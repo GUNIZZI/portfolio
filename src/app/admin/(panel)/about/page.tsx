@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
-import { AdminHeader } from '@/widgets/adminHeader';
 import { AboutEditor, AboutEditorError } from '@/features/aboutEditor';
 import { AdminGuard } from '@/features/adminAuth';
 import type { AboutEditorData } from '@/entities/about/model/about.types';
@@ -25,7 +24,6 @@ export default async function AdminAboutPage() {
     return (
         <Suspense fallback={null}>
             <AdminGuard>
-                <AdminHeader currentHref="/admin/about" />
                 <main className="mx-auto flex max-w-page flex-col gap-8 px-gutter py-10">
                     <div>
                         <h1 className="text-section font-bold text-strong">소개</h1>
