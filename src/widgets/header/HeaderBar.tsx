@@ -1,9 +1,11 @@
 'use client';
 
 import { type MouseEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
+import { LockKeyhole } from 'lucide-react';
 
 import Icon from '@/shared/ui/icon/Icon';
 import Logo from '@/shared/ui/logo/Logo';
@@ -20,6 +22,9 @@ import NavLink from './NavLink';
 
 /** 페이지 맨 위. 레이아웃의 바깥 틀에 이 id 가 있다 (src/app/(site)/layout.tsx) */
 const TOP_HREF = '#top';
+
+/** 관리 화면의 입구. 세션에 따라 로그인이나 대시보드로 보낸다 (src/app/admin/page.tsx) */
+const ADMIN_HREF = '/admin';
 
 /** 헤더에 메뉴를 펼쳐 놓는 폭. Tailwind 의 md 경계(48rem)와 같아야 한다 */
 const WIDE_QUERY = '(min-width: 48rem)';
@@ -185,10 +190,25 @@ export default function HeaderBar({ name, action }: OwnProps) {
                         })}
                         <NavIndicator activeKey={currentHref} />
                     </nav>
-                    {/* 테마 버튼은 좁은 화면에서도 막대에 남는다. 메뉴를 열지 않고 바꿀 수 있다 */}
-                    <div className="flex items-center gap-x-1 md:gap-x-4">
-                        <ThemeToggle className="size-11" />
+                    {/* 넓은 화면의 순서는 Contact · 테마 · 관리, 좁은 화면은 테마 · 관리 · 메뉴 버튼이다 */}
+                    <div className="relative flex items-center gap-x-1 md:gap-x-4">
                         <div className="hidden md:block">{action}</div>
+                        {/*
+                          테마 버튼은 좁은 화면에서도 막대에 남는다. 메뉴를 열지 않고 바꿀 수 있다.
+                          본문 폭 바깥에 자리가 남는 화면에서는 Contact 오른쪽 바깥으로 내보내, Contact 가 본문의 오른쪽 끝에 맞는다
+                        */}
+                        <div className="flex items-center xl:absolute xl:left-full">
+                            <ThemeToggle className="size-7" />
+                            <Link
+                                href={ADMIN_HREF}
+                                prefetch={false}
+                                aria-label="관리 화면"
+                                title="관리 화면"
+                                className="flex size-7 items-center justify-center text-muted-foreground hover:text-strong"
+                            >
+                                <LockKeyhole aria-hidden="true" className="size-4" />
+                            </Link>
+                        </div>
                         <button
                             ref={menuButtonRef}
                             type="button"
@@ -196,7 +216,7 @@ export default function HeaderBar({ name, action }: OwnProps) {
                             aria-expanded={isMenuOpen}
                             aria-controls={panelId}
                             onClick={hndlMenuToggle}
-                            className="flex size-11 items-center justify-center text-strong md:hidden"
+                            className="flex items-center justify-center text-strong md:hidden"
                         >
                             <Icon name={isMenuOpen ? 'close' : 'menu'} size={26} strokeWidth={2} />
                         </button>

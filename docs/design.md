@@ -92,7 +92,7 @@
 ## 3. 배치
 
 ```
-헤더      로고 · 메뉴 3개 · 테마 버튼 · Contact 버튼
+헤더      로고 · 메뉴 3개 · Contact 버튼 · 테마 버튼 · 관리 버튼
 히어로    Hey, I'm / GUNI / Web Frontend Developer / 태그 / 버튼 1개   ←→ 캐릭터와 낙서
 패널      FEATURED PROJECTS(카드 격자) + MY SKILLS(타일 격자)
 소개      캐릭터 · ABOUT ME · 숫자 3개
