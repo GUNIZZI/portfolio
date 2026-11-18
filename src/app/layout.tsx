@@ -52,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
               서버가 그린 HTML 과 달라져 개발 중에 하이드레이션 경고가 뜬다. body 한 요소의 속성 차이만 넘긴다.
               자식 요소의 불일치는 그대로 경고한다
             */}
-            <body className="min-h-dvh" suppressHydrationWarning>
+            <body className="min-h-dvh min-w-page-min" suppressHydrationWarning>
                 <Providers>{children}</Providers>
             </body>
         </html>
