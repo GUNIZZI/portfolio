@@ -169,10 +169,12 @@ export default function HeaderBar({ name, action }: OwnProps) {
                                     isCurrent={isCurrent}
                                     className={cn(
                                         // 배치와 모양. 아래 여백에 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
-                                        'pt-2 pb-2.5',
+                                        'pt-2 pb-2.5 font-extrabold',
                                         // 상태
                                         isCurrent && 'text-primary',
                                         isCurrent && NAV_INDICATOR_FALLBACK_CLASS,
+                                        // hover 상태
+                                        !isCurrent && 'hover:text-primary',
                                         // 모션
                                         'transition-colors duration-fast ease-move',
                                     )}
