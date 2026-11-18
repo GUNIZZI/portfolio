@@ -16,7 +16,7 @@
 
 <div class="intro">
   <h1>소개 관리 (/admin/about)</h1>
-  <p>소개 페이지와 홈의 소개 섹션에 보이는 문구를 고치는 관리 화면의 와이어프레임이다. 인트로 · 일하는 방식 · 기술 묶음 · 홈 소개를 한 화면에서 섹션별로 고친다.</p>
+  <p>소개 페이지와 홈의 소개 섹션에 보이는 문구를 고치는 관리 화면의 와이어프레임이다. 인트로 · 일하는 방식 · Skill 관리 · 홈 소개를 한 화면에서 섹션별로 고친다.</p>
   <p>관리 화면은 디자인 원본이 없다. 여기서는 배치 · 순서 · 상태만 그리고, 모양은 지금의 토큰으로 표와 폼을 단순하게 그린다. 정책과 입력 규칙은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. GNB 의 명세는 대시보드 와이어프레임(<span class="mono">../dashboard/wireframe.html</span>)에 있다.</p>
   <div class="legend">
     <span><span class="m">1</span> 설명 번호</span>
@@ -31,7 +31,7 @@
         <tr><td><a href="#p01">P-01</a></td><td>토스트</td><td>토스트</td><td>S-01</td></tr>
       </tbody>
     </table></div>
-    <p class="spec-note">컴포넌트 이름은 src/shared/ui/ 와 src/widgets/ 에 있는 것만 적었다. 없는 것은 을 붙였다.</p>
+    <p class="spec-note">컴포넌트 이름은 src/shared/ui/ · src/widgets/ · src/features/ 에 있는 것만 적었다. 없는 것은 을 붙였다.</p>
   </div>
 </div>
 
@@ -83,7 +83,8 @@ flowchart TD
     IN -->|"GNB · 다른 화면"| OUT(["누른 곳으로 이동"]):::done
 ```
 
-- 섹션은 인트로 · 일하는 방식 · 기술 묶음 · 홈 소개 4개다. 저장 버튼이 섹션마다 있다.
+- 섹션은 인트로 · 일하는 방식 · Skill 관리 · 홈 소개 4개다. 저장 버튼이 섹션마다 있다.
+- 항목 입력에는 목록을 고치는 것도 들어간다. 소개 문단은 줄 목록, 성장 경로와 Skill 이름은 칩 목록이다.([README.md](./README.md) 「목록 고치기」)
 - 저장해도 화면을 옮기지 않는다. 다른 섹션에 고친 내용이 있으면 그대로 남는다.
 - 고친 내용이 없는 섹션의 저장 버튼은 비활성이다.
 - 저장에 실패하면 입력한 내용을 그대로 둔다.
@@ -110,20 +111,18 @@ flowchart TD
         </div>
         <div class="sepx"></div>
         <div class="fl req">성장 경로</div>
-        <div class="fv">
-          <div class="row"><div class="inp val">Design</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div>
-          <div class="row"><div class="inp val">Flash</div><span class="btn sm">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div>
-          <div class="row"><div class="inp val">React · TS</div><span class="btn sm">↑</span><span class="btn sm dis">↓</span><span class="btn sm ghost">빼기</span></div>
-          <div class="row"><span class="btn sm">항목 더하기</span></div>
-          <div class="info">ⓘ 2개 이상이어야 한다</div>
+        <div class="fv rel"><span class="m abs">4</span>
+          <div class="pf-chips"><span class="pf-chip">Design ×</span><span class="pf-chip">Flash ×</span><span class="pf-chip">React · TS ×</span></div>
+          <div class="info">드래그해서 순서를 변경.</div>
+          <div class="row"><div class="inp">항목 이름</div><span class="btn sm dis">+ 추가</span></div>
         </div>
         <div class="sepx"></div>
         <div class="fl">성장 경로 아래 한 줄</div>
         <div class="fv"><div class="inp val">도구는 바뀌어도 기준은 가져갑니다.</div></div>
       </div>
-      <div class="btn-row rel"><span class="m abs">4</span><span class="muted small">고친 내용이 없습니다</span><span class="sp"></span><span class="btn pri dis" aria-disabled="true">인트로 저장</span></div>
+      <div class="btn-row rel"><span class="m abs">5</span><span class="muted small">고친 내용이 없습니다</span><span class="sp"></span><span class="btn pri dis" aria-disabled="true">인트로 저장</span></div>
 
-      <div class="ph rel"><span class="m abs">5</span><div><h4>일하는 방식</h4><p>소개 페이지 · 4가지</p></div></div>
+      <div class="ph rel"><span class="m abs">6</span><div><h4>일하는 방식</h4><p>소개 페이지 · 4가지</p></div></div>
       <div class="form-grid">
         <div class="fl req">1 제목</div>
         <div class="fv"><div class="inp val">화면보다 문제를 먼저 봅니다</div></div>
@@ -135,25 +134,25 @@ flowchart TD
       </div>
       <div class="btn-row"><span class="muted small">필수 항목을 입력해 주세요</span><span class="sp"></span><span class="btn pri dis" aria-disabled="true">일하는 방식 저장</span></div>
 
-      <div class="ph rel"><span class="m abs">6</span><div><h4>기술 묶음</h4><p>소개 페이지 · 8개</p></div></div>
+      <div class="ph rel"><span class="m abs">7</span><div><h4>Skill 관리</h4><p>소개 페이지 · 8개</p></div></div>
       <div class="form-grid">
         <div class="fl req">1 이름</div>
         <div class="fv"><div class="inp val">UI · 디자인 시스템</div></div>
-        <div class="fl req">1 쓴 곳</div>
+        <div class="fl req">1 내용</div>
         <div class="fv"><div class="inp val">KOCOM Design System 과 NEWEN AI UI Kit 을 설계하고 문서화했습니다.</div></div>
-        <div class="fl req">1 기술 이름</div>
+        <div class="fl req">1 Skill 이름</div>
         <div class="fv">
-          <div class="row"><div class="inp val">Shadcn UI</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div>
-          <div class="row"><div class="inp val">Storybook</div><span class="btn sm">↑</span><span class="btn sm dis">↓</span><span class="btn sm ghost">빼기</span></div>
-          <div class="row"><span class="btn sm">기술 더하기</span></div>
+          <div class="pf-chips"><span class="pf-chip">Shadcn UI ×</span><span class="pf-chip">Storybook ×</span></div>
+          <div class="info">드래그해서 순서를 변경.</div>
+          <div class="row"><div class="inp">Skill 이름</div><span class="btn sm dis">+ 추가</span></div>
         </div>
         <div class="sepx"></div>
         <div class="fl">2 ~ 8</div>
         <div class="fv"><span class="muted">1 과 같다</span></div>
       </div>
-      <div class="btn-row"><span class="sp"></span><span class="btn pri">기술 묶음 저장</span></div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri">Skill 관리 저장</span></div>
 
-      <div class="ph rel"><span class="m abs">7</span><div><h4>홈 소개</h4><p>홈의 소개 섹션</p></div></div>
+      <div class="ph rel"><span class="m abs">8</span><div><h4>홈 소개</h4><p>홈의 소개 섹션</p></div></div>
       <div class="form-grid">
         <div class="fl req">소개 문단</div>
         <div class="fv"><span class="muted">인트로의 소개 문단과 같은 방식이다. 줄마다 한 항목이다</span></div>
@@ -167,12 +166,13 @@ flowchart TD
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>명세는 대시보드 와이어프레임(../dashboard/wireframe.html)의 「GNB」 표가 갖는다. 이 화면에서는 「소개」 를 강조한다. 저장하지 않은 섹션이 있어도 메뉴 · 로고를 누르면 묻지 않고 옮긴다</p></div></li>
-      <li><span class="m">2</span><div><b>섹션 머리</b><p>섹션은 인트로 · 일하는 방식 · 기술 묶음 · 홈 소개 순이다. 어느 페이지에 보이는지와 그 섹션의 수정 일시를 적는다</p></div></li>
-      <li><span class="m">3</span><div><b>길이가 바뀌는 목록</b> (컴포넌트 없음) · <b>Input</b> <code>shared/ui/input</code><p>줄마다 ↑ · ↓ · 빼기 버튼이 있다. 첫 줄의 ↑ 와 끝 줄의 ↓ 는 비활성. 최소 개수만 남으면 빼기는 비활성. 더하면 맨 아래에 빈 줄이 생긴다</p></div></li>
-      <li><span class="m">4</span><div><b>Button</b> <code>shared/ui/button</code><p>저장 버튼은 섹션마다 있다. 고친 내용이 없거나 규칙에 맞지 않으면 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 저장하면 화면에 머물고 <a href="#p01">P-01</a></p></div></li>
-      <li><span class="m">5</span><div><b>일하는 방식</b><p>4개로 고정한다. 제목과 설명은 모두 필수다. 오류 문구는 입력을 벗어난 뒤에 보여 준다. 그림은 설명을 비운 채 벗어난 상태다</p></div></li>
-      <li><span class="m">6</span><div><b>기술 묶음</b><p>8개로 고정한다. 묶음 안의 기술 이름은 1개 이상이다</p></div></li>
-      <li><span class="m">7</span><div><b>홈 소개</b><p>숫자는 3개로 고정한다. 값은 숫자만 받는다. 기호는 비울 수 있다</p></div></li>
+      <li><span class="m">2</span><div><b>섹션 머리</b><p>섹션은 인트로 · 일하는 방식 · Skill 관리 · 홈 소개 순이다. 어느 페이지에 보이는지와 그 섹션의 수정 일시를 적는다</p></div></li>
+      <li><span class="m">3</span><div><b>줄 목록</b> <code>features/aboutEditor</code> ListField<p>소개 문단에 쓴다. 줄마다 ↑ · ↓ · 빼기 버튼이 있다. 첫 줄의 ↑ 와 끝 줄의 ↓ 는 비활성. 최소 개수만 남으면 빼기는 비활성. 더하면 맨 아래에 빈 줄이 생긴다</p></div></li>
+      <li><span class="m">4</span><div><b>칩 목록</b> <code>features/aboutEditor</code> ChipListField<p>성장 경로와 Skill 이름에 쓴다. 이름을 옆으로 늘어놓고 끌어서 순서를 바꾼다. 마우스를 올리면 테두리와 면의 색이 바뀐다. 키보드로는 순서를 바꾸지 않는다. 놓을 자리는 이름 사이에 선으로 보여 준다. 이름마다 × 가 있고, 최소 개수만 남으면 비활성. 아래 입력에 적고 「+ 추가」 나 Enter 로 맨 끝에 더한다. 그림은 입력이 비어 「+ 추가」 가 비활성인 상태다. 규칙은 README.md 「목록 고치기」 가 갖는다</p></div></li>
+      <li><span class="m">5</span><div><b>Button</b> <code>shared/ui/button</code><p>저장 버튼은 섹션마다 있다. 고친 내용이 없거나 규칙에 맞지 않으면 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 저장하면 화면에 머물고 <a href="#p01">P-01</a></p></div></li>
+      <li><span class="m">6</span><div><b>일하는 방식</b><p>4개로 고정한다. 제목과 설명은 모두 필수다. 오류 문구는 입력을 벗어난 뒤에 보여 준다. 그림은 설명을 비운 채 벗어난 상태다</p></div></li>
+      <li><span class="m">7</span><div><b>Skill 관리</b><p>묶음은 8개로 고정한다. 묶음마다 이름 · 내용 · Skill 이름이 있다. Skill 이름은 칩 목록(4)이고 1개 이상이다</p></div></li>
+      <li><span class="m">8</span><div><b>홈 소개</b><p>숫자는 3개로 고정한다. 값은 숫자만 받는다. 기호는 비울 수 있다</p></div></li>
     </ol></aside>
   </div>
   <div class="spec">

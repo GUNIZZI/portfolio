@@ -1,13 +1,6 @@
 'use client';
 
-import {
-    type ChangeEvent,
-    type DragEvent,
-    type KeyboardEvent,
-    useId,
-    useRef,
-    useState,
-} from 'react';
+import { type ChangeEvent, type DragEvent, type KeyboardEvent, useState } from 'react';
 
 import { X } from 'lucide-react';
 
@@ -15,7 +8,7 @@ import { Button } from '@/shared/ui/button/button';
 import { Input } from '@/shared/ui/input/input';
 import { cn } from '@/shared/util/cn';
 
-import { moveItem, moveItemTo, removeItem } from '../model/aboutEditor.utils';
+import { moveItemTo, removeItem } from '../model/aboutEditor.utils';
 
 interface OwnProps {
     /** 목록의 이름 */
@@ -32,7 +25,7 @@ interface OwnProps {
 
 /**
  * 짧은 이름의 목록. 항목을 옆으로 늘어놓고, 자리가 모자라면 다음 줄로 넘긴다.
- * 항목을 끌어 순서를 바꾼다. 키보드로는 항목에 초점을 두고 ← → 로 옮긴다.
+ * 항목을 끌어 순서를 바꾼다. 키보드로는 옮기지 않는다.(2026-11-18 사용자 결정)
  * 놓을 자리는 항목 사이의 틈에 선을 세워 보여 주고, 놓았을 때 한 번만 옮긴다.
  * 끄는 동안 바로 옮기면 폭이 다른 항목끼리 자리가 계속 뒤바뀐다.
  */
@@ -44,8 +37,6 @@ export default function ChipListField({
     addLabel,
     isNested = false,
 }: OwnProps) {
-    const hintId = useId();
-    const listRef = useRef<HTMLUListElement>(null);
     const [draft, setDraft] = useState('');
     /** 끌고 있는 항목의 자리 */
     const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -96,7 +87,6 @@ export default function ChipListField({
                 )}
             >
                 <ul
-                    ref={listRef}
                     className="flex flex-wrap gap-2"
                     onDragOver={(event) => {
                         // 놓을 수 있는 곳임을 알린다. 막지 않으면 drop 이 오지 않는다
@@ -117,18 +107,6 @@ export default function ChipListField({
                             const isAfter = event.clientX > rect.left + rect.width / 2;
                             setDropIndex(isAfter ? index + 1 : index);
                         };
-                        const hndlKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
-                            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-                            event.preventDefault();
-                            const offset = event.key === 'ArrowLeft' ? -1 : 1;
-                            const target = index + offset;
-                            if (target < 0 || target >= items.length) return;
-                            onChange(moveItem(items, index, offset));
-                            // 초점이 옮긴 항목을 따라간다. 자리를 key 로 써서 요소는 그대로 남아 있다
-                            listRef.current
-                                ?.querySelectorAll<HTMLElement>('[data-chip-handle]')
-                                [target]?.focus();
-                        };
                         const hndlRemove = () => {
                             onChange(removeItem(items, index));
                         };
@@ -147,6 +125,8 @@ export default function ChipListField({
                                     'border border-border-card bg-muted-foreground/20 pr-1 pl-3',
                                     // 글자
                                     'text-caption text-strong',
+                                    // hover. 끌 수 있는 항목임을 테두리와 면의 색으로 알린다
+                                    'hover:border-primary hover:bg-primary/20',
                                     // 끌고 있는 항목
                                     dragIndex === index && 'border-dashed text-decorative',
                                     // 놓을 자리. 이 항목의 앞이면 왼쪽, 뒤면 오른쪽 틈에 선을 세운다.
@@ -159,17 +139,7 @@ export default function ChipListField({
                                         'after:absolute after:inset-y-0.5 after:-right-1.5 after:w-0.5 after:rounded-full after:bg-primary',
                                 )}
                             >
-                                <span
-                                    data-chip-handle
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label={`${item}, ${items.length}개 중 ${index + 1}번째`}
-                                    aria-describedby={hintId}
-                                    onKeyDown={hndlKeyDown}
-                                    className="rounded-full focus-visible:outline-offset-2"
-                                >
-                                    {item}
-                                </span>
+                                {item}
                                 <button
                                     type="button"
                                     aria-label={`${item} 빼기`}
@@ -190,9 +160,7 @@ export default function ChipListField({
                         );
                     })}
                 </ul>
-                <p id={hintId} className="text-2xs text-decorative">
-                    끌어서 순서를 바꾼다. 키보드로는 항목에서 ← → 를 누른다.
-                </p>
+                <p className="text-2xs text-decorative">드래그해서 순서를 변경.</p>
                 <div className="flex items-center gap-2 pt-2">
                     <Input
                         size="xs"
@@ -201,14 +169,14 @@ export default function ChipListField({
                         value={draft}
                         onChange={hndlDraftChange}
                         onKeyDown={hndlDraftKeyDown}
-                        className="w-48"
+                        className="w-full"
                     />
                     <Button
                         size="xs"
                         effect="none"
                         disabled={draft.trim() === ''}
                         onClick={hndlAdd}
-                        className="items-center"
+                        className="items-center whitespace-nowrap"
                     >
                         + 추가
                     </Button>
