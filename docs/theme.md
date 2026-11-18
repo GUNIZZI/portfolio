@@ -12,34 +12,36 @@
     - 계층이 더 필요하면 색을 늘리지 않고 크기·굵기로 구분한다.
 3. **토큰에 없는 값을 적지 않는다.** `z-50` `duration-300` `opacity-50` `rounded-[4px]` 는 값을 정한 근거가 남지 않는다.
 4. **`dark:` 로 색을 나누지 않는다.** 색 값은 토큰에서만 정한다.
+    - 다크와 라이트의 차이도 토큰 값으로만 만든다. 화면 코드는 테마를 알지 못한다.(1.2절)
 5. **토큰은 `src/style/tokens/` 에만 정의한다.** 앱 CSS 나 컴포넌트에 색 변수를 새로 정의하지 않는다.
 
 ## 1. 색 토큰
 
 토큰 파일: `src/style/tokens/color.css`
+표의 알파 값은 다크 값이다. 라이트 값은 [design.md](./design.md) 1.1절에 있다.
 
-| 유틸리티                                                           | 용도                                                      |
-| ------------------------------------------------------------------ | --------------------------------------------------------- |
-| `background`                                                       | 페이지 바탕                                               |
-| `panel` · `card` · `chip`                                          | 면. 뒤로 갈수록 한 단계씩 밝다                            |
-| `panel-glass`                                                      | 뒤의 배경이 비치는 패널(`panel` 에 알파 0.5)              |
-| `glass`                                                            | 고정 헤더의 반투명 바탕(알파 0.8)                         |
-| `glow`                                                             | 작업 카드의 테두리 선에서 번지는 빛(`brand` 에 알파 0.65) |
-| `border` · `border-card`                                           | 패널과 카드의 테두리                                      |
-| `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다              |
-| `strong`                                                           | 제목, 링크                                                |
-| `foreground`                                                       | 본문                                                      |
-| `muted-foreground`                                                 | 보조 설명                                                 |
-| `decorative`                                                       | 읽지 못해도 되는 글자                                     |
-| `primary` · `primary-foreground`                                   | 주 강조(연두)와 그 위 글자                                |
-| `brand` · `brand-soft` · `brand-foreground`                        | 보조 강조, 연한 보조 강조, 그 위 글자                     |
-| `badge`                                                            | 작업 분류 표시                                            |
-| `info`                                                             | 히어로 태그의 파란 기호                                   |
-| `destructive`                                                      | 지우기처럼 되돌릴 수 없는 동작                            |
-| `doodle-sky` · `doodle-violet` · `doodle-yellow` · `doodle-indigo` | 낙서. `doodle-indigo` 는 임시 썸네일의 그라데이션         |
-| `brush-sky` · `brush-violet`                                       | 가장자리 붓 자국(알파 0.85)                               |
-| `dot`                                                              | 배경 점 무늬                                              |
-| `ring`                                                             | 포커스 표시                                               |
+| 유틸리티                                                           | 용도                                                                   |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| `background`                                                       | 페이지 바탕                                                            |
+| `panel` · `card` · `chip`                                          | 면. 뒤로 갈수록 한 단계씩 밝다. 라이트에서는 `chip` 만 바탕보다 어둡다 |
+| `panel-glass`                                                      | 뒤의 배경이 비치는 패널(`panel` 에 알파 0.5)                           |
+| `glass`                                                            | 고정 헤더의 반투명 바탕(알파 0.8)                                      |
+| `glow`                                                             | 작업 카드의 테두리 선에서 번지는 빛(`brand` 에 알파 0.65)              |
+| `border` · `border-card`                                           | 패널과 카드의 테두리                                                   |
+| `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다                           |
+| `strong`                                                           | 제목, 링크                                                             |
+| `foreground`                                                       | 본문                                                                   |
+| `muted-foreground`                                                 | 보조 설명                                                              |
+| `decorative`                                                       | 읽지 못해도 되는 글자                                                  |
+| `primary` · `primary-foreground`                                   | 주 강조(연두)와 그 위 글자                                             |
+| `brand` · `brand-soft` · `brand-foreground`                        | 보조 강조, 연한 보조 강조, 그 위 글자                                  |
+| `badge`                                                            | 작업 분류 표시                                                         |
+| `info`                                                             | 히어로 태그의 파란 기호                                                |
+| `destructive`                                                      | 지우기처럼 되돌릴 수 없는 동작                                         |
+| `doodle-sky` · `doodle-violet` · `doodle-yellow` · `doodle-indigo` | 낙서. `doodle-indigo` 는 임시 썸네일의 그라데이션                      |
+| `brush-sky` · `brush-violet`                                       | 가장자리 붓 자국(알파 0.85)                                            |
+| `dot`                                                              | 배경 점 무늬                                                           |
+| `ring`                                                             | 포커스 표시                                                            |
 
 ### 1.1 shadcn 이름
 
@@ -61,7 +63,21 @@
 값과 대비 수치의 근거는 [design.md](./design.md) 1절에 있다.
 이름을 늘리거나 바꿀 때는 이 표를 함께 고친다.
 
-다크 전용이다. 디자인 원본(`sample/`)에 라이트 화면이 없다.(2026-11-12 사용자 결정)
+### 1.2 다크와 라이트
+
+테마는 다크와 라이트 2개다.(2026-11-18 사용자 결정. 2026-11-12 의 "다크 전용" 을 바꿨다)
+
+- **`:root` 가 다크 값이고, `[data-theme='light']` 가 같은 이름의 값을 덮어쓴다.**(`src/style/tokens/color.css`)
+  라이트에서 값이 같은 토큰(`brand` · `doodle-violet` 등)은 다시 적지 않는다.
+- **토큰을 더하면 라이트 값도 함께 정한다.** 라이트 값과 대비 수치는 [design.md](./design.md) 1.1절에 있다.
+- 처음 방문은 다크다. OS 설정을 따르지 않는다. 방문자가 헤더의 버튼으로 바꾼 것만 `localStorage` 에 저장한다.(`src/_app/Providers.tsx`)
+- 전환은 `next-themes` 가 맡아 `html` 에 `data-theme` 을 적는다. shadcn 의 기본값(`class="dark"`)을 쓰지 않는 것은 원칙 4 때문이다.(`src/_app/Providers.tsx`)
+- 버튼은 `src/shared/ui/themeToggle` 이다. 공개 헤더와 관리 헤더에 있다.
+- 브라우저 주소창 색은 `src/_app/ThemeColorSync.tsx` 가 테마의 `background` 로 맞춘다.
+
+**색이 박혀 있는 그림은 테마마다 한 장씩 두고 `theme-light:` 변형으로 바꿔 끼운다.**(`src/style/tokens/color.css`)
+둘 다 그려 두고 하나를 숨긴다. 지금은 로고(`src/shared/ui/logo/Logo.tsx`)와 연락의 브이 그림(`src/widgets/contact/Contact.tsx`)이 그렇다.
+`theme-light:` 로 색을 나누면 원칙 4 를 어긴다.
 
 ## 2. 모서리와 배치
 
@@ -101,12 +117,15 @@
 | ---------------------------- | ------------------------------------ | ---------------------------------- |
 | `text-gray-500` · `bg-white` | semantic 유틸리티                    | 토큰을 고쳐도 함께 바뀌지 않는다   |
 | `dark:bg-…`                  | 토큰 값을 고친다                     | 색 값은 토큰에서만 정한다(Kozipsa) |
+| `theme-light:bg-…`           | 토큰의 라이트 값을 고친다            | 위와 같다(1.2절)                   |
 | `z-50` · `z-[999]`           | 층 토큰                              | 층의 근거가 남지 않는다(Kozipsa)   |
 | 컴포넌트에 `--my-color` 정의 | `src/style/tokens/color.css` 에 추가 | 같은 내용이 2곳에 생긴다(Kozipsa)  |
 
 ## 미정리 항목
 
-- 없다. 앞의 3계층과 `primary` 는 AA 를 넘는다(design.md 1절).
+- 글자색 앞의 3계층은 두 테마 모두 AA 를 넘는다(design.md 1절 · 1.1절).
+- 라이트의 `primary`(`#80bf1c`)는 바탕 대비 2.1, 그 위 흰 글자 2.2 로 AA(4.5)에 못 미친다. 1곳이다.(2026-11-18 사용자 결정, design.md 1.1절)
+- 로그인한 뒤의 관리 화면은 라이트에서 아직 눈으로 확인하지 못했다.(2026-11-18)
 
 ## 확인방법
 

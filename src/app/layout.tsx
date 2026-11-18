@@ -33,8 +33,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-    colorScheme: 'dark',
-    // 브라우저 주소창 색. meta 태그라 CSS 변수를 읽지 못해 토큰 --background 의 값을 그대로 적는다
+    colorScheme: 'dark light',
+    // 브라우저 주소창 색. meta 태그라 CSS 변수를 읽지 못해 토큰 --background 의 다크 값을 그대로 적는다.
+    // 라이트로 바꾸면 _app/ThemeColorSync 가 그때의 --background 로 고쳐 적는다
     themeColor: '#0a0a12',
 };
 
@@ -45,6 +46,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             // global.css 가 html 에 scroll-behavior: smooth 를 준다. 이 속성이 있어야 Next 가 페이지를 옮길 때만
             // 부드러운 스크롤을 잠깐 꺼서, 새 페이지가 맨 위에서 바로 열린다. 같은 페이지 안의 이동은 그대로 부드럽다
             data-scroll-behavior="smooth"
+            // next-themes 가 React 보다 먼저 html 에 data-theme 을 적는다. html 한 요소의 속성 차이만 넘긴다
+            suppressHydrationWarning
             className={cn(notoSansKr.variable, permanentMarker.variable, caveat.variable)}
         >
             {/*

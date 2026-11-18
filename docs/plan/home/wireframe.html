@@ -147,7 +147,7 @@ flowchart TD
       <span class="vp">데스크톱 1280</span>
 
       <div class="pf-sec rel"><span class="pf-lab">header</span><span class="m abs">1</span>
-        <div class="row"><b>GUNI</b><span class="muted small">Frontend Developer</span><span class="sp"></span><span class="pf-chip">Home</span><span class="small">Projects</span><span class="small">About</span><span class="sp"></span><span class="btn pri">Contact →</span></div>
+        <div class="row"><b>GUNI</b><span class="muted small">Frontend Developer</span><span class="sp"></span><span class="pf-chip">Home</span><span class="small">Projects</span><span class="small">About</span><span class="sp"></span><span class="rel"><span class="mo abs">아이콘 올라옴</span><span class="btn ghost" aria-label="테마 바꾸기">☀</span></span><span class="btn pri">Contact →</span></div>
       </div>
 
       <div class="pf-sec rel"><span class="pf-lab">hero</span><span class="m abs">2</span><span class="mo abs">등장 연출</span>
@@ -196,7 +196,7 @@ flowchart TD
     </div>
 
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>Header</b> <code>widgets/header</code><p>메뉴 3개(Home · Projects · About)는 각 페이지로 간다. 지금 있는 페이지의 메뉴에 밑줄. Contact 버튼 → <code>#contact</code></p></div></li>
+      <li><span class="m">1</span><div><b>Header</b> <code>widgets/header</code><p>메뉴 3개(Home · Projects · About)는 각 페이지로 간다. 지금 있는 페이지의 메뉴에 밑줄. Contact 버튼 → <code>#contact</code>. 그 왼쪽의 테마 버튼(<b>ThemeToggle</b> <code>shared/ui/themeToggle</code>)으로 다크와 라이트를 바꾼다. 처음 방문은 다크이고, 정책은 README 「테마」</p></div></li>
       <li><span class="m">2</span><div><b>Hero</b> <code>features/hero</code><p>이름은 <code>h1</code>. 등장 연출은 <a href="#s04">S-04</a>, 값은 README 「모션」 표</p></div></li>
       <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>View My Projects → <code>#projects</code>. 이력서 버튼은 두지 않는다</p></div></li>
       <li><span class="m">4</span><div><b>HeroVisual</b><p>캐릭터는 처음 화면 이미지라 미리 불러온다(<code>loading="eager"</code>). 손글씨는 <code>aria-hidden</code>. 낙서는 포인터 반대쪽으로 밀린다</p></div></li>
@@ -215,7 +215,7 @@ flowchart TD
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel pf-sticky"><span class="pf-lab">header · 고정</span><span class="m abs">1</span><span class="mo abs">바탕 흐림</span>
-        <div class="row"><b>GUNI</b><span class="sp"></span><span class="pf-chip">Home</span><span class="small">Projects</span><span class="small">About</span><span class="sp"></span><span class="btn pri">Contact →</span></div>
+        <div class="row"><b>GUNI</b><span class="sp"></span><span class="pf-chip">Home</span><span class="small">Projects</span><span class="small">About</span><span class="sp"></span><span class="btn ghost" aria-label="테마 바꾸기">☀</span><span class="btn pri">Contact →</span></div>
       </div>
       <div class="pf-sec"><span class="pf-lab">#projects</span><span class="muted small">S-01 과 같다</span></div>
     </div>
@@ -232,7 +232,7 @@ flowchart TD
     <div class="frame phone">
       <span class="vp">모바일 390</span>
       <div class="pf-sec rel"><span class="pf-lab">header</span><span class="m abs">1</span>
-        <div class="row"><b>GUNI</b><span class="sp"></span><span class="btn" aria-label="메뉴 열기">☰</span></div>
+        <div class="row"><b>GUNI</b><span class="sp"></span><span class="btn ghost" aria-label="테마 바꾸기">☀</span><span class="btn" aria-label="메뉴 열기">☰</span></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">hero</span><span class="m abs">2</span>
         <div class="pf-stack"><span class="pf-hand">Hey, I'm</span><span class="pf-display">GUNI</span><span class="btn pri">View My Projects →</span><div class="img-ph pf-hero-img">캐릭터</div></div>
@@ -242,7 +242,7 @@ flowchart TD
       </div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>헤더</b><p>768px 미만에서는 로고와 메뉴 버튼만 한 줄에 둔다. 메뉴 버튼 → <a href="#p01">P-01</a></p></div></li>
+      <li><span class="m">1</span><div><b>헤더</b><p>768px 미만에서는 로고와 테마 버튼 · 메뉴 버튼만 한 줄에 둔다. 메뉴 버튼 → <a href="#p01">P-01</a></p></div></li>
       <li><span class="m">2</span><div><b>히어로</b><p>캐릭터가 글 아래로 내려간다</p></div></li>
       <li><span class="m">3</span><div><b>작업 · 기술</b><p>카드는 한 열, 기술 타일은 세 열</p></div></li>
     </ol></aside>
@@ -274,7 +274,7 @@ flowchart TD
     <div class="frame phone">
       <span class="vp">모바일 390 · 메뉴 열림</span>
       <div class="pf-sec rel pf-sticky"><span class="pf-lab">header</span><span class="m abs">1</span>
-        <div class="row"><b>GUNI</b><span class="sp"></span><span class="btn" aria-label="메뉴 닫기">✕</span></div>
+        <div class="row"><b>GUNI</b><span class="sp"></span><span class="btn ghost" aria-label="테마 바꾸기">☀</span><span class="btn" aria-label="메뉴 닫기">✕</span></div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">패널</span><span class="m abs">2</span><span class="mo abs">내려오며 드러남</span>
         <div class="pf-stack">

@@ -13,6 +13,12 @@ const LOGO_SIZE_CLASS = {
     lg: 'h-12',
 } as const;
 
+/** 테마별 그림. 다크는 흰 글자, 라이트는 짙은 글자다 */
+const LOGO_IMAGES = [
+    { src: '/images/logo/logo.svg', className: 'theme-light:hidden' },
+    { src: '/images/logo/logo-light.svg', className: 'hidden theme-light:block' },
+] as const;
+
 interface OwnProps {
     /** 링크의 이름에 쓴다. 로고 그림 안의 글자는 스크린 리더가 읽지 못한다 */
     name: string;
@@ -23,22 +29,24 @@ interface OwnProps {
 }
 
 /**
- * 가로형 로고. G 심볼 · 이름 · 직함이 그림 한 장(public/images/logo/logo.svg)에 들어 있다.
+ * 가로형 로고. G 심볼 · 이름 · 직함이 그림 한 장(public/images/logo/)에 들어 있다.
  * 헤더와 푸터가 함께 쓴다.
  */
 export default function Logo({ name, href = '#top', size = 'md' }: OwnProps) {
-    const image = (
+    // 글자색이 그림에 박혀 있어 테마마다 그림을 따로 둔다. 둘 다 그려 두고 CSS 로 하나만 보인다
+    const image = LOGO_IMAGES.map((logo) => (
         // SVG 는 이미지 최적화를 거치지 않는다. 벡터라 크기를 줄여 내려 줄 것이 없다
         <Image
-            src="/images/logo/logo.svg"
+            key={logo.src}
+            src={logo.src}
             alt=""
             width={144}
             height={40}
             unoptimized
             loading="eager"
-            className={cn(LOGO_SIZE_CLASS[size], 'w-auto')}
+            className={cn(LOGO_SIZE_CLASS[size], 'w-auto', logo.className)}
         />
-    );
+    ));
     const label = `${name} 홈으로`;
     const className = 'flex shrink-0 items-center';
 

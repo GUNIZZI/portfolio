@@ -85,12 +85,20 @@ export default function Contact() {
                 >
                     {'Good\nIdeas\nStart with\na Conversation'}
                 </p>
+                {/* 손은 흰 선으로 그린 그림이라 밝은 바탕에서 보이지 않는다. 라이트에서는 선이 짙은 그림으로 바꿔 끼운다 */}
                 <Image
                     src="/images/characters/peace.png"
                     alt=""
                     width={96}
                     height={117}
-                    className="h-auto w-24"
+                    className="h-auto w-24 theme-light:hidden"
+                />
+                <Image
+                    src="/images/characters/peace-light.png"
+                    alt=""
+                    width={96}
+                    height={117}
+                    className="hidden h-auto w-24 theme-light:block"
                 />
             </div>
         </section>

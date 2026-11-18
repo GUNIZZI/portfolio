@@ -88,12 +88,21 @@
     - 맨 위에서는 바탕이 없고, 스크롤을 시작하면 바탕을 반투명으로 흐린다.
     - 버튼으로 섹션에 갈 때는 헤더 높이만큼 덜 올라가 제목이 헤더에 가리지 않는다.(`src/style/tokens/layout.css` 의 `scroll-mt-header`)
 
+### 테마
+
+- **테마는 다크와 라이트 2개이고, 헤더의 테마 버튼으로 바꾼다.**(2026-11-18 사용자 결정, `src/shared/ui/themeToggle/ThemeToggle.tsx`)
+    - 버튼은 Contact 버튼의 왼쪽에 있다. 다크에서는 해, 라이트에서는 달 아이콘이다.(`src/widgets/header/HeaderBar.tsx`)
+    - 모든 공개 페이지의 헤더에 있다. 관리 화면의 버튼은 [대시보드 기획](../admin/dashboard/README.md) 「GNB」 에 있다.
+- **처음 방문은 다크다.** OS 의 설정을 따르지 않는다.(2026-11-18 사용자 결정, `src/_app/Providers.tsx`)
+- 바꾼 테마는 브라우저에 저장해 다음 방문과 다른 페이지에서도 유지한다. 공개 화면과 관리 화면이 같은 값을 쓴다.
+- 색 값은 `docs/theme.md` 1.2절과 `docs/design.md` 1.1절에 있다.
+
 ### 모바일 메뉴
 
 요구사항 9번이다. 아래 기획안을 사용자가 모두 채택했다.(요구사항 11) 구현은 `src/widgets/header/HeaderBar.tsx` 에 있다.
 
 - **전환 폭**: 768px 미만에서 햄버거 메뉴로 바꾼다. Tailwind 의 `md` 경계다.
-- **좁은 화면의 헤더**: 로고와 메뉴 버튼만 한 줄에 둔다. 메뉴 3개와 Contact 버튼은 패널로 옮긴다.
+- **좁은 화면의 헤더**: 로고와 테마 버튼 · 메뉴 버튼만 한 줄에 둔다. 메뉴 3개와 Contact 버튼은 패널로 옮긴다.
 - **패널**: 메뉴 버튼을 누르면 헤더 바로 아래에 화면 폭으로 펼친다. 메뉴 3개를 세로로 놓고 그 아래에 Contact 버튼을 둔다.
     - 바탕은 헤더와 같은 `glass` 다. 층은 `z-overlay` 다.(`docs/theme.md` 3절)
         - 뒤의 화면은 어둡게 덮지 않고 스크롤도 잠그지 않는다. 패널이 화면의 일부만 가린다.
@@ -153,6 +162,7 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 | 나머지 작업 카드    | 다른 카드에 hover · focus | 흐려지고 어두워진다                                                                                                         | CSS             | `duration-base` · `ease-move`                            | 바로 흐려짐      |
 | 기술 타일           | hover                     | 아이콘이 한 번 흔들린다                                                                                                     | CSS             | `duration-base` · `ease-move`                            | 움직이지 않음    |
 | 주요 버튼           | hover · focus             | 다른 색의 면이 밀려 들어와 덮고, 면이 오른쪽으로 넓어지고, 화살표가 조금 늦게 밀린다                                        | CSS             | `duration-fast` · `ease-move`                            | 색만 바뀜        |
+| 테마 버튼           | 누름                      | 바뀐 테마의 아이콘이 아래에서 올라오며 나타난다(FadeSlideUp). 페이지를 처음 그릴 때는 움직이지 않는다                       | framer-motion   | `DURATION.base` · `EASE.enter`                           | 바로 바뀜        |
 | 연락 버튼 문구      | hover · focus             | 문구가 위로 말려 올라가고 메일 주소가 아래에서 올라온다                                                                     | CSS             | `duration-fast` · `ease-move`                            | 바로 바뀜        |
 | 모바일 메뉴 패널    | 메뉴 버튼                 | 위에서 내려오며 드러난다. 닫힐 때는 반대로                                                                                  | framer-motion   | `DURATION.fast` · `EASE.enter` · `EASE.exit`             | 바로 열리고 닫힘 |
 | 소개 숫자           | 화면에 처음 들어옴        | 0 부터 세어 올라간다                                                                                                        | framer-motion   | `DURATION.slower`                                        | 최종 숫자        |
@@ -201,6 +211,7 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 | F-09 | 등장 연출          | S-01 · S-04 | 히어로 낙서와 이름, 말풍선                        |
 | F-10 | 스크롤 연출        | S-01        | 카드 등장, 숫자 세기, 밑줄, 붓 자국               |
 | F-11 | 모바일 메뉴        | S-03 · P-01 | 메뉴 버튼으로 패널을 열고 닫는다                  |
+| F-12 | 테마 바꾸기        | S-01 · S-03 | 헤더의 테마 버튼으로 다크와 라이트를 바꾼다       |
 
 ## 데이터
 

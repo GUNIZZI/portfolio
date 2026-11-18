@@ -4,6 +4,7 @@ import { House } from 'lucide-react';
 
 import { LogoutButton } from '@/features/adminAuth';
 import Logo from '@/shared/ui/logo/Logo';
+import ThemeToggle from '@/shared/ui/themeToggle/ThemeToggle';
 import { cn } from '@/shared/util/cn';
 import { ADMIN_NAV_ITEMS, type AdminNavHref } from '@/config/nav';
 import { SITE } from '@/config/site';
@@ -18,7 +19,7 @@ interface OwnProps {
 
 /**
  * 관리 화면의 머리. 로그인을 뺀 모든 관리 화면에 같은 모양으로 붙는다.
- * 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃이 있다. 연출은 두지 않는다.
+ * 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃 · 테마 버튼이 있다. 연출은 두지 않는다.
  */
 export default function AdminHeader({ currentHref }: OwnProps) {
     return (
@@ -67,6 +68,7 @@ export default function AdminHeader({ currentHref }: OwnProps) {
                     </a>
                     {/* <Separator orientation="vertical" className="h-3! bg-foreground/50" /> */}
                     <LogoutButton />
+                    <ThemeToggle effect="none" />
                 </div>
             </div>
         </header>

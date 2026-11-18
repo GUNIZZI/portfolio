@@ -118,7 +118,7 @@ flowchart TD
   <div class="screen-h"><span class="id">S-01</span><h2>대시보드</h2><span class="route">/admin/dashboard</span></div>
   <div class="wrap">
     <div class="frame">
-      <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t on">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
+      <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t on">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span><span class="btn ghost" aria-label="테마 바꾸기">☀</span></div>
       <div class="ph"><div><h4>대시보드</h4><p>사이트의 방문 통계를 본다</p></div></div>
       <div class="tbar">
         <span class="row rel"><span class="m abs">2</span><span class="btn sm">7일</span><span class="btn sm focus">30일</span><span class="btn sm">90일</span></span>
@@ -160,7 +160,7 @@ flowchart TD
       <div class="btn-row rel"><span class="m abs">9</span><span class="muted small">전송량은 Vercel 에서 본다</span><span class="sp"></span><span class="btn ghost">GA 콘솔 ↗</span><span class="btn ghost">Vercel 사용량 ↗</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>로그인을 뺀 모든 관리 화면의 맨 위에 같은 모양으로 둔다. 왼쪽부터 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃이다. 항목의 명세는 아래 「GNB」 표</p></div></li>
+      <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>로그인을 뺀 모든 관리 화면의 맨 위에 같은 모양으로 둔다. 왼쪽부터 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃 · 테마 버튼이다. 항목의 명세는 아래 「GNB」 표</p></div></li>
       <li><span class="m">2</span><div><b>기간</b> (컴포넌트 없음)<p>7일 · 30일 · 90일. 처음 값은 30일이다. 오늘은 넣지 않는다. 옆에 기간의 첫날과 끝날을 적는다. 고른 값은 주소에 남긴다</p></div></li>
       <li><span class="m">3</span><div><b>기준 시각 · Button</b> <code>shared/ui/button</code><p>값을 받은 시각을 적는다. 새로 고침은 간직한 값을 버리고 다시 받는다. 받는 동안 비활성</p></div></li>
       <li><span class="m">4</span><div><b>안내 상자</b> (컴포넌트 없음)<p>항상 보인다. 닫지 못한다</p></div></li>
@@ -182,8 +182,9 @@ flowchart TD
           <tr><td>지금 화면의 메뉴</td><td>밑줄과 강조색으로 나타내고 <code>aria-current="page"</code> 를 단다</td><td>등록 · 수정 화면은 자기가 속한 메뉴를 강조한다. 프로젝트 등록에서는 「프로젝트」 다</td></tr>
           <tr><td>사이트 보기</td><td>글자 링크</td><td><code>/</code> 를 새 탭으로 연다</td></tr>
           <tr><td>로그아웃</td><td><b>Button</b> <code>shared/ui/button</code>. 연출 없는 변형이다</td><td>세션을 지우고 로그인으로 간다. 확인 창을 거치지 않는다</td></tr>
+          <tr><td>테마 버튼</td><td><b>ThemeToggle</b> <code>shared/ui/themeToggle</code>. 연출 없는 변형이다</td><td>다크와 라이트를 바꾼다. 공개 화면과 같은 값을 쓴다</td></tr>
           <tr><td>자리</td><td>페이지 제목 위의 한 줄</td><td>스크롤하면 함께 올라간다. 화면 위에 붙지 않는다</td></tr>
-          <tr><td>좁은 화면</td><td>메뉴만 아랫줄로 내려 고르게 벌려 놓는다. 윗줄에는 로고와 사이트 보기 · 로그아웃이 남는다</td><td>메뉴를 버튼으로 접지 않는다</td></tr>
+          <tr><td>좁은 화면</td><td>메뉴만 아랫줄로 내려 고르게 벌려 놓는다. 윗줄에는 로고와 사이트 보기 · 로그아웃 · 테마 버튼이 남는다</td><td>메뉴를 버튼으로 접지 않는다</td></tr>
           <tr><td>저장하지 않은 내용이 있을 때</td><td>소개 수정 · 경력 등록 · 경력 수정 · 프로젝트 등록 · 프로젝트 수정</td><td>메뉴 · 로고를 눌러도 묻지 않고 옮긴다. 고친 내용은 남지 않는다</td></tr>
         </tbody>
       </table></div>

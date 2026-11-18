@@ -16,7 +16,7 @@
 
 ## 1. 색
 
-토큰 파일: `src/style/tokens/color.css`. 다크 전용이다.
+토큰 파일: `src/style/tokens/color.css`. 아래 표는 다크 값이고 원본에서 옮겼다. 라이트 값은 1.1절에 있다.
 
 | 토큰                         | 값        | 쓰는 곳                                                                                                                   |
 | ---------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------- |
@@ -41,6 +41,35 @@
 버튼 글자 대비는 `primary` 위 13.1, `brand` 위 흰 글자 5.4 다.
 `destructive` 의 바탕 대비는 7.1 이다.
 
+### 1.1 라이트
+
+**라이트 값은 원본에 없다.** 원본은 다크 화면뿐이라 2026-11-18 에 새로 정했다.(`src/style/tokens/color.css` 의 `[data-theme='light']`)
+아래에 없는 토큰은 다크와 값이 같다.
+
+| 토큰                                  | 값                                | 다크와 달라진 점                                               |
+| ------------------------------------- | --------------------------------- | -------------------------------------------------------------- |
+| `background` · `panel` · `card`       | `#f5f5fa` · `#fafafd` · `#ffffff` | 뒤로 갈수록 밝다                                               |
+| `chip`                                | `#e8e8f1`                         | 바탕보다 어둡다. 흰 카드 위에서 구분된다                       |
+| `strong` · `foreground`               | `#14141f` · `#3a3a48`             | 짙은 글자                                                      |
+| `muted-foreground` · `decorative`     | `#5c5c6e` · `#7a7a8c`             |                                                                |
+| `primary` · `primary-foreground`      | `#80bf1c` · `#ffffff`             | 형광 연두는 밝은 바탕에서 읽히지 않아 짙은 연두로 바꿨다       |
+| `brand-soft` · `info` · `destructive` | `#7e22ce` · `#2563eb` · `#b91c1c` | 글자로 쓰여 짙게 바꿨다                                        |
+| `badge`                               | `#ede9fe`                         | 짙은 보라 면이 옅은 보라 면이 됐다. 그 위 글자는 `strong` 이다 |
+| `doodle-sky` · `doodle-yellow`        | `#0ea5e9` · `#eab308`             | 한 단계 짙다                                                   |
+| `glow` · `brush-*`                    | 알파 0.35 · 0.6                   | 밝은 바탕에서 번짐이 탁해 보여 알파를 낮췄다                   |
+
+바탕 대비는 `strong` 16.8 · `foreground` 10.3 · `muted-foreground` 6.0 · `destructive` 6.0 이다. 모두 WCAG AA(4.5)를 넘는다.
+`primary` 는 2.1 로 AA 에 못 미친다.(2026-11-18 사용자 결정)
+`decorative` 는 3.9 라 정보 전달에 쓰지 않는다.
+버튼 글자 대비는 `primary` 위 흰 글자 2.2, `brand` 위 흰 글자 5.4 다. `primary` 위는 AA 에 못 미친다.
+
+그림도 2장을 새로 만들었다. 원본 그림에서 흰 글자와 흰 선만 짙게 바꿨다.
+
+| 그림                                       | 원본                             |
+| ------------------------------------------ | -------------------------------- |
+| `public/images/logo/logo-light.svg`        | `logo.svg`. 이름과 직함의 글자색 |
+| `public/images/characters/peace-light.png` | `peace.png`. 손을 그린 흰 선     |
+
 ## 2. 글자
 
 토큰 파일: `src/style/tokens/typography.css`
@@ -59,7 +88,7 @@
 ## 3. 배치
 
 ```
-헤더      로고 · 메뉴 3개 · Contact 버튼
+헤더      로고 · 메뉴 3개 · 테마 버튼 · Contact 버튼
 히어로    Hey, I'm / GUNI / Web Frontend Developer / 태그 / 버튼 1개   ←→ 캐릭터와 낙서
 패널      FEATURED PROJECTS(카드 격자) + MY SKILLS(타일 격자)
 소개      캐릭터 · ABOUT ME · 숫자 3개

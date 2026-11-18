@@ -1,7 +1,8 @@
 /*
  * 색 토큰 정본. 앱 어디서도 색 변수를 새로 정의하지 않는다 (docs/theme.md).
  * 값의 출처와 대비 수치는 docs/design.md 1절이 갖는다.
- * 이 디자인은 다크 전용이다. 라이트 값을 따로 두지 않는다.
+ * :root 가 다크 값이고, [data-theme='light'] 가 같은 이름의 값을 라이트로 덮어쓴다.
+ * 디자인 원본은 다크뿐이다. 라이트 값은 원본에서 옮긴 것이 아니라 새로 정했다 (docs/design.md 1.1절).
  */
 
 :root {
@@ -65,6 +66,57 @@
     --accent-foreground: var(--strong);
     --input: var(--border-card);
 }
+
+/*
+ * 라이트. html 의 data-theme 은 next-themes 가 붙인다 (src/_app/Providers.tsx).
+ * 어두운 바탕을 전제로 고른 형광색은 밝은 바탕에서 읽히도록 짙게 바꿨다.
+ * shadcn 이름은 위의 토큰을 가리키므로 다시 적지 않는다.
+ */
+[data-theme='light'] {
+    color-scheme: light;
+
+    /* 면. 뒤로 갈수록 한 단계씩 밝고, chip 만 바탕보다 어둡다 */
+    --background: #f5f5fa;
+    --panel: #fafafd;
+    --card: #ffffff;
+    --chip: #e8e8f1;
+    --panel-glass: rgb(250 250 253 / 0.5);
+    --glow: rgb(147 51 234 / 0.35);
+    --glass: rgb(245 245 250 / 0.8);
+
+    /* 선 */
+    --border: #dcdce8;
+    --border-card: #d2d2e0;
+    --line: #e4e4ee;
+    --divider: #cdcddc;
+
+    /* 글자 */
+    --strong: #14141f;
+    --foreground: #3a3a48;
+    --muted-foreground: #5c5c6e;
+    --decorative: #7a7a8c;
+
+    /* 강조 */
+    --primary: #80bf1c;
+    --primary-foreground: #ffffff;
+    --brand-soft: #7e22ce;
+    --badge: #ede9fe;
+    --info: #2563eb;
+    --destructive: #b91c1c;
+
+    /* 낙서 */
+    --doodle-sky: #0ea5e9;
+    --doodle-yellow: #eab308;
+    --brush-sky: rgb(14 165 233 / 0.6);
+    --brush-violet: rgb(168 85 247 / 0.6);
+    --dot: rgb(160 160 190 / 0.4);
+}
+
+/*
+ * 라이트일 때만 적용하는 변형. 색이 박혀 있어 토큰으로 바꿀 수 없는 그림을 바꿔 끼울 때만 쓴다 (로고).
+ * 색은 이 변형으로 나누지 않고 위의 토큰 값으로 정한다 (docs/theme.md 원칙 4).
+ */
+@custom-variant theme-light (&:where([data-theme='light'], [data-theme='light'] *));
 
 @theme inline {
     --color-background: var(--background);

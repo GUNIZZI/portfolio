@@ -7,6 +7,7 @@
 
 @layer base {
     html {
+        /* 라이트에서는 tokens/color.css 의 [data-theme='light'] 가 덮어쓴다 */
         color-scheme: dark;
         scroll-behavior: smooth;
     }

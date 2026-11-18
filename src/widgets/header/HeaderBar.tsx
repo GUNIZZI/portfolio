@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 
 import Icon from '@/shared/ui/icon/Icon';
 import Logo from '@/shared/ui/logo/Logo';
+import ThemeToggle from '@/shared/ui/themeToggle/ThemeToggle';
 import { cn } from '@/shared/util/cn';
 import { NAV_ITEMS, type NavHref } from '@/config/nav';
 
@@ -158,18 +159,22 @@ export default function HeaderBar({ name, currentHref, action }: OwnProps) {
                             );
                         })}
                     </nav>
-                    <div className="hidden md:block">{action}</div>
-                    <button
-                        ref={menuButtonRef}
-                        type="button"
-                        aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
-                        aria-expanded={isMenuOpen}
-                        aria-controls={panelId}
-                        onClick={hndlMenuToggle}
-                        className="flex size-11 items-center justify-center text-strong md:hidden"
-                    >
-                        <Icon name={isMenuOpen ? 'close' : 'menu'} size={26} strokeWidth={2} />
-                    </button>
+                    {/* 테마 버튼은 좁은 화면에서도 막대에 남는다. 메뉴를 열지 않고 바꿀 수 있다 */}
+                    <div className="flex items-center gap-x-1 md:gap-x-4">
+                        <ThemeToggle className="size-11" />
+                        <div className="hidden md:block">{action}</div>
+                        <button
+                            ref={menuButtonRef}
+                            type="button"
+                            aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+                            aria-expanded={isMenuOpen}
+                            aria-controls={panelId}
+                            onClick={hndlMenuToggle}
+                            className="flex size-11 items-center justify-center text-strong md:hidden"
+                        >
+                            <Icon name={isMenuOpen ? 'close' : 'menu'} size={26} strokeWidth={2} />
+                        </button>
+                    </div>
                 </div>
             </div>
 
