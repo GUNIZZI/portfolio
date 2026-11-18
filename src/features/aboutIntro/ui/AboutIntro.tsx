@@ -38,7 +38,7 @@ export default function AboutIntro({ intro }: OwnProps) {
                     </svg>
                 </div>
 
-                <div className="flex max-w-140 flex-col gap-3 text-lead leading-relaxed text-foreground">
+                <div className="flex flex-col gap-3 text-lead leading-relaxed text-foreground lg:max-w-140">
                     {intro.lines.map((line) => (
                         <p key={line}>{line}</p>
                     ))}

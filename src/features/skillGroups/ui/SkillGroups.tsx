@@ -24,20 +24,20 @@ export default function SkillGroups({ groups }: OwnProps) {
                     {groups.map((group) => (
                         <li
                             key={group.name}
-                            className="flex flex-col gap-3 rounded-card border border-border-card bg-card p-5"
+                            className="flex flex-col gap-5 rounded-card border border-border-card bg-card p-5"
                         >
                             <h3 className="text-body font-bold">{group.name}</h3>
                             <ul className="flex flex-wrap gap-1">
                                 {group.items.map((item) => (
                                     <li
                                         key={item}
-                                        className="rounded-md bg-chip px-2.5 py-1 text-xs text-muted-foreground"
+                                        className="rounded-md bg-chip px-2.5 py-1 text-2xs text-muted-foreground"
                                     >
                                         {item}
                                     </li>
                                 ))}
                             </ul>
-                            <p className="leading-relaxed text-foreground">{group.usage}</p>
+                            <p className="leading-relaxed text-muted-foreground">{group.usage}</p>
                         </li>
                     ))}
                 </ul>

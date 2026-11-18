@@ -21,7 +21,7 @@ export default function WorkPrinciples({ principles }: OwnProps) {
                             {String(index + 1).padStart(2, '0')}
                         </span>
                         <h3 className="text-lead font-bold">{principle.title}</h3>
-                        <p className="text-sm leading-relaxed text-foreground">
+                        <p className="text-sm leading-relaxed text-muted-foreground">
                             {principle.description}
                         </p>
                     </li>
