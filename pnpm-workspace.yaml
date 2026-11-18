@@ -1,3 +1,8 @@
 ignoredBuiltDependencies:
     - sharp
     - unrs-resolver
+
+# jwks-rsa@4 는 ESM 전용인 jose@6 를 require() 한다. Vercel 런타임은 require(esm) 을 꺼 두어
+# firebase-admin/auth 로드가 ERR_REQUIRE_ESM 으로 실패하므로, CJS 빌드가 있는 5.x 로 고정한다.
+overrides:
+    'jwks-rsa>jose': 5.10.0
