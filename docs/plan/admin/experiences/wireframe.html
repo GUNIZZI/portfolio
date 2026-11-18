@@ -179,10 +179,10 @@ flowchart TD
       <div class="ph"><div><h4>경력 등록</h4><p>id 는 저장할 때 발급한다</p></div></div>
       <div class="form-grid">
         <div class="fl req">회사</div>
-        <div class="fv"><div class="rel"><span class="m abs">1</span><div class="inp val">KOCOM</div></div></div>
+        <div class="fv"><div class="row rel"><span class="m abs">1</span><div class="inp val">KOCOM</div><span class="cb on">재직 중 ●</span></div></div>
         <div class="sepx"></div>
         <div class="fl req">기간</div>
-        <div class="fv"><div class="row rel"><span class="m abs">2</span><div class="inp val">2025</div><span class="muted">~</span><div class="inp ro">떠난 해</div><span class="cb on">✓ 재직 중</span></div></div>
+        <div class="fv"><div class="row rel"><span class="m abs">2</span><div class="inp val">2025</div><span class="muted">~</span><div class="inp ro">떠난 해</div></div></div>
         <div class="sepx"></div>
         <div class="fl">요약</div>
         <div class="fv"><div class="rel"><span class="m abs">3</span><div class="ta">프론트엔드 개발. 사내 디자인 시스템을 개발하고 …</div></div><div class="info">ⓘ 비우면 공개 화면이 요약 줄을 그리지 않는다</div></div>
@@ -197,23 +197,23 @@ flowchart TD
             <table>
               <thead><tr><th>이름</th><th>시기</th><th>기술 태그</th><th>프로젝트 연결</th><th class="c">순서</th><th class="c">빼기</th></tr></thead>
               <tbody>
-                <tr><td><div class="inp val">Design System</div></td><td><div class="inp val">2025.06</div></td><td><div class="inp val">React19, Shadcn UI, Tailwind</div></td><td><div class="inp sel">잇지 않음</div></td><td class="c"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
+                <tr><td><div class="inp val">Design System</div></td><td><div class="inp val">2025.06</div></td><td><div class="inp val">React19, Shadcn UI, Tailwind</div></td><td><div class="inp sel">선택없음</div></td><td class="c"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
                 <tr><td><div class="inp val">KOZIPSA Web Admin</div></td><td><div class="inp val">2025.06</div></td><td><div class="inp val">Next15, Context, Zustand</div></td><td><div class="inp sel val">KOZIPSA 플랫폼 관리 시스템</div></td><td class="c"><span class="btn sm">↑</span><span class="btn sm">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
-                <tr><td><div class="inp val">HomeNetwork Web Admin</div></td><td><div class="rel"><span class="ferr">2025.06 또는 2022 처럼 입력해 주세요.</span><div class="inp val err">25.5</div></div></td><td><div class="inp val">Next15</div></td><td><div class="inp sel">잇지 않음</div></td><td class="c"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
+                <tr><td><div class="inp val">HomeNetwork Web Admin</div></td><td><div class="rel"><span class="ferr">2025.06 또는 2022 처럼 입력해 주세요.</span><div class="inp val err">25.5</div></div></td><td><div class="inp val">Next15</div></td><td><div class="inp sel">선택없음</div></td><td class="c"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></td><td class="c"><span class="btn sm ghost">빼기</span></td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <div class="btn-row rel"><span class="m abs">6</span><span class="muted small">시기를 확인해 주세요</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
+      <div class="btn-row rel"><span class="m abs">6</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>회사</b> <code>company</code> · <b>Input</b> <code>shared/ui/input</code><p>1자 이상</p></div></li>
-      <li><span class="m">2</span><div><b>기간</b> <code>startYear</code> · <code>endYear</code><p>4자리 숫자. 재직 중을 켜면 떠난 해는 비활성이고 값을 비운다. 떠난 해는 들어간 해보다 앞설 수 없다</p></div></li>
+      <li><span class="m">1</span><div><b>회사</b> <code>company</code> · <b>Input</b> <code>shared/ui/input</code><p>1자 이상. 오른쪽 끝에 「재직 중」 스위치가 있다. <b>Switch</b> <code>shared/ui/switch</code></p></div></li>
+      <li><span class="m">2</span><div><b>기간</b> <code>startYear</code> · <code>endYear</code><p>4자리 숫자. 재직 중을 켜면 떠난 해는 비활성이고 저장하지 않는다. 떠난 해는 들어간 해보다 앞설 수 없다</p></div></li>
       <li><span class="m">3</span><div><b>요약</b> <code>summary</code><p>선택 항목이다</p></div></li>
       <li><span class="m">4</span><div><b>실제 프로젝트 수</b> <code>totalProjects</code><p>선택 항목이다. 1 이상의 숫자. 공개 화면은 <code>50개+</code> 로 적는다</p></div></li>
       <li><span class="m">5</span><div><b>프로젝트 목록</b> <code>projects</code> (컴포넌트 없음)<p>더하면 맨 위에 빈 줄이 생긴다. ↑ · ↓ 로 옮기고 빼기로 뺀다. 확인 창은 띄우지 않는다. 0건이어도 저장할 수 있다. 줄의 명세는 아래 표</p></div></li>
-      <li><span class="m">6</span><div><b>Button</b> <code>shared/ui/button</code><p>규칙에 맞지 않으면 등록은 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 취소 → 묻지 않고 <a href="#s01">S-01</a> 로 간다. 고친 내용은 버린다</p></div></li>
+      <li><span class="m">6</span><div><b>Button</b> <code>shared/ui/button</code><p>규칙에 맞지 않으면 등록은 비활성이다. 이유는 따로 적지 않고 항목의 오류 문구로 알린다. 저장하는 동안에도 비활성. 취소 → 묻지 않고 <a href="#s01">S-01</a> 로 간다. 고친 내용은 버린다</p></div></li>
     </ol></aside>
   </div>
   <div class="spec">
@@ -224,8 +224,8 @@ flowchart TD
         <tbody>
           <tr><td>이름</td><td><code>name</code>. 필수</td><td>—</td></tr>
           <tr><td>시기</td><td><code>date</code>. 필수. <code>2025.06</code> 또는 <code>2022</code></td><td>—</td></tr>
-          <tr><td>기술 태그</td><td><code>tags</code>. 선택</td><td>입력 방식은 정하지 않았다. 그림은 쉼표로 나눠 적는 안이다. README.md 검토 필요 사항의 「기술 태그 입력 방식」</td></tr>
-          <tr><td>프로젝트 연결</td><td><code>projectId</code>. 선택</td><td>등록된 프로젝트를 순서대로 보여 준다. 비공개에는 「비공개」 를 붙인다. 처음 값은 「잇지 않음」</td></tr>
+          <tr><td>기술 태그</td><td><code>tags</code>. 선택</td><td>칩 목록으로 입력한다. 그림은 그 전의 쉼표로 나눠 적는 안이다. README.md 「구현하면서 정한 것」</td></tr>
+          <tr><td>프로젝트 연결</td><td><code>projectId</code>. 선택</td><td>등록된 프로젝트를 순서대로 보여 준다. 비공개에는 「비공개」 를 붙인다. <b>Select</b> <code>shared/ui/select</code>. 고르지 않았으면 「선택없음」 이 보인다</td></tr>
           <tr><td>순서</td><td>↑ · ↓ 버튼</td><td>첫 줄의 ↑ 와 끝 줄의 ↓ 는 비활성</td></tr>
           <tr><td>빼기</td><td>버튼</td><td>그 줄을 뺀다. 저장하기 전에는 반영하지 않는다</td></tr>
         </tbody>
@@ -236,11 +236,12 @@ flowchart TD
       <div class="spec-tw"><table class="spec-t">
         <thead><tr><th>항목</th><th>상황</th><th>문구</th></tr></thead>
         <tbody>
-          <tr><td>회사 · 프로젝트 이름</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요.</td></tr>
-          <tr><td>들어간 해 · 떠난 해</td><td>4자리 숫자가 아니다</td><td>연도 4자리를 입력해 주세요.</td></tr>
-          <tr><td>떠난 해</td><td>들어간 해보다 앞선다</td><td>떠난 해는 들어간 해보다 앞설 수 없습니다.</td></tr>
+          <tr><td>회사</td><td>비었다</td><td>회사를 입력해 주세요.</td></tr>
+          <tr><td>프로젝트 이름</td><td>비었다</td><td>이름을 입력해 주세요.</td></tr>
+          <tr><td>들어간 해 · 떠난 해</td><td>비었거나 4자리 숫자가 아니다</td><td>연도 4자리를 입력해 주세요.</td></tr>
+          <tr><td>떠난 해</td><td>들어간 해보다 앞선다</td><td>퇴사날짜는 입사날짜보다 앞설 수 없습니다.</td></tr>
           <tr><td>실제 프로젝트 수</td><td>1 이상의 숫자가 아니다</td><td>1 이상의 숫자를 입력해 주세요.</td></tr>
-          <tr><td>시기</td><td>형식이 다르다</td><td>2025.06 또는 2022 처럼 입력해 주세요.</td></tr>
+          <tr><td>시기</td><td>비었거나 형식이 다르다</td><td>2025.06 또는 2022 처럼 입력해 주세요.</td></tr>
         </tbody>
       </table></div>
       <p class="spec-note">입력 규칙은 README.md 「경력 등록 · 수정」 표가 갖는다. 문구는 초안이다. README.md 검토 필요 사항의 「문구」</p>
@@ -254,10 +255,10 @@ flowchart TD
   <div class="wrap">
     <div class="frame">
       <div class="tabs rel"><b>GUNI</b><span class="t">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t on">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
-      <div class="ph"><div><h4>경력 수정</h4><p>수정 일시 2026.11.17 (10:12)</p></div></div>
+      <div class="ph"><div><h4>경력 수정</h4><p>회사와 그 회사에서 한 프로젝트를 고친다</p></div></div>
       <div class="form-grid">
         <div class="fl">입력 항목</div>
-        <div class="fv"><span class="muted">S-02 과 같다. 저장된 값으로 채운다</span></div>
+        <div class="fv"><span class="muted">S-02 과 같다. 저장된 값으로 채운다. 「회사」 제목의 오른쪽 끝에 수정 일시를 적는다. 「수정. 2026.11.17 (10:12)」</span></div>
       </div>
       <div class="btn-row rel"><span class="m abs">1</span><span class="btn danger">삭제</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">저장</span></div>
     </div>
@@ -272,7 +273,7 @@ flowchart TD
         <thead><tr><th>상황</th><th>동작</th></tr></thead>
         <tbody>
           <tr><td>없는 <code>id</code> 다</td><td>404 를 그린다</td></tr>
-          <tr><td>이어 둔 프로젝트가 삭제됐다</td><td>그 줄의 프로젝트 연결을 「잇지 않음」 으로 그린다</td></tr>
+          <tr><td>이어 둔 프로젝트가 삭제됐다</td><td>그 줄의 프로젝트 연결을 고르지 않은 것(「선택없음」)으로 그린다</td></tr>
         </tbody>
       </table></div>
     </div>
@@ -314,7 +315,7 @@ flowchart TD
       <div class="spec-tw"><table class="spec-t">
         <thead><tr><th>항목</th><th>내용</th></tr></thead>
         <tbody>
-          <tr><td>컴포넌트</td><td>다이얼로그 (컴포넌트 없음)</td></tr>
+          <tr><td>컴포넌트</td><td>AlertDialog <code>shared/ui/alertDialog</code></td></tr>
           <tr><td>처음 포커스</td><td>취소</td></tr>
           <tr><td>삭제</td><td>회사와 프로젝트 목록을 지우고 S-01 로 간다. <a href="#p02">P-02</a> 삭제됨. 이어 둔 프로젝트는 지우지 않는다</td></tr>
           <tr><td>취소 · Esc</td><td>창을 닫고 열었던 버튼으로 포커스를 돌려준다</td></tr>
@@ -332,7 +333,7 @@ flowchart TD
       <div class="row rel"><span class="m abs">1</span><span class="toast">✓ 경력을 등록했습니다</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>토스트</b> (컴포넌트 없음)<p><code>role="status"</code>. 모양 · 위치 · 사라지는 시간은 프로젝트 관리 와이어프레임(../wireframe.html)의 토스트와 같다</p></div></li>
+      <li><span class="m">1</span><div><b>토스트</b> <code>shared/ui/toast</code><p><code>role="status"</code>. 모양 · 위치 · 사라지는 시간은 프로젝트 관리 와이어프레임(../wireframe.html)의 토스트와 같다</p></div></li>
     </ol></aside>
   </div>
   <div class="spec">

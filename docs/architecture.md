@@ -19,7 +19,7 @@ Kozipsa(`admin-next/docs/architecture.md`)의 구조를 가져오고, 백엔드�
 | 항목          | Kozipsa                                   | 이 저장소                                                   | 이유                                                                          |
 | ------------- | ----------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | 저장소        | pnpm + Turborepo 모노레포                 | 단일 앱                                                     | 앱이 하나라 공용 패키지로 나눌 대상이 없다                                    |
-| 데이터        | 백엔드 API                                | `content/` 의 로컬 파일과 Firestore, 로그인은 Firebase Auth | 소개 문구는 Firestore 로 옮겼다. 작업과 경력은 아직 로컬 파일이다(2026-11-17) |
+| 데이터        | 백엔드 API                                | `content/` 의 로컬 파일과 Firestore, 로그인은 Firebase Auth | 소개 문구와 경력은 Firestore 로 옮겼다. 작업은 아직 로컬 파일이다(2026-11-18) |
 | entity        | model · actions · services · repositories | model · services · repositories, 변경 요청이 있으면 actions | 서버 액션이 필요한 entity 만 `actions` 를 둔다(2026-11-12 사용자 결정)        |
 | 디자인 시스템 | `packages/ui` + Storybook                 | `src/shared/ui` + `src/style/tokens`                        | UI 를 함께 쓸 다른 앱이 없다                                                  |
 | 상태          | Zustand · TanStack Query                  | 쓰지 않는다                                                 | 전역 상태와 서버 상태가 없다                                                  |
@@ -30,7 +30,7 @@ Kozipsa(`admin-next/docs/architecture.md`)의 구조를 가져오고, 백엔드�
 
 ```
 portfolio/
-├── content/          원문 (projects.ts, experiences.json)
+├── content/          원문 (projects.ts)
 ├── docs/             규칙 문서
 ├── e2e/              Playwright
 └── src/
@@ -84,7 +84,7 @@ flowchart TD
 ```
 
 **`entities` 끼리도 서로 import 하지 않는다.** 조합이 필요하면 상위인 `features` 에서 합친다.(Kozipsa 3절)
-**예외는 `session` 하나다.** 변경 요청을 받는 서버 액션은 세션을 다시 검사해야 하므로, entity 는 `session` 을 import 할 수 있다.(`eslint.config.mjs` 의 `boundaries/dependencies`, `src/entities/about/actions/about.actions.ts`)
+**예외는 `session` 하나다.** 변경 요청을 받는 서버 액션은 세션을 다시 검사해야 하므로, entity 는 `session` 을 import 할 수 있다.(`eslint.config.mjs` 의 `boundaries/dependencies`, `src/entities/about/actions/about.actions.ts` · `src/entities/experience/actions/experience.actions.ts`)
 
 **`features` 끼리, `widgets` 끼리도 서로 import 하지 않는다.** 슬라이스 사이의 조합은 한 단계 위에서 한다.
 
@@ -127,7 +127,9 @@ widgets/        ← 여러 기능을 조합하거나 모든 페이지에 붙는 
 features/*/ui   ← 특정 기능에서만 쓰는 UI
 ```
 
-`shared/ui` 의 Button · Input · Textarea · Separator · Label · Field 는 shadcn 을 바탕으로 한다.(`components.json`, 2026-11-17 사용자 결정) 파일 이름과 export 는 [conventions.md](./conventions.md) 2.5절을 따른다.
+`shared/ui` 의 Button · Input · Textarea · Separator · Label · Field · AlertDialog 는 shadcn 을 바탕으로 한다.(`components.json`, 2026-11-17 사용자 결정) 파일 이름과 export 는 [conventions.md](./conventions.md) 2.5절을 따른다.
+
+`shared/ui` 의 Table · Pagination · DataTable · Select · Switch 와 확인 창(ConfirmDialog) · Toast 는 Kozipsa `packages/ui` 에서 가져왔다.(2026-11-18 사용자 결정) 원본과 다른 점은 컴포넌트마다의 문서에 있다.(`src/shared/ui/dataTable/dataTable.md`)
 
 `shared/ui/size` 는 컴포넌트가 아니다. Button · Input · Textarea 가 함께 읽는 크기 눈금을 둔다.(`src/shared/ui/size/size.constants.ts`, 2026-11-17 사용자 결정)
 
@@ -152,7 +154,7 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 **변경 요청은 `actions` 의 서버 액션으로 받는다.**(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 요구사항 7)
 파일 첫 줄에 `'use server';` 를 둔다. 클라이언트 컴포넌트가 entity 에서 직접 가져올 수 있는 것은 서버 액션과 `model` 뿐이다.
-지금은 `session` 과 `about` 에 있다.(`src/entities/session/actions/` · `src/entities/about/actions/`)
+지금은 `session` · `about` · `experience` 에 있다.(`src/entities/session/actions/` · `src/entities/about/actions/` · `src/entities/experience/actions/`)
 
 ```
 폼(클라이언트) → <e>.actions.ts → <e>.services.ts → <e>.repositories.ts → 저장소
@@ -165,6 +167,7 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 - 읽은 결과는 `services` 가 `'use cache'` 로 캐시하고 태그를 붙인다. 공개 화면이 요청마다 저장소를 부르지 않는다.(`src/entities/about/services/about.services.ts`)
 - 저장한 서버 액션이 그 태그의 캐시를 지운다. 공개 화면은 저장한 직후의 내용을 그린다.(`src/entities/about/actions/about.actions.ts`)
 - 저장한 시각은 서버가 기록한다. 캐시에 담을 수 있게 문자열로 바꿔 읽는다.(`src/entities/about/repositories/about.repositories.ts`)
+- 여러 건을 두는 컬렉션은 문서 1개가 1건이고, 문서의 id 는 저장소가 발급한다. 순서는 `services` 가 정한다.(`src/entities/experience/repositories/experience.repositories.ts` · `src/entities/experience/services/experience.services.ts`)
 - 빌드할 때도 저장소를 읽는다. 빌드하는 곳에 환경 변수 5개가 있어야 한다.(`src/shared/util/serverEnv.ts`)
 
 ### 4.2 세션
@@ -184,11 +187,21 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 - `/admin` 은 화면을 그리지 않는다. 세션이 있으면 대시보드로, 없으면 로그인으로 보낸다.(`src/features/adminAuth/ui/AdminEntry.tsx`)
 - 관리 화면의 머리는 `widgets/adminHeader` 다. 메뉴 항목은 `src/config/nav.ts` 의 `ADMIN_NAV_ITEMS` 에 있다.
 - 머리는 페이지가 아니라 레이아웃이 그린다. 로그인을 뺀 관리 화면을 `(panel)` 로 묶어, 메뉴를 옮겨도 머리는 남고 본문만 바뀐다.(`src/app/admin/(panel)/layout.tsx`)
+- 토스트도 그 레이아웃에 하나만 둔다. 저장하고 다른 화면으로 옮긴 뒤에도 문구가 남는다.(`src/app/admin/(panel)/layout.tsx`, `src/shared/ui/toast/ToastProvider.tsx`)
+- 확인 창을 그리는 곳도 그 레이아웃에 하나만 둔다. 화면은 `addConfirmDialog` 를 불러 띄운다.(`src/app/admin/(panel)/layout.tsx`, `src/shared/ui/alertDialog/ConfirmDialogProvider.tsx`)
 - 레이아웃은 화면을 옮길 때 다시 실행되지 않는다. 그래서 레이아웃과 페이지가 각각 `AdminGuard` 를 두고, 강조할 메뉴는 `AdminNav` 가 주소에서 읽는다.(`src/widgets/adminHeader/AdminNav.tsx`)
 - 쿠키는 `services` 의 `getSession` 이 읽고, `actions` 가 쓰고 지운다.(`src/entities/session/`)
 - 쿠키를 읽는 컴포넌트는 `<Suspense>` 안에 둔다. `cacheComponents` 가 켜져 있어 밖에서 읽으면 빌드가 실패한다.(`next.config.ts`)
 
 **`repositories` 는 `interface` 를 먼저 선언하고, JSDoc 은 interface 멤버에만 단다.**(Kozipsa 4절)
+
+### 4.3 폼의 검증
+
+**검증은 zod 스키마가 하고, 오류 문구도 스키마가 낸다.** 폼은 따로 검사하지 않고 스키마가 낸 문구를 그 항목 아래에 그린다.(2026-11-18 사용자 결정, Kozipsa `docs/form.md`)
+
+- 폼은 `react-hook-form` 의 `useForm` 에 `zodResolver` 를 걸어 만든다.(`src/features/experienceEditor/ui/ExperienceForm.tsx` · `src/features/aboutEditor/model/useSectionForm.ts`)
+- 규칙과 문구는 entity 의 스키마에 둔다. 서버 액션도 같은 스키마로 다시 검증한다.(`src/entities/experience/model/experience.schemas.ts` 와 `EXPERIENCE_FIELD_ERROR`, `src/entities/about/model/about.schemas.ts` 와 `ABOUT_FIELD_ERROR`)
+- 폼의 값이 저장할 내용과 모양이 다르면 `features` 에 폼 스키마를 둔다. 모양만 바꿔 entity 의 스키마에 넘기고, 규칙은 다시 적지 않는다.(`src/features/experienceEditor/model/experienceEditor.schemas.ts`)
 
 ## 금지사항
 
@@ -203,10 +216,10 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 
 ## 미정리 항목
 
-- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` 다.
+- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` 다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
 - widget 은 `header` · `footer` · `backdrop` · `contact` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` 이다.
-- 관리 기능은 로그인과 소개까지 구현했다(2026-11-17). 작업과 경력의 원문은 아직 `content/` 에 있다. 저장소로 옮기면 1절의 데이터 행과 4절이 다시 바뀐다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
+- 관리 기능은 로그인 · 소개 · 경력까지 구현했다(2026-11-18). 작업의 원문은 아직 `content/` 에 있다. 저장소로 옮기면 1절의 데이터 행과 4절이 다시 바뀐다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
 
 ## 확인방법
 
