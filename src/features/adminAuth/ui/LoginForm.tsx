@@ -62,11 +62,11 @@ export default function LoginForm() {
             <Button
                 type="submit"
                 size="lg"
-                effect="none"
-                disabled={!isFilled || isPending}
+                disabled={!isFilled}
+                isLoading={isPending}
                 className="mt-3 justify-center"
             >
-                {isPending ? '로그인하는 중' : '로그인'}
+                로그인
             </Button>
             {/* 문구가 없을 때도 요소를 둔다. 나중에 생긴 role="status" 는 스크린 리더가 읽지 않는다 */}
             <div role="status">

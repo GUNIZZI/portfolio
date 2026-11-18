@@ -43,7 +43,7 @@ export default function Contact() {
                     <br />
                     언제든 편하게 메일 주세요.
                 </p>
-                <Button asChild className="group self-start">
+                <Button asChild effect="sweep" className="group self-start">
                     <a href={mailto}>
                         <Icon name="send" size={18} strokeWidth={2} />
                         {/*

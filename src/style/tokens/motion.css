@@ -12,6 +12,21 @@
     /* 기술 아이콘이 좌우로 한 번 흔들린다. 동작 줄이기에서는 지속시간이 0ms 라 움직이지 않는다 */
     --animate-wiggle: wiggle var(--duration-base) var(--ease-move);
 
+    /*
+     * 로더. 고리 3개가 서로 다른 빠르기로 끝없이 돈다. 값은 Kozipsa 의 loaderAni 에서 가져왔다.
+     * 화면의 연출이 아니라 진행 중임을 알리는 표시라, 지속시간 토큰을 쓰지 않고 한 바퀴의 시간을 여기 적는다.
+     * 동작 줄이기에서는 쓰는 쪽이 motion-safe 로 걸러 돌지 않는다 (src/shared/ui/loader/Loader.tsx)
+     */
+    --animate-loader: loader 1s linear infinite;
+    --animate-loader-slow: loader 2s linear infinite;
+    --animate-loader-slower: loader 4s linear infinite;
+
+    @keyframes loader {
+        to {
+            rotate: 1turn;
+        }
+    }
+
     @keyframes wiggle {
         0%,
         100% {

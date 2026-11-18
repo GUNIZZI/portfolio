@@ -66,7 +66,13 @@ export default function About({ about }: OwnProps) {
                             </span>
                         ))}
                     </p>
-                    <Button asChild variant="outlineBrand" size="md" className="self-start">
+                    <Button
+                        asChild
+                        variant="outlineBrand"
+                        size="md"
+                        effect="sweep"
+                        className="self-start"
+                    >
                         <a href="/about">
                             More About Me
                             <Icon name="arrowRight" size={16} strokeWidth={2} />
