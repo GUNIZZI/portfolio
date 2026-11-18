@@ -20,7 +20,7 @@ export default function AboutEditorError({ retryHref }: OwnProps) {
                     {EDITOR_MESSAGE.LOAD_FAILED_DESCRIPTION}
                 </p>
             </div>
-            <Button asChild variant="outline" size="sm" effect="none" className="items-center">
+            <Button asChild variant="outline" size="sm" className="items-center">
                 <a href={retryHref}>다시 시도</a>
             </Button>
         </Panel>

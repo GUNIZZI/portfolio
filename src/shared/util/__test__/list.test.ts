@@ -1,4 +1,4 @@
-import { moveItem, moveItemTo, removeItem, replaceItem, requiredError } from '../aboutEditor.utils';
+import { moveItem, moveItemTo, removeItem, replaceItem } from '../list';
 
 describe('moveItem', () => {
     it('한 줄을 아래로 옮긴다', () => {
@@ -39,16 +39,5 @@ describe('removeItem · replaceItem', () => {
     it('한 줄을 빼고, 한 줄을 바꾼다', () => {
         expect(removeItem(['a', 'b', 'c'], 1)).toEqual(['a', 'c']);
         expect(replaceItem(['a', 'b', 'c'], 1, 'x')).toEqual(['a', 'x', 'c']);
-    });
-});
-
-describe('requiredError', () => {
-    it('비었으면 항목 이름에 맞는 조사로 문구를 만든다', () => {
-        expect(requiredError('제목', '  ')).toBe('제목을 입력해 주세요.');
-        expect(requiredError('성장 경로', '')).toBe('성장 경로를 입력해 주세요.');
-    });
-
-    it('값이 있으면 문구가 없다', () => {
-        expect(requiredError('제목', '값')).toBeUndefined();
     });
 });

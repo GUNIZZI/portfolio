@@ -16,14 +16,9 @@ export const SECTION_PLACE = {
     [ABOUT_SECTION.HOME]: '홈의 소개 섹션',
 } as const satisfies Record<AboutSection, string>;
 
-/** 토스트를 띄워 두는 시간(ms) */
-export const TOAST_DURATION_MS = 3000;
-
 /** 문구. 초안이다.(docs/plan/admin/about/README.md 검토 필요 사항의 「문구」) */
 export const EDITOR_MESSAGE = {
     SAVE_FAILED: '저장하지 못했습니다. 다시 시도해 주세요',
-    NOT_DIRTY: '고친 내용이 없습니다',
-    INVALID: '필수 항목을 입력해 주세요',
     LOAD_FAILED_TITLE: '소개 내용을 불러오지 못했습니다',
     LOAD_FAILED_DESCRIPTION: '잠시 뒤에 다시 시도해 주세요.',
 } as const;

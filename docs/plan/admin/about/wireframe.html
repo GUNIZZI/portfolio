@@ -120,7 +120,7 @@ flowchart TD
         <div class="fl">성장 경로 아래 한 줄</div>
         <div class="fv"><div class="inp val">도구는 바뀌어도 기준은 가져갑니다.</div></div>
       </div>
-      <div class="btn-row rel"><span class="m abs">5</span><span class="muted small">고친 내용이 없습니다</span><span class="sp"></span><span class="btn pri dis" aria-disabled="true">인트로 저장</span></div>
+      <div class="btn-row rel"><span class="m abs">5</span><span class="sp"></span><span class="btn pri dis" aria-disabled="true">인트로 저장</span></div>
 
       <div class="ph rel"><span class="m abs">6</span><div><h4>일하는 방식</h4><p>소개 페이지 · 4가지</p></div></div>
       <div class="form-grid">
@@ -132,7 +132,7 @@ flowchart TD
         <div class="fl">2 ~ 4</div>
         <div class="fv"><span class="muted">1 과 같다. 제목과 설명이 한 쌍이다</span></div>
       </div>
-      <div class="btn-row"><span class="muted small">필수 항목을 입력해 주세요</span><span class="sp"></span><span class="btn pri dis" aria-disabled="true">일하는 방식 저장</span></div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri dis" aria-disabled="true">일하는 방식 저장</span></div>
 
       <div class="ph rel"><span class="m abs">7</span><div><h4>Skill 관리</h4><p>소개 페이지 · 8개</p></div></div>
       <div class="form-grid">
@@ -169,8 +169,8 @@ flowchart TD
       <li><span class="m">2</span><div><b>섹션 머리</b><p>섹션은 인트로 · 일하는 방식 · Skill 관리 · 홈 소개 순이다. 어느 페이지에 보이는지와 그 섹션의 수정 일시를 적는다</p></div></li>
       <li><span class="m">3</span><div><b>줄 목록</b> <code>features/aboutEditor</code> ListField<p>소개 문단에 쓴다. 줄마다 ↑ · ↓ · 빼기 버튼이 있다. 첫 줄의 ↑ 와 끝 줄의 ↓ 는 비활성. 최소 개수만 남으면 빼기는 비활성. 더하면 맨 아래에 빈 줄이 생긴다</p></div></li>
       <li><span class="m">4</span><div><b>칩 목록</b> <code>features/aboutEditor</code> ChipListField<p>성장 경로와 Skill 이름에 쓴다. 이름을 옆으로 늘어놓고 끌어서 순서를 바꾼다. 마우스를 올리면 테두리와 면의 색이 바뀐다. 키보드로는 순서를 바꾸지 않는다. 놓을 자리는 이름 사이에 선으로 보여 준다. 이름마다 × 가 있고, 최소 개수만 남으면 비활성. 아래 입력에 적고 「+ 추가」 나 Enter 로 맨 끝에 더한다. 그림은 입력이 비어 「+ 추가」 가 비활성인 상태다. 규칙은 README.md 「목록 고치기」 가 갖는다</p></div></li>
-      <li><span class="m">5</span><div><b>Button</b> <code>shared/ui/button</code><p>저장 버튼은 섹션마다 있다. 고친 내용이 없거나 규칙에 맞지 않으면 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 저장하면 화면에 머물고 <a href="#p01">P-01</a></p></div></li>
-      <li><span class="m">6</span><div><b>일하는 방식</b><p>4개로 고정한다. 제목과 설명은 모두 필수다. 오류 문구는 입력을 벗어난 뒤에 보여 준다. 그림은 설명을 비운 채 벗어난 상태다</p></div></li>
+      <li><span class="m">5</span><div><b>Button</b> <code>shared/ui/button</code><p>저장 버튼은 섹션마다 있다. 고친 내용이 없거나 규칙에 맞지 않으면 비활성이다. 이유는 따로 적지 않고 항목의 오류 문구로 알린다. 저장하는 동안에도 비활성. 저장하면 화면에 머물고 <a href="#p01">P-01</a></p></div></li>
+      <li><span class="m">6</span><div><b>일하는 방식</b><p>4개로 고정한다. 제목과 설명은 모두 필수다. 오류 문구는 그 항목을 고치거나 입력을 벗어난 뒤에 보여 준다. 그림은 설명을 비운 채 벗어난 상태다</p></div></li>
       <li><span class="m">7</span><div><b>Skill 관리</b><p>묶음은 8개로 고정한다. 묶음마다 이름 · 내용 · Skill 이름이 있다. Skill 이름은 칩 목록(4)이고 1개 이상이다</p></div></li>
       <li><span class="m">8</span><div><b>홈 소개</b><p>숫자는 3개로 고정한다. 값은 숫자만 받는다. 기호는 비울 수 있다</p></div></li>
     </ol></aside>
@@ -181,7 +181,7 @@ flowchart TD
       <div class="spec-tw"><table class="spec-t">
         <thead><tr><th>항목</th><th>상황</th><th>문구</th></tr></thead>
         <tbody>
-          <tr><td>필수 항목</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요.</td></tr>
+          <tr><td>필수 항목</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요. 항목은 소개 문단 · 제목 · 설명 · 이름 · 내용 · 문구다</td></tr>
           <tr><td>숫자의 값</td><td>숫자가 아니다</td><td>숫자만 입력해 주세요.</td></tr>
         </tbody>
       </table></div>

@@ -1,60 +1,64 @@
 'use client';
 
+import { Controller } from 'react-hook-form';
+
 import { ABOUT_SECTION } from '@/entities/about/model/about.constants';
-import type { AboutEditorData, AboutHomeData } from '@/entities/about/model/about.types';
+import type { AboutEditorData } from '@/entities/about/model/about.types';
 import { Separator } from '@/shared/ui/separator/separator';
+import TextField from '@/shared/ui/textField/TextField';
 import { cn } from '@/shared/util/cn';
 
-import { replaceItem, requiredError } from '../model/aboutEditor.utils';
+import { toLineErrors } from '../model/aboutEditor.utils';
 import { useSectionForm } from '../model/useSectionForm';
 import ListField from './ListField';
 import SectionShell from './SectionShell';
-import TextField from './TextField';
 
 interface OwnProps {
     data: AboutEditorData['home'];
 }
 
-type Stat = AboutHomeData['stats'][number];
-
 const STAT_LABELS = ['나이', '프로젝트', '경력'];
 
 /** 홈 소개 섹션. 소개 문단과 숫자 3개의 값 · 기호 · 이름을 고친다. 아이콘은 고치지 않는다 */
 export default function HomeForm({ data }: OwnProps) {
-    const form = useSectionForm(ABOUT_SECTION.HOME, data.content);
-    const { value, setValue } = form;
-
-    function hndlLinesChange(lines: string[]) {
-        setValue({ ...value, lines });
-    }
-
-    function hndlStatChange(index: number, patch: Partial<Stat>) {
-        const stat = value.stats[index];
-        if (!stat) return;
-        setValue({ ...value, stats: replaceItem(value.stats, index, { ...stat, ...patch }) });
-    }
+    const { form, isBlocked, isPending, hndlSubmit } = useSectionForm(
+        ABOUT_SECTION.HOME,
+        data.content,
+    );
+    const {
+        control,
+        register,
+        formState: { errors },
+    } = form;
 
     return (
         <SectionShell
             section={ABOUT_SECTION.HOME}
             updatedAtText={data.updatedAtText}
-            blockedReason={form.blockedReason}
-            isPending={form.isPending}
-            onSave={form.save}
+            isBlocked={isBlocked}
+            isPending={isPending}
+            onSubmit={hndlSubmit}
         >
-            <ListField
-                label="소개 문단"
-                items={value.lines}
-                onChange={hndlLinesChange}
-                min={1}
-                addLabel="+ 문단 더하기"
+            <Controller
+                control={control}
+                name="lines"
+                render={({ field, fieldState }) => (
+                    <ListField
+                        label="소개 문단"
+                        items={field.value}
+                        onChange={field.onChange}
+                        errors={toLineErrors(fieldState.error)}
+                        min={1}
+                        addLabel="+ 문단 더하기"
+                    />
+                )}
             />
             <Separator />
             <div>
                 <h3 className="mb-3 text-lg font-semibold">통계</h3>
                 <div className="flex flex-col gap-3">
-                    {value.stats.map((stat, index) => {
-                        const isNumber = Number.isInteger(stat.value) && stat.value >= 0;
+                    {data.content.stats.map((_stat, index) => {
+                        const statErrors = errors.stats?.[index];
                         return (
                             // 자리를 key 로 쓴다. 3개로 고정이고 순서를 바꾸지 않는다
                             <fieldset
@@ -74,31 +78,23 @@ export default function HomeForm({ data }: OwnProps) {
                                         min={0}
                                         step={1}
                                         inputMode="numeric"
-                                        value={Number.isNaN(stat.value) ? '' : stat.value}
-                                        onChange={(event) => {
-                                            hndlStatChange(index, {
-                                                value: event.target.valueAsNumber,
-                                            });
-                                        }}
-                                        error={isNumber ? undefined : '숫자만 입력해 주세요.'}
+                                        // 숫자로 바꿔 스키마에 넘긴다. 비운 입력은 NaN 이 되어 스키마가 걸러 낸다
+                                        {...register(`stats.${index}.value`, {
+                                            valueAsNumber: true,
+                                        })}
+                                        error={statErrors?.value?.message}
                                         className="max-w-30 min-w-0 flex-1"
                                     />
                                     <TextField
                                         afterLabel="기호"
-                                        value={stat.suffix}
-                                        onChange={(event) => {
-                                            hndlStatChange(index, { suffix: event.target.value });
-                                        }}
+                                        {...register(`stats.${index}.suffix`)}
                                         className="w-25"
                                     />
                                 </div>
                                 <TextField
                                     afterLabel="문구"
-                                    value={stat.label}
-                                    onChange={(event) => {
-                                        hndlStatChange(index, { label: event.target.value });
-                                    }}
-                                    error={requiredError('이름', stat.label)}
+                                    {...register(`stats.${index}.label`)}
+                                    error={statErrors?.label?.message}
                                     className="flex-1"
                                 />
                             </fieldset>

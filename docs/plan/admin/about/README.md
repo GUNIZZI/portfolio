@@ -82,7 +82,7 @@
 | 방식    | 쓰는 곳                         | 컴포넌트                                        |
 | ------- | ------------------------------- | ----------------------------------------------- |
 | 줄 목록 | 인트로와 홈 소개의 소개 문단    | `src/features/aboutEditor/ui/ListField.tsx`     |
-| 칩 목록 | 성장 경로, 묶음 안의 Skill 이름 | `src/features/aboutEditor/ui/ChipListField.tsx` |
+| 칩 목록 | 성장 경로, 묶음 안의 Skill 이름 | `src/shared/ui/chipListField/ChipListField.tsx` |
 
 줄 목록
 
@@ -175,7 +175,7 @@
 
 - 입력마다 `label` 을 잇고, 오류 문구는 `role="alert"` 로 입력 아래에 적는다.(`src/shared/ui/field/field.md`)
 - 줄을 더하고 빼고 옮기는 버튼에는 어느 줄의 버튼인지 이름에 넣는다.
-- 칩 목록의 빼기 버튼에는 어느 이름의 버튼인지를 읽어 준다.(`src/features/aboutEditor/ui/ChipListField.tsx`)
+- 칩 목록의 빼기 버튼에는 어느 이름의 버튼인지를 읽어 준다.(`src/shared/ui/chipListField/ChipListField.tsx`)
 - 줄을 옮기면 옮긴 줄의 버튼에 포커스를 남긴다. 줄을 빼면 그다음 줄로 포커스를 보낸다.
 - 토스트는 `role="status"` 로 알린다.
 - 관리 화면의 코드는 공개 화면의 번들에 넣지 않는다.

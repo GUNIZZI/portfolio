@@ -5,16 +5,17 @@ import type { ChangeEvent } from 'react';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 
 import { Button } from '@/shared/ui/button/button';
+import TextField from '@/shared/ui/textField/TextField';
 import { cn } from '@/shared/util/cn';
-
-import { moveItem, removeItem, replaceItem, requiredError } from '../model/aboutEditor.utils';
-import TextField from './TextField';
+import { moveItem, removeItem, replaceItem } from '@/shared/util/list';
 
 interface OwnProps {
     /** 목록의 이름. 줄마다 번호를 붙여 입력의 이름으로 쓴다 */
     label?: string;
     items: string[];
     onChange: (items: string[]) => void;
+    /** 줄마다의 오류 문구. items 와 같은 순서다. 문제가 없는 줄은 undefined 다 */
+    errors?: (string | undefined)[];
     /** 남겨야 하는 최소 개수. 이만큼만 남으면 빼기를 누를 수 없다 */
     min: number;
     /** 더하기 버튼의 문구 */
@@ -28,6 +29,7 @@ export default function ListField({
     label,
     items,
     onChange,
+    errors,
     min,
     addLabel,
     isMultiline = false,
@@ -63,45 +65,54 @@ export default function ListField({
                             'md:flex-row md:items-center',
                         )}
                     >
-                        <TextField
-                            afterLabel={name}
-                            isMultiline={isMultiline}
-                            value={item}
-                            onChange={hndlChange}
-                            error={requiredError(label ?? '', item)}
-                            className="flex-1"
-                        />
+                        {/* afterLabel 은 Input 에만 있다. Textarea 에 넘기면 DOM 까지 내려가 React 가 경고한다 */}
+                        {isMultiline ? (
+                            <TextField
+                                isMultiline
+                                aria-label={name}
+                                value={item}
+                                onChange={hndlChange}
+                                error={errors?.[index]}
+                                className="flex-1"
+                            />
+                        ) : (
+                            <TextField
+                                afterLabel={name}
+                                aria-label={name}
+                                value={item}
+                                onChange={hndlChange}
+                                error={errors?.[index]}
+                                className="flex-1"
+                            />
+                        )}
                         <div className="flex gap-1">
                             <Button
                                 variant="secondary"
                                 size="2xs"
-                                effect="none"
                                 aria-label={`${name} 위로`}
                                 disabled={index === 0}
                                 onClick={hndlUp}
-                                className="items-center"
+                                className="flex w-6.5 items-center justify-center p-0"
                             >
                                 <ArrowUp className="size-3.5" aria-hidden="true" />
                             </Button>
                             <Button
                                 variant="secondary"
                                 size="2xs"
-                                effect="none"
                                 aria-label={`${name} 아래로`}
                                 disabled={index === items.length - 1}
                                 onClick={hndlDown}
-                                className="items-center"
+                                className="flex w-6.5 items-center justify-center p-0"
                             >
                                 <ArrowDown className="size-3.5" aria-hidden="true" />
                             </Button>
                             <Button
                                 variant="destructive"
                                 size="2xs"
-                                effect="none"
                                 aria-label={`${name} 빼기`}
                                 disabled={items.length <= min}
                                 onClick={hndlRemove}
-                                className="items-center"
+                                className="flex w-6.5 items-center justify-center p-0"
                             >
                                 <Trash2 className="size-3.5" aria-hidden="true" />
                             </Button>
@@ -113,7 +124,6 @@ export default function ListField({
                 <Button
                     variant="secondary"
                     size="sm"
-                    effect="none"
                     onClick={hndlAdd}
                     className="items-center px-10"
                 >

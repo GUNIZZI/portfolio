@@ -12,10 +12,11 @@ interface OwnProps {
     section: AboutSection;
     /** 수정 일시 문구. 기록이 없으면 null */
     updatedAtText: string | null;
-    /** 저장 버튼을 누를 수 없는 이유. 누를 수 있으면 null */
-    blockedReason: string | null;
+    /** 저장 버튼을 누를 수 없는가 */
+    isBlocked: boolean;
     isPending: boolean;
-    onSave: () => void;
+    /** 폼을 제출했다. 검증과 저장은 useSectionForm 이 한다 */
+    onSubmit: (event: SyntheticEvent<HTMLFormElement>) => void;
     children: ReactNode;
 }
 
@@ -23,22 +24,17 @@ interface OwnProps {
 export default function SectionShell({
     section,
     updatedAtText,
-    blockedReason,
+    isBlocked,
     isPending,
-    onSave,
+    onSubmit,
     children,
 }: OwnProps) {
     const label = SECTION_LABEL[section];
     const headingId = `about-section-${section}`;
 
-    function hndlSubmit(event: SyntheticEvent<HTMLFormElement>) {
-        event.preventDefault();
-        onSave();
-    }
-
     return (
         <Panel className="p-6">
-            <form aria-labelledby={headingId} onSubmit={hndlSubmit} className="flex flex-col gap-8">
+            <form aria-labelledby={headingId} onSubmit={onSubmit} className="flex flex-col gap-8">
                 <div>
                     {/* 수정 일시는 제목 밖에 둔다. 안에 두면 이 제목으로 이름이 붙는 폼의 이름에 일시까지 읽힌다 */}
                     <div className="flex items-center justify-between gap-2">
@@ -60,17 +56,11 @@ export default function SectionShell({
                     <Button
                         type="submit"
                         size="lg"
-                        effect="none"
-                        disabled={blockedReason !== null || isPending}
+                        disabled={isBlocked}
+                        isLoading={isPending}
                         className="items-center px-10"
                     >
-                        {isPending ? (
-                            '저장하는 중'
-                        ) : (
-                            <>
-                                <Save className="size-4.5" aria-hidden="true" /> {label} 저장
-                            </>
-                        )}
+                        <Save className="size-4.5" aria-hidden="true" /> {label} 저장
                     </Button>
                 </div>
             </form>
