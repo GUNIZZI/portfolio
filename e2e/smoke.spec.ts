@@ -79,11 +79,14 @@ test('헤더는 스크롤해도 화면 위에 붙어 있고, 지금 페이지의
     await expect(page).toHaveURL(/\/(#top)?$/);
 });
 
-test('소개 숫자가 최종 값으로 끝난다', async ({ page }) => {
+test('소개 숫자가 0 보다 크다', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('heading', { level: 2, name: 'ABOUT ME' }).scrollIntoViewIfNeeded();
-    for (const value of ['40+', '20+', '7+']) {
-        await expect(page.locator('#about').getByText(value, { exact: true }).last()).toBeVisible();
+    // 숫자는 관리 화면에서 바꿀 수 있어 값을 고정하지 않는다. 눈에 보이는 숫자 3개가 0 보다 큰지만 본다
+    const numbers = page.locator('#about strong [aria-hidden="true"]');
+    await expect(numbers).toHaveCount(3);
+    for (const number of await numbers.all()) {
+        await expect(number).toHaveText(/^[1-9]\d*/);
     }
 });
 
