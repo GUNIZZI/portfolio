@@ -6,7 +6,7 @@
 | prop   | 값                                                                               | 기본 |
 | ------ | -------------------------------------------------------------------------------- | ---- |
 | `size` | `2xs` · `xs` · `sm` · `md` · `lg` · `xl` · `2xl`. 글자 크기와 안쪽 여백이 바뀐다 | `sm` |
-| `rows` | 처음에 보이는 줄 수                                                              | 3    |
+| `rows` | 가장 낮은 높이의 줄 수. 내용이 이보다 길면 늘어난다                              | 3    |
 
 그 밖에는 `<textarea>` 의 속성을 그대로 받는다. `className` 은 입력에 붙는다.
 
@@ -17,6 +17,9 @@ import { Textarea } from '@/shared/ui/textarea/textarea';
 ```
 
 - 글자 크기는 Input 과 같은 눈금에서 읽는다. 높이는 `rows` 가 정해 눈금을 타지 않는다.(`src/shared/ui/size/size.constants.ts`)
+- **높이는 내용만큼 늘어난다.** CSS 의 `field-sizing: content` 를 쓴다. 처음에는 `rows` 줄이고, 그보다 길어지면 늘어난다.(`textarea.tsx`, 2026-11-18 사용자 결정)
+- 손으로 끌어 크기를 바꾸지 못한다.(`textarea.tsx` 의 `resize-none`, 2026-11-18 사용자 결정)
+- Firefox 는 `field-sizing` 을 몰라 `rows` 줄로 고정되고 안에서 스크롤한다.(`textarea.tsx`)
 - `aria-invalid` 를 주면 테두리가 `destructive` 로 바뀐다.(`textarea.tsx`)
 
 ## 자주 하는 실수
@@ -25,4 +28,5 @@ import { Textarea } from '@/shared/ui/textarea/textarea';
 
 ## 이 컴포넌트를 고칠 때
 
+`size` 의 위아래 여백(`py-*`)을 바꾸면 같은 줄의 `min-h` 도 함께 고친다. 가장 낮은 높이가 줄 수 · 여백 · 테두리의 합이다.(`textarea.tsx` 의 `textareaVariants`)
 테두리 · 바탕 · 오류 색을 바꾸면 Input 도 함께 바꾼다. 두 컴포넌트가 같은 폼에 나란히 놓인다.(`src/features/aboutEditor/`)

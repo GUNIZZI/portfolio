@@ -13,7 +13,7 @@ import { Separator } from '../separator/separator';
  * 입력에 이름 · 설명 · 오류 문구를 붙이는 묶음. shadcn 의 Field 를 바탕으로 했다.
  * 구조와 이름은 shadcn 그대로다. 아래 3가지만 이 사이트에 맞췄다.
  * - 흐리게 하는 대신 글자색을 낮춘다. 위계는 글자색으로 만든다.(docs/theme.md 원칙 3)
- * - 다크 전용 분기(dark 변형)를 뺐다. 이 디자인은 다크 전용이다.(src/style/tokens/color.css)
+ * - 다크 전용 분기(dark 변형)를 뺐다. dark: 로 색을 나누지 않는다.(docs/theme.md 원칙 4)
  * - 글자 크기를 text-caption 으로, 이름과 입력의 간격을 gap-2 로 맞췄다. 바꾸기 전의 입력과 같다
  */
 

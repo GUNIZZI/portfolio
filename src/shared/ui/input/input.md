@@ -25,14 +25,16 @@ import { Input } from '@/shared/ui/input/input';
 - `aria-invalid` 를 주면 테두리가 `destructive` 로 바뀐다.(`input.tsx`)
 - `beforeLabel` · `afterLabel` 은 Kozipsa 의 Input 에서 가져왔다.(Kozipsa `packages/ui` 의 `input.md` 2절) 입력의 이름이 아니라 단위 표기다. 이름은 `FieldLabel` 로 붙인다.
 - 둘 중 하나라도 주면 상자(`div`)가 입력의 모양을 입고, `className` 도 상자에 붙는다. 상자를 누르면 입력에 초점이 간다.(`input.tsx`)
+- 글자 정렬(`text-right`)은 상자에 붙어도 안쪽 입력이 따른다.(`input.tsx`)
 - 붙는 글자의 색은 입력 글자색의 30% 다.(2026-11-17 사용자 결정, `input.tsx` 의 `ADORNMENT_CLASS`)
 - 붙는 글자의 크기는 `size` 와 상관없이 `text-xs`(12px)다. `2xs` 일 때만 입력과 같은 11px 이다.(2026-11-17 사용자 결정, `input.tsx`)
 - 누르는 동작을 다루어 클라이언트 컴포넌트다.(`input.tsx`)
 
 ## 자주 하는 실수
 
-- 이름 없이 쓰는 입력에는 `aria-label` 을 준다. `placeholder` 는 값을 적으면 사라진다.(`src/features/aboutEditor/ui/ChipListField.tsx`)
+- 이름 없이 쓰는 입력에는 `aria-label` 을 준다. `placeholder` 는 값을 적으면 사라진다.(`src/shared/ui/chipListField/ChipListField.tsx`)
 
 ## 이 컴포넌트를 고칠 때
 
+Select 의 트리거가 `inputVariants` 를 그대로 입는다. 여기서 고치면 Select 도 함께 바뀐다.(`src/shared/ui/select/select.base.tsx`)
 테두리 · 바탕 · 오류 색을 바꾸면 Textarea 도 함께 바꾼다. 두 컴포넌트가 같은 폼에 나란히 놓인다.(`src/features/aboutEditor/`)

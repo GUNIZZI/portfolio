@@ -48,7 +48,7 @@ type InputProps = Omit<ComponentProps<'input'>, 'size'> &
     };
 
 /**
- * 입력칸 안쪽에 붙는 글자. 누르면 뒤의 상자가 받아 입력에 초점을 준다.
+ * 입력칸 안쪽에 붙는 글자. 누르면 뒤의 상자가 받아 입력에 초점을 준다. Select 도 같은 모양으로 쓴다.
  * 색은 입력 글자색의 30% 다.(2026-11-17 사용자 결정) 글자색을 따라가 비활성일 때도 함께 흐려진다.
  * 크기는 입력의 size 와 상관없이 text-xs 다. 입력이 2xs 일 때만 입력과 같은 크기를 쓴다.(2026-11-17 사용자 결정)
  */
@@ -98,7 +98,8 @@ function Input({ className, type, size, beforeLabel, afterLabel, ...props }: Inp
             <input
                 type={type}
                 data-slot="input"
-                className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-decorative"
+                // 글자 정렬은 상자를 따른다. 입력은 text-align 을 물려받지 않아 따로 적는다
+                className="min-w-0 flex-1 bg-transparent [text-align:inherit] outline-none placeholder:text-decorative"
                 {...props}
             />
             {afterLabel ? <span className={adornmentClass}>{afterLabel}</span> : null}
@@ -106,4 +107,4 @@ function Input({ className, type, size, beforeLabel, afterLabel, ...props }: Inp
     );
 }
 
-export { Input, inputVariants };
+export { ADORNMENT_CLASS, Input, inputVariants };

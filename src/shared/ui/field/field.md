@@ -26,10 +26,10 @@ import { Input } from '@/shared/ui/input/input';
 
 - 오류일 때는 `Field` 에 `data-invalid` 를, 입력에 `aria-invalid` 를 함께 준다. 이름과 테두리가 `destructive` 로 바뀐다.(`field.tsx`, `src/shared/ui/input/input.tsx`)
 - `FieldError` 는 `role="alert"` 라 문구가 생기면 스크린 리더가 읽는다.(`field.tsx`)
-- 소개 수정 폼은 이 묶음을 `TextField` 로 한 번 감싸 쓴다.(`src/features/aboutEditor/ui/TextField.tsx`)
+- 관리 화면의 폼은 이 묶음을 `TextField` 로 한 번 감싸 쓴다.(`src/shared/ui/textField/TextField.tsx`)
 
 ## shadcn 원본과 다른 점
 
 - 비활성을 흐리게 하는 대신 글자색을 `decorative` 로 낮췄다.(`docs/theme.md` 원칙 3)
-- 다크 전용 분기를 뺐다. 이 디자인은 다크 전용이다.(`src/style/tokens/color.css`)
+- 다크 전용 분기를 뺐다. `dark:` 로 색을 나누지 않는다.(`docs/theme.md` 원칙 4)
 - 글자 크기는 `text-caption`, 이름과 입력의 간격은 8px 이다. 바꾸기 전의 입력과 같다.(`field.tsx`)
