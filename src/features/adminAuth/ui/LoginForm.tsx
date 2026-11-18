@@ -1,6 +1,6 @@
 'use client';
 
-import { type ChangeEvent, useActionState, useState } from 'react';
+import { type ChangeEvent, useActionState, useEffect, useRef, useState } from 'react';
 
 import { login } from '@/entities/session/actions/session.actions';
 import { LOGIN_STATUS, type LoginStateData } from '@/entities/session/model/session.types';
@@ -16,6 +16,15 @@ export default function LoginForm() {
     const [state, formAction, isPending] = useActionState(login, INITIAL_STATE);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    // 화면의 스크립트가 준비되기 전에 들어간 값은 onChange 를 거치지 않는다.
+    // 준비된 직후 입력칸의 값을 한 번 읽어 맞춘다. 맞추지 않으면 값이 보이는데도 버튼이 꺼져 있다
+    useEffect(() => {
+        setEmail(emailRef.current?.value ?? '');
+        setPassword(passwordRef.current?.value ?? '');
+    }, []);
 
     const notice = state.status === LOGIN_STATUS.IDLE ? null : LOGIN_NOTICE[state.status];
     const isFilled = email.trim() !== '' && password !== '';
@@ -31,6 +40,7 @@ export default function LoginForm() {
     return (
         <form action={formAction} className="flex flex-col gap-2">
             <Input
+                ref={emailRef}
                 name="email"
                 type="email"
                 size="md"
@@ -40,6 +50,7 @@ export default function LoginForm() {
                 placeholder="이메일"
             />
             <Input
+                ref={passwordRef}
                 name="password"
                 type="password"
                 size="md"
