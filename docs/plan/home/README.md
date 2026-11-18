@@ -54,7 +54,7 @@
 
 ### 섹션 구성
 
-코드에 있는 순서다.(`src/app/page.tsx`)
+코드에 있는 순서다.(`src/app/(site)/page.tsx`)
 
 | 순서 | 섹션      | id         | 담당                        |
 | ---- | --------- | ---------- | --------------------------- |
@@ -79,8 +79,10 @@
     - 모든 페이지에 붙는 것이라 feature 가 아니라 위젯이다.(`src/widgets/contact/`, `docs/architecture.md` 3.1)
 - 푸터 메뉴는 Home · Projects · About · Contact 다. 앞의 3개는 헤더와 같은 페이지로 간다.
 - **현재 메뉴 표시**: 지금 있는 페이지의 메뉴에 밑줄과 강조색을 준다.(`src/widgets/header/HeaderBar.tsx`)
-    - 어느 메뉴인지는 페이지가 헤더에 직접 알려 준다. 작업 상세(`/work/<slug>`)도 Projects 를 강조한다.(`src/widgets/header/Header.tsx` 의 `currentHref`)
-    - 헤더가 주소를 읽어 알아내지 않는다. 주소를 읽으면 작업 상세 같은 동적 경로를 미리 그려 둘 수 없어 빌드가 실패한다.
+    - **밑줄은 하나다.** 메뉴를 옮기면 그 메뉴로 미끄러져 가고, 폭도 그 메뉴의 글자에 맞춰진다.(2026-11-18 사용자 결정, `src/shared/ui/navIndicator/NavIndicator.tsx`)
+    - 헤더는 페이지가 아니라 레이아웃이 그린다. 페이지를 옮겨도 헤더는 남고 그 아래만 바뀐다.(2026-11-18 사용자 결정, `src/app/(site)/layout.tsx`)
+    - 어느 메뉴인지는 헤더가 주소에서 읽는다. 작업 상세(`/work/<slug>`)도 Projects 를 강조한다.(`src/widgets/header/HeaderBar.tsx` 의 `findCurrentHref`)
+    - 주소를 읽는 헤더는 `<Suspense>` 안에 둔다. 밖에 두면 미리 그려 두지 않은 작업 상세의 틀을 만들지 못해 빌드가 실패한다.(`src/app/(site)/layout.tsx`)
     - 지금 있는 페이지의 메뉴를 누르면 페이지를 다시 불러오지 않고 맨 위로 올라간다.
     - 처음에는 스크롤에 따라 보고 있는 섹션의 메뉴를 강조했다. 메뉴가 페이지를 가리키게 되면서 없앴다.
 - 홈 안의 섹션으로 가는 길은 히어로의 View My Projects(`#projects`)와 Contact 버튼(`#contact`)이 남는다.
@@ -156,6 +158,7 @@ LinkedIn 은 두지 않는다.(요구사항 8)
 | 히어로 이름         | 처음 그릴 때 한 번        | 마커로 칠하듯 왼쪽부터 드러난다                                                                                             | framer-motion   | `DURATION.slower` · `EASE.enter`                         | 보이는 상태      |
 | 말풍선              | 처음 그릴 때 한 번        | 이름 다음에 튀어나온다                                                                                                      | framer-motion   | `SPRING.follow`                                          | 보이는 상태      |
 | 히어로 낙서         | 창 안의 포인터 이동       | 포인터 반대쪽으로 살짝 밀린다                                                                                               | framer-motion   | `SPRING.follow`                                          | 움직이지 않음    |
+| 헤더의 밑줄         | 메뉴 이동                 | 밑줄 하나가 지금 메뉴로 미끄러져 가고 폭이 그 메뉴에 맞춰진다                                                               | framer-motion   | `DURATION.base` · `EASE.move`                            | 바로 옮겨 감     |
 | 헤더                | 스크롤 시작               | 바탕이 반투명으로 바뀐다                                                                                                    | CSS             | `duration-fast` · `ease-move`                            | 바로 바뀜        |
 | 작업 카드           | 화면에 처음 들어옴        | 아래에서 차례로 올라온다(한 번만)                                                                                           | framer-motion   | `DURATION.base` · `STAGGER.base`                         | 보이는 상태      |
 | 작업 카드           | hover · focus             | 테두리 선이 마우스가 들어온 쪽에서 맞은편으로 그려지고 썸네일이 커진다. 나가면 나간 쪽으로 지워진다. 자리는 움직이지 않는다 | CSS + 방향 판정 | 선 `duration-base` · 썸네일 `duration-fast`, `ease-move` | 선이 바로 나타남 |

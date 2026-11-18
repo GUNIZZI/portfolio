@@ -1,23 +1,17 @@
 import { Button } from '@/shared/ui/button/button';
 import Icon from '@/shared/ui/icon/Icon';
-import type { NavHref } from '@/config/nav';
 import { SITE } from '@/config/site';
 
 import HeaderBar from './HeaderBar';
 
-interface OwnProps {
-    /**
-     * 이 페이지의 메뉴. 강조해서 보여 준다.
-     * 주소를 읽어 알아내지 않고 페이지가 직접 알려 준다. 주소를 읽으면 /work/[id] 같은 경로를 미리 그려 둘 수 없다
-     */
-    currentHref: NavHref;
-}
-
-export default function Header({ currentHref }: OwnProps) {
+/**
+ * 공개 화면의 헤더. 레이아웃이 한 번 그리고, 페이지를 옮겨도 그대로 남는다.(src/app/(site)/layout.tsx)
+ * 지금 메뉴는 HeaderBar 가 주소에서 읽는다
+ */
+export default function Header() {
     return (
         <HeaderBar
             name={SITE.name}
-            currentHref={currentHref}
             action={
                 // 연락 섹션은 모든 페이지에 있다(widgets/contact)
                 <Button asChild variant="brand" size="md">

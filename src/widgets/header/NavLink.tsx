@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 
-/** 페이지 맨 위. 페이지마다 바깥 틀에 이 id 가 있다 */
+/** 페이지 맨 위. 레이아웃의 바깥 틀에 이 id 가 있다 (src/app/(site)/layout.tsx) */
 const TOP_HREF = '#top';
 
 interface OwnProps {

@@ -107,10 +107,15 @@ flowchart TD
 지금은 `widgets/header/model/header.motions.ts` 와 `widgets/backdrop/model/backdrop.constants.ts` 가 있다.
 컴포넌트는 `ui/` 로 나누지 않고 위젯 폴더 바로 아래에 둔다.(`src/widgets/header/`)
 
+**헤더는 레이아웃이 그린다.**(2026-11-18 사용자 결정)
+헤더가 있는 공개 페이지(홈 · 작업 · 소개)를 `(site)` 로 묶고, 그 레이아웃이 헤더와 페이지 맨 위(`#top`)의 틀을 갖는다.(`src/app/(site)/layout.tsx`)
+페이지는 배경과 본문 · 푸터를 채운다. 페이지를 옮겨도 헤더는 다시 그려지지 않아, 지금 메뉴는 헤더가 주소에서 읽는다.(`src/widgets/header/HeaderBar.tsx`)
+관리 화면도 같은 방식이다.(4.2절)
+
 **배경은 공통과 페이지 전용으로 나눈다.**(2026-11-16 사용자 결정)
 점 무늬와 가장자리 붓 자국은 모든 페이지가 같아 `widgets/backdrop` 에 둔다.
 낙서는 페이지의 섹션 배치에 맞춰 자리를 잡으므로 페이지마다 따로 둔다. 홈은 `features/homeDoodles`, 소개는 `features/aboutDoodles`, 작업은 `features/workDoodles` 다.
-`app` 의 페이지가 `<Backdrop>` 안에 그 페이지의 낙서를 넣어 조합한다. 낙서 하나를 그리는 것은 `shared/ui/doodle` 이다.
+`app` 의 페이지가 `<Backdrop>` 안에 그 페이지의 낙서를 넣어 조합한다. 배경은 `(site)` 레이아웃의 틀에 기대어 헤더 뒤까지 깔린다. 낙서 하나를 그리는 것은 `shared/ui/doodle` 이다.
 
 ### 3.2 공통 컴포넌트를 두는 곳
 

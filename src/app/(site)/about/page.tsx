@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Backdrop } from '@/widgets/backdrop';
 import { Contact } from '@/widgets/contact';
 import { Footer } from '@/widgets/footer';
-import { Header } from '@/widgets/header';
 import { AboutDoodles } from '@/features/aboutDoodles';
 import { AboutIntro } from '@/features/aboutIntro';
 import { ExperienceTimeline } from '@/features/experienceTimeline';
@@ -27,12 +26,11 @@ export default async function AboutPage() {
     ]);
 
     return (
-        <div id="top" className="relative min-h-dvh overflow-x-clip">
+        <>
             <Backdrop>
                 <AboutDoodles />
             </Backdrop>
             <div className="relative z-raised">
-                <Header currentHref="/about" />
                 <main>
                     <AboutIntro intro={intro} />
                     <ExperienceTimeline experiences={experiences} />
@@ -42,6 +40,6 @@ export default async function AboutPage() {
                 </main>
                 <Footer />
             </div>
-        </div>
+        </>
     );
 }

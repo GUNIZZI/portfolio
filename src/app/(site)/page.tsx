@@ -1,7 +1,6 @@
 import { Backdrop } from '@/widgets/backdrop';
 import { Contact } from '@/widgets/contact';
 import { Footer } from '@/widgets/footer';
-import { Header } from '@/widgets/header';
 import { About } from '@/features/about';
 import { FeaturedProjects } from '@/features/featuredProjects';
 import { Hero } from '@/features/hero';
@@ -15,12 +14,11 @@ export default async function HomePage() {
     const [projects, about] = await Promise.all([getProjectList(), getAboutHome()]);
 
     return (
-        <div id="top" className="relative min-h-dvh overflow-x-clip">
+        <>
             <Backdrop>
                 <HomeDoodles />
             </Backdrop>
             <div className="relative z-raised">
-                <Header currentHref="/" />
                 <main>
                     <Hero />
                     <section
@@ -37,6 +35,6 @@ export default async function HomePage() {
                 </main>
                 <Footer isHome />
             </div>
-        </div>
+        </>
     );
 }

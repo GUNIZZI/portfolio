@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 import { Backdrop } from '@/widgets/backdrop';
 import { Contact } from '@/widgets/contact';
 import { Footer } from '@/widgets/footer';
-import { Header } from '@/widgets/header';
 import { ProjectDetail } from '@/features/projectDetail';
 import { WorkDoodles } from '@/features/workDoodles';
 import { getProject, getProjectSlugList } from '@/entities/project/services/project.services';
@@ -39,12 +38,11 @@ async function WorkDetailContent({ params }: Pick<PageProps<'/work/[id]'>, 'para
 
 export default function WorkDetailPage({ params }: PageProps<'/work/[id]'>) {
     return (
-        <div id="top" className="relative min-h-dvh overflow-x-clip">
+        <>
             <Backdrop>
                 <WorkDoodles />
             </Backdrop>
-            <div className="relative z-raised flex min-h-dvh flex-col">
-                <Header currentHref="/work" />
+            <div className="relative z-raised flex flex-1 flex-col">
                 <main className="flex-1">
                     <Suspense fallback={null}>
                         <WorkDetailContent params={params} />
@@ -53,6 +51,6 @@ export default function WorkDetailPage({ params }: PageProps<'/work/[id]'>) {
                 </main>
                 <Footer />
             </div>
-        </div>
+        </>
     );
 }

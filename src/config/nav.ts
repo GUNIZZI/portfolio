@@ -11,7 +11,7 @@ export const NAV_ITEMS = [
 /** 푸터 메뉴. 헤더 메뉴에 연락을 더한 것이다. 연락의 주소는 페이지마다 달라 푸터가 따로 받는다 */
 export const FOOTER_NAV_ITEMS = NAV_ITEMS;
 
-/** 메뉴가 가리키는 페이지의 주소. 페이지가 헤더에 자기 메뉴를 알려 줄 때 쓴다 */
+/** 메뉴가 가리키는 페이지의 주소. 헤더가 지금 주소에서 찾은 메뉴를 나타낼 때 쓴다 */
 export type NavHref = (typeof NAV_ITEMS)[number]['href'];
 
 /** 관리 화면의 메뉴. 순서와 주소는 docs/plan/admin/dashboard/README.md 요구사항 6 */

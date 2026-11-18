@@ -13,4 +13,4 @@
 서버에서만 실행한다. 클라이언트 컴포넌트에는 `page` 가 `ExperienceData` 를 넘긴다.(docs/architecture.md 4절)
 
 원문은 기존 소개 페이지(`gunizzi.github.io/guni/about`)의 내용을 옮긴 임시 데이터다.(2026-11-16 사용자 결정)
-회사 6곳, 프로젝트 56개다. 회사별 `summary` 는 프로젝트 목록을 보고 쓴 초안이고 사용자가 고친다. `src/app/about/page.tsx` 가 읽어 `features/experienceTimeline` 에 넘긴다.
+회사 6곳, 프로젝트 56개다. 회사별 `summary` 는 프로젝트 목록을 보고 쓴 초안이고 사용자가 고친다. `src/app/(site)/about/page.tsx` 가 읽어 `features/experienceTimeline` 에 넘긴다.

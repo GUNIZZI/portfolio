@@ -43,7 +43,7 @@
 
 ### 구성
 
-- 목록은 feature `projectExplorer`, 상세는 feature `projectDetail` 이다.(`src/app/work/`)
+- 목록은 feature `projectExplorer`, 상세는 feature `projectDetail` 이다.(`src/app/(site)/work/`)
 - 헤더 · 연락 섹션 · 푸터는 홈과 같고 Projects 를 강조한다.
 - 배경은 공통 배경에 작업 페이지의 낙서를 넣는다. 목록과 상세가 같은 낙서를 쓴다.(`src/features/workDoodles/`)
 
@@ -74,7 +74,7 @@
 - 빌드할 때 모든 상세를 미리 만든다(`generateStaticParams`).
 - **없는 `id` 로 들어오면 「찾을 수 없음」 화면을 보여 준다.**([not-found/](../not-found/README.md))
     - 응답 코드는 404 가 아니라 200 이다. 헤더 같은 틀을 먼저 보낸 뒤에 작업이 없는 것을 알게 되기 때문이다. 검색 엔진에는 색인하지 말라는 표시가 함께 나간다.
-    - 주소의 `id` 를 틀 밖에서 먼저 읽으면 404 를 낼 수 있지만, 목록에서 상세로 넘어올 때 화면이 바로 열리지 않는다.(`src/app/work/[id]/page.tsx`)
+    - 주소의 `id` 를 틀 밖에서 먼저 읽으면 404 를 낼 수 있지만, 목록에서 상세로 넘어올 때 화면이 바로 열리지 않는다.(`src/app/(site)/work/[id]/page.tsx`)
 - 주소의 `id` 는 지금 작업의 `slug` 다. 저장소를 연동하면 저장소가 발급한 `id` 로 바뀐다.([admin/](../admin/README.md) 요구사항 10)
 
 ### 메타

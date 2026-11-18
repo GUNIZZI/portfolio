@@ -1,11 +1,16 @@
 'use client';
 
 import { type MouseEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 
 import Icon from '@/shared/ui/icon/Icon';
 import Logo from '@/shared/ui/logo/Logo';
+import NavIndicator, {
+    NAV_INDICATOR_FALLBACK_CLASS,
+    NAV_INDICATOR_ROOT_CLASS,
+} from '@/shared/ui/navIndicator/NavIndicator';
 import ThemeToggle from '@/shared/ui/themeToggle/ThemeToggle';
 import { cn } from '@/shared/util/cn';
 import { NAV_ITEMS, type NavHref } from '@/config/nav';
@@ -13,11 +18,25 @@ import { NAV_ITEMS, type NavHref } from '@/config/nav';
 import { menuPanelVariants } from './model/header.motions';
 import NavLink from './NavLink';
 
-/** 페이지 맨 위. 페이지마다 바깥 틀에 이 id 가 있다 */
+/** 페이지 맨 위. 레이아웃의 바깥 틀에 이 id 가 있다 (src/app/(site)/layout.tsx) */
 const TOP_HREF = '#top';
 
 /** 헤더에 메뉴를 펼쳐 놓는 폭. Tailwind 의 md 경계(48rem)와 같아야 한다 */
 const WIDE_QUERY = '(min-width: 48rem)';
+
+/**
+ * 주소가 속한 메뉴를 찾는다. 작업 상세(/work/<slug>)는 Projects 다.
+ * @returns 어느 메뉴에도 속하지 않으면 null
+ */
+function findCurrentHref(pathname: string): NavHref | null {
+    const current = NAV_ITEMS.find((item) =>
+        // 홈의 주소는 모든 주소의 앞부분이라 똑같을 때만 고른다
+        item.href === '/'
+            ? pathname === '/'
+            : pathname === item.href || pathname.startsWith(`${item.href}/`),
+    );
+    return current?.href ?? null;
+}
 
 /** 반투명 바탕. 스크롤을 시작한 헤더 막대와 모바일 메뉴 패널이 함께 쓴다 */
 const GLASS_CLASS = 'bg-glass backdrop-blur-md';
@@ -25,17 +44,17 @@ const GLASS_CLASS = 'bg-glass backdrop-blur-md';
 interface OwnProps {
     /** 로고 링크의 이름에 쓴다 */
     name: string;
-    /** 이 페이지의 메뉴. 페이지가 알려 준다 */
-    currentHref: NavHref;
     action: ReactNode;
 }
 
 /**
  * 헤더의 움직이는 부분.
  * 항상 화면 위에 붙어 있고, 지금 있는 페이지의 메뉴를 강조한다.
+ * 레이아웃에 있어 페이지를 옮겨도 다시 그려지지 않으므로, 지금 메뉴는 주소에서 직접 읽는다.
  * 좁은 화면에서는 메뉴와 action 을 버튼으로 여닫는 패널에 둔다.
  */
-export default function HeaderBar({ name, currentHref, action }: OwnProps) {
+export default function HeaderBar({ name, action }: OwnProps) {
+    const currentHref = findCurrentHref(usePathname());
     const headerRef = useRef<HTMLElement>(null);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
     /** 패널에서 고른 섹션. 패널이 다 닫힌 뒤에 이동한다 */
@@ -136,7 +155,10 @@ export default function HeaderBar({ name, currentHref, action }: OwnProps) {
                     <Logo name={name} href={currentHref === '/' ? TOP_HREF : '/'} />
                     <nav
                         aria-label="주 메뉴"
-                        className="hidden items-center gap-x-[clamp(12px,3vw,36px)] text-sm font-medium md:flex"
+                        className={cn(
+                            NAV_INDICATOR_ROOT_CLASS,
+                            'hidden items-center gap-x-[clamp(12px,3vw,36px)] text-sm font-medium md:flex',
+                        )}
                     >
                         {NAV_ITEMS.map((item) => {
                             const isCurrent = item.href === currentHref;
@@ -146,10 +168,11 @@ export default function HeaderBar({ name, currentHref, action }: OwnProps) {
                                     href={item.href}
                                     isCurrent={isCurrent}
                                     className={cn(
-                                        // 배치와 모양. 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
-                                        'border-b-2 border-transparent py-2',
+                                        // 배치와 모양. 아래 여백에 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
+                                        'pt-2 pb-2.5',
                                         // 상태
-                                        isCurrent && 'border-primary text-primary',
+                                        isCurrent && 'text-primary',
+                                        isCurrent && NAV_INDICATOR_FALLBACK_CLASS,
                                         // 모션
                                         'transition-colors duration-fast ease-move',
                                     )}
@@ -158,6 +181,7 @@ export default function HeaderBar({ name, currentHref, action }: OwnProps) {
                                 </NavLink>
                             );
                         })}
+                        <NavIndicator activeKey={currentHref} />
                     </nav>
                     {/* 테마 버튼은 좁은 화면에서도 막대에 남는다. 메뉴를 열지 않고 바꿀 수 있다 */}
                     <div className="flex items-center gap-x-1 md:gap-x-4">

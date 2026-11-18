@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Backdrop } from '@/widgets/backdrop';
 import { Contact } from '@/widgets/contact';
 import { Footer } from '@/widgets/footer';
-import { Header } from '@/widgets/header';
 import { ProjectCard } from '@/features/featuredProjects';
 import { ProjectExplorer } from '@/features/projectExplorer';
 import { WorkDoodles } from '@/features/workDoodles';
@@ -21,18 +20,17 @@ export default async function WorkPage() {
     }));
 
     return (
-        <div id="top" className="relative min-h-dvh overflow-x-clip">
+        <>
             <Backdrop>
                 <WorkDoodles />
             </Backdrop>
-            <div className="relative z-raised flex min-h-dvh flex-col">
-                <Header currentHref="/work" />
+            <div className="relative z-raised flex flex-1 flex-col">
                 <main className="flex-1">
                     <ProjectExplorer items={items} />
                     <Contact />
                 </main>
                 <Footer />
             </div>
-        </div>
+        </>
     );
 }

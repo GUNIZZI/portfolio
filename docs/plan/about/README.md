@@ -55,7 +55,7 @@ GUNI 가 어떤 개발자인지 홈보다 자세히 보여 주는 페이지다. 
 | 4    | 기술          | 분야별 묶음 8개. 「기술」 절                                     |
 | 5    | 연락          | 모든 페이지에 붙는 연락 섹션(`widgets/contact`)                  |
 
-- 섹션마다 feature 하나다. `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups`, 연락은 모든 페이지에 붙는 위젯 `contact` 다.(`src/app/about/page.tsx`)
+- 섹션마다 feature 하나다. `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups`, 연락은 모든 페이지에 붙는 위젯 `contact` 다.(`src/app/(site)/about/page.tsx`)
 - 헤더와 푸터는 홈과 같다. 메뉴의 About 이 이 페이지이고, 여기서는 About 을 강조한다.([home/](../home/README.md) 「메뉴」)
 - 배경은 공통 배경에 이 페이지의 낙서를 넣는다.(`src/features/aboutDoodles/`) 글이 많은 페이지라 홈보다 적게 둔다.
 - 타임라인은 순서가 있는 정보라 프로젝트마다 시기를 앞에 둔다.
@@ -163,7 +163,7 @@ GUNI 가 어떤 개발자인지 홈보다 자세히 보여 주는 페이지다. 
 ## 데이터
 
 경력 원문은 `content/experiences.json` 이고, 읽는 곳은 entity `experience` 다.(`src/entities/experience/`)
-기존 소개 페이지에서 옮긴 임시 데이터다.(요구사항 6) `src/app/about/page.tsx` 가 읽어 타임라인에 넘긴다.
+기존 소개 페이지에서 옮긴 임시 데이터다.(요구사항 6) `src/app/(site)/about/page.tsx` 가 읽어 타임라인에 넘긴다.
 
 | 단위     | 항목            | 내용                                                                         |
 | -------- | --------------- | ---------------------------------------------------------------------------- |
@@ -180,7 +180,7 @@ GUNI 가 어떤 개발자인지 홈보다 자세히 보여 주는 페이지다. 
 
 화면용 가공은 `services` 가 한다. 기간 문구(`2025 – 현재`), 처음부터 펼칠지, 작업 상세 주소를 만든다.
 
-나머지 문구는 저장소에 두고 entity `about` 이 읽는다.(`src/entities/about/`) `src/app/about/page.tsx` 가 읽어 섹션마다 넘긴다.
+나머지 문구는 저장소에 두고 entity `about` 이 읽는다.(`src/entities/about/`) `src/app/(site)/about/page.tsx` 가 읽어 섹션마다 넘긴다.
 관리 화면의 소개(`/admin/about`)에서 고친다.([소개 관리 기획](../admin/about/README.md))
 
 | 내용                 | 저장소의 문서       | 상태                            |
