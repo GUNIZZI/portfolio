@@ -40,12 +40,19 @@ export default function SectionShell({
         <Panel className="p-6">
             <form aria-labelledby={headingId} onSubmit={hndlSubmit} className="flex flex-col gap-8">
                 <div>
-                    <h2 id={headingId} className="text-2xl font-bold text-strong">
-                        {label}
-                    </h2>
+                    {/* 수정 일시는 제목 밖에 둔다. 안에 두면 이 제목으로 이름이 붙는 폼의 이름에 일시까지 읽힌다 */}
+                    <div className="flex items-center justify-between gap-2">
+                        <h2 id={headingId} className="text-2xl font-bold text-strong">
+                            {label}
+                        </h2>
+                        {updatedAtText ? (
+                            <span className="text-xs text-muted-foreground">
+                                수정. {updatedAtText}
+                            </span>
+                        ) : null}
+                    </div>
                     <p className="mt-1 text-caption text-muted-foreground">
                         {SECTION_PLACE[section]}
-                        {updatedAtText ? ` · 수정 일시 ${updatedAtText}` : null}
                     </p>
                 </div>
                 {children}
