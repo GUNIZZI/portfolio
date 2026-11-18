@@ -27,7 +27,11 @@ export default function AdminHeader({ currentHref }: OwnProps) {
                 <Logo name={SITE.name} href={ADMIN_NAV_ITEMS[0].href} size="md" />
                 <nav
                     aria-label="관리 메뉴"
-                    className="flex items-center gap-x-6 text-sm font-medium"
+                    // 좁은 화면에서는 메뉴만 아랫줄로 내려 고르게 벌려 놓는다. 윗줄에는 로고와 사이트 보기 · 로그아웃이 남는다
+                    className={cn(
+                        'order-last flex w-full items-center justify-evenly gap-x-6 text-sm font-medium',
+                        'md:order-0 md:w-auto md:justify-start',
+                    )}
                 >
                     {ADMIN_NAV_ITEMS.map((item) => {
                         const isCurrent = item.href === currentHref;
