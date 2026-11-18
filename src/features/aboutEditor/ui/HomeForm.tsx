@@ -3,6 +3,7 @@
 import { ABOUT_SECTION } from '@/entities/about/model/about.constants';
 import type { AboutEditorData, AboutHomeData } from '@/entities/about/model/about.types';
 import { Separator } from '@/shared/ui/separator/separator';
+import { cn } from '@/shared/util/cn';
 
 import { replaceItem, requiredError } from '../model/aboutEditor.utils';
 import { useSectionForm } from '../model/useSectionForm';
@@ -58,34 +59,39 @@ export default function HomeForm({ data }: OwnProps) {
                             // 자리를 key 로 쓴다. 3개로 고정이고 순서를 바꾸지 않는다
                             <fieldset
                                 key={index}
-                                className="grid grid-cols-[60_auto_auto_1fr] items-center gap-1 rounded-xl bg-card p-4"
+                                className={cn(
+                                    'flex min-w-0 flex-col gap-1 rounded-xl bg-card p-4',
+                                    'md:grid md:grid-cols-[60px_auto_1fr] md:items-center',
+                                )}
                             >
                                 <p className="text-caption text-muted-foreground">
                                     {STAT_LABELS[index]}
                                 </p>
-                                <TextField
-                                    afterLabel="값"
-                                    type="number"
-                                    min={0}
-                                    step={1}
-                                    inputMode="numeric"
-                                    value={Number.isNaN(stat.value) ? '' : stat.value}
-                                    onChange={(event) => {
-                                        hndlStatChange(index, {
-                                            value: event.target.valueAsNumber,
-                                        });
-                                    }}
-                                    error={isNumber ? undefined : '숫자만 입력해 주세요.'}
-                                    className="w-32"
-                                />
-                                <TextField
-                                    afterLabel="기호"
-                                    value={stat.suffix}
-                                    onChange={(event) => {
-                                        hndlStatChange(index, { suffix: event.target.value });
-                                    }}
-                                    className="w-24"
-                                />
+                                <div className="flex w-full flex-1 gap-1">
+                                    <TextField
+                                        afterLabel="값"
+                                        type="number"
+                                        min={0}
+                                        step={1}
+                                        inputMode="numeric"
+                                        value={Number.isNaN(stat.value) ? '' : stat.value}
+                                        onChange={(event) => {
+                                            hndlStatChange(index, {
+                                                value: event.target.valueAsNumber,
+                                            });
+                                        }}
+                                        error={isNumber ? undefined : '숫자만 입력해 주세요.'}
+                                        className="max-w-30 min-w-0 flex-1"
+                                    />
+                                    <TextField
+                                        afterLabel="기호"
+                                        value={stat.suffix}
+                                        onChange={(event) => {
+                                            hndlStatChange(index, { suffix: event.target.value });
+                                        }}
+                                        className="w-25"
+                                    />
+                                </div>
                                 <TextField
                                     afterLabel="문구"
                                     value={stat.label}
@@ -93,7 +99,7 @@ export default function HomeForm({ data }: OwnProps) {
                                         hndlStatChange(index, { label: event.target.value });
                                     }}
                                     error={requiredError('이름', stat.label)}
-                                    className="min-w-48 flex-1"
+                                    className="flex-1"
                                 />
                             </fieldset>
                         );

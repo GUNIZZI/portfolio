@@ -5,6 +5,7 @@ import type { ChangeEvent } from 'react';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 
 import { Button } from '@/shared/ui/button/button';
+import { cn } from '@/shared/util/cn';
 
 import { moveItem, removeItem, replaceItem, requiredError } from '../model/aboutEditor.utils';
 import TextField from './TextField';
@@ -55,48 +56,56 @@ export default function ListField({
 
                 return (
                     // 자리를 key 로 쓴다. 줄에 고유한 값이 없다. 입력 값은 상태가 갖고 있어 자리가 바뀌어도 어긋나지 않는다
-                    <div key={index} className="flex items-center gap-2 rounded-lg bg-card p-4">
+                    <div
+                        key={index}
+                        className={cn(
+                            'flex flex-col items-end gap-2 rounded-lg bg-card p-4',
+                            'md:flex-row md:items-center',
+                        )}
+                    >
                         <TextField
                             afterLabel={name}
                             isMultiline={isMultiline}
                             value={item}
                             onChange={hndlChange}
                             error={requiredError(label ?? '', item)}
-                            className="min-w-60 flex-1"
+                            className="flex-1"
                         />
-                        <Button
-                            variant="secondary"
-                            size="2xs"
-                            effect="none"
-                            aria-label={`${name} 위로`}
-                            disabled={index === 0}
-                            onClick={hndlUp}
-                            className="items-center"
-                        >
-                            <ArrowUp className="size-3.5" aria-hidden="true" />
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            size="2xs"
-                            effect="none"
-                            aria-label={`${name} 아래로`}
-                            disabled={index === items.length - 1}
-                            onClick={hndlDown}
-                            className="items-center"
-                        >
-                            <ArrowDown className="size-3.5" aria-hidden="true" />
-                        </Button>
-                        <Button
-                            variant="destructive"
-                            size="2xs"
-                            effect="none"
-                            aria-label={`${name} 빼기`}
-                            disabled={items.length <= min}
-                            onClick={hndlRemove}
-                            className="items-center"
-                        >
-                            <Trash2 className="size-3.5" aria-hidden="true" />
-                        </Button>
+                        <div className="flex gap-1">
+                            <Button
+                                variant="secondary"
+                                size="2xs"
+                                effect="none"
+                                aria-label={`${name} 위로`}
+                                disabled={index === 0}
+                                onClick={hndlUp}
+                                className="items-center"
+                            >
+                                <ArrowUp className="size-3.5" aria-hidden="true" />
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="2xs"
+                                effect="none"
+                                aria-label={`${name} 아래로`}
+                                disabled={index === items.length - 1}
+                                onClick={hndlDown}
+                                className="items-center"
+                            >
+                                <ArrowDown className="size-3.5" aria-hidden="true" />
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                size="2xs"
+                                effect="none"
+                                aria-label={`${name} 빼기`}
+                                disabled={items.length <= min}
+                                onClick={hndlRemove}
+                                className="items-center"
+                            >
+                                <Trash2 className="size-3.5" aria-hidden="true" />
+                            </Button>
+                        </div>
                     </div>
                 );
             })}
