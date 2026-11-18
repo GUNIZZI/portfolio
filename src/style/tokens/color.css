@@ -18,6 +18,10 @@
     /* 고정 헤더의 반투명 바탕. --background 에 알파 0.8 */
     --glass: rgb(10 10 18 / 0.8);
 
+    /* 상태. 표의 행처럼 바탕이 비쳐야 하는 면에 얹는다 */
+    --state-hover: rgb(255 255 255 / 0.06);
+    --state-selected: rgb(255 255 255 / 0.1);
+
     /* 선 */
     --border: #22223a;
     --border-card: #26263e;
@@ -38,6 +42,9 @@
     --brand-foreground: #ffffff;
     --badge: #4c1d95;
     --info: #60a5fa;
+    /* 결과와 확인을 알리는 색. 토스트와 확인 창이 쓴다 */
+    --success: #4ade80;
+    --warning: #fbbf24;
     /* 지우기처럼 되돌릴 수 없는 동작 */
     --destructive: #f87171;
 
@@ -84,6 +91,10 @@
     --glow: rgb(147 51 234 / 0.35);
     --glass: rgb(245 245 250 / 0.8);
 
+    /* 상태 */
+    --state-hover: rgb(0 23 52 / 0.04);
+    --state-selected: rgb(0 23 52 / 0.08);
+
     /* 선 */
     --border: #dcdce8;
     --border-card: #d2d2e0;
@@ -102,6 +113,8 @@
     --brand-soft: #7e22ce;
     --badge: #ede9fe;
     --info: #2563eb;
+    --success: #15803d;
+    --warning: #b45309;
     --destructive: #b91c1c;
 
     /* 낙서 */
@@ -126,6 +139,8 @@
     --color-panel-glass: var(--panel-glass);
     --color-glass: var(--glass);
     --color-glow: var(--glow);
+    --color-state-hover: var(--state-hover);
+    --color-state-selected: var(--state-selected);
     --color-border: var(--border);
     --color-border-card: var(--border-card);
     --color-line: var(--line);
@@ -141,6 +156,8 @@
     --color-brand-foreground: var(--brand-foreground);
     --color-badge: var(--badge);
     --color-info: var(--info);
+    --color-success: var(--success);
+    --color-warning: var(--warning);
     --color-destructive: var(--destructive);
     --color-doodle-sky: var(--doodle-sky);
     --color-doodle-violet: var(--doodle-violet);

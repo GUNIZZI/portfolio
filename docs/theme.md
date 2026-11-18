@@ -20,28 +20,30 @@
 토큰 파일: `src/style/tokens/color.css`
 표의 알파 값은 다크 값이다. 라이트 값은 [design.md](./design.md) 1.1절에 있다.
 
-| 유틸리티                                                           | 용도                                                                   |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| `background`                                                       | 페이지 바탕                                                            |
-| `panel` · `card` · `chip`                                          | 면. 뒤로 갈수록 한 단계씩 밝다. 라이트에서는 `chip` 만 바탕보다 어둡다 |
-| `panel-glass`                                                      | 뒤의 배경이 비치는 패널(`panel` 에 알파 0.5)                           |
-| `glass`                                                            | 고정 헤더의 반투명 바탕(알파 0.8)                                      |
-| `glow`                                                             | 작업 카드의 테두리 선에서 번지는 빛(`brand` 에 알파 0.65)              |
-| `border` · `border-card`                                           | 패널과 카드의 테두리                                                   |
-| `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다                           |
-| `strong`                                                           | 제목, 링크                                                             |
-| `foreground`                                                       | 본문                                                                   |
-| `muted-foreground`                                                 | 보조 설명                                                              |
-| `decorative`                                                       | 읽지 못해도 되는 글자                                                  |
-| `primary` · `primary-foreground`                                   | 주 강조(연두)와 그 위 글자                                             |
-| `brand` · `brand-soft` · `brand-foreground`                        | 보조 강조, 연한 보조 강조, 그 위 글자                                  |
-| `badge`                                                            | 작업 분류 표시                                                         |
-| `info`                                                             | 히어로 태그의 파란 기호                                                |
-| `destructive`                                                      | 지우기처럼 되돌릴 수 없는 동작                                         |
-| `doodle-sky` · `doodle-violet` · `doodle-yellow` · `doodle-indigo` | 낙서. `doodle-indigo` 는 임시 썸네일의 그라데이션                      |
-| `brush-sky` · `brush-violet`                                       | 가장자리 붓 자국(알파 0.85)                                            |
-| `dot`                                                              | 배경 점 무늬                                                           |
-| `ring`                                                             | 포커스 표시                                                            |
+| 유틸리티                                                           | 용도                                                                       |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| `background`                                                       | 페이지 바탕                                                                |
+| `panel` · `card` · `chip`                                          | 면. 뒤로 갈수록 한 단계씩 밝다. 라이트에서는 `chip` 만 바탕보다 어둡다     |
+| `panel-glass`                                                      | 뒤의 배경이 비치는 패널(`panel` 에 알파 0.5)                               |
+| `glass`                                                            | 고정 헤더의 반투명 바탕(알파 0.8)                                          |
+| `glow`                                                             | 작업 카드의 테두리 선에서 번지는 빛(`brand` 에 알파 0.65)                  |
+| `state-hover` · `state-selected`                                   | 표의 행에 얹는 면. hover 와 선택된 행이다. 반투명이라 뒤의 패널이 비친다   |
+| `border` · `border-card`                                           | 패널과 카드의 테두리                                                       |
+| `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다                               |
+| `strong`                                                           | 제목, 링크                                                                 |
+| `foreground`                                                       | 본문                                                                       |
+| `muted-foreground`                                                 | 보조 설명                                                                  |
+| `decorative`                                                       | 읽지 못해도 되는 글자                                                      |
+| `primary` · `primary-foreground`                                   | 주 강조(연두)와 그 위 글자                                                 |
+| `brand` · `brand-soft` · `brand-foreground`                        | 보조 강조, 연한 보조 강조, 그 위 글자                                      |
+| `badge`                                                            | 작업 분류 표시                                                             |
+| `info`                                                             | 히어로 태그의 파란 기호                                                    |
+| `destructive`                                                      | 지우기처럼 되돌릴 수 없는 동작                                             |
+| `success` · `warning`                                              | 결과와 확인을 알리는 색. 토스트의 아이콘 · 제목 · 테두리, 확인 창의 아이콘 |
+| `doodle-sky` · `doodle-violet` · `doodle-yellow` · `doodle-indigo` | 낙서. `doodle-indigo` 는 임시 썸네일의 그라데이션                          |
+| `brush-sky` · `brush-violet`                                       | 가장자리 붓 자국(알파 0.85)                                                |
+| `dot`                                                              | 배경 점 무늬                                                               |
+| `ring`                                                             | 포커스 표시                                                                |
 
 ### 1.1 shadcn 이름
 
