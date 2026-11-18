@@ -12,7 +12,7 @@ test('로그인하지 않고 관리 화면에 들어가면 로그인 화면으�
     ]) {
         await page.goto(path);
         await expect(page).toHaveURL(/\/admin\/login$/);
-        await expect(page.getByRole('heading', { level: 1, name: '로그인' })).toBeVisible();
+        await expect(page.getByRole('heading', { level: 1, name: 'Login' })).toBeVisible();
     }
 });
 
@@ -35,10 +35,10 @@ test('이메일과 비밀번호를 모두 입력해야 로그인 버튼을 누�
     const button = page.getByRole('button', { name: '로그인' });
     await expect(button).toBeDisabled();
 
-    await page.getByLabel('이메일').fill('admin@example.com');
+    await page.getByPlaceholder('이메일').fill('admin@example.com');
     await expect(button).toBeDisabled();
 
-    await page.getByLabel('비밀번호').fill('password');
+    await page.getByPlaceholder('비밀번호').fill('password');
     await expect(button).toBeEnabled();
 });
 
