@@ -14,6 +14,20 @@ export const FOOTER_NAV_ITEMS = NAV_ITEMS;
 /** 메뉴가 가리키는 페이지의 주소. 헤더가 지금 주소에서 찾은 메뉴를 나타낼 때 쓴다 */
 export type NavHref = (typeof NAV_ITEMS)[number]['href'];
 
+/**
+ * 주소가 속한 메뉴를 찾는다. 작업 상세(/work/<slug>)는 Projects 다.
+ * @returns 어느 메뉴에도 속하지 않으면 null
+ */
+export function findNavHref(pathname: string): NavHref | null {
+    const current = NAV_ITEMS.find((item) =>
+        // 홈의 주소는 모든 주소의 앞부분이라 똑같을 때만 고른다
+        item.href === '/'
+            ? pathname === '/'
+            : pathname === item.href || pathname.startsWith(`${item.href}/`),
+    );
+    return current?.href ?? null;
+}
+
 /** 관리 화면의 메뉴. 순서와 주소는 docs/plan/admin/dashboard/README.md 요구사항 6 */
 export const ADMIN_NAV_ITEMS = [
     { label: '대시보드', href: '/admin/dashboard' },

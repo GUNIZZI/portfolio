@@ -11,8 +11,8 @@ export default function SiteLayout({ children }: LayoutProps<'/'>) {
     return (
         <div
             id="top"
-            // 페이지 전환이 이 틀을 이전 화면과 새 화면으로 찍어 움직인다 (src/style/viewTransition.css)
-            style={{ viewTransitionName: 'site-page' }}
+            // 페이지 전환이 이 틀을 이전 화면과 새 화면으로 찍어 움직인다. 이름은 전환하는 동안에만 붙는다 (src/style/viewTransition.css)
+            data-view-transition="site-page"
             className="relative flex min-h-dvh flex-col overflow-x-clip"
         >
             {/* 헤더가 주소를 읽는다. 미리 그려 두지 않은 작업 상세의 틀을 만들 때 빌드가 막히지 않게 Suspense 안에 둔다 */}
