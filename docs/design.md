@@ -48,19 +48,19 @@
 **라이트 값은 원본에 없다.** 원본은 다크 화면뿐이라 2026-11-18 에 새로 정했다.(`src/style/tokens/color.css` 의 `[data-theme='light']`)
 아래에 없는 토큰은 다크와 값이 같다.
 
-| 토큰                                  | 값                                      | 다크와 달라진 점                                                    |
-| ------------------------------------- | --------------------------------------- | ------------------------------------------------------------------- |
-| `background` · `panel` · `card`       | `#f5f5fa` · `#fafafd` · `#ffffff`       | 뒤로 갈수록 밝다                                                    |
-| `chip`                                | `#e8e8f1`                               | 바탕보다 어둡다. 흰 카드 위에서 구분된다                            |
-| `strong` · `foreground`               | `#14141f` · `#3a3a48`                   | 짙은 글자                                                           |
-| `muted-foreground` · `decorative`     | `#5c5c6e` · `#7a7a8c`                   |                                                                     |
-| `primary` · `primary-foreground`      | `#80bf1c` · `#ffffff`                   | 형광 연두는 밝은 바탕에서 읽히지 않아 짙은 연두로 바꿨다            |
-| `brand-soft` · `info` · `destructive` | `#7e22ce` · `#2563eb` · `#b91c1c`       | 글자로 쓰여 짙게 바꿨다                                             |
-| `success` · `warning`                 | `#15803d` · `#b45309`                   | 글자로 쓰여 짙게 바꿨다. 카드 위 대비는 둘 다 5.0 이다              |
-| `badge`                               | `#ede9fe`                               | 짙은 보라 면이 옅은 보라 면이 됐다. 그 위 글자는 `strong` 이다      |
-| `doodle-sky` · `doodle-yellow`        | `#0ea5e9` · `#eab308`                   | 한 단계 짙다                                                        |
-| `glow` · `brush-*`                    | 알파 0.35 · 0.6                         | 밝은 바탕에서 번짐이 탁해 보여 알파를 낮췄다                        |
-| `state-hover` · `state-selected`      | 남색(`rgb(0 23 52)`)에 알파 0.04 · 0.08 | 밝은 바탕에서는 어두운 색을 얹어야 보인다. Kozipsa 의 라이트 값이다 |
+| 토큰                                  | 값                                 | 다크와 달라진 점                                                    |
+| ------------------------------------- | ---------------------------------- | ------------------------------------------------------------------- |
+| `background` · `panel` · `card`       | `#f5f5fa` · `#fafafd` · `#ffffff`  | 뒤로 갈수록 밝다                                                    |
+| `chip`                                | `#e8e8f1`                          | 바탕보다 어둡다. 흰 카드 위에서 구분된다                            |
+| `strong` · `foreground`               | `#14141f` · `#3a3a48`              | 짙은 글자                                                           |
+| `muted-foreground` · `decorative`     | `#5c5c6e` · `#7a7a8c`              |                                                                     |
+| `primary` · `primary-foreground`      | `#80bf1c` · `#ffffff`              | 형광 연두는 밝은 바탕에서 읽히지 않아 짙은 연두로 바꿨다            |
+| `brand-soft` · `info` · `destructive` | `#7e22ce` · `#2563eb` · `#b91c1c`  | 글자로 쓰여 짙게 바꿨다                                             |
+| `success` · `warning`                 | `#15803d` · `#b45309`              | 글자로 쓰여 짙게 바꿨다. 카드 위 대비는 둘 다 5.0 이다              |
+| `badge`                               | `#ede9fe`                          | 짙은 보라 면이 옅은 보라 면이 됐다. 그 위 글자는 `strong` 이다      |
+| `doodle-sky` · `doodle-yellow`        | `#0ea5e9` · `#eab308`              | 한 단계 짙다                                                        |
+| `glow` · `brush-*`                    | 알파 0.35 · 0.6                    | 밝은 바탕에서 번짐이 탁해 보여 알파를 낮췄다                        |
+| `state-hover` · `state-selected`      | 남색(`#001734`)에 알파 0.04 · 0.08 | 밝은 바탕에서는 어두운 색을 얹어야 보인다. Kozipsa 의 라이트 값이다 |
 
 바탕 대비는 `strong` 16.8 · `foreground` 10.3 · `muted-foreground` 6.0 · `destructive` 6.0 이다. 모두 WCAG AA(4.5)를 넘는다.
 `primary` 는 2.1 로 AA 에 못 미친다.(2026-11-18 사용자 결정)

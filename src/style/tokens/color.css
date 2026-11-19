@@ -12,15 +12,15 @@
     --card: #161624;
     --chip: #27273c;
     /* 뒤의 배경 낙서가 비치는 패널. --panel 에 알파 0.5 */
-    --panel-glass: rgb(16 16 26 / 0.5);
+    --panel-glass: #10101a80;
     /* 작업 카드의 테두리 선에서 번지는 빛. --brand 에 알파 0.65 */
-    --glow: rgb(147 51 234 / 0.65);
+    --glow: #9333eaa6;
     /* 고정 헤더의 반투명 바탕. --background 에 알파 0.8 */
-    --glass: rgb(10 10 18 / 0.8);
+    --glass: #0a0a12cc;
 
     /* 상태. 표의 행처럼 바탕이 비쳐야 하는 면에 얹는다 */
-    --state-hover: rgb(255 255 255 / 0.06);
-    --state-selected: rgb(255 255 255 / 0.1);
+    --state-hover: #ffffff0f;
+    --state-selected: #ffffff1a;
 
     /* 선 */
     --border: #22223a;
@@ -53,9 +53,9 @@
     --doodle-violet: #a855f7;
     --doodle-yellow: #facc15;
     --doodle-indigo: #6366f1;
-    --brush-sky: rgb(56 189 248 / 0.85);
-    --brush-violet: rgb(168 85 247 / 0.85);
-    --dot: rgb(42 42 68 / 0.35);
+    --brush-sky: #38bdf8d9;
+    --brush-violet: #a855f7d9;
+    --dot: #2a2a4459;
 
     --ring: var(--primary);
 
@@ -87,13 +87,13 @@
     --panel: #fafafd;
     --card: #ffffff;
     --chip: #e8e8f1;
-    --panel-glass: rgb(250 250 253 / 0.5);
-    --glow: rgb(147 51 234 / 0.35);
-    --glass: rgb(245 245 250 / 0.8);
+    --panel-glass: #fafafd80;
+    --glow: #9333ea59;
+    --glass: #f5f5facc;
 
     /* 상태 */
-    --state-hover: rgb(0 23 52 / 0.04);
-    --state-selected: rgb(0 23 52 / 0.08);
+    --state-hover: #0017340a;
+    --state-selected: #00173414;
 
     /* 선 */
     --border: #dcdce8;
@@ -120,9 +120,9 @@
     /* 낙서 */
     --doodle-sky: #0ea5e9;
     --doodle-yellow: #eab308;
-    --brush-sky: rgb(14 165 233 / 0.6);
-    --brush-violet: rgb(168 85 247 / 0.6);
-    --dot: rgb(160 160 190 / 0.4);
+    --brush-sky: #0ea5e999;
+    --brush-violet: #a855f799;
+    --dot: #a0a0be66;
 }
 
 /*
