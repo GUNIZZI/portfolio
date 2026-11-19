@@ -85,15 +85,16 @@
 
 토큰 파일: `src/style/tokens/layout.css`
 
-| 유틸리티           | 값                                             |
-| ------------------ | ---------------------------------------------- |
-| `max-w-page`       | 1240px                                         |
-| `min-w-page-min`   | 320px. `body` 에 준다. 더 좁으면 가로 스크롤   |
-| `px-gutter`        | 16–40px, 화면 폭에 따라                        |
-| `scroll-mt-header` | 붙은 헤더의 높이 + 24px. 메뉴로 갈 섹션에 준다 |
-| `shadow-glow`      | 선 바깥으로 번지는 빛. 16px, 색은 `glow`       |
-| `rounded-card`     | 14px                                           |
-| `rounded-blob`     | 손으로 그린 말풍선의 고르지 않은 모서리        |
+| 유틸리티           | 값                                                    |
+| ------------------ | ----------------------------------------------------- |
+| `max-w-page`       | 1240px                                                |
+| `min-w-page-min`   | 320px. `body` 에 준다. 더 좁으면 가로 스크롤          |
+| `px-gutter`        | 16–40px, 화면 폭에 따라                               |
+| `scroll-mt-header` | 붙은 헤더의 높이 + 24px. 메뉴로 갈 섹션에 준다        |
+| `h-below-header`   | 화면 높이 − 붙은 헤더의 높이. 모바일 메뉴 패널에 준다 |
+| `shadow-glow`      | 선 바깥으로 번지는 빛. 16px, 색은 `glow`              |
+| `rounded-card`     | 14px                                                  |
+| `rounded-blob`     | 손으로 그린 말풍선의 고르지 않은 모서리               |
 
 토큰으로 더한 글자 크기와 모서리 이름은 `src/shared/util/cn.ts` 에도 등록한다.
 등록하지 않으면 `tailwind-merge` 가 `text-body` 를 색으로 읽어 다른 글자색과 함께 쓸 때 지운다.

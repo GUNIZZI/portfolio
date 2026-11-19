@@ -76,7 +76,7 @@ flowchart TD
     H["S-03 모바일 홈"]:::screen -->|"메뉴 버튼"| M("P-01 모바일 메뉴"):::dialog
     M -->|"메뉴 항목"| SEC(["그 페이지로 이동"]):::done
     M -->|"Contact"| C["연락 섹션"]:::step
-    M -.->|"메뉴 버튼 · Esc · 패널 밖"| H
+    M -.->|"메뉴 버튼 · Esc"| H
     M --> W{"화면이 넓어졌는가"}:::decision
     W -.->|"예"| D["S-01 홈"]:::screen
     SEC -.-> H

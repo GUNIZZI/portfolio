@@ -32,7 +32,7 @@
         <tr><td><a href="#s02">S-02</a></td><td>헤더 고정</td><td>S-01 의 스크롤 상태</td><td><code>/</code></td></tr>
         <tr><td><a href="#s03">S-03</a></td><td>모바일 배치</td><td>S-01 의 390px 상태</td><td><code>/</code></td></tr>
         <tr><td><a href="#s04">S-04</a></td><td>등장 연출 · 동작 줄이기</td><td>S-01 의 상태</td><td><code>/</code></td></tr>
-        <tr><td><a href="#p01">P-01</a></td><td>모바일 메뉴</td><td>S-03 의 헤더 아래 패널</td><td><code>/</code></td></tr>
+        <tr><td><a href="#p01">P-01</a></td><td>모바일 메뉴</td><td>S-03 의 헤더 아래를 다 덮는 패널</td><td><code>/</code></td></tr>
       </tbody>
     </table></div>
     <p class="spec-note">컴포넌트 이름은 src/shared/ui/ 와 src/features/ 에 있는 것만 적었다. 없는 것은 (제안) 을 붙였다.</p>
@@ -124,7 +124,7 @@ flowchart TD
     H["S-03 모바일 홈"]:::screen -->|"메뉴 버튼"| M("P-01 모바일 메뉴"):::dialog
     M -->|"메뉴 항목"| SEC(["그 페이지로 이동"]):::done
     M -->|"Contact"| C["연락 섹션"]:::step
-    M -.->|"메뉴 버튼 · Esc · 패널 밖"| H
+    M -.->|"메뉴 버튼 · Esc"| H
     M --> W{"화면이 넓어졌는가"}:::decision
     W -.->|"예"| D["S-01 홈"]:::screen
     SEC -.-> H
@@ -284,13 +284,13 @@ flowchart TD
           <div class="row rel"><span class="m abs">3</span><span class="btn pri">Contact →</span></div>
         </div>
       </div>
-      <div class="pf-sec rel"><span class="pf-lab">#projects</span><span class="m abs">4</span><span class="muted small">패널 아래로 화면이 그대로 보인다</span></div>
+      <div class="pf-sec rel"><span class="pf-lab">패널(계속)</span><span class="m abs">4</span><span class="muted small">화면 끝까지 덮는다. 뒤의 화면이 흐리게 비친다</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>메뉴 버튼</b><p>닫혀 있으면 ☰, 열려 있으면 ✕. <code>aria-expanded</code> · <code>aria-controls</code>. 이름은 「메뉴 열기」 · 「메뉴 닫기」. 아이콘은 <code>shared/ui/icon</code> 의 <code>menu</code> · <code>close</code></p></div></li>
-      <li><span class="m">2</span><div><b>패널</b><p>헤더 바로 아래에 화면 폭으로 펼친다. 메뉴 3개를 세로로. 지금 있는 페이지(여기서는 Home)에 강조색. 바탕 <code>glass</code>, 층 <code>z-overlay</code>. 메뉴 항목을 누르면 닫고 그 페이지로 간다</p></div></li>
+      <li><span class="m">2</span><div><b>패널</b><p>헤더 바로 아래에서 화면 끝까지 덮는다. 메뉴 3개를 세로로. 지금 있는 페이지(여기서는 Home)에 강조색. 바탕 <code>glass</code>, 층 <code>z-overlay</code>. 메뉴 항목을 누르면 닫고 그 페이지로 간다</p></div></li>
       <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>Contact → <code>#contact</code>. 좁은 화면에서는 헤더가 아니라 여기에 둔다</p></div></li>
-      <li><span class="m">4</span><div><b>뒤의 화면</b><p>어둡게 덮지 않고 스크롤도 잠그지 않는다. 패널 밖을 누르면 닫힌다. <code>Esc</code> 로도 닫히고 초점은 메뉴 버튼으로 돌아간다</p></div></li>
+      <li><span class="m">4</span><div><b>뒤의 화면</b><p>패널의 반투명 바탕 너머로 흐리게 비친다. 스크롤은 잠그지 않는다. <code>Esc</code> 로 닫히고 초점은 메뉴 버튼으로 돌아간다</p></div></li>
     </ol></aside>
   </div>
 </section>

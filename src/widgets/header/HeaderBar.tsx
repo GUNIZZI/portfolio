@@ -15,9 +15,9 @@ import NavIndicator, {
 } from '@/shared/ui/navIndicator/NavIndicator';
 import ThemeToggle from '@/shared/ui/themeToggle/ThemeToggle';
 import { cn } from '@/shared/util/cn';
-import { NAV_ITEMS, type NavHref } from '@/config/nav';
+import { findNavHref, NAV_ITEMS } from '@/config/nav';
 
-import { menuPanelVariants } from './model/header.motions';
+import { glassVariants, menuContentVariants } from './model/header.motions';
 import NavLink from './NavLink';
 
 /** 페이지 맨 위. 레이아웃의 바깥 틀에 이 id 가 있다 (src/app/(site)/layout.tsx) */
@@ -29,22 +29,8 @@ const ADMIN_HREF = '/admin';
 /** 헤더에 메뉴를 펼쳐 놓는 폭. Tailwind 의 md 경계(48rem)와 같아야 한다 */
 const WIDE_QUERY = '(min-width: 48rem)';
 
-/**
- * 주소가 속한 메뉴를 찾는다. 작업 상세(/work/<slug>)는 Projects 다.
- * @returns 어느 메뉴에도 속하지 않으면 null
- */
-function findCurrentHref(pathname: string): NavHref | null {
-    const current = NAV_ITEMS.find((item) =>
-        // 홈의 주소는 모든 주소의 앞부분이라 똑같을 때만 고른다
-        item.href === '/'
-            ? pathname === '/'
-            : pathname === item.href || pathname.startsWith(`${item.href}/`),
-    );
-    return current?.href ?? null;
-}
-
-/** 반투명 바탕. 스크롤을 시작한 헤더 막대와 모바일 메뉴 패널이 함께 쓴다 */
-const GLASS_CLASS = 'bg-glass backdrop-blur-md';
+/** 반투명 바탕과 뒤 화면 흐림. 헤더 막대와 모바일 메뉴 패널이 함께 쓴다 */
+const GLASS_CLASS = 'bg-glass backdrop-blur-xs';
 
 interface OwnProps {
     /** 로고 링크의 이름에 쓴다 */
@@ -59,7 +45,7 @@ interface OwnProps {
  * 좁은 화면에서는 메뉴와 action 을 버튼으로 여닫는 패널에 둔다.
  */
 export default function HeaderBar({ name, action }: OwnProps) {
-    const currentHref = findCurrentHref(usePathname());
+    const currentHref = findNavHref(usePathname());
     const headerRef = useRef<HTMLElement>(null);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
     /** 패널에서 고른 섹션. 패널이 다 닫힌 뒤에 이동한다 */
@@ -73,6 +59,8 @@ export default function HeaderBar({ name, action }: OwnProps) {
     useMotionValueEvent(scrollY, 'change', (latest) => {
         setIsScrolled(latest > 0);
     });
+    // 패널이 열리면 맨 위에서도 바탕을 깐다. 막대만 비어 있으면 패널과 끊겨 보인다
+    const hasGlass = isScrolled || isMenuOpen;
 
     // 붙은 헤더가 섹션 제목을 가리지 않게 헤더 높이를 알린다. 섹션의 scroll-mt-header 가 읽는다
     useEffect(() => {
@@ -91,7 +79,7 @@ export default function HeaderBar({ name, action }: OwnProps) {
         };
     }, []);
 
-    // 열린 패널은 Esc, 패널 밖 누름, 화면이 넓어짐으로 닫힌다
+    // 열린 패널은 Esc 와 화면이 넓어짐으로 닫힌다. 패널이 화면을 다 덮어 밖을 누를 자리는 없다
     useEffect(() => {
         if (!isMenuOpen) return;
 
@@ -100,22 +88,16 @@ export default function HeaderBar({ name, action }: OwnProps) {
             setIsMenuOpen(false);
             menuButtonRef.current?.focus();
         }
-        function hndlPointerDown(event: PointerEvent) {
-            if (event.target instanceof Node && headerRef.current?.contains(event.target)) return;
-            setIsMenuOpen(false);
-        }
         function hndlWiden(event: MediaQueryListEvent) {
             if (event.matches) setIsMenuOpen(false);
         }
 
         const wide = window.matchMedia(WIDE_QUERY);
         document.addEventListener('keydown', hndlKeyDown);
-        document.addEventListener('pointerdown', hndlPointerDown);
         wide.addEventListener('change', hndlWiden);
 
         return () => {
             document.removeEventListener('keydown', hndlKeyDown);
-            document.removeEventListener('pointerdown', hndlPointerDown);
             wide.removeEventListener('change', hndlWiden);
         };
     }, [isMenuOpen]);
@@ -150,18 +132,21 @@ export default function HeaderBar({ name, action }: OwnProps) {
     return (
         <header
             ref={headerRef}
-            // 페이지 전환에서 헤더를 본문과 따로 찍어 제자리에 둔다 (src/style/viewTransition.css)
-            style={{ viewTransitionName: 'site-header' }}
+            // 페이지 전환에서 헤더를 본문과 따로 찍어 제자리에 둔다. 이름은 전환하는 동안에만 붙는다 (src/style/viewTransition.css)
+            data-view-transition="site-header"
             className="sticky top-0 z-header"
         >
             {/* 바탕을 header 가 아니라 막대에 준다. 흐림 효과는 겹쳐 쓸 수 없어 패널과 형제로 둔다 */}
-            <div
-                className={cn(
-                    isScrolled && GLASS_CLASS,
-                    'transition-colors duration-fast ease-move',
-                )}
-            >
-                <div className="mx-auto flex max-w-page items-center justify-between gap-x-6 px-gutter py-5">
+            <div className="relative">
+                {/* 바탕만 따로 깔아 패널의 바탕과 같은 값으로 드러낸다. 막대의 내용은 움직이지 않는다 */}
+                <motion.div
+                    aria-hidden="true"
+                    variants={glassVariants}
+                    initial={false}
+                    animate={hasGlass ? 'shown' : 'hidden'}
+                    className={cn('absolute inset-0', GLASS_CLASS)}
+                />
+                <div className="relative mx-auto flex max-w-page items-center justify-between gap-x-6 px-gutter py-5">
                     <Logo name={name} href={currentHref === '/' ? TOP_HREF : '/'} />
                     <nav
                         aria-label="주 메뉴"
@@ -234,36 +219,42 @@ export default function HeaderBar({ name, action }: OwnProps) {
                     <motion.nav
                         id={panelId}
                         aria-label="주 메뉴"
-                        variants={menuPanelVariants}
-                        initial="closed"
-                        animate="open"
-                        exit="closed"
+                        variants={glassVariants}
+                        initial="hidden"
+                        animate="shown"
+                        exit="hidden"
                         onClick={hndlPanelClick}
                         className={cn(
-                            // 배치와 모양. 헤더 바로 아래에 화면 폭으로 펼친다
-                            'absolute inset-x-0 top-full z-overlay flex flex-col gap-1 px-gutter pt-2 pb-6 md:hidden',
+                            // 배치와 모양. 헤더 바로 아래에서 화면 끝까지 덮는다. 내용이 넘치면 패널 안에서 스크롤한다
+                            'absolute inset-x-0 top-full z-overlay h-below-header overflow-y-auto px-gutter pt-2 pb-6 md:hidden',
                             GLASS_CLASS,
                             // 글자
                             'text-body font-medium',
                         )}
                     >
-                        {NAV_ITEMS.map((item) => {
-                            const isCurrent = item.href === currentHref;
-                            return (
-                                <NavLink
-                                    key={item.href}
-                                    href={item.href}
-                                    isCurrent={isCurrent}
-                                    className={cn(
-                                        'flex min-h-11 items-center',
-                                        isCurrent && 'text-primary',
-                                    )}
-                                >
-                                    {item.label}
-                                </NavLink>
-                            );
-                        })}
-                        <div className="mt-3 flex">{action}</div>
+                        {/* 바탕은 제자리에서 드러나고 내용만 내려온다. 바탕까지 움직이면 헤더 막대와 어긋난다 */}
+                        <motion.div
+                            variants={menuContentVariants}
+                            className="flex h-full flex-col gap-1"
+                        >
+                            {NAV_ITEMS.map((item) => {
+                                const isCurrent = item.href === currentHref;
+                                return (
+                                    <NavLink
+                                        key={item.href}
+                                        href={item.href}
+                                        isCurrent={isCurrent}
+                                        className={cn(
+                                            'flex min-h-11 items-center',
+                                            isCurrent && 'text-primary',
+                                        )}
+                                    >
+                                        {item.label}
+                                    </NavLink>
+                                );
+                            })}
+                            <div className="mt-auto ml-auto flex">{action}</div>
+                        </motion.div>
                     </motion.nav>
                 ) : null}
             </AnimatePresence>
