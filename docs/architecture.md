@@ -38,7 +38,7 @@ portfolio/
     ├── app/          App Router 라우트
     ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact, pageTransition, adminHeader)
     ├── features/     기능 단위 (hero, featuredProjects, …)
-    ├── entities/     도메인 데이터 (project, experience, session, about)
+    ├── entities/     도메인 데이터 (project, experience, session, about, analytics)
     ├── shared/       앱 공용 (ui/, util/)
     ├── config/       사이트 정보, 내비게이션
     ├── style/        global.css, tokens/
@@ -217,6 +217,23 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 - 규칙과 문구는 entity 의 스키마에 둔다. 서버 액션도 같은 스키마로 다시 검증한다.(`src/entities/experience/model/experience.schemas.ts` 와 `EXPERIENCE_FIELD_ERROR`, `src/entities/about/model/about.schemas.ts` 와 `ABOUT_FIELD_ERROR`)
 - 폼의 값이 저장할 내용과 모양이 다르면 `features` 에 폼 스키마를 둔다. 모양만 바꿔 entity 의 스키마에 넘기고, 규칙은 다시 적지 않는다.(`src/features/experienceEditor/model/experienceEditor.schemas.ts`)
 
+### 4.4 방문 통계
+
+대시보드가 읽는 방문 통계는 entity `analytics` 가 다룬다. 저장소는 Google Analytics(GA)다.(2026-11-17 사용자 결정, `docs/plan/admin/dashboard/README.md`)
+
+| 하는 일                              | 위치                                                    |
+| ------------------------------------ | ------------------------------------------------------- |
+| 공개 화면에 추적 코드를 넣는다       | `src/_app/SiteAnalytics.tsx`                            |
+| GA Data API 를 부른다                | `src/entities/analytics/repositories/`                  |
+| 기간을 정하고 블록의 모양으로 바꾼다 | `src/entities/analytics/services/analytics.services.ts` |
+| 새로 고침으로 캐시를 지운다          | `src/entities/analytics/actions/analytics.actions.ts`   |
+| 프로젝트 제목과 조회수를 잇는다      | `src/features/dashboard/model/dashboard.utils.ts`       |
+
+- 추적 코드는 `(site)` 레이아웃과 그 밖에 있는 `colophon` 페이지에만 둔다. 관리 화면에는 두지 않는다.(`src/app/(site)/layout.tsx` · `src/app/colophon/page.tsx`)
+- GA 는 Firebase 서비스 계정으로 부른다. 환경 변수는 서버의 `GA_PROPERTY_ID` 와 공개 화면의 `NEXT_PUBLIC_GA_MEASUREMENT_ID` 2개다. 둘 다 없어도 빌드와 다른 화면은 동작한다.(`src/shared/util/serverEnv.ts` · `src/_app/SiteAnalytics.tsx`)
+- 받은 값은 기간마다 `cacheLife('hours')` 로 간직한다. 받지 못해 던진 것은 간직하지 않는다.(`src/entities/analytics/services/analytics.services.ts`)
+- 블록은 서버 컴포넌트가 저마다 `services` 를 불러 `<Suspense>` 안에서 그린다.(`src/features/dashboard/ui/DashboardBlock.tsx`)
+
 ## 금지사항
 
 | 금지                                       | 대신                                 | 근거                                                             |
@@ -230,10 +247,10 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 
 ## 미정리 항목
 
-- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` · `projectEditor`, 404 와 에러 화면의 `statusScreen` 이다.
+- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` · `projectEditor` · `dashboard`, 404 와 에러 화면의 `statusScreen` 이다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
-- widget 은 `header` · `footer` · `backdrop` · `contact` · `pageTransition` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` 이다.
-- 관리 기능은 로그인 · 소개 · 경력(2026-11-18)과 프로젝트(2026-11-19)까지 구현했다. 대시보드가 남았다.(`docs/plan/admin/README.md` 요구사항 24)
+- widget 은 `header` · `footer` · `backdrop` · `contact` · `pageTransition` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` · `analytics` 이다.
+- 관리 기능은 로그인 · 소개 · 경력(2026-11-18)과 프로젝트(2026-11-19), 대시보드 1차(2026-11-20)까지 구현했다. 대시보드의 그래프와 2차 블록이 남았다.(`docs/plan/admin/dashboard/README.md` 검토 필요 사항 10번 · 요구사항 3)
 - `content/projects.ts` 와 `public/images/projects/` 는 저장소로 옮기는 스크립트(`scripts/migrate-projects.mjs`)만 읽는다. 옮긴 뒤 스크립트와 함께 지운다.(`docs/plan/admin/README.md` 「기존 프로젝트 이전」)
 
 ## 확인방법

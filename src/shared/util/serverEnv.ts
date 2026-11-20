@@ -13,6 +13,8 @@ const ServerEnvSchema = z.object({
         .transform((key) => key.replaceAll('\\n', '\n')),
     FIREBASE_WEB_API_KEY: z.string().min(1),
     ADMIN_UID: z.string().min(1),
+    // GA4 속성의 숫자 id 다. G- 로 시작하는 측정 id 가 아니다. 없어도 다른 관리 화면은 동작하고 대시보드만 값을 받지 못한다
+    GA_PROPERTY_ID: z.string().regex(/^\d+$/).optional(),
 });
 
 export type ServerEnvType = z.infer<typeof ServerEnvSchema>;
