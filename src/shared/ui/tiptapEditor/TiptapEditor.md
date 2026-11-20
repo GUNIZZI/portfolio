@@ -51,6 +51,7 @@ react-hook-form 에서는 `Controller` 로 잇는다.(`src/features/projectEdito
 ## 모양
 
 - **편집 영역은 읽는 화면과 같은 서식 클래스(`tiptap-content`)를 단다.** 쓰면서 보던 모습 그대로 읽힌다. 서식의 정본은 `src/shared/ui/tiptapViewer/tiptapContent.css` 하나다.
+- **`className` 으로 높이를 정하면 편집 영역만 스크롤한다.** 도구 줄은 위에 그대로 남는다. 높이를 정하지 않으면 내용만큼 늘어난다.(`TiptapEditor.tsx`, `src/features/projectEditor/ui/ProjectForm.tsx`)
 - 테두리와 바탕은 Input 과 같다. 편집 영역에 포커스가 있으면 테두리가 `primary` 로 바뀐다.
 - 도구 줄의 버튼은 `ghost` 버튼이다. 켜진 서식은 `aria-pressed` 로 알리고 글자색(`primary`)으로 구분한다.
 - 나타나고 사라지는 연출은 없다. 관리 화면에는 연출을 두지 않는다.(`docs/plan/admin/README.md` 「모션」)

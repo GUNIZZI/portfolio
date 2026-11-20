@@ -429,7 +429,8 @@ export default function TiptapEditor({
         immediatelyRender: false,
         editorProps: {
             attributes: {
-                class: 'tiptap-content min-h-60 p-4 outline-none',
+                // 내용이 적어도 편집 영역을 채워, 빈 곳을 눌러도 커서가 들어간다
+                class: 'tiptap-content min-h-60 shrink-0 grow p-4 outline-none',
                 role: 'textbox',
                 'aria-multiline': 'true',
                 'aria-label': label,
@@ -452,7 +453,7 @@ export default function TiptapEditor({
         <div
             className={cn(
                 // 배치와 모양. 입력과 같은 테두리와 바탕이다
-                'rounded-card border border-input bg-card',
+                'flex flex-col rounded-card border border-input bg-card',
                 // 포커스. 편집 영역에 포커스가 있으면 테두리로 알린다
                 'focus-within:border-primary',
                 className,
@@ -461,7 +462,11 @@ export default function TiptapEditor({
             {editor ? (
                 <Toolbar editor={editor} onImageUpload={onImageUpload} imageAccept={imageAccept} />
             ) : null}
-            <EditorContent editor={editor} />
+            {/* 바깥에서 높이를 정하면 도구 줄은 그대로 두고 편집 영역만 스크롤한다. 정하지 않으면 내용만큼 늘어난다 */}
+            <EditorContent
+                editor={editor}
+                className="flex min-h-0 flex-1 flex-col overflow-y-auto"
+            />
         </div>
     );
 }
