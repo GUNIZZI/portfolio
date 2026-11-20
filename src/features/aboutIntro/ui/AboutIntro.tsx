@@ -5,7 +5,7 @@ import DrawnPath from '@/shared/ui/drawnPath/DrawnPath';
 import Icon from '@/shared/ui/icon/Icon';
 import { cn } from '@/shared/util/cn';
 
-/** 소개 페이지의 첫 화면. 페이지 제목, 소개 문단, 성장 경로, 캐릭터 */
+/** 소개 페이지의 첫 화면. 캐릭터, 페이지 제목, 소개 문단, 성장 경로 */
 interface OwnProps {
     /** 소개 문단 · 성장 경로 · 그 아래 한 줄. 페이지가 저장소에서 읽어 넘긴다 */
     intro: AboutIntroData;
@@ -14,7 +14,31 @@ interface OwnProps {
 export default function AboutIntro({ intro }: OwnProps) {
     return (
         <section className="mx-auto flex max-w-page flex-wrap items-center gap-x-10 gap-y-8 px-gutter pt-6 pb-4">
-            <div className="flex min-w-0 flex-[1_1_440px] flex-col gap-5">
+            {/* 전신 그림이라 세로로 길다. 왼쪽에 세우고 글을 오른쪽에 둔다. 좁은 화면에서는 글 위로 올라간다 */}
+            <div className="flex min-w-0 flex-[1_1_320px] justify-center">
+                <div className="relative aspect-[570/856] w-full max-w-64 md:max-w-96">
+                    <div
+                        aria-hidden="true"
+                        className="absolute inset-x-[4%] top-[16%] bottom-[6%] z-base -rotate-3 rounded-blob bg-brand"
+                    />
+                    <Image
+                        src="/images/characters/about_new.png"
+                        alt="엄지를 들고 서 있는 개발자 캐릭터 일러스트"
+                        fill
+                        sizes="(max-width: 768px) 256px, 384px"
+                        loading="eager"
+                        className="z-raised object-contain"
+                    />
+                    <p
+                        aria-hidden="true"
+                        className="absolute top-0 right-0 z-float rotate-6 font-hand text-note font-bold whitespace-pre-line"
+                    >
+                        {'Since\n2004'}
+                    </p>
+                </div>
+            </div>
+
+            <div className="flex min-w-0 flex-[2_1_440px] flex-col gap-5">
                 <span
                     aria-hidden="true"
                     className="inline-block -rotate-6 self-start font-hand text-greeting font-bold"
@@ -77,29 +101,6 @@ export default function AboutIntro({ intro }: OwnProps) {
                     {intro.growthPathNote ? (
                         <p className="text-caption text-muted-foreground">{intro.growthPathNote}</p>
                     ) : null}
-                </div>
-            </div>
-
-            <div className="flex min-w-0 flex-[1_1_320px] justify-center">
-                <div className="relative aspect-[640/470] w-full max-w-110">
-                    <div
-                        aria-hidden="true"
-                        className="absolute inset-x-[8%] top-[10%] bottom-0 z-base -rotate-3 rounded-blob bg-brand"
-                    />
-                    <Image
-                        src="/images/characters/about.png"
-                        alt="윙크하며 엄지를 든 개발자 캐릭터 일러스트"
-                        fill
-                        sizes="(max-width: 920px) 100vw, 440px"
-                        loading="eager"
-                        className="z-raised object-contain"
-                    />
-                    <p
-                        aria-hidden="true"
-                        className="absolute top-0 right-0 z-float rotate-6 font-hand text-note font-bold whitespace-pre-line"
-                    >
-                        {'Since\n2004'}
-                    </p>
                 </div>
             </div>
         </section>

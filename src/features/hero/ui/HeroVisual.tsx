@@ -7,13 +7,14 @@ import HeroDoodle from './HeroDoodle';
 
 /**
  * 캐릭터 일러스트와 그 둘레의 낙서.
- * 낙서의 위치는 원본 디자인(sample/)의 백분율 값 그대로다. 그림이 커지고 작아져도 함께 따라간다.
+ * 낙서의 위치는 백분율이라 그림이 커지고 작아져도 함께 따라간다.
+ * 원본 디자인(sample/)의 값에서 말풍선 · 왕관 · 번개 · 메모를 hero_new.png 의 머리와 후드를 가리지 않게 옮겼다.
  * 낙서마다 depth 가 달라 포인터를 움직이면 서로 다른 거리만큼 밀린다.
  */
 export default function HeroVisual() {
     return (
         <div className="flex min-w-0 flex-[1_1_380px] justify-center">
-            <div className="relative aspect-[1108/982] w-full max-w-145">
+            <div className="relative aspect-503/540 w-full max-w-130">
                 <HeroDoodle depth={0.4} className="absolute inset-0 z-base">
                     <svg
                         viewBox="0 0 100 89"
@@ -43,10 +44,10 @@ export default function HeroVisual() {
                 </HeroDoodle>
 
                 <Image
-                    src="/images/characters/hero.webp"
-                    alt="노트북 앞에 앉아 턱을 괸 안경 쓴 개발자 캐릭터 일러스트"
+                    src="/images/characters/hero_new.png"
+                    alt="노트북 앞에서 윙크하며 엄지를 치켜든 안경 쓴 개발자 캐릭터 일러스트"
                     fill
-                    sizes="(max-width: 920px) 100vw, 580px"
+                    sizes="(max-width: 920px) 100vw, 520px"
                     loading="eager"
                     fetchPriority="high"
                     className="z-raised object-contain"
@@ -57,7 +58,7 @@ export default function HeroVisual() {
                     depth={1}
                     className={cn(
                         // 배치와 모양
-                        'absolute top-[4%] left-0 z-float flex aspect-[1.1/1] w-1/4 -rotate-12 items-center justify-center rounded-blob bg-doodle-sky',
+                        'absolute top-[2%] -left-[4%] z-float flex aspect-[1.1/1] w-1/4 -rotate-12 items-center justify-center rounded-blob bg-doodle-sky',
                         // 글자
                         'text-center font-hand text-bubble font-bold whitespace-pre-line text-primary-foreground',
                     )}
@@ -67,7 +68,7 @@ export default function HeroVisual() {
 
                 <HeroDoodle
                     depth={1.6}
-                    className="absolute top-[1%] left-[66%] z-float w-[7%] rotate-12"
+                    className="absolute top-0 left-[65%] z-float w-[7%] rotate-12"
                 >
                     <svg viewBox="0 0 40 34" className="block w-full">
                         <DrawnPath
@@ -79,7 +80,7 @@ export default function HeroVisual() {
                         />
                     </svg>
                 </HeroDoodle>
-                <HeroDoodle depth={1.3} className="absolute top-[15%] left-[61%] z-float w-[8%]">
+                <HeroDoodle depth={1.3} className="absolute top-0 left-[21%] z-float w-[8%]">
                     <svg viewBox="0 0 40 40" className="block w-full">
                         <DrawnPath
                             trigger="parent"
@@ -93,7 +94,7 @@ export default function HeroVisual() {
                 </HeroDoodle>
                 <HeroDoodle
                     depth={0.8}
-                    className="absolute top-[11%] left-[78%] z-float -rotate-8 font-hand text-note font-bold whitespace-pre-line"
+                    className="absolute top-[3%] left-[80%] z-float -rotate-8 font-hand text-note font-bold whitespace-pre-line"
                 >
                     {'Ideas\nDesign\nDevelop\nDeploy ✓'}
                 </HeroDoodle>
