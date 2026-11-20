@@ -12,7 +12,7 @@ export default function Header() {
         <HeaderBar
             name={SITE.name}
             action={
-                // 연락 섹션은 모든 페이지에 있다(widgets/contact)
+                // 연락 섹션은 404 · 에러 화면을 뺀 모든 페이지에 있다(widgets/contact)
                 <Button asChild variant="brand" size="md" effect="sweep" arrow="end">
                     <a href="#contact">Contact</a>
                 </Button>

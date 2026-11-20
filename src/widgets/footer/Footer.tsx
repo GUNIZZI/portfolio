@@ -51,7 +51,7 @@ export default function Footer({ isHome = false }: OwnProps) {
                             </Link>
                         ),
                     )}
-                    {/* 연락 섹션은 모든 페이지에 있다(widgets/contact) */}
+                    {/* 연락 섹션은 404 · 에러 화면을 뺀 모든 페이지에 있다(widgets/contact) */}
                     <a href="#contact" className={LINK_CLASS}>
                         Contact
                     </a>

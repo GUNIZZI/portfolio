@@ -77,6 +77,7 @@
     - Skills 는 메뉴에서 뺐다. 기술 전용 페이지가 없고, 홈과 소개 페이지에 섹션으로 들어 있다.
 - 연락 섹션으로는 헤더 오른쪽의 Contact 버튼으로 간다. 메뉴에는 Contact 를 두지 않는다.(2026-11-12 사용자 결정)
     - **연락 섹션은 모든 페이지의 푸터 위에 있다.**(2026-11-16 사용자 결정) Contact 는 어느 페이지에서든 그 페이지의 연락 섹션(`#contact`)으로 간다.
+    - 404 와 에러 화면에는 연락 섹션을 두지 않는다.(2026-11-20 사용자 결정, `src/app/(site)/not-found.tsx` · `error.tsx`)
     - 모든 페이지에 붙는 것이라 feature 가 아니라 위젯이다.(`src/widgets/contact/`, `docs/architecture.md` 3.1)
 - 푸터 메뉴는 Home · Projects · About · Contact 다. 앞의 3개는 헤더와 같은 페이지로 간다.
 - **현재 메뉴 표시**: 지금 있는 페이지의 메뉴에 밑줄과 강조색을 준다.(`src/widgets/header/HeaderBar.tsx`)
