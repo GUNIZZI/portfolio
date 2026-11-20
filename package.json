@@ -19,8 +19,10 @@
         "plan-index": "node scripts/build-plan-index.mjs"
     },
     "dependencies": {
+        "@google-analytics/data": "^7.3.0",
         "@gsap/react": "^2.1.2",
         "@hookform/resolvers": "^7.0.7",
+        "@next/third-parties": "16.4.6",
         "@tanstack/react-table": "^8.21.3",
         "@tiptap/pm": "^3.34.0",
         "@tiptap/react": "^3.34.0",
@@ -30,6 +32,7 @@
         "clsx": "^2.1.1",
         "firebase-admin": "^14.5.1",
         "framer-motion": "^14.12.0",
+        "google-auth-library": "11.3.4",
         "gsap": "^3.15.1",
         "lucide-react": "^1.74.0",
         "next": "16.4.6",
