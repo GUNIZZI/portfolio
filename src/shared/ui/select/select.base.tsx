@@ -129,7 +129,7 @@ function SelectItem({
                 // 고른 항목
                 'data-[state=checked]:bg-state-selected data-[state=checked]:text-strong',
                 // 고를 수 없는 항목
-                'data-disabled:pointer-events-none data-disabled:text-decorative data-disabled:line-through',
+                'data-disabled:pointer-events-none data-disabled:line-through data-disabled:opacity-disabled',
                 className,
             )}
             {...props}

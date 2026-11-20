@@ -19,7 +19,7 @@ const inputVariants = cva(
         // 포커스. 입력끼리 붙어 있어 전역 값(4px)보다 좁게 띄운다
         'focus-visible:outline-offset-2',
         // 비활성
-        'disabled:pointer-events-none disabled:text-muted-foreground',
+        'disabled:pointer-events-none disabled:opacity-disabled',
     ],
     {
         variants: {
@@ -49,7 +49,7 @@ type InputProps = Omit<ComponentProps<'input'>, 'size'> &
 
 /**
  * 입력칸 안쪽에 붙는 글자. 누르면 뒤의 상자가 받아 입력에 초점을 준다. Select 도 같은 모양으로 쓴다.
- * 색은 입력 글자색의 30% 다.(2026-11-17 사용자 결정) 글자색을 따라가 비활성일 때도 함께 흐려진다.
+ * 색은 입력 글자색의 30% 다.(2026-11-17 사용자 결정) 비활성일 때는 상자와 함께 더 흐려진다.
  * 크기는 입력의 size 와 상관없이 text-xs 다. 입력이 2xs 일 때만 입력과 같은 크기를 쓴다.(2026-11-17 사용자 결정)
  */
 const ADORNMENT_CLASS = 'pointer-events-none shrink-0 text-current/30 select-none';
@@ -85,7 +85,7 @@ function Input({ className, type, size, beforeLabel, afterLabel, ...props }: Inp
                 'flex cursor-text items-center gap-2',
                 // 상태. 안쪽 입력의 상태를 상자가 대신 보여 준다
                 'has-[input[aria-invalid=true]]:border-destructive',
-                'has-[input:disabled]:pointer-events-none has-[input:disabled]:text-muted-foreground',
+                'has-[input:disabled]:pointer-events-none has-[input:disabled]:opacity-disabled',
                 // 포커스. 입력끼리 붙어 있어 전역 값(4px)보다 좁게 띄운다
                 'has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring',
                 className,

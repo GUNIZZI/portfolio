@@ -30,6 +30,6 @@ import { Input } from '@/shared/ui/input/input';
 
 ## shadcn 원본과 다른 점
 
-- 비활성을 흐리게 하는 대신 글자색을 `decorative` 로 낮췄다.(`docs/theme.md` 원칙 3)
+- 비활성은 숫자 불투명도 대신 `opacity-disabled` 로 흐리게 한다.(`docs/theme.md` 4절)
 - 다크 전용 분기를 뺐다. `dark:` 로 색을 나누지 않는다.(`docs/theme.md` 원칙 4)
 - 글자 크기는 `text-caption`, 이름과 입력의 간격은 8px 이다. 바꾸기 전의 입력과 같다.(`field.tsx`)

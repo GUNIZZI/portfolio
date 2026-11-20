@@ -153,7 +153,7 @@ export default function ChipListField({
                                         isNested ? 'hover:bg-card' : 'hover:bg-chip',
                                         'hover:text-destructive',
                                         'focus-visible:outline-offset-0',
-                                        'disabled:pointer-events-none disabled:text-decorative',
+                                        'disabled:pointer-events-none disabled:opacity-disabled',
                                     )}
                                 >
                                     <X className="size-3" aria-hidden="true" />

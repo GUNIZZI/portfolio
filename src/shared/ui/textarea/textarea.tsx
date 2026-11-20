@@ -19,7 +19,7 @@ const textareaVariants = cva(
         // 포커스. 입력끼리 붙어 있어 전역 값(4px)보다 좁게 띄운다
         'focus-visible:outline-offset-2',
         // 비활성
-        'disabled:pointer-events-none disabled:text-muted-foreground',
+        'disabled:pointer-events-none disabled:opacity-disabled',
     ],
     {
         variants: {

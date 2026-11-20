@@ -26,7 +26,7 @@ const switchVariants = cva(
         // 상태
         'aria-invalid:border-destructive',
         // 비활성
-        'disabled:pointer-events-none disabled:data-[state=checked]:bg-chip disabled:data-[state=unchecked]:bg-chip',
+        'disabled:pointer-events-none disabled:opacity-disabled',
         // 모션
         'transition-colors duration-fast ease-move',
     ],
@@ -52,9 +52,6 @@ const switchThumbVariants = cva(
         // 켜짐 · 꺼짐. 켜지면 트랙의 오른쪽 끝까지 간다. 2px 는 트랙의 좌우 테두리다
         'data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=checked]:bg-primary-foreground',
         'data-[state=unchecked]:translate-x-0 data-[state=unchecked]:bg-strong',
-        // 비활성
-        'group-disabled/switch:data-[state=checked]:bg-muted-foreground',
-        'group-disabled/switch:data-[state=unchecked]:bg-muted-foreground',
         // 모션. 동작 줄이기에서는 지속시간이 0ms 라 바로 옮겨 간다
         'transition-[translate] duration-fast ease-move',
     ],
@@ -81,7 +78,7 @@ function Switch({ className, size, ...props }: SwitchProps) {
     return (
         <SwitchPrimitive.Root
             data-slot="switch"
-            className={cn('group/switch', switchVariants({ size }), className)}
+            className={cn(switchVariants({ size }), className)}
             {...props}
         >
             <SwitchPrimitive.Thumb

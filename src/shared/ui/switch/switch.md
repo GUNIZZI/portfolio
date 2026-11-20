@@ -21,7 +21,7 @@ import { Switch } from '@/shared/ui/switch/switch';
 
 - 켜지면 트랙이 `primary`, 꺼지면 `input` 이다.(`switch.tsx` 의 `switchVariants`)
 - 손잡이는 `duration-fast` · `ease-move` 로 옮겨 간다. 동작 줄이기에서는 바로 옮겨 간다.(`switch.tsx`, `docs/motion.md` 3절)
-- 비활성이면 트랙이 `chip`, 손잡이가 `muted-foreground` 로 바뀐다.(`switch.tsx`)
+- 비활성이면 스위치 전체가 `opacity-disabled` 로 흐려진다. 켜짐과 꺼짐의 색은 그대로 남는다.(`switch.tsx`, `docs/theme.md` 4절)
 
 ## 자주 하는 실수
 

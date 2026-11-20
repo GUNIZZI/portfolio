@@ -10,4 +10,4 @@ import { Label } from '@/shared/ui/label/label';
 ```
 
 - 글자는 `text-caption` · `muted-foreground` 다. 바꾸기 전 입력의 이름과 같다.(`label.tsx`)
-- 비활성은 흐리게 하는 대신 글자색을 `decorative` 로 낮춘다.(`docs/theme.md` 원칙 3)
+- 비활성은 `opacity-disabled` 로 흐리게 한다. 입력과 같은 값이다.(`docs/theme.md` 4절)

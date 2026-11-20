@@ -12,7 +12,7 @@ import { Separator } from '../separator/separator';
 /*
  * 입력에 이름 · 설명 · 오류 문구를 붙이는 묶음. shadcn 의 Field 를 바탕으로 했다.
  * 구조와 이름은 shadcn 그대로다. 아래 3가지만 이 사이트에 맞췄다.
- * - 흐리게 하는 대신 글자색을 낮춘다. 위계는 글자색으로 만든다.(docs/theme.md 원칙 3)
+ * - 비활성은 숫자 opacity 대신 opacity-disabled 로 흐리게 한다.(docs/theme.md 4절)
  * - 다크 전용 분기(dark 변형)를 뺐다. dark: 로 색을 나누지 않는다.(docs/theme.md 원칙 4)
  * - 글자 크기를 text-caption 으로, 이름과 입력의 간격을 gap-2 로 맞췄다. 바꾸기 전의 입력과 같다
  */
@@ -119,7 +119,7 @@ function FieldLabel({ className, ...props }: ComponentProps<typeof Label>) {
         <Label
             data-slot="field-label"
             className={cn(
-                'group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:text-decorative',
+                'group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-disabled',
                 'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4',
                 'has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/10',
                 className,
@@ -134,7 +134,7 @@ function FieldTitle({ className, ...props }: ComponentProps<'div'>) {
         <div
             data-slot="field-label"
             className={cn(
-                'flex w-fit items-center gap-2 text-caption leading-snug font-medium group-data-[disabled=true]/field:text-decorative',
+                'flex w-fit items-center gap-2 text-caption leading-snug font-medium group-data-[disabled=true]/field:opacity-disabled',
                 className,
             )}
             {...props}

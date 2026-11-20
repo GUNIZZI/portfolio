@@ -16,7 +16,7 @@ import { getPageNumbers, getTotalPages } from './pagination.utils';
 
 const ARROW_CLASS = cn(
     'inline-flex h-7 cursor-pointer items-center px-1 text-strong',
-    'disabled:pointer-events-none disabled:text-decorative',
+    'disabled:pointer-events-none disabled:opacity-disabled',
 );
 
 interface PaginationProps {
