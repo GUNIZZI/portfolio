@@ -132,4 +132,4 @@
 
 - 소개 섹션의 숫자 3개(40+ · 20+ · 7+)는 원본 값이다. 사용자가 나중에 실제 값으로 바꾼다.
   관리 화면의 소개(`/admin/about`)에서 고친다.
-- 4번째 작업 카드는 썸네일이 없어 임시 이미지를 표시한다(`content/projects.ts`).
+- 썸네일이 없는 작업 카드는 임시 이미지를 표시한다. 지금은 4번째 작업이다(`src/features/featuredProjects/ui/ProjectCard.tsx`).

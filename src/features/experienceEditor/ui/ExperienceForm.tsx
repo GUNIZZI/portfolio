@@ -65,7 +65,7 @@ function ExperienceFormBody({ experience, projects }: OwnProps) {
     const [initial] = useState(() =>
         toFormValue(
             experience?.content ?? null,
-            projects.map((project) => project.slug),
+            projects.map((project) => project.id),
         ),
     );
     const form = useForm<ExperienceFormValue, unknown, ExperienceType>({

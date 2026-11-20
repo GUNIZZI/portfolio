@@ -63,7 +63,7 @@ export default function ProjectDetail({ project }: OwnProps) {
 
             {/* 줄이 바뀌면 메타가 본문 위로 올라가게 거꾸로 접는다. 거꾸로 접으면 세로 기준도 뒤집혀 items-end 가 위쪽 맞춤이다 */}
             <div className="flex flex-wrap-reverse items-end gap-6">
-                <Panel className="min-w-0 flex-[3_1_480px] p-[clamp(20px,5vw,48px)]">
+                <Panel className="flex-[3_1_480px] self-stretch p-[clamp(20px,5vw,48px)]">
                     {project.body ? (
                         <TiptapViewer content={project.body} />
                     ) : (

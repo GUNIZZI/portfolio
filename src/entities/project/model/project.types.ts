@@ -1,16 +1,22 @@
 import type {
+    ProjectContentType,
     ProjectImageType,
     ProjectLinkType,
     ProjectScopeLevel,
     ProjectType,
 } from './project.schemas';
 
-/** 원문 한 건. content/projects.ts 를 검증한 결과다 */
-export type ProjectResponse = ProjectType;
+/** 저장소에서 읽은 프로젝트 한 건 */
+export interface ProjectResponse extends ProjectType {
+    /** 저장소가 발급한 문서 id. 상세 주소에 쓴다 */
+    id: string;
+    /** 마지막으로 저장한 시각(ISO 8601). 기록이 없으면 null */
+    updatedAt: string | null;
+}
 
 /** 화면에서 쓰는 작업 한 건 */
 export interface ProjectData {
-    slug: string;
+    id: string;
     title: string;
     category: string;
     summary: string;
@@ -53,3 +59,49 @@ export interface ProjectDetailData extends ProjectData {
     /** 목록에서 뒤에 있는 작업. 마지막 작업이면 null */
     next: ProjectNeighborData | null;
 }
+
+/** 관리 화면의 프로젝트 목록이 그리는 한 줄 */
+export interface ProjectRowData {
+    id: string;
+    title: string;
+    category: string;
+    /** 썸네일. 없으면 null */
+    image: Pick<ProjectImageType, 'src' | 'alt'> | null;
+    isPublished: boolean;
+    /** 홈의 대표 작업에도 보이는가. 비공개면 언제나 false 다 */
+    isFeatured: boolean;
+    /** 수정 일시. 2026.11.17 (10:12) 형식이고, 기록이 없으면 null */
+    updatedAtText: string | null;
+}
+
+/**
+ * 수정 폼에 채울 내용. 저장할 내용과 같은 모양이고 분류만 글자다.
+ * 목록에서 뺀 분류가 저장되어 있을 수 있다. 그때는 폼이 다시 고르게 한다
+ */
+export type ProjectEditorContent = Omit<ProjectContentType, 'category'> & { category: string };
+
+/** 관리 화면의 프로젝트 수정 폼이 그리는 한 건 */
+export interface ProjectEditorData {
+    id: string;
+    content: ProjectEditorContent;
+    /** 수정 일시. 2026.11.17 (10:12) 형식이고, 기록이 없으면 null */
+    updatedAtText: string | null;
+}
+
+/** 다른 화면이 프로젝트를 고를 때 쓰는 한 건. 경력의 프로젝트 연결이 쓴다 */
+export interface ProjectOptionData {
+    id: string;
+    title: string;
+    isPublished: boolean;
+}
+
+export const PROJECT_SAVE_STATUS = {
+    SAVED: 'SAVED',
+    /** 규칙에 맞지 않아 저장하지 않았다 */
+    INVALID: 'INVALID',
+    /** 고치거나 지울 프로젝트가 저장소에 없다 */
+    NOT_FOUND: 'NOT_FOUND',
+    /** 저장소에 쓰지 못했다 */
+    FAILED: 'FAILED',
+} as const;
+export type ProjectSaveStatus = (typeof PROJECT_SAVE_STATUS)[keyof typeof PROJECT_SAVE_STATUS];

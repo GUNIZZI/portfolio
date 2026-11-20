@@ -39,13 +39,13 @@ const BASE: ExperienceResponse = {
 
 describe('toExperienceData', () => {
     it('떠난 해가 있으면 기간을 두 해로 적는다', () => {
-        const data = toExperienceData(BASE);
+        const data = toExperienceData(BASE, []);
         expect(data.periodText).toBe('2020 – 2023');
         expect(data.isCurrent).toBe(false);
     });
 
     it('재직 중이면 끝을 현재로 적는다', () => {
-        const data = toExperienceData({ ...BASE, endYear: null });
+        const data = toExperienceData({ ...BASE, endYear: null }, []);
         expect(data.periodText).toBe('2020 – 현재');
         expect(data.startYearText).toBe('2020');
         expect(data.endYearText).toBe('현재');
@@ -53,42 +53,54 @@ describe('toExperienceData', () => {
     });
 
     it('2014년 이후에 시작한 경력만 처음부터 펼친다', () => {
-        expect(toExperienceData({ ...BASE, startYear: 2014 }).isOpen).toBe(true);
-        expect(toExperienceData({ ...BASE, startYear: 2009, endYear: 2014 }).isOpen).toBe(false);
+        expect(toExperienceData({ ...BASE, startYear: 2014 }, []).isOpen).toBe(true);
+        expect(toExperienceData({ ...BASE, startYear: 2009, endYear: 2014 }, []).isOpen).toBe(
+            false,
+        );
     });
 
     it('요약을 쓰지 않았으면 null 로 낸다', () => {
-        expect(toExperienceData(BASE).summary).toBeNull();
-        expect(toExperienceData({ ...BASE, summary: '프론트엔드 리드' }).summary).toBe(
+        expect(toExperienceData(BASE, []).summary).toBeNull();
+        expect(toExperienceData({ ...BASE, summary: '프론트엔드 리드' }, []).summary).toBe(
             '프론트엔드 리드',
         );
     });
 
     it('작업 상세가 있는 프로젝트만 주소를 갖는다', () => {
-        const data = toExperienceData({
+        const experience = {
             ...BASE,
             projects: [
                 { name: 'P', date: '2021', tags: [] },
-                { name: 'Q', date: '2022.01', tags: [], workSlug: 'q' },
+                { name: 'Q', date: '2022.01', tags: [], projectId: 'q' },
+                { name: 'R', date: '2023.01', tags: [], projectId: 'hidden' },
             ],
-        });
-        expect(data.projects.map((project) => project.href)).toEqual([null, '/work/q']);
+        };
+        const data = toExperienceData(experience, ['q']);
+        expect(data.projects.map((project) => project.href)).toEqual([null, '/work/q', null]);
+    });
+
+    it('비공개이거나 지워진 프로젝트에 이은 줄은 주소 없이 이름만 낸다', () => {
+        const data = toExperienceData(
+            { ...BASE, projects: [{ name: 'Q', date: '2022.01', tags: [], projectId: 'q' }] },
+            [],
+        );
+        expect(data.projects[0]).toMatchObject({ name: 'Q', href: null });
     });
 });
 
 describe('toExperienceData 의 프로젝트 수', () => {
     it('목록을 다 적은 회사는 목록의 개수를 적는다', () => {
-        const data = toExperienceData(BASE);
+        const data = toExperienceData(BASE, []);
         expect(data.projectCountText).toBe('1개');
     });
 
     it('실제 수가 목록보다 많으면 그 수에 + 를 붙인다', () => {
-        const data = toExperienceData({ ...BASE, totalProjects: 40 });
+        const data = toExperienceData({ ...BASE, totalProjects: 40 }, []);
         expect(data.projectCountText).toBe('40개+');
     });
 
     it('실제 수가 목록보다 많지 않으면 목록의 개수를 쓴다', () => {
-        const data = toExperienceData({ ...BASE, totalProjects: 1 });
+        const data = toExperienceData({ ...BASE, totalProjects: 1 }, []);
         expect(data.projectCountText).toBe('1개');
     });
 });
@@ -136,14 +148,14 @@ describe('getExperienceList', () => {
             { ...BASE, id: 'now', startYear: 2025, endYear: null },
         ]);
 
-        const list = await getExperienceList();
+        const list = await getExperienceList([]);
         expect(list.map((item) => item.id)).toEqual(['now', 'old']);
         expect(list[0]?.isCurrent).toBe(true);
     });
 
     it('경력이 없으면 빈 목록을 낸다', async () => {
         repository.getExperienceList.mockResolvedValue([]);
-        expect(await getExperienceList()).toEqual([]);
+        expect(await getExperienceList([])).toEqual([]);
     });
 });
 
@@ -190,12 +202,12 @@ describe('createExperience', () => {
         await createExperience({
             ...CONTENT,
             totalProjects: undefined,
-            projects: [{ name: 'P', date: '2021', tags: [], workSlug: undefined }],
+            projects: [{ name: 'P', date: '2021', tags: [], projectId: undefined }],
         });
 
         const [saved] = repository.createExperience.mock.calls[0] ?? [];
         expect(saved).not.toHaveProperty('totalProjects');
-        expect(saved?.projects[0]).not.toHaveProperty('workSlug');
+        expect(saved?.projects[0]).not.toHaveProperty('projectId');
     });
 
     it('떠난 해가 들어간 해보다 앞서면 등록하지 않는다', async () => {

@@ -26,7 +26,17 @@ function toPeriodText(experience: ExperienceResponse): string {
     return `${experience.startYear} – ${experience.endYear ?? '현재'}`;
 }
 
-export function toExperienceData(experience: ExperienceResponse): ExperienceData {
+/**
+ * 경력 1건을 공개 화면용으로 바꾼다
+ * @param experience - 저장소에서 읽은 경력
+ * @param linkableProjectIds - 상세 화면이 있는 프로젝트의 id. 공개한 프로젝트다.
+ *   여기 없는 프로젝트(비공개 · 삭제)에 이은 줄은 링크 없이 이름만 그린다.
+ *   (docs/plan/admin/experiences/README.md 「등록 · 수정」)
+ */
+export function toExperienceData(
+    experience: ExperienceResponse,
+    linkableProjectIds: readonly string[],
+): ExperienceData {
     const isCurrent = experience.endYear === null;
     const startYearText = String(experience.startYear);
     const endYearText = isCurrent ? '현재' : String(experience.endYear);
@@ -48,7 +58,10 @@ export function toExperienceData(experience: ExperienceResponse): ExperienceData
             name: project.name,
             dateText: project.date,
             tags: project.tags,
-            href: project.workSlug ? `/work/${project.workSlug}` : null,
+            href:
+                project.projectId && linkableProjectIds.includes(project.projectId)
+                    ? `/work/${project.projectId}`
+                    : null,
         })),
     };
 }
@@ -89,10 +102,15 @@ async function getExperienceResponseList(): Promise<ExperienceResponse[]> {
     return sortExperienceList(await experienceRepository.getExperienceList());
 }
 
-/** 화면에 그릴 경력 목록. 최근 회사가 앞이다 */
-export async function getExperienceList(): Promise<ExperienceData[]> {
+/**
+ * 화면에 그릴 경력 목록. 최근 회사가 앞이다
+ * @param linkableProjectIds - 상세 화면이 있는 프로젝트의 id. 페이지가 entity project 에서 읽어 넘긴다
+ */
+export async function getExperienceList(
+    linkableProjectIds: readonly string[],
+): Promise<ExperienceData[]> {
     const list = await getExperienceResponseList();
-    return list.map(toExperienceData);
+    return list.map((experience) => toExperienceData(experience, linkableProjectIds));
 }
 
 /** 관리 화면의 경력 목록. 최근 회사가 앞이다 */

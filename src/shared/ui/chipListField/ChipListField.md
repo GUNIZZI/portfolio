@@ -1,7 +1,7 @@
 # ChipListField
 
 짧은 이름의 목록을 고치는 입력이다. 항목을 옆으로 늘어놓고, 자리가 모자라면 다음 줄로 넘긴다.(`ChipListField.tsx`)
-소개의 성장 경로 · Skill 이름과 경력의 기술 태그가 쓴다. 두 화면이 함께 쓰게 되어 `features/aboutEditor` 에서 올렸다.(2026-11-18 사용자 결정, `src/features/aboutEditor/` · `src/features/experienceEditor/ui/ProjectRow.tsx`)
+소개의 성장 경로 · Skill 이름, 경력의 기술 태그, 프로젝트의 기술이 쓴다. 두 화면이 함께 쓰게 되어 `features/aboutEditor` 에서 올렸다.(2026-11-18 사용자 결정, `src/features/aboutEditor/` · `src/features/experienceEditor/ui/ProjectRow.tsx`)
 
 | prop         | 값                                                                        | 기본    |
 | ------------ | ------------------------------------------------------------------------- | ------- |

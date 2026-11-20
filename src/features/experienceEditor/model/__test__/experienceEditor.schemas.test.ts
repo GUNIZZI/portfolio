@@ -8,7 +8,7 @@ const VALUE: ExperienceFormValue = {
     endYear: '2026',
     summary: '',
     totalProjects: '',
-    projects: [{ name: 'Design System', date: '2025.06', tags: ['React'], workSlug: '' }],
+    projects: [{ name: 'Design System', date: '2025.06', tags: ['React'], projectId: '' }],
 };
 
 /** 오류가 난 자리와 문구. 자리는 `projects.0.date` 처럼 점으로 잇는다 */

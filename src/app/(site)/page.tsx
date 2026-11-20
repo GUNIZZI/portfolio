@@ -7,11 +7,11 @@ import { Hero } from '@/features/hero';
 import { HomeDoodles } from '@/features/homeDoodles';
 import { Skills } from '@/features/skills';
 import { getAboutHome } from '@/entities/about/services/about.services';
-import { getProjectList } from '@/entities/project/services/project.services';
+import { getFeaturedProjectList } from '@/entities/project/services/project.services';
 import Panel from '@/shared/ui/panel/Panel';
 
 export default async function HomePage() {
-    const [projects, about] = await Promise.all([getProjectList(), getAboutHome()]);
+    const [projects, about] = await Promise.all([getFeaturedProjectList(), getAboutHome()]);
 
     return (
         <>

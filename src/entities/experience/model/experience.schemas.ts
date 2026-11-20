@@ -21,13 +21,10 @@ export const ExperienceProjectSchema = z.object({
     /** 쓴 기술과 맡은 일 */
     tags: z.array(z.string().trim().min(1)),
     /**
-     * 작업 상세(`/work/<slug>`)가 있는 프로젝트의 slug.
-     * 프로젝트를 저장소로 옮기면 projectId 로 바꾼다.(docs/plan/admin/experiences/README.md 「기존 내용 이전」)
+     * 이은 프로젝트(entity project)의 id. 그 프로젝트의 상세(`/work/<id>`)로 간다.
+     * (docs/plan/admin/experiences/README.md 「등록 · 수정」)
      */
-    workSlug: z
-        .string()
-        .regex(/^[a-z0-9-]+$/)
-        .optional(),
+    projectId: z.string().min(1).optional(),
 });
 
 /** 경력 한 건(회사 하나)의 내용. 폼과 서버가 같은 규칙으로 검증한다 */

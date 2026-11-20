@@ -10,14 +10,14 @@
 <header class="top">
   <nav aria-label="화면 바로가기">
     <a href="#flow">유저 플로우</a><a href="#s01">S-01 프로젝트 목록</a><a href="#s02">S-02 프로젝트 등록</a><a href="#s03">S-03 프로젝트 수정</a>
-    <a href="#s04">S-04 목록 상태</a><a href="#p01">P-01 삭제 확인</a><a href="#p02">P-02 순서 변경</a><a href="#p03">P-03 토스트</a>
+    <a href="#s04">S-04 목록 상태</a><a href="#p01">P-01 삭제 확인</a><a href="#p02">P-02 토스트</a>
   </nav>
 </header>
 <main>
 
 <div class="intro">
   <h1>프로젝트 관리 (/admin/projects)</h1>
-  <p>포트폴리오에 싣는 프로젝트를 등록 · 수정 · 삭제하고 공개 여부와 순서를 정하는 관리 화면의 와이어프레임이다. 관리자 1명만 들어온다.</p>
+  <p>포트폴리오에 싣는 프로젝트를 등록 · 수정 · 삭제하고 공개 여부 · 홈 노출 · 순서를 정하는 관리 화면의 와이어프레임이다. 관리자 1명만 들어온다.</p>
   <p>관리 화면은 디자인 원본이 없다. 여기서는 배치 · 순서 · 상태만 그리고, 모양은 지금의 토큰으로 표와 폼을 단순하게 그린다. 정책과 입력 규칙은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. 로그인 화면은 로그인 와이어프레임(<span class="mono">login/wireframe.html</span>)에 있다.</p>
   <div class="legend">
     <span><span class="m">1</span> 설명 번호</span>
@@ -32,8 +32,7 @@
         <tr><td><a href="#s03">S-03</a></td><td>프로젝트 수정</td><td>페이지</td><td><code>/admin/projects/[id]</code></td></tr>
         <tr><td><a href="#s04">S-04</a></td><td>목록 상태</td><td>S-01 의 상태</td><td><code>/admin/projects</code></td></tr>
         <tr><td><a href="#p01">P-01</a></td><td>삭제 확인 창</td><td>확인 창</td><td>S-01 · S-03</td></tr>
-        <tr><td><a href="#p02">P-02</a></td><td>순서 변경 창</td><td>다이얼로그</td><td>S-01</td></tr>
-        <tr><td><a href="#p03">P-03</a></td><td>토스트</td><td>토스트</td><td>S-01 · S-02 · S-03</td></tr>
+        <tr><td><a href="#p02">P-02</a></td><td>토스트</td><td>토스트</td><td>S-01 · S-02 · S-03</td></tr>
       </tbody>
     </table></div>
     <p class="spec-note">컴포넌트 이름은 src/shared/ui/ 에 있는 것만 적었다. 지금 있는 것은 Button · Icon · Logo · Panel 이고, 없는 것은 을 붙였다.</p>
@@ -61,11 +60,9 @@ flowchart TD
     SS -->|"예"| LS["S-01 프로젝트 목록"]:::screen
     LS -->|"등록"| NW["S-02 프로젝트 등록"]:::screen
     LS -->|"제목"| ED["S-03 프로젝트 수정"]:::screen
-    LS -->|"순서 변경"| OD("P-02 순서 변경 창"):::dialog
     LS -->|"삭제"| DL("P-01 삭제 확인 창"):::dialog
     NW -.->|"저장 · 취소"| LS
     ED -.->|"저장 · 취소"| LS
-    OD -.->|"저장 · 취소"| LS
     DL -.->|"삭제 · 취소"| LS
     LS -->|"로그아웃"| OUT(["로그인으로"]):::done
     LS -->|"저장한 내용"| PUB[/"공개 화면 캐시 지움"/]:::api
@@ -79,20 +76,21 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    F["S-02 등록 · S-03 수정"]:::screen --> IN["항목 입력"]:::step
+    F["S-02 등록 · S-03 수정"]:::screen --> IN["기본 항목 · 상세 항목 · 본문 입력"]:::step
     IN --> IMG{"썸네일을 올리는가"}:::decision
     IMG -->|"예"| CHK{"형식과 크기가 맞는가"}:::decision
     CHK -->|"아니요"| IE["썸네일 오류 문구"]:::warn
     IE -.-> IN
-    CHK -->|"예"| UP[/"이미지 저장소에 올림"/]:::api
+    CHK -->|"예"| RS["크기를 줄임"]:::step
+    RS --> UP[/"이미지 저장소에 올림"/]:::api
     UP --> V
     IMG -->|"아니요"| V{"필수 항목이 맞는가"}:::decision
     V -->|"아니요"| FE["항목 오류 문구 · 저장 비활성"]:::warn
     FE -.-> IN
     V -->|"예"| SV[/"서버 액션으로 저장"/]:::api
     SV --> R{"저장했는가"}:::decision
-    R -->|"예"| T("P-03 저장됨 토스트"):::dialog
-    R -->|"아니요"| TE("P-03 실패 토스트"):::dialog
+    R -->|"예"| T("P-02 저장됨 토스트"):::dialog
+    R -->|"아니요"| TE("P-02 실패 토스트"):::dialog
     TE -.-> IN
     T --> LS(["S-01 프로젝트 목록"]):::done
     IN -->|"취소 · 뒤로"| LS
@@ -100,28 +98,32 @@ flowchart TD
 
 - `id` 는 등록할 때 저장소가 발급한다. 입력받지 않는다.
 - 썸네일은 저장을 누르기 전에 올린다. 저장하지 않고 나가면 올린 파일을 지운다.
+- 기본 항목 · 상세 항목 · 본문은 저장 버튼 하나로 함께 저장한다. 상세 항목과 본문은 비워 둘 수 있다.
+- 본문은 서버가 저장하기 전에 정제한다.(제안)
 - 저장에 실패하면 입력한 내용을 그대로 둔다.
 - 취소하거나 다른 화면으로 가면 묻지 않고 나간다. 고친 내용은 남지 않는다.
 - 세션이 끝난 뒤 저장을 누르면 저장하지 않고 로그인으로 보낸다. 입력하던 내용은 남지 않는다.
 
-## 3. 순서 · 공개 바꾸기
+## 3. 순서 · 공개 · 홈 노출 바꾸기
 
 ```mermaid
 flowchart TD
     LS["S-01 프로젝트 목록"]:::screen --> W{"무엇을 바꾸는가"}:::decision
     W -->|"공개 스위치"| SW[/"곧바로 저장"/]:::api
+    W -->|"홈 노출 스위치"| PB{"공개인가"}:::decision
+    PB -->|"아니요"| DIS["스위치 비활성"]:::warn
+    PB -->|"예"| SW
+    W -->|"행의 위 아래 버튼"| SW
     SW --> SR{"저장했는가"}:::decision
-    SR -->|"예"| T("P-03 저장됨 토스트"):::dialog
-    SR -->|"아니요"| BK["스위치를 되돌림 · 실패 토스트"]:::warn
-    W -->|"순서 변경"| OD("P-02 순서 변경 창"):::dialog
-    OD --> MV["끌기 · 위 아래 버튼"]:::step
-    MV -->|"저장"| OS[/"순서 저장"/]:::api
-    MV -.->|"취소"| LS
-    OS --> T
+    SR -->|"예"| T("P-02 저장됨 토스트"):::dialog
+    SR -->|"아니요"| BK["바꾸기 전으로 되돌림 · 실패 토스트"]:::warn
+    BK -.-> LS
     T --> END(["공개 화면에 반영"]):::done
 ```
 
-- 순서를 하나도 바꾸지 않았으면 순서 변경 창의 저장 버튼은 비활성이다.
+- 순서는 위 · 아래 버튼을 누른 때 저장한다. 끌기는 없다.
+- 공개를 끄면 그 프로젝트의 홈 노출도 함께 꺼진다.
+- 홈 노출을 바꾸면 홈만, 공개와 순서를 바꾸면 홈과 작업 목록이 함께 바뀐다.
 
 ## 4. 프로젝트 삭제
 
@@ -131,8 +133,8 @@ flowchart TD
     DL -.->|"취소"| S
     DL -->|"삭제"| RM[/"문서와 썸네일 삭제"/]:::api
     RM --> R{"지웠는가"}:::decision
-    R -->|"예"| T("P-03 삭제됨 토스트"):::dialog
-    R -->|"아니요"| TE("P-03 실패 토스트"):::dialog
+    R -->|"예"| T("P-02 삭제됨 토스트"):::dialog
+    R -->|"아니요"| TE("P-02 실패 토스트"):::dialog
     TE -.-> S
     T --> LS(["S-01 프로젝트 목록"]):::done
 ```
@@ -150,17 +152,17 @@ flowchart TD
       <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t">대시보드</span><span class="t on">프로젝트</span><span class="t">소개</span><span class="t">경력</span><span class="sp"></span><span class="rel"><span class="m abs">2</span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></span></div>
       <div class="ph"><div><h4>프로젝트</h4><p>포트폴리오에 싣는 프로젝트를 관리한다</p></div></div>
       <div class="tbar">
-        <span class="muted">전체 4건 · 공개 3건</span>
+        <span class="row rel"><span class="m abs">5</span><span class="muted">전체 4건 · 공개 3건 · 홈 노출 2건</span></span>
         <span class="sp"></span>
-        <span class="row rel"><span class="m abs">3</span><span class="btn">순서 변경</span><span class="btn pri">등록</span></span>
+        <span class="row rel"><span class="m abs">3</span><span class="btn pri">등록</span></span>
       </div>
       <div class="tw rel"><span class="m abs">4</span>
         <table>
-          <thead><tr><th class="c">순서</th><th>썸네일</th><th>제목</th><th>분류</th><th>공개</th><th class="c">수정 일시</th><th class="c">삭제</th></tr></thead>
+          <thead><tr><th class="c">순서</th><th>썸네일</th><th>제목</th><th>분류</th><th>공개</th><th>홈 노출</th><th class="c">수정 일시</th><th class="c">삭제</th></tr></thead>
           <tbody>
-            <tr class="hover"><td class="c muted">1</td><td><span class="thumb"></span></td><td class="title"><b>KOZIPSA 플랫폼 관리 시스템</b></td><td><span class="badge b-type">Enterprise</span></td><td><span class="sw on"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
-            <tr><td class="c muted">2</td><td><span class="thumb"></span></td><td class="title"><b>사내 통합 대시보드</b></td><td><span class="badge b-type">Dashboard</span></td><td><span class="sw on"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
-            <tr><td class="c muted">4</td><td><span class="muted small">없음</span></td><td class="title"><b>팬을 위한 특별한 공간</b></td><td><span class="badge b-type">Landing Page</span></td><td><span class="sw"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+            <tr class="hover"><td class="c"><span class="row"><span class="muted">1</span><span class="updown"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></span></span></td><td><span class="thumb"></span></td><td class="title"><b>KOZIPSA 플랫폼 관리 시스템</b></td><td><span class="badge b-type">Admin</span></td><td><span class="sw on"></span></td><td><span class="sw on"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+            <tr><td class="c"><span class="row"><span class="muted">2</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm">↓</span></span></span></td><td><span class="thumb"></span></td><td class="title"><b>사내 통합 대시보드</b></td><td><span class="badge b-type">Dashboard</span></td><td><span class="sw on"></span></td><td><span class="sw"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
+            <tr><td class="c"><span class="row"><span class="muted">4</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></span></span></td><td><span class="muted small">없음</span></td><td class="title"><b>팬을 위한 특별한 공간</b></td><td><span class="badge b-type">Promotion</span></td><td><span class="sw"></span></td><td><span class="sw ro"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -168,8 +170,9 @@ flowchart TD
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>명세는 대시보드 와이어프레임(dashboard/wireframe.html)의 「GNB」 표가 갖는다. 이 화면과 등록 · 수정 화면에서는 「프로젝트」 를 강조한다</p></div></li>
       <li><span class="m">2</span><div><b>사이트 보기 · 로그아웃</b><p>GNB 의 오른쪽 끝에 있다. 사이트 보기는 <code>/</code> 를 새 탭으로 연다. 로그아웃하면 세션을 지우고 로그인(login/wireframe.html)으로 간다</p></div></li>
-      <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>순서 변경 → <a href="#p02">P-02</a>. 프로젝트가 1건 이하면 비활성. 등록 → <a href="#s02">S-02</a></p></div></li>
-      <li><span class="m">4</span><div><b>표</b> (컴포넌트 없음)<p>공개 · 비공개를 모두 순서대로 그린다. 검색 · 페이지 나누기 · 정렬은 없다. 열의 명세는 아래 표</p></div></li>
+      <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>등록 → <a href="#s02">S-02</a></p></div></li>
+      <li><span class="m">4</span><div><b>표</b> <code>shared/ui/dataTable</code><p>경력 목록과 같은 표다. 공개 · 비공개를 모두 순서대로 그린다. 순서는 이 표에서 바로 바꾼다. 검색 · 페이지 나누기 · 정렬은 없다. 열의 명세는 아래 표</p></div></li>
+      <li><span class="m">5</span><div><b>건수</b><p>전체 · 공개 · 홈 노출 건수다. 공개 · 홈 노출 스위치를 바꾸면 바로 바뀐다. 저장에 실패해 스위치를 되돌리면 건수도 되돌린다</p></div></li>
     </ol></aside>
   </div>
   <div class="spec">
@@ -178,11 +181,12 @@ flowchart TD
       <div class="spec-tw"><table class="spec-t">
         <thead><tr><th>열</th><th>값</th><th>동작</th></tr></thead>
         <tbody>
-          <tr><td>순서</td><td><code>order</code> 로 매긴 1부터의 번호</td><td>—</td></tr>
+          <tr><td>순서</td><td><code>order</code> 로 매긴 1부터의 번호 · ↑ ↓ 버튼</td><td>↑ · ↓ 로 옮기면 곧바로 저장하고 <a href="#p02">P-02</a>. 끌기는 없다. 첫 행의 ↑ 와 끝 행의 ↓ 는 비활성. 실패하면 옮기기 전으로 되돌린다</td></tr>
           <tr><td>썸네일</td><td>이미지. 없으면 「없음」</td><td>—</td></tr>
           <tr><td>제목</td><td><code>title</code></td><td>누르면 <a href="#s03">S-03</a></td></tr>
           <tr><td>분류</td><td><code>category</code></td><td>—</td></tr>
-          <tr><td>공개</td><td>스위치 (컴포넌트 없음)</td><td>누르면 곧바로 저장하고 <a href="#p03">P-03</a>. 실패하면 되돌린다</td></tr>
+          <tr><td>공개</td><td>스위치 <code>shared/ui/switch</code></td><td>누르면 곧바로 저장하고 <a href="#p02">P-02</a>. 실패하면 되돌린다. 끄면 홈 노출도 함께 꺼진다</td></tr>
+          <tr><td>홈 노출</td><td>스위치 <code>shared/ui/switch</code></td><td>누르면 곧바로 저장하고 <a href="#p02">P-02</a>. 실패하면 되돌린다. 비공개 행에서는 비활성</td></tr>
           <tr><td>수정 일시</td><td><code>updatedAt</code>. <code>2026.11.12 (10:12)</code></td><td>—</td></tr>
           <tr><td>삭제</td><td>버튼</td><td><a href="#p01">P-01</a></td></tr>
         </tbody>
@@ -203,7 +207,7 @@ flowchart TD
         <div class="fv"><div class="rel"><span class="m abs">1</span><div class="inp val">팬을 위한 특별한 공간</div></div></div>
         <div class="sepx"></div>
         <div class="fl req">분류</div>
-        <div class="fv"><div class="rel"><span class="m abs">2</span><div class="inp sel val">Landing Page</div></div><div class="info">ⓘ 목록에 없으면 새로 입력한다</div></div>
+        <div class="fv"><div class="rel"><span class="m abs">2</span><div class="inp sel val">Promotion</div></div><div class="info">ⓘ 정해 둔 분류에서 고른다</div></div>
         <div class="sepx"></div>
         <div class="fl req">요약</div>
         <div class="fv"><div class="rel"><span class="ferr">요약을 입력해 주세요.</span><span class="m abs r">3</span><div class="inp err">Next.js · Tailwind</div></div></div>
@@ -220,20 +224,64 @@ flowchart TD
         <div class="fl req">대체 텍스트</div>
         <div class="fv"><div class="rel"><span class="m abs">6</span><div class="inp val">팬 공간 랜딩 페이지 화면</div></div><div class="info">ⓘ 썸네일이 있을 때만 보이고, 그때는 필수다</div></div>
         <div class="sepx"></div>
+        <div class="fl">팀</div>
+        <div class="fv rel"><span class="m abs">10</span>
+          <div class="row"><div class="inp val">프론트엔드</div><div class="inp val">2</div><span>명</span><span class="updown"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></span><span class="btn sm ghost">빼기</span></div>
+          <div class="row"><div class="inp val">디자이너</div><div class="inp val">1</div><span>명</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></span><span class="btn sm ghost">빼기</span></div>
+          <div class="row"><span class="btn sm">+ 파트 추가</span></div>
+        </div>
+        <div class="sepx"></div>
+        <div class="fl">역할</div>
+        <div class="fv"><div class="rel"><span class="m abs">11</span><div class="inp val">프론트엔드 개발</div></div></div>
+        <div class="sepx"></div>
+        <div class="fl">맡은 범위</div>
+        <div class="fv rel"><span class="m abs">12</span>
+          <div class="row"><span>기획</span><div class="inp sel val">없음</div><span>디자인</span><div class="inp sel val">참여</div><span>퍼블리싱</span><div class="inp sel val">전담</div><span>개발</span><div class="inp sel val">주도</div></div>
+        </div>
+        <div class="sepx"></div>
+        <div class="fl">기간</div>
+        <div class="fv"><div class="row rel"><span class="m abs">13</span><div class="inp val">2025.06</div><span>–</span><div class="inp">진행 중</div><span class="sw on"></span><span>진행 중</span></div></div>
+        <div class="sepx"></div>
+        <div class="fl">기술</div>
+        <div class="fv rel"><span class="m abs">14</span>
+          <div class="pf-chips"><span class="pf-chip">Next.js 15 ✕</span><span class="pf-chip">Zustand ✕</span><span class="pf-chip">CI/CD ✕</span></div>
+          <div class="row"><div class="inp">기술 이름</div><span class="btn sm">+ 추가</span></div>
+        </div>
+        <div class="sepx"></div>
+        <div class="fl">링크</div>
+        <div class="fv rel"><span class="m abs">15</span>
+          <div class="row"><div class="inp val">서비스</div><div class="inp val">https://example.com</div><span class="updown"><span class="btn sm dis">↑</span><span class="btn sm dis">↓</span></span><span class="btn sm ghost">빼기</span></div>
+          <div class="row"><span class="btn sm">+ 링크 추가</span></div>
+        </div>
+        <div class="sepx"></div>
+        <div class="fl">본문</div>
+        <div class="fv rel"><span class="m abs">16</span><div class="editor"><div class="tb">H2 · H3 · B · S · 목록 · 인용 · 코드 · 구분선 · 링크</div><div class="ed"><div>개요<br/>문제<br/>해결<br/>결과<br/>회고</div><div>읽는 화면과 같은 서식으로 보인다</div></div></div></div>
+        <div class="sepx"></div>
         <div class="fl">공개</div>
         <div class="fv"><div class="row rel"><span class="m abs">7</span><span class="sw"></span><span>비공개</span></div></div>
+        <div class="sepx"></div>
+        <div class="fl">홈 노출</div>
+        <div class="fv"><div class="row rel"><span class="m abs">8</span><span class="sw ro"></span><span>노출 안 함</span></div><div class="info">ⓘ 공개를 켜야 켤 수 있다</div></div>
       </div>
-      <div class="btn-row rel"><span class="m abs">8</span><span class="muted small">필수 항목을 입력해 주세요</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
+      <div class="btn-row rel"><span class="m abs">9</span><span class="muted small">필수 항목을 입력해 주세요</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>제목</b> <code>title</code><p>1자 이상</p></div></li>
-      <li><span class="m">2</span><div><b>분류</b> <code>category</code><p>이미 있는 분류에서 선택하거나 새로 입력한다</p></div></li>
+      <li><span class="m">2</span><div><b>분류</b> <code>category</code><p><code>shared/ui/select</code>. 정해 둔 분류에서 고른다. 새로 입력하지 않는다</p></div></li>
       <li><span class="m">3</span><div><b>요약</b> <code>summary</code><p>오류 문구는 입력을 벗어난 뒤에 보여 준다. 그림은 비운 채 벗어난 상태다</p></div></li>
       <li><span class="m">4</span><div><b>상세 주소</b> <code>href</code><p>선택 항목이다</p></div></li>
-      <li><span class="m">5</span><div><b>썸네일</b> <code>image</code> (컴포넌트 없음)<p>고르면 바로 올리고 미리보기 · 파일 이름 · 용량 · 크기를 보여 준다. 크기는 파일에서 읽는다. 삭제하면 올린 파일을 지운다</p></div></li>
+      <li><span class="m">5</span><div><b>썸네일</b> <code>image</code> (컴포넌트 없음)<p>고르면 크기를 줄여 바로 올리고 미리보기 · 파일 이름 · 크기를 보여 준다. 긴 변을 1000px 이하로 줄이고 WebP 로 바꾼다. 크기는 줄인 뒤의 값이다. 삭제하면 올린 파일을 지운다</p></div></li>
       <li><span class="m">6</span><div><b>대체 텍스트</b> <code>image.alt</code><p>썸네일을 지우면 항목도 감춘다</p></div></li>
       <li><span class="m">7</span><div><b>공개</b> <code>published</code> (스위치)<p>처음 값은 비공개다</p></div></li>
-      <li><span class="m">8</span><div><b>Button</b> <code>shared/ui/button</code><p>규칙에 맞지 않으면 등록은 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 취소 → 묻지 않고 <a href="#s01">S-01</a> 로 간다. 고친 내용과 저장 전에 올린 썸네일은 버린다</p></div></li>
+      <li><span class="m">8</span><div><b>홈 노출</b> <code>featured</code> (스위치)<p>공개가 꺼져 있으면 비활성이다. 공개를 끄면 함께 꺼진다</p></div></li>
+      <li><span class="m">10</span><div><b>팀</b> <code>team</code> (제안)<p>파트 이름과 인원을 한 줄씩 더한다. ↑ · ↓ 로 옮기고 빼기로 뺀다. 한 줄도 없으면 상세의 메타에 팀을 그리지 않는다</p></div></li>
+      <li><span class="m">11</span><div><b>역할</b> <code>role</code><p>선택 항목이다</p></div></li>
+      <li><span class="m">12</span><div><b>맡은 범위</b> <code>scope</code> <code>shared/ui/select</code> (제안)<p>영역 4개마다 없음 · 전담 · 주도 · 참여 중 하나를 고른다. 처음 값은 모두 없음이다. 없음인 영역은 저장하지 않는다</p></div></li>
+      <li><span class="m">13</span><div><b>기간</b> <code>period</code> (제안)<p>시작과 끝을 <code>2025.06</code> 으로 적는다. 진행 중을 켜면 끝을 감추고 입력을 막는다. 둘 다 비우면 기간을 저장하지 않는다</p></div></li>
+      <li><span class="m">14</span><div><b>기술</b> <code>stack</code> <code>shared/ui/chipListField</code><p>이름을 하나씩 더한다. 끌어서 순서를 바꾼다</p></div></li>
+      <li><span class="m">15</span><div><b>링크</b> <code>links</code> (제안)<p>이름과 주소를 한 줄씩 더한다. 주소는 URL 이어야 한다</p></div></li>
+      <li><span class="m">16</span><div><b>본문</b> <code>body</code> Tiptap 에디터 (컴포넌트 없음, 제안)<p>서식은 제목(h2 · h3) · 굵게 · 취소선 · 목록 · 인용 · 코드 · 구분선 · 링크다. 이미지와 표는 없다. 등록 화면의 처음 값은 절 제목 5개다. 편집 영역은 읽는 화면과 같은 서식 CSS 를 쓴다</p></div></li>
+      <li><span class="m">9</span><div><b>Button</b> <code>shared/ui/button</code><p>규칙에 맞지 않으면 등록은 비활성이고 왼쪽에 이유를 적는다. 저장하는 동안에도 비활성. 취소 → 묻지 않고 <a href="#s01">S-01</a> 로 간다. 고친 내용과 저장 전에 올린 썸네일은 버린다</p></div></li>
     </ol></aside>
   </div>
   <div class="spec">
@@ -242,10 +290,18 @@ flowchart TD
       <div class="spec-tw"><table class="spec-t">
         <thead><tr><th>항목</th><th>상황</th><th>문구</th></tr></thead>
         <tbody>
-          <tr><td>제목 · 분류 · 요약 · 대체 텍스트</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요.</td></tr>
+          <tr><td>제목 · 요약 · 대체 텍스트</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요.</td></tr>
+          <tr><td>분류 (제안)</td><td>고르지 않았다</td><td>분류를 선택해 주세요.</td></tr>
           <tr><td>썸네일</td><td>형식이 다르다</td><td>PNG · JPG · WebP 파일만 올릴 수 있습니다.</td></tr>
           <tr><td>썸네일</td><td>5MB 를 넘는다</td><td>5MB 이하의 파일만 올릴 수 있습니다.</td></tr>
           <tr><td>썸네일</td><td>올리지 못했다</td><td>파일을 올리지 못했습니다. 다시 시도해 주세요.</td></tr>
+          <tr><td>팀 (제안)</td><td>파트 이름이 비었다</td><td>파트를 입력해 주세요.</td></tr>
+          <tr><td>팀 (제안)</td><td>인원이 1 이상의 숫자가 아니다</td><td>1 이상의 숫자를 입력해 주세요.</td></tr>
+          <tr><td>기간 (제안)</td><td>형식이 다르다</td><td>2025.06 처럼 입력해 주세요.</td></tr>
+          <tr><td>기간 (제안)</td><td>시작 없이 끝만 적었다</td><td>시작을 입력해 주세요.</td></tr>
+          <tr><td>기간 (제안)</td><td>끝이 시작보다 앞선다</td><td>끝은 시작보다 앞설 수 없습니다.</td></tr>
+          <tr><td>링크 (제안)</td><td>이름이 비었다</td><td>이름을 입력해 주세요.</td></tr>
+          <tr><td>링크 (제안)</td><td>주소가 URL 이 아니다</td><td>https:// 로 시작하는 주소를 입력해 주세요.</td></tr>
         </tbody>
       </table></div>
       <p class="spec-note">입력 규칙은 README.md 「등록 · 수정」 표가 갖는다.</p>
@@ -291,7 +347,7 @@ flowchart TD
     <div class="state">
       <div class="lab">프로젝트 0건</div>
       <div class="empty"><div class="ic"></div>등록한 프로젝트가 없습니다.</div>
-      <div class="help">등록 버튼은 그대로 둔다. 순서 변경은 비활성</div>
+      <div class="help">등록 버튼은 그대로 둔다</div>
     </div>
     <div class="state">
       <div class="lab">조회 실패</div>
@@ -301,9 +357,19 @@ flowchart TD
       </div>
     </div>
     <div class="state">
-      <div class="lab">공개 전환 실패</div>
+      <div class="lab">공개 · 홈 노출 전환 실패</div>
       <div class="row"><span class="sw"></span><span>스위치를 누르기 전으로 되돌린다</span></div>
-      <div class="help">P-03 실패 토스트를 띄운다</div>
+      <div class="help">P-02 실패 토스트를 띄운다</div>
+    </div>
+    <div class="state">
+      <div class="lab">순서 저장 실패</div>
+      <div class="row"><span class="updown"><span class="btn sm">↑</span><span class="btn sm">↓</span></span><span>행을 옮기기 전의 자리로 되돌린다</span></div>
+      <div class="help">P-02 실패 토스트를 띄운다</div>
+    </div>
+    <div class="state">
+      <div class="lab">비공개 행의 홈 노출</div>
+      <div class="row"><span class="sw ro"></span><span>스위치가 비활성이다</span></div>
+      <div class="help">공개를 켜면 누를 수 있다</div>
     </div>
   </div>
 </section>
@@ -325,7 +391,7 @@ flowchart TD
         <tbody>
           <tr><td>컴포넌트</td><td>다이얼로그 (컴포넌트 없음)</td></tr>
           <tr><td>처음 포커스</td><td>취소</td></tr>
-          <tr><td>삭제</td><td>문서와 썸네일을 지우고 S-01 로 간다. <a href="#p03">P-03</a> 삭제됨</td></tr>
+          <tr><td>삭제</td><td>문서와 썸네일을 지우고 S-01 로 간다. <a href="#p02">P-02</a> 삭제됨</td></tr>
           <tr><td>취소 · Esc</td><td>창을 닫고 열었던 버튼으로 포커스를 돌려준다</td></tr>
         </tbody>
       </table></div>
@@ -333,42 +399,9 @@ flowchart TD
   </div>
 </section>
 
-<!-- ============ P-02 순서 변경 창 ============ -->
+<!-- ============ P-02 토스트 ============ -->
 <section class="screen" id="p02">
-  <div class="screen-h"><span class="id">P-02</span><h2>순서 변경 창</h2><span class="route">S-01</span></div>
-  <div class="dlg-grid">
-    <div class="dlg-stage"><div class="dlg sm" role="dialog">
-      <div class="dh"><div><h6>P-02 · 순서 변경</h6><p>공개 화면에 놓는 차례다. 끌거나 버튼으로 옮긴다.</p></div><span class="x" aria-label="닫기">✕</span></div>
-      <div class="db">
-        <ol class="sortlist">
-          <li><span class="hdl">⋮⋮</span><span class="no">1</span><span class="thumb"></span><span class="tt"><b>KOZIPSA 플랫폼 관리 시스템</b><span>Enterprise</span></span><span class="badge b-on">공개</span><span class="updown"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></span></li>
-          <li class="drag"><span class="hdl">⋮⋮</span><span class="no">2</span><span class="thumb"></span><span class="tt"><b>아파트 관리 시스템 <span class="chg">변경됨</span></b><span>Web App</span></span><span class="badge b-on">공개</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm">↓</span></span></li>
-          <li><span class="hdl">⋮⋮</span><span class="no">3</span><span class="thumb"></span><span class="tt"><b>팬을 위한 특별한 공간</b><span>Landing Page</span></span><span class="badge b-off">비공개</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm dis">↓</span></span></li>
-        </ol>
-      </div>
-      <div class="df"><span class="muted">1건의 순서를 바꿨다</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri">저장</span></div>
-    </div></div>
-  </div>
-  <div class="spec">
-    <div class="spec-block">
-      <h4>동작</h4>
-      <div class="spec-tw"><table class="spec-t">
-        <thead><tr><th>항목</th><th>내용</th></tr></thead>
-        <tbody>
-          <tr><td>목록</td><td>공개 · 비공개를 모두 지금 순서로 그린다</td></tr>
-          <tr><td>옮기기</td><td>행을 끌거나 ↑ · ↓ 버튼. 첫 행의 ↑ 와 끝 행의 ↓ 는 비활성</td></tr>
-          <tr><td>변경됨</td><td>처음 순서와 달라진 행에 붙인다</td></tr>
-          <tr><td>저장</td><td>바뀐 것이 없으면 비활성. 저장하면 창을 닫고 <a href="#p03">P-03</a></td></tr>
-          <tr><td>취소 · ✕ · Esc</td><td>묻지 않고 닫는다. 순서는 바꾸기 전 그대로다</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ P-03 토스트 ============ -->
-<section class="screen" id="p03">
-  <div class="screen-h"><span class="id">P-03</span><h2>토스트</h2><span class="route">S-01 · S-02 · S-03</span></div>
+  <div class="screen-h"><span class="id">P-02</span><h2>토스트</h2><span class="route">S-01 · S-02 · S-03</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="row rel"><span class="m abs">1</span><span class="toast">✓ 프로젝트를 등록했습니다</span></div>
@@ -388,6 +421,8 @@ flowchart TD
           <tr><td>삭제</td><td>프로젝트를 삭제했습니다</td></tr>
           <tr><td>공개로 바꿈</td><td>프로젝트를 공개했습니다</td></tr>
           <tr><td>비공개로 바꿈</td><td>프로젝트를 비공개로 바꿨습니다</td></tr>
+          <tr><td>홈 노출을 켬</td><td>홈에 노출했습니다</td></tr>
+          <tr><td>홈 노출을 끔</td><td>홈에서 내렸습니다</td></tr>
           <tr><td>순서 저장</td><td>순서를 저장했습니다</td></tr>
           <tr><td>실패</td><td>저장하지 못했습니다. 다시 시도해 주세요</td></tr>
         </tbody>

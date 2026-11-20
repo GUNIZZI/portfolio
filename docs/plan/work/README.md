@@ -32,12 +32,12 @@
 
 ## 용어
 
-| 용어          | 뜻                                                                 |
-| ------------- | ------------------------------------------------------------------ |
-| 분류          | 작업의 `category`. Enterprise · Dashboard · Web App · Landing Page |
-| 케이스 스터디 | 작업 하나를 문제 · 해결 · 결과로 풀어 쓴 상세 본문                 |
-| 메타          | 본문 옆에 두는 팀 · 역할 · 맡은 범위 · 기간 · 기술 · 외부 링크     |
-| 맡은 범위     | 이 작업에서 손댄 영역과 그 깊이. 영역 4개, 단계 3개                |
+| 용어          | 뜻                                                                                                                                                            |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 분류          | 작업의 `category`. Admin · Dashboard · Design System · Website · Promotion · Interactive. 항목의 뜻은 [관리 기획](../admin/README.md) 「등록 · 수정」 에 있다 |
+| 케이스 스터디 | 작업 하나를 문제 · 해결 · 결과로 풀어 쓴 상세 본문                                                                                                            |
+| 메타          | 본문 옆에 두는 팀 · 역할 · 맡은 범위 · 기간 · 기술 · 외부 링크                                                                                                |
+| 맡은 범위     | 이 작업에서 손댄 영역과 그 깊이. 영역 4개, 단계 3개                                                                                                           |
 
 ## 정책
 
@@ -50,7 +50,7 @@
 ### 목록
 
 - 제목 아래에 소개 문단 2개를 둔다. 소개 페이지의 소개 문단과 같은 크기와 폭이다. 문구는 초안이다.(2026-11-16 사용자 결정, `src/features/projectExplorer/model/projectExplorer.constants.ts`)
-- **머리는 소개 페이지의 첫 화면과 같은 짜임이다.** 왼쪽에 제목과 소개 문단, 오른쪽에 캐릭터를 둔다.(2026-11-16 사용자 결정, `public/images/characters/project.png`, `src/features/projectExplorer/ui/ProjectExplorer.tsx`)
+- **머리는 왼쪽에 제목과 소개 문단, 오른쪽에 캐릭터를 둔다.** 소개 페이지의 첫 화면과는 좌우가 반대다. 소개는 2026-11-20 에 캐릭터를 왼쪽으로 옮겼다.(2026-11-16 사용자 결정, `public/images/characters/project_new.png`, `src/features/projectExplorer/ui/ProjectExplorer.tsx`)
     - 캐릭터 뒤의 색 면은 하늘색이다. 소개의 보라와 구분한다.
     - 폭이 좁아지면 캐릭터가 문단 아래로 내려간다.
 - 카드는 홈과 같은 `ProjectCard` 를 쓴다. 같은 작업이 2곳에서 다르게 보이지 않게 하기 위해서다.(`src/features/featuredProjects/`)
@@ -58,14 +58,14 @@
 - 고른 필터는 주소에 남긴다(`/work?category=Dashboard`). 주소를 넘기면 같은 목록이 열린다.
     - 주소에 목록에 없는 분류가 적혀 있으면 전체로 본다.
     - 페이지를 다시 불러오지 않고 주소만 바꾼다. 뒤로 가기 기록에는 쌓지 않는다.(`src/features/projectExplorer/ui/ProjectFilterGrid.tsx`)
-- 순서는 원문의 순서다. 정렬 선택은 두지 않는다. 작업이 많지 않다.
+- **공개한 작업만 보여 준다.** 순서는 관리 화면에서 정한 순서다. 정렬 선택은 두지 않는다. 작업이 많지 않다.([admin/](../admin/README.md) 「공개 화면 반영」, `src/entities/project/services/project.services.ts` 의 `getProjectList`)
 
 ### 상세
 
 - **본문은 Tiptap 에디터가 내는 HTML 이다.**(요구사항 2) 읽는 화면은 `shared/ui/tiptapViewer` 이고, 서식은 Kozipsa 의 본문 CSS 를 이 사이트의 토큰으로 옮긴 것이다.
-    - 지금은 에디터가 없다. 본문은 원문 파일(`content/projects.ts`)에 HTML 로 적는다. 에디터는 관리 화면을 만들 때 붙인다.([admin/](../admin/README.md) 요구사항 12)
+    - 본문은 관리 화면의 프로젝트 폼에서 에디터로 쓴다.([admin/](../admin/README.md) 요구사항 29 · 32, `src/shared/ui/tiptapEditor/TiptapEditor.md`)
     - 본문은 서버에서 그린다. 검색에 잡혀야 하는 화면이라 첫 HTML 에 본문이 들어 있어야 한다.
-    - 읽는 화면은 본문을 정제하지 않는다. 지금은 저장소 안의 원문이라 믿을 수 있다. 관리 화면에서 본문을 받게 되면 저장하는 쪽에서 정제한다.
+    - 읽는 화면은 본문을 정제하지 않는다. 저장할 때 서버가 정제한다.(`src/entities/project/services/project.services.ts` 의 `sanitizeProjectBody`)
 - 절은 개요 · 문제 · 해결 · 결과 · 회고 순서다. 결과에는 가능하면 숫자를 쓴다. 본문의 절은 `h2` 다.
 - 머리에 분류 · 제목 · 한 줄 설명 · 이미지를 둔다. 이미지는 목록의 썸네일과 같은 그림이다.
 - 메타는 팀 · 역할 · 맡은 범위 · 기간 · 기술 · 외부 링크(서비스 · 저장소)다. 없는 항목은 감추고, 하나도 없으면 칸을 그리지 않는다. 항목의 뜻과 순서는 「메타」 절에 있다.
@@ -75,7 +75,7 @@
 - **없는 `id` 로 들어오면 「찾을 수 없음」 화면을 보여 준다.**([not-found/](../not-found/README.md))
     - 응답 코드는 404 가 아니라 200 이다. 헤더 같은 틀을 먼저 보낸 뒤에 작업이 없는 것을 알게 되기 때문이다. 검색 엔진에는 색인하지 말라는 표시가 함께 나간다.
     - 주소의 `id` 를 틀 밖에서 먼저 읽으면 404 를 낼 수 있지만, 목록에서 상세로 넘어올 때 화면이 바로 열리지 않는다.(`src/app/(site)/work/[id]/page.tsx`)
-- 주소의 `id` 는 지금 작업의 `slug` 다. 저장소를 연동하면 저장소가 발급한 `id` 로 바뀐다.([admin/](../admin/README.md) 요구사항 10)
+- 주소의 `id` 는 저장소가 발급한 `id` 다.([admin/](../admin/README.md) 요구사항 10) 비공개 작업의 `id` 로 들어와도 「찾을 수 없음」 을 보여 준다.(`src/entities/project/services/project.services.ts` 의 `getProject`)
 
 ### 메타
 
@@ -142,12 +142,12 @@
 
 ## 데이터
 
-작업 원문은 `content/projects.ts` 이고, 읽는 곳은 entity `project` 다.(`src/entities/project/`)
-관리 기능을 만들면 원문이 저장소로 옮겨진다.([admin/](../admin/README.md) 「데이터」)
+작업은 저장소(Firestore 의 `projects`)에 있고, 읽는 곳은 entity `project` 다.(`src/entities/project/`)
+등록 · 수정 · 공개 · 순서는 관리 화면에서 한다.([admin/](../admin/README.md) 「데이터」)
 
 | 항목                                       | 내용                                             | 지금 값                              |
 | ------------------------------------------ | ------------------------------------------------ | ------------------------------------ |
-| `slug`                                     | 구분 값. 상세 주소에 쓴다                        | 4건 모두 있다                        |
+| `id`                                       | 구분 값. 저장소가 발급한다. 상세 주소에 쓴다     | 4건 모두 있다                        |
 | `title` · `category` · `summary` · `image` | 목록과 상세 머리에 쓴다                          | 4건 모두 있다                        |
 | `team`                                     | 팀 구성. 파트와 인원의 목록                      | KOZIPSA 만 있다. 임시 값             |
 | `role`                                     | 팀에서의 자리                                    | KOZIPSA 만 있다                      |

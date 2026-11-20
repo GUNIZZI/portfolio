@@ -1,18 +1,18 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
-import { AdminGuard } from '@/features/adminAuth';
+import { AdminGuard, AdminGuardFallback } from '@/features/adminAuth';
 import { ExperienceForm } from '@/features/experienceEditor';
-import { getProjectList } from '@/entities/project/services/project.services';
+import { getProjectOptionList } from '@/entities/project/services/project.services';
 
 export const metadata: Metadata = { title: '경력 등록' };
 
 export default async function AdminExperienceNewPage() {
     // 프로젝트 연결에서 고를 프로젝트
-    const projects = await getProjectList();
+    const projects = await getProjectOptionList();
 
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<AdminGuardFallback />}>
             <AdminGuard>
                 <main className="mx-auto flex max-w-page flex-col gap-8 px-gutter py-10">
                     <div>
@@ -21,10 +21,7 @@ export default async function AdminExperienceNewPage() {
                             회사와 그 회사에서 한 프로젝트를 등록한다
                         </p>
                     </div>
-                    <ExperienceForm
-                        experience={null}
-                        projects={projects.map(({ slug, title }) => ({ slug, title }))}
-                    />
+                    <ExperienceForm experience={null} projects={projects} />
                 </main>
             </AdminGuard>
         </Suspense>

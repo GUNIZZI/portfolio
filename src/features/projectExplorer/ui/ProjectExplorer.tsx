@@ -15,7 +15,7 @@ interface OwnProps {
 
 /**
  * 작업 목록 페이지의 본문. 페이지 제목과, 분류로 거를 수 있는 작업 격자.
- * 머리는 소개 페이지의 첫 화면과 같은 짜임이다. 왼쪽에 제목과 소개 문단, 오른쪽에 색 면을 깐 캐릭터
+ * 머리는 소개 페이지의 첫 화면과 좌우가 반대인 짜임이다. 왼쪽에 제목과 소개 문단, 오른쪽에 색 면을 깐 캐릭터
  */
 export default function ProjectExplorer({ items }: OwnProps) {
     return (
@@ -39,20 +39,19 @@ export default function ProjectExplorer({ items }: OwnProps) {
                 </div>
 
                 <div className="flex min-w-0 flex-[1_1_320px] justify-center">
-                    <div className="relative flex aspect-[640/470] w-full max-w-110 items-center justify-center">
+                    <div className="relative aspect-570/521 w-full max-w-110">
                         {/* 소개의 색 면은 보라다. 여기는 하늘색으로 두고 반대로 기울여 두 페이지를 구분한다 */}
                         <div
                             aria-hidden="true"
                             className="absolute inset-x-[8%] top-[10%] bottom-0 z-base rotate-3 rounded-blob bg-doodle-sky"
                         />
                         <Image
-                            src="/images/characters/project.png"
-                            alt="윙크하며 엄지를 든 개발자 캐릭터 일러스트"
-                            // 원본이 276×219 로 작다. 틀에 맞춰 늘리면 흐려져서 원본 크기를 넘기지 않는다
-                            width={276}
-                            height={219}
+                            src="/images/characters/project_new.png"
+                            alt="윙크하며 엄지를 들고 노트북을 든 개발자 캐릭터 일러스트"
+                            fill
+                            sizes="(max-width: 920px) 100vw, 440px"
                             loading="eager"
-                            className="z-raised h-auto max-w-full"
+                            className="z-raised object-contain"
                         />
                         <p
                             aria-hidden="true"

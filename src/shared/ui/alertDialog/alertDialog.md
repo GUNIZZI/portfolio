@@ -2,7 +2,7 @@
 
 확인 창이다. 되돌릴 수 없는 동작을 하기 전에 한 번 더 묻는다.
 구성과 나타나고 사라지는 연출은 Kozipsa 의 확인 창과 같다.(Kozipsa `packages/ui` 의 `alertDialog/ConfirmDialog.tsx` 에서 가져옴, 2026-11-18 사용자 결정)
-경력 삭제가 쓴다.(`docs/plan/admin/experiences/wireframe.html` P-01, `src/features/experienceEditor/ui/ExperienceDeleteButton.tsx`)
+경력 삭제와 프로젝트 삭제가 쓴다.(`docs/plan/admin/experiences/wireframe.html` P-01, `src/features/experienceEditor/ui/ExperienceDeleteButton.tsx`, `docs/plan/admin/wireframe.html` P-01, `src/features/projectEditor/ui/ProjectDeleteButton.tsx`)
 
 ```tsx
 import { useConfirmDialog } from '@/shared/ui/alertDialog/ConfirmDialogProvider';

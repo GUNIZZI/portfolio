@@ -17,7 +17,7 @@
 - 오류 문구는 스키마가 낸다. 폼은 따로 검사하지 않고 그 문구를 그린다.(`docs/architecture.md` 4.3절)
 - 경력은 저장소가 발급한 `id` 로 구분한다.(`docs/plan/admin/experiences/README.md` 「등록 · 수정」)
 - 들어간 해가 늦은 회사부터 놓는다. 저장소가 주는 순서는 정해져 있지 않아 `services` 가 놓는다.(`services/experience.services.ts` 의 `sortExperienceList`)
-- 프로젝트 연결은 지금 프로젝트의 `slug`(`workSlug`)로 잇는다. 프로젝트를 저장소로 옮길 때 `projectId` 로 바꾼다.(`docs/plan/admin/experiences/README.md` 「기존 내용 이전」)
+- 프로젝트 연결은 프로젝트의 `id`(`projectId`)로 잇는다. 공개한 프로젝트에 이은 줄만 상세로 가는 링크를 갖는다. 공개한 프로젝트의 id 는 페이지가 entity `project` 에서 읽어 넘긴다.(`services/experience.services.ts` 의 `toExperienceData`, `docs/plan/admin/experiences/README.md` 「등록 · 수정」)
 - `src/app/(site)/about/page.tsx` 가 읽어 `features/experienceTimeline` 에, 관리 화면의 페이지가 읽어 `features/experienceEditor` 에 넘긴다.
 
 처음 내용은 기존 소개 페이지(`gunizzi.github.io/guni/about`)에서 옮긴 회사 6곳이다.(2026-11-16 사용자 결정) `content/experiences.json` 에 있던 것을 2026-11-18 에 저장소로 옮기고 파일을 지웠다.

@@ -78,6 +78,8 @@ const COLUMNS: ColumnDef<ExperienceRowData>[] = [
                     id={row.original.id}
                     company={row.original.company}
                     size="2xs"
+                    // 아이콘만 한 네모로 좁히고 칸의 가운데에 놓는다
+                    className="mx-auto flex w-6.5 items-center justify-center p-0"
                 />
             </span>
         ),

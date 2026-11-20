@@ -2,7 +2,9 @@
 
 목록 표다. 바깥이 잘라 준 한 페이지를 그린다. TanStack Table 위에 `Table` · `Pagination` 을 얹었다.
 Kozipsa 의 DataTable 을 가져왔고, prop 의 이름과 동작은 Kozipsa 와 같다.(`dataTable.tsx`, Kozipsa `packages/ui` 의 `custom/dataTable` 에서 가져옴, 2026-11-18 사용자 결정)
-관리 화면의 목록이 쓴다. 지금은 경력 목록이다.(`src/features/experienceEditor/ui/ExperienceList.tsx`)
+관리 화면의 목록이 쓴다. 지금은 경력 목록과 프로젝트 목록이다.(`src/features/experienceEditor/ui/ExperienceList.tsx`, `src/features/projectEditor/ui/ProjectList.tsx`)
+
+칸 안의 버튼이나 스위치가 목록의 상태를 바꿔야 하면, 컬럼 정의를 컴포넌트 밖에 두고 동작은 컨텍스트로 내려 준다. 컬럼을 컴포넌트 안에서 만들면 그릴 때마다 칸이 새 컴포넌트가 되어 포커스를 잃는다.(`src/features/projectEditor/ui/ProjectList.tsx` 의 `ListActionsContext`)
 
 ```tsx
 import { DataTable } from '@/shared/ui/dataTable/dataTable';

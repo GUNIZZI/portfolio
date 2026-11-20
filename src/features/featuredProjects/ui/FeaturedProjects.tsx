@@ -8,6 +8,7 @@ import ProjectCard from './ProjectCard';
 import ProjectGrid from './ProjectGrid';
 
 interface OwnProps {
+    /** 홈에 올릴 작업. 공개한 것 가운데 홈 노출을 켠 것이다 */
     projects: ProjectData[];
 }
 
@@ -32,11 +33,18 @@ export default function FeaturedProjects({ projects }: OwnProps) {
                     <Icon name="arrowRight" size={16} strokeWidth={2} />
                 </Link>
             </div>
-            <ProjectGrid className="group/cards grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
-                {projects.map((project) => (
-                    <ProjectCard key={project.slug} project={project} />
-                ))}
-            </ProjectGrid>
+            {projects.length > 0 ? (
+                <ProjectGrid className="grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
+                    {projects.map((project) => (
+                        <ProjectCard key={project.id} project={project} />
+                    ))}
+                </ProjectGrid>
+            ) : (
+                // 홈에 올린 프로젝트가 없어도 섹션은 감추지 않는다.(docs/plan/admin/README.md 「공개 화면 반영」)
+                <p className="py-10 text-center text-body text-muted-foreground">
+                    아직 등록된 프로젝트가 없습니다
+                </p>
+            )}
         </div>
     );
 }

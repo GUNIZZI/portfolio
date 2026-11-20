@@ -1,6 +1,6 @@
 # Toast
 
-작업 결과를 잠깐 알리고 사라지는 알림이다. 관리 화면에서 저장하거나 지운 결과를 알린다.(`docs/plan/admin/about/wireframe.html` P-01, `docs/plan/admin/experiences/wireframe.html` P-02)
+작업 결과를 잠깐 알리고 사라지는 알림이다. 관리 화면에서 저장하거나 지운 결과를 알린다.(`docs/plan/admin/about/wireframe.html` P-01, `docs/plan/admin/experiences/wireframe.html` P-02, `docs/plan/admin/wireframe.html` P-02)
 종류 · 모양 · 호출 방식은 Kozipsa 의 토스트와 같다.(Kozipsa `packages/ui` 의 `toast/toast.tsx` 에서 가져옴, 2026-11-18 사용자 결정)
 
 ```tsx

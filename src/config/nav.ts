@@ -15,7 +15,7 @@ export const FOOTER_NAV_ITEMS = NAV_ITEMS;
 export type NavHref = (typeof NAV_ITEMS)[number]['href'];
 
 /**
- * 주소가 속한 메뉴를 찾는다. 작업 상세(/work/<slug>)는 Projects 다.
+ * 주소가 속한 메뉴를 찾는다. 작업 상세(/work/<id>)는 Projects 다.
  * @returns 어느 메뉴에도 속하지 않으면 null
  */
 export function findNavHref(pathname: string): NavHref | null {

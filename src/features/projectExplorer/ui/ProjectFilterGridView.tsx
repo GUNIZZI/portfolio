@@ -62,12 +62,11 @@ export default function ProjectFilterGridView({ items, categories, selected, onS
                 })}
             </div>
 
-            {/* group/cards — 카드 하나에 마우스를 올리면 나머지 카드가 흐려진다(ProjectCardFrame) */}
-            <div className="group/cards grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
                 <AnimatePresence mode="popLayout" initial={false}>
                     {visible.map((item) => (
                         <motion.div
-                            key={item.slug}
+                            key={item.id}
                             layout
                             initial={{ opacity: 0, scale: 0.96 }}
                             animate={{ opacity: 1, scale: 1 }}

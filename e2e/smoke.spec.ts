@@ -132,7 +132,12 @@ test('어느 페이지에서든 Contact 를 누르면 그 페이지의 연락 �
     page,
     isMobile,
 }) => {
-    for (const path of ['/', '/about', '/work', '/work/kozipsa']) {
+    // 작업 상세의 주소는 저장소가 발급한 id 라 고정하지 않는다. 목록의 첫 카드에서 읽는다
+    await page.goto('/work');
+    const detailPath = await page.getByRole('link', { name: /열기$/ }).first().getAttribute('href');
+    expect(detailPath).toMatch(/^\/work\/[^/]+$/);
+
+    for (const path of ['/', '/about', '/work', detailPath ?? '']) {
         await page.goto(path);
         if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
         const scope = isMobile
@@ -182,9 +187,9 @@ test('작업 목록을 분류로 거르면 주소에 남고, 그 주소로 열�
         'true',
     );
 
-    await page.goto('/work?category=Enterprise');
+    await page.goto('/work?category=Promotion');
     await expect(cards).toHaveCount(1);
-    await expect(page.getByRole('heading', { level: 3, name: /KOZIPSA/ })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 3, name: /팬을 위한/ })).toBeVisible();
 
     await page.getByRole('button', { name: '전체' }).click();
     await expect(cards).toHaveCount(4);
@@ -194,7 +199,8 @@ test('작업 목록을 분류로 거르면 주소에 남고, 그 주소로 열�
 test('작업 카드에서 상세로 가면 본문과 메타가 있고, 다음 작업으로 넘어간다', async ({ page }) => {
     await page.goto('/work');
     await page.getByRole('link', { name: /KOZIPSA.*열기/ }).click();
-    await expect(page).toHaveURL(/\/work\/kozipsa$/);
+    await expect(page).toHaveURL(/\/work\/[^/]+$/);
+    const firstUrl = page.url();
     await expect(page.getByRole('heading', { level: 1, name: /KOZIPSA/ })).toBeVisible();
     for (const name of ['개요', '문제', '해결', '결과', '회고']) {
         await expect(page.getByRole('heading', { level: 2, name })).toBeVisible();
@@ -205,7 +211,8 @@ test('작업 카드에서 상세로 가면 본문과 메타가 있고, 다음 �
     const pager = page.getByRole('navigation', { name: '다른 작업' });
     await expect(pager.getByRole('link')).toHaveCount(1);
     await pager.getByRole('link', { name: /다음 작업/ }).click();
-    await expect(page).toHaveURL(/\/work\/dashboard$/);
+    await expect(page).toHaveURL(/\/work\/[^/]+$/);
+    expect(page.url()).not.toBe(firstUrl);
     await expect(page.getByRole('heading', { level: 1, name: '사내 통합 대시보드' })).toBeVisible();
 });
 

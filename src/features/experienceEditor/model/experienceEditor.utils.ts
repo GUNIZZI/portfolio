@@ -4,18 +4,18 @@ import type { ExperienceFormValue, ProjectFormValue } from './experienceEditor.t
 
 /** 빈 프로젝트 1줄 */
 export function createEmptyProject(): ProjectFormValue {
-    return { name: '', date: '', tags: [], workSlug: '' };
+    return { name: '', date: '', tags: [], projectId: '' };
 }
 
 /**
  * 저장된 경력을 폼의 값으로 바꾼다
  * @param content - 저장된 내용. 등록 화면이면 null
- * @param projectSlugs - 지금 등록된 프로젝트의 slug. 여기 없는 연결은 「잇지 않음」 으로 바꾼다
+ * @param projectIds - 지금 등록된 프로젝트의 id. 여기 없는 연결은 「잇지 않음」 으로 바꾼다
  * @returns 폼의 처음 값. 등록 화면이면 모두 빈 값이다
  */
 export function toFormValue(
     content: ExperienceType | null,
-    projectSlugs: readonly string[],
+    projectIds: readonly string[],
 ): ExperienceFormValue {
     if (!content) {
         return {
@@ -39,8 +39,10 @@ export function toFormValue(
             name: project.name,
             date: project.date,
             tags: project.tags,
-            workSlug:
-                project.workSlug && projectSlugs.includes(project.workSlug) ? project.workSlug : '',
+            projectId:
+                project.projectId && projectIds.includes(project.projectId)
+                    ? project.projectId
+                    : '',
         })),
     };
 }
@@ -68,7 +70,7 @@ export function toContent(value: ExperienceFormValue): ExperienceType {
             name: project.name,
             date: project.date.trim(),
             tags: project.tags,
-            ...(project.workSlug === '' ? {} : { workSlug: project.workSlug }),
+            ...(project.projectId === '' ? {} : { projectId: project.projectId }),
         })),
     };
 }

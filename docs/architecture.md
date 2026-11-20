@@ -16,13 +16,13 @@ Kozipsa(`admin-next/docs/architecture.md`)의 구조를 가져오고, 백엔드�
 
 ## 1. Kozipsa 와 다른 점
 
-| 항목          | Kozipsa                                   | 이 저장소                                                   | 이유                                                                          |
-| ------------- | ----------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| 저장소        | pnpm + Turborepo 모노레포                 | 단일 앱                                                     | 앱이 하나라 공용 패키지로 나눌 대상이 없다                                    |
-| 데이터        | 백엔드 API                                | `content/` 의 로컬 파일과 Firestore, 로그인은 Firebase Auth | 소개 문구와 경력은 Firestore 로 옮겼다. 작업은 아직 로컬 파일이다(2026-11-18) |
-| entity        | model · actions · services · repositories | model · services · repositories, 변경 요청이 있으면 actions | 서버 액션이 필요한 entity 만 `actions` 를 둔다(2026-11-12 사용자 결정)        |
-| 디자인 시스템 | `packages/ui` + Storybook                 | `src/shared/ui` + `src/style/tokens`                        | UI 를 함께 쓸 다른 앱이 없다                                                  |
-| 상태          | Zustand · TanStack Query                  | 쓰지 않는다                                                 | 전역 상태와 서버 상태가 없다                                                  |
+| 항목          | Kozipsa                                   | 이 저장소                                                   | 이유                                                                   |
+| ------------- | ----------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 저장소        | pnpm + Turborepo 모노레포                 | 단일 앱                                                     | 앱이 하나라 공용 패키지로 나눌 대상이 없다                             |
+| 데이터        | 백엔드 API                                | Firestore, 이미지는 Vercel Blob, 로그인은 Firebase Auth     | 소개 문구 · 경력(2026-11-18)과 작업(2026-11-19)을 Firestore 로 옮겼다  |
+| entity        | model · actions · services · repositories | model · services · repositories, 변경 요청이 있으면 actions | 서버 액션이 필요한 entity 만 `actions` 를 둔다(2026-11-12 사용자 결정) |
+| 디자인 시스템 | `packages/ui` + Storybook                 | `src/shared/ui` + `src/style/tokens`                        | UI 를 함께 쓸 다른 앱이 없다                                           |
+| 상태          | Zustand · TanStack Query                  | 쓰지 않는다                                                 | 전역 상태와 서버 상태가 없다                                           |
 
 따로 적지 않은 것은 2026-11-11 플랜 승인 때 정했다.
 
@@ -30,7 +30,7 @@ Kozipsa(`admin-next/docs/architecture.md`)의 구조를 가져오고, 백엔드�
 
 ```
 portfolio/
-├── content/          원문 (projects.ts)
+├── content/          저장소로 옮기기 전의 작업 원문 (projects.ts). 옮긴 뒤 지운다
 ├── docs/             규칙 문서
 ├── e2e/              Playwright
 └── src/
@@ -77,7 +77,6 @@ flowchart TD
     A --> F["features/"]
     W --> F
     F --> E["entities/"]
-    E --> C["content/"]
     W --> S["shared/ · config/ · style/"]
     F --> S
     E --> S
@@ -91,6 +90,9 @@ flowchart TD
 **슬라이스는 `index.ts` 로만 공개한다.** 바깥에서 `@/features/hero/ui/Hero` 처럼 안쪽 파일을 부르지 않는다.(Kozipsa conventions 4.1)
 
 이 절의 규칙은 ESLint 가 검사한다.(`eslint.config.mjs` 의 `boundaries/dependencies` 와 `no-restricted-imports`)
+
+**라우트 핸들러(`route.ts`)는 서버 액션으로 받을 수 없는 요청에만 둔다.** 지금은 썸네일을 올릴 권한을 내주는 1곳이다. `@vercel/blob` 의 `upload` 가 주소로 토큰을 요청한다.(`src/app/admin/api/project-images/route.ts`)
+세션을 검사하고 entity 의 `services` 를 부르는 일만 한다.
 
 ### 3.1 계층 판단 기준
 
@@ -131,15 +133,17 @@ features/*/ui   ← 특정 기능에서만 쓰는 UI
 
 `shared/ui` 의 Table · Pagination · DataTable · Select · Switch 와 확인 창(ConfirmDialog) · Toast 는 Kozipsa `packages/ui` 에서 가져왔다.(2026-11-18 사용자 결정) 원본과 다른 점은 컴포넌트마다의 문서에 있다.(`src/shared/ui/dataTable/dataTable.md`)
 
+`shared/ui/tiptapEditor` 는 Tiptap 을 감싼 본문 에디터다. 읽는 화면인 `tiptapViewer` 와 같은 서식 CSS 를 쓴다.(2026-11-19 사용자 결정, `src/shared/ui/tiptapEditor/TiptapEditor.md`)
+
 `shared/ui/size` 는 컴포넌트가 아니다. Button · Input · Textarea 가 함께 읽는 크기 눈금을 둔다.(`src/shared/ui/size/size.constants.ts`, 2026-11-17 사용자 결정)
 
 ## 4. Entity 계층
 
-목적은 **원문을 읽는 위치를 `repositories` 한 곳으로 고정**하는 것이다. 원문은 `content/` 의 파일이거나 외부 저장소다.
+목적은 **원문을 읽는 위치를 `repositories` 한 곳으로 고정**하는 것이다. 원문은 외부 저장소에 있다.
 원문 형식이 바뀌어도 `repositories` 만 고치면 된다.
 
 ```
-page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → content/
+page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → 저장소
 ```
 
 | 계층           | 책임                                             | 금지             |
@@ -154,7 +158,7 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → conten
 
 **변경 요청은 `actions` 의 서버 액션으로 받는다.**(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 요구사항 7)
 파일 첫 줄에 `'use server';` 를 둔다. 클라이언트 컴포넌트가 entity 에서 직접 가져올 수 있는 것은 서버 액션과 `model` 뿐이다.
-지금은 `session` · `about` · `experience` 에 있다.(`src/entities/session/actions/` · `src/entities/about/actions/` · `src/entities/experience/actions/`)
+지금은 `session` · `about` · `experience` · `project` 에 있다.(`src/entities/session/actions/` · `src/entities/about/actions/` · `src/entities/experience/actions/` · `src/entities/project/actions/`)
 
 ```
 폼(클라이언트) → <e>.actions.ts → <e>.services.ts → <e>.repositories.ts → 저장소
@@ -169,6 +173,16 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 - 저장한 시각은 서버가 기록한다. 캐시에 담을 수 있게 문자열로 바꿔 읽는다.(`src/entities/about/repositories/about.repositories.ts`)
 - 여러 건을 두는 컬렉션은 문서 1개가 1건이고, 문서의 id 는 저장소가 발급한다. 순서는 `services` 가 정한다.(`src/entities/experience/repositories/experience.repositories.ts` · `src/entities/experience/services/experience.services.ts`)
 - 빌드할 때도 저장소를 읽는다. 빌드하는 곳에 환경 변수 5개가 있어야 한다.(`src/shared/util/serverEnv.ts`)
+- 순서를 정해 두는 컬렉션은 문서에 `order` 를 두고, `services` 가 그 값으로 놓는다.(`src/entities/project/services/project.services.ts` 의 `sortProjectList`)
+- 폼이 다루지 않는 항목(순서 · 등록 시각)이 있는 문서는 통째로 바꾸지 않고 폼의 항목만 바꾼다. 비운 선택 항목은 항목째로 지운다.(`src/entities/project/repositories/project.repositories.ts` 의 `updateProject`)
+- 에디터로 받은 HTML 은 `services` 가 저장하기 전에 정제한다. 읽는 화면은 정제하지 않는다.(`src/entities/project/services/project.services.ts` 의 `sanitizeProjectBody`, `src/shared/ui/tiptapViewer/TiptapViewer.md`)
+
+이미지는 Vercel Blob 에 둔다. 부르는 곳은 같은 `repositories` 다.(`src/entities/project/repositories/project.repositories.ts`)
+
+- 파일은 브라우저가 긴 변 1000px 이하로 줄여 저장소에 바로 올린다. 서버는 형식과 크기의 제한을 넣은 토큰만 내준다. 서버를 거치면 요청 크기 제한(4.5MB)에 걸려 5MB 를 받지 못한다.(`src/features/projectEditor/model/useImageUpload.ts`, `src/app/admin/api/project-images/route.ts`)
+- 문서가 가리키지 않게 된 파일은 `services` 가 지운다. 썸네일을 바꾸거나 프로젝트를 지울 때, 올려 두고 저장하지 않고 나갈 때다.(`src/entities/project/services/project.services.ts`)
+- 서버가 저장소를 부를 때 환경 변수 `BLOB_READ_WRITE_TOKEN` 을 쓴다. `@vercel/blob` 이 읽는다. 빌드할 때는 쓰지 않는다.
+- 이미지의 주소는 `next.config.ts` 의 `images.remotePatterns` 에 허용해 둔다.
 
 ### 4.2 세션
 

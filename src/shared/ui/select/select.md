@@ -2,7 +2,7 @@
 
 정해진 목록에서 하나를 고르는 입력이다. Kozipsa 의 Select 를 가져왔다.(`select.tsx`, Kozipsa `packages/ui` 의 `custom/select` 에서 가져옴, 2026-11-18 사용자 결정)
 `list` · `value` · `onChange` · `placeholder` 의 이름과 동작은 Kozipsa 와 같다.
-관리 화면의 프로젝트 연결이 쓴다.(`src/features/experienceEditor/ui/ProjectRow.tsx`)
+관리 화면의 경력 폼이 프로젝트 연결에, 프로젝트 폼이 분류와 맡은 범위에 쓴다.(`src/features/experienceEditor/ui/ProjectRow.tsx`, `src/features/projectEditor/ui/ProjectForm.tsx` · `DetailFields.tsx`)
 
 | prop          | 값                                                                                     | 기본       |
 | ------------- | -------------------------------------------------------------------------------------- | ---------- |

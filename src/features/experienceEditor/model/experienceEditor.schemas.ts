@@ -23,7 +23,7 @@ export const ExperienceFormSchema = z
                 name: z.string(),
                 date: z.string(),
                 tags: z.array(z.string()),
-                workSlug: z.string(),
+                projectId: z.string(),
             }),
         ),
     })

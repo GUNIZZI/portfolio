@@ -8,7 +8,7 @@ const VALUE: ExperienceFormValue = {
     endYear: '2026',
     summary: '',
     totalProjects: '',
-    projects: [{ name: 'Design System', date: '2025.06', tags: ['React'], workSlug: '' }],
+    projects: [{ name: 'Design System', date: '2025.06', tags: ['React'], projectId: '' }],
 };
 
 describe('toFormValue', () => {
@@ -37,14 +37,14 @@ describe('toFormValue', () => {
                 summary: '',
                 totalProjects: 50,
                 projects: [
-                    { name: 'P', date: '2021', tags: [], workSlug: 'kozipsa' },
-                    { name: 'Q', date: '2022', tags: [], workSlug: 'gone' },
+                    { name: 'P', date: '2021', tags: [], projectId: 'kozipsa' },
+                    { name: 'Q', date: '2022', tags: [], projectId: 'gone' },
                 ],
             },
             ['kozipsa'],
         );
         expect(value.totalProjects).toBe('50');
-        expect(value.projects.map((project) => project.workSlug)).toEqual(['kozipsa', '']);
+        expect(value.projects.map((project) => project.projectId)).toEqual(['kozipsa', '']);
     });
 });
 
@@ -70,13 +70,13 @@ describe('toContent', () => {
         });
     });
 
-    it('이은 프로젝트가 있으면 slug 를 낸다', () => {
+    it('이은 프로젝트가 있으면 id 를 낸다', () => {
         const [project] = VALUE.projects;
         const content = toContent({
             ...VALUE,
-            projects: project ? [{ ...project, workSlug: 'kozipsa' }] : [],
+            projects: project ? [{ ...project, projectId: 'kozipsa' }] : [],
         });
-        expect(content.projects[0]?.workSlug).toBe('kozipsa');
+        expect(content.projects[0]?.projectId).toBe('kozipsa');
     });
 
     it('폼으로 다녀와도 저장된 내용이 바뀌지 않는다', () => {
@@ -86,7 +86,7 @@ describe('toContent', () => {
             endYear: 2025,
             summary: '요약',
             totalProjects: 50,
-            projects: [{ name: 'P', date: '2021.03', tags: ['Vue'], workSlug: 'p' }],
+            projects: [{ name: 'P', date: '2021.03', tags: ['Vue'], projectId: 'p' }],
         };
         expect(toContent(toFormValue(saved, ['p']))).toEqual(saved);
     });

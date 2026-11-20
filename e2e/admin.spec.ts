@@ -32,6 +32,33 @@ test('세션 쿠키가 가짜면 관리 화면을 그리지 않고 로그인 화
     }
 });
 
+test('로그인하지 않으면 썸네일을 올릴 권한을 받지 못한다', async ({
+    request,
+    context,
+    baseURL,
+}) => {
+    const body = {
+        type: 'blob.generate-client-token',
+        payload: { pathname: 'projects/a.png', multipart: false, clientPayload: null },
+    };
+
+    // 쿠키가 없으면 로그인 화면으로 보낸다. 토큰을 내주지 않는다
+    const withoutCookie = await request.post('/admin/api/project-images', {
+        data: body,
+        maxRedirects: 0,
+    });
+    expect(withoutCookie.status()).toBe(307);
+    expect(withoutCookie.headers()['location']).toMatch(/\/admin\/login$/);
+
+    // 쿠키가 가짜면 401 로 알린다
+    await context.addCookies([{ name: 'admin_session', value: 'fake', url: baseURL ?? '' }]);
+    const withFakeCookie = await context.request.post('/admin/api/project-images', {
+        data: body,
+        maxRedirects: 0,
+    });
+    expect(withFakeCookie.status()).toBe(401);
+});
+
 test('이메일과 비밀번호를 모두 입력해야 로그인 버튼을 누를 수 있다', async ({ page }) => {
     await page.goto('/admin/login');
     const button = page.getByRole('button', { name: '로그인' });

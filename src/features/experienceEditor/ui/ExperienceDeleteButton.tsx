@@ -10,6 +10,7 @@ import { EXPERIENCE_SAVE_STATUS } from '@/entities/experience/model/experience.t
 import { useConfirmDialog } from '@/shared/ui/alertDialog/ConfirmDialogProvider';
 import { Button } from '@/shared/ui/button/button';
 import { useToast } from '@/shared/ui/toast/ToastProvider';
+import { cn } from '@/shared/util/cn';
 
 import { EDITOR_MESSAGE, EXPERIENCE_ROUTE } from '../model/experienceEditor.constants';
 
@@ -20,13 +21,21 @@ interface OwnProps {
     size: ComponentProps<typeof Button>['size'];
     /** 지운 뒤 경력 목록으로 가는가. 수정 화면에서 켠다. 목록에서는 그 자리에 머문다 */
     isLeaving?: boolean;
+    /** 버튼에 붙는다. 쓰는 곳마다 모양이 달라 여기서 정한다. 목록의 칸에서는 폭을 좁혀 아이콘만 한 네모로 그린다 */
+    className?: string;
 }
 
 /**
  * 경력 삭제 버튼. 누르면 확인 창(P-01)을 띄운다. 확인 창은 처음 포커스를 취소에 두고, 닫으면 이 버튼으로 돌려준다.
  * 회사와 그 안의 프로젝트 목록을 함께 지운다. 이어 둔 프로젝트는 지우지 않는다.
  */
-export default function ExperienceDeleteButton({ id, company, size, isLeaving = false }: OwnProps) {
+export default function ExperienceDeleteButton({
+    id,
+    company,
+    size,
+    isLeaving = false,
+    className,
+}: OwnProps) {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const toast = useToast();
@@ -70,7 +79,7 @@ export default function ExperienceDeleteButton({ id, company, size, isLeaving = 
             size={size}
             aria-label={`${company} 삭제`}
             isLoading={isPending}
-            className="items-center"
+            className={cn('items-center', className)}
             onClick={hndlAsk}
         >
             {/* 크기는 버튼의 size 를 따른다 */}

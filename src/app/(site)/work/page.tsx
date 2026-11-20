@@ -14,7 +14,7 @@ export default async function WorkPage() {
     const projects = await getProjectList();
     // 카드는 서버에서 그려 넘긴다. 격자는 거르고 자리를 옮기는 일만 한다
     const items = projects.map((project) => ({
-        slug: project.slug,
+        id: project.id,
         category: project.category,
         card: <ProjectCard project={project} />,
     }));

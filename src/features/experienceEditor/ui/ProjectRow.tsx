@@ -27,7 +27,7 @@ export function toRowTargetId(rowId: string, target: RowTarget): string {
 
 /**
  * 프로젝트 연결을 비우는 항목의 값. 폼에는 빈 문자열로 둔다.
- * Select 의 항목은 빈 값을 가질 수 없어 목록 안에서만 이 값을 쓴다. slug 에는 밑줄이 없어 겹치지 않는다
+ * Select 의 항목은 빈 값을 가질 수 없어 목록 안에서만 이 값을 쓴다. 저장소가 발급한 id 에는 밑줄이 없어 겹치지 않는다
  */
 const UNLINKED_CODE = '__unlinked__';
 
@@ -67,7 +67,11 @@ export default function ProjectRow({
     const linkList = [
         // 고르면 연결을 비운다. 이름은 고르지 않았을 때 Select 가 보여 주는 글자와 같다
         // { code: UNLINKED_CODE, name: '선택없음' },
-        ...options.map((option) => ({ code: option.slug, name: option.title })),
+        // 비공개 프로젝트에는 표시를 붙인다. 이어도 공개 화면에는 링크가 생기지 않는다
+        ...options.map((option) => ({
+            code: option.id,
+            name: option.isPublished ? option.title : `${option.title} (비공개)`,
+        })),
     ];
 
     return (
@@ -98,7 +102,7 @@ export default function ProjectRow({
                     />
                     <Controller
                         control={control}
-                        name={`projects.${index}.workSlug`}
+                        name={`projects.${index}.projectId`}
                         render={({ field }) => (
                             <Select
                                 aria-label={`${name} 연결`}
@@ -106,7 +110,7 @@ export default function ProjectRow({
                                 afterLabel="연결"
                                 // 이어 둔 프로젝트가 지워졌으면 고르지 않은 것으로 그린다.(docs/plan/admin/experiences/wireframe.html S-02)
                                 value={
-                                    options.some((option) => option.slug === field.value)
+                                    options.some((option) => option.id === field.value)
                                         ? field.value
                                         : ''
                                 }

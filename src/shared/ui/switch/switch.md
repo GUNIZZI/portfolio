@@ -1,7 +1,7 @@
 # Switch
 
 켜고 끄는 스위치다. Kozipsa 의 Switch 를 가져왔다.(`switch.tsx`, Kozipsa `packages/ui` 의 `custom/switch` 에서 가져옴, 2026-11-18 사용자 결정)
-관리 화면의 경력 폼이 「재직 중」 에 쓴다.(`src/features/experienceEditor/ui/ExperienceForm.tsx`)
+관리 화면의 경력 폼이 「재직 중」 에, 프로젝트 목록과 폼이 「공개」 · 「홈 노출」 에 쓴다.(`src/features/experienceEditor/ui/ExperienceForm.tsx`, `src/features/projectEditor/ui/ProjectList.tsx` · `ProjectForm.tsx`)
 
 | prop              | 값                                                                      | 기본   |
 | ----------------- | ----------------------------------------------------------------------- | ------ |

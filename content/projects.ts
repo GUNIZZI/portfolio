@@ -23,7 +23,7 @@ export const PROJECTS = [
     {
         slug: 'kozipsa',
         title: 'KOZIPSA 플랫폼 관리 시스템',
-        category: 'Enterprise',
+        category: 'Admin',
         summary: 'Kocom · Admin Platform',
         image: {
             src: '/images/projects/kozipsa.png',
@@ -63,7 +63,7 @@ export const PROJECTS = [
     {
         slug: 'apartment',
         title: '아파트 관리 시스템',
-        category: 'Web App',
+        category: 'Admin',
         summary: 'React · TypeScript',
         image: {
             src: '/images/projects/apartment.png',
@@ -76,7 +76,7 @@ export const PROJECTS = [
     {
         slug: 'fan-space',
         title: '팬을 위한 특별한 공간',
-        category: 'Landing Page',
+        category: 'Promotion',
         summary: 'Next.js · Tailwind',
         image: null,
         body: BODY_TEMPLATE,

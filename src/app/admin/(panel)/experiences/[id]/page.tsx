@@ -2,11 +2,11 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { AdminGuard } from '@/features/adminAuth';
+import { AdminGuard, AdminGuardFallback } from '@/features/adminAuth';
 import { ExperienceError, ExperienceForm } from '@/features/experienceEditor';
 import type { ExperienceEditorData } from '@/entities/experience/model/experience.types';
 import { getExperienceEditor } from '@/entities/experience/services/experience.services';
-import { getProjectList } from '@/entities/project/services/project.services';
+import { getProjectOptionList } from '@/entities/project/services/project.services';
 
 export const metadata: Metadata = { title: '경력 수정' };
 
@@ -32,7 +32,10 @@ async function ExperienceEditContent({
     params,
 }: Pick<PageProps<'/admin/experiences/[id]'>, 'params'>) {
     const { id } = await params;
-    const [experience, projects] = await Promise.all([loadExperienceEditor(id), getProjectList()]);
+    const [experience, projects] = await Promise.all([
+        loadExperienceEditor(id),
+        getProjectOptionList(),
+    ]);
     if (!experience) notFound();
 
     return (
@@ -46,10 +49,7 @@ async function ExperienceEditContent({
             {experience === LOAD_FAILED ? (
                 <ExperienceError retryHref={`/admin/experiences/${id}`} />
             ) : (
-                <ExperienceForm
-                    experience={experience}
-                    projects={projects.map(({ slug, title }) => ({ slug, title }))}
-                />
+                <ExperienceForm experience={experience} projects={projects} />
             )}
         </main>
     );
@@ -57,7 +57,7 @@ async function ExperienceEditContent({
 
 export default function AdminExperienceEditPage({ params }: PageProps<'/admin/experiences/[id]'>) {
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<AdminGuardFallback />}>
             <AdminGuard>
                 <ExperienceEditContent params={params} />
             </AdminGuard>
