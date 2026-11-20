@@ -19,7 +19,7 @@ const ARROW_CLASS = cn(
     'disabled:pointer-events-none disabled:opacity-disabled',
 );
 
-interface PaginationProps {
+interface OwnProps {
     /** 전체 건수 */
     totalCount: number;
     /** 지금 페이지. 1부터 센다 */
@@ -44,7 +44,7 @@ function Pagination({
     visiblePages = 5,
     onPageChange,
     className,
-}: PaginationProps) {
+}: OwnProps) {
     const totalPages = getTotalPages(totalCount, pageSize);
 
     function hndlPageChange(nextPage: number) {

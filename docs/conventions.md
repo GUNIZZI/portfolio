@@ -239,7 +239,7 @@ export { default as Hero } from './ui/Hero';
 
 ## 미정리 항목
 
-- 아래 확인방법으로 찾은 어긋난 곳은 없다(2026-11-16).
+- 아래 확인방법으로 찾은 어긋난 곳은 없다(2026-11-20). `shared/ui` 의 `DataTableProps` · `PaginationProps` 2곳을 `OwnProps` 로 고쳤다.
 - `OwnProps` 와 `hndl` 은 lint 로 검사하지 않는다. 아래 확인방법의 grep 으로 본다.
 
 ## 확인방법

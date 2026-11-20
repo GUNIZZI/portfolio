@@ -46,7 +46,7 @@ const DEFAULT_EMPTY_MESSAGE = '데이터가 없습니다.';
 
 const COUNT_FORMAT = new Intl.NumberFormat('ko-KR');
 
-interface DataTableProps<TRow> {
+interface OwnProps<TRow> {
     /**
      * 컬럼 정의. TanStack 의 ColumnDef 그대로다. 열의 폭과 정렬은 meta.className 으로 정한다
      */
@@ -142,7 +142,7 @@ function DataTable<TRow>({
     meta,
     emptyMessage,
     ref,
-}: DataTableProps<TRow>) {
+}: OwnProps<TRow>) {
     const rows = data?.content ?? [];
     const totalCount = data?.totalElements ?? 0;
     const pageSize = opts?.pageSize ?? DEFAULT_PAGE_SIZE;
@@ -418,4 +418,3 @@ function DataTable<TRow>({
 }
 
 export { DataTable };
-export type { DataTableProps };
