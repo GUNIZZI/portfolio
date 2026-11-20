@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 
+import SiteAnalytics from '@/_app/SiteAnalytics';
 import { Header } from '@/widgets/header';
 import { PageTransition } from '@/widgets/pageTransition';
 
@@ -24,6 +25,7 @@ export default function SiteLayout({ children }: LayoutProps<'/'>) {
                 <PageTransition />
             </Suspense>
             {children}
+            <SiteAnalytics />
         </div>
     );
 }
