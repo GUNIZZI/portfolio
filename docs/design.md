@@ -27,6 +27,7 @@
 | `panel-glass`                    | 알파 0.5               | 작업·소개를 묶는 반투명 패널                                                                                                                                                                                   |
 | `glass`                          | 알파 0.8               | 화면 위에 붙은 헤더의 바탕                                                                                                                                                                                     |
 | `glow`                           | 알파 0.65              | 작업 카드의 테두리 선에서 번지는 빛                                                                                                                                                                            |
+| `glow-sky`                       | 알파 0.65              | 작업 카드의 테두리 선이 하늘색일 때 번지는 빛. 2026-11-20 사용자 결정                                                                                                                                          |
 | `state-hover` · `state-selected` | 흰색에 알파 0.06 · 0.1 | 표의 행 hover 와 선택된 행(`src/shared/ui/table/table.tsx`). Kozipsa 의 같은 이름 토큰에서 값을 가져왔다. 2026-11-18 사용자 결정                                                                               |
 | `strong`                         | `#f4f4f5`              | 제목, 링크                                                                                                                                                                                                     |
 | `foreground`                     | `#d4d4d8`              | 본문                                                                                                                                                                                                           |
@@ -59,7 +60,7 @@
 | `success` · `warning`                 | `#15803d` · `#b45309`              | 글자로 쓰여 짙게 바꿨다. 카드 위 대비는 둘 다 5.0 이다              |
 | `badge`                               | `#ede9fe`                          | 짙은 보라 면이 옅은 보라 면이 됐다. 그 위 글자는 `strong` 이다      |
 | `doodle-sky` · `doodle-yellow`        | `#0ea5e9` · `#eab308`              | 한 단계 짙다                                                        |
-| `glow` · `brush-*`                    | 알파 0.35 · 0.6                    | 밝은 바탕에서 번짐이 탁해 보여 알파를 낮췄다                        |
+| `glow` · `glow-sky` · `brush-*`       | 알파 0.35 · 0.6                    | 밝은 바탕에서 번짐이 탁해 보여 알파를 낮췄다                        |
 | `state-hover` · `state-selected`      | 남색(`#001734`)에 알파 0.04 · 0.08 | 밝은 바탕에서는 어두운 색을 얹어야 보인다. Kozipsa 의 라이트 값이다 |
 
 바탕 대비는 `strong` 16.8 · `foreground` 10.3 · `muted-foreground` 6.0 · `destructive` 6.0 이다. 모두 WCAG AA(4.5)를 넘는다.

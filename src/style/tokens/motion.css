@@ -28,6 +28,28 @@
      */
     --animate-skeleton: skeleton 1.6s var(--ease-move) infinite;
 
+    /*
+     * 작업 카드의 테두리 선. 보라색과 하늘색 사이를 오가기를 되풀이한다. 한 색에 2초 머물고 3초에 걸쳐 다음 색으로 바뀐다.
+     * 머무는 시간과 바뀌는 시간(3초)이 지속시간 토큰에 없어 한 바퀴의 시간을 여기 적는다. 선은 포인터의 불빛이 닿는 곳에서만 보인다.
+     * 동작 줄이기에서는 쓰는 쪽이 motion-safe 로 걸러 보라색에 머문다 (src/features/featuredProjects/ui/ProjectCardFrame.tsx)
+     */
+    --animate-card-outline: card-outline 10s var(--ease-move) infinite;
+
+    @keyframes card-outline {
+        /* 가속도는 구간마다 따로 걸린다. 머무는 구간은 처음과 끝이 같아 바뀌지 않는다 */
+        0%,
+        20%,
+        100% {
+            border-color: var(--brand);
+            box-shadow: 0 0 16px var(--glow);
+        }
+        50%,
+        70% {
+            border-color: var(--doodle-sky);
+            box-shadow: 0 0 16px var(--glow-sky);
+        }
+    }
+
     @keyframes loader {
         to {
             rotate: 1turn;

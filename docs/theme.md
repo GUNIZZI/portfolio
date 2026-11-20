@@ -27,6 +27,7 @@
 | `panel-glass`                                                      | 뒤의 배경이 비치는 패널(`panel` 에 알파 0.5)                               |
 | `glass`                                                            | 고정 헤더의 반투명 바탕(알파 0.8)                                          |
 | `glow`                                                             | 작업 카드의 테두리 선에서 번지는 빛(`brand` 에 알파 0.65)                  |
+| `glow-sky`                                                         | 테두리 선이 하늘색일 때 번지는 빛(`doodle-sky` 에 알파 0.65)               |
 | `state-hover` · `state-selected`                                   | 표의 행에 얹는 면. hover 와 선택된 행이다. 반투명이라 뒤의 패널이 비친다   |
 | `border` · `border-card`                                           | 패널과 카드의 테두리                                                       |
 | `line` · `divider`                                                 | 구분선. `divider` 는 바랜 배경 낙서에도 쓴다                               |

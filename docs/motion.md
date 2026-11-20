@@ -7,7 +7,9 @@
 
 1. **도구는 framer-motion 과 GSAP 2개만 쓴다.**(2026-11-11 사용자 결정)
     - 다른 모션 라이브러리(Lenis, three 등)를 추가하지 않는다. 필요하면 먼저 컨펌을 받는다.
-    - 예외가 2곳 있다. 로더는 CSS 애니메이션으로 돈다. 화면의 연출이 아니라 진행 중임을 알리는 표시다.(2026-11-18 사용자 결정, `src/shared/ui/loader/Loader.tsx`)
+    - 예외가 4곳 있다. 로더 · 관리 화면의 기다리는 틀 · 작업 카드의 테두리 선 · 페이지 전환이다. 로더는 CSS 애니메이션으로 돈다. 화면의 연출이 아니라 진행 중임을 알리는 표시다.(2026-11-18 사용자 결정, `src/shared/ui/loader/Loader.tsx`)
+      관리 화면의 기다리는 틀도 CSS 애니메이션이다. 면 위로 옅은 빛이 왼쪽에서 오른쪽으로 지나가기를 되풀이한다.(2026-11-20 사용자 결정, `src/features/adminAuth/ui/AdminGuardFallback.tsx`)
+    - 작업 카드의 테두리 선도 CSS 애니메이션이다. 보라색과 하늘색 사이를 오가기를 되풀이한다. 한 색에 2초 머물고 3초에 걸쳐 바뀐다. 선은 포인터의 불빛이 닿는 곳에서만 보인다.(2026-11-20 사용자 결정, `src/features/featuredProjects/ui/ProjectCardFrame.tsx`)
     - 페이지 전환은 React 의 `<ViewTransition>` 이 시작하고, 브라우저가 CSS 애니메이션으로 이전 화면을 붙잡아 둔다. 나가는 화면을 붙잡아 둘 수 있는 것이 브라우저의 화면 전환뿐이다. 화면을 덮는 붓질은 GSAP 이 그린다.(2026-11-18 사용자 결정, `src/widgets/pageTransition/PageTransition.tsx` · `src/style/viewTransition.css`)
     - 같은 메뉴 안에서 옮길 때(작업 목록 ↔ 상세, 상세 ↔ 상세)는 붓질을 그리지 않고, 화면이 번지며 바뀌는 디졸브만 한다.(2026-11-20 사용자 결정, `src/widgets/pageTransition/model/pageTransition.utils.ts` 의 `toTransitionMode`)
 2. **값은 토큰으로만 쓴다.** 지속시간·가속도·간격을 숫자로 적지 않는다.
@@ -16,7 +18,7 @@
    `width` · `top` · `margin` 을 애니메이션하면 매 프레임 레이아웃을 다시 계산한다.
     - `clip-path` 는 버튼의 면이 넓어지는 연출에 쓴다. 폭을 움직이지 않고 가려 둔 면을 드러낸다.(`src/shared/ui/button/button.tsx`)
     - `filter` 는 페이지 전환에서 화면이 번지는 연출에 쓴다. 레이아웃을 다시 계산하지 않는다.(2026-11-18 사용자 결정, `src/style/viewTransition.css`)
-    - 예외가 1곳 있다. 소개의 경력은 회사를 여닫을 때 프로젝트 목록과 회사 요약의 높이를 움직인다.(2026-11-16 사용자 결정, `src/features/experienceTimeline/ui/ExperienceTimeline.tsx`, `docs/plan/about/README.md` 「모션」)
+    - 예외가 2곳 있다. 작업 카드의 테두리 선은 `border-color` · `box-shadow` 를 움직인다.(아래 「미정리 항목」) 소개의 경력은 회사를 여닫을 때 프로젝트 목록과 회사 요약의 높이를 움직인다.(2026-11-16 사용자 결정, `src/features/experienceTimeline/ui/ExperienceTimeline.tsx`, `docs/plan/about/README.md` 「모션」)
 
 ## 1. 상황별 도구
 
@@ -127,9 +129,11 @@ e2e 는 `reduced-motion` 프로젝트로 같은 화면을 한 번 더 실행한�
 ## 미정리 항목
 
 - 모션 목록은 `docs/plan/home/README.md` 와 `docs/plan/about/README.md` 의 「모션」 표다. 헤더와 배경의 모션은 홈의 표에 있다.
-- 원칙 4 의 예외가 1곳 있다. 소개 경력의 높이 전환이다.
+- 원칙 4 의 예외가 2곳 있다. 소개 경력의 높이 전환과 작업 카드의 테두리 선이다.
 - 원칙 1 과 2 의 예외가 1곳 더 있다. 페이지 전환이다. 칠하는 시간(900ms)과 지우는 시간(900ms)을 지속시간 토큰이 아닌 값으로 `src/style/viewTransition.css` 에 적었다.
 - 원칙 1 과 2 의 예외가 1곳 있다. 로더의 회전이다. 한 바퀴의 시간(1초 · 2초 · 4초)을 지속시간 토큰이 아닌 값으로 `src/style/tokens/motion.css` 에 적었다.
+  관리 화면의 기다리는 틀도 같다. 빛이 한 번 지나가는 시간(1.6초)을 같은 파일에 적었다.
+  작업 카드의 테두리 선도 같다. 색이 한 번 오가는 시간(10초)을 같은 파일에 적었다. 움직이는 속성도 `transform` · `opacity` 가 아니라 `border-color` · `box-shadow` 다. 원칙 4 의 예외다.
 
 ## 확인방법
 

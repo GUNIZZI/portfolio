@@ -30,7 +30,7 @@ export default function ProjectCard({ project }: OwnProps) {
                         className={cn(
                             'aspect-[2/1] w-full object-cover',
                             'motion-safe:group-focus-within:scale-105 motion-safe:group-hover:scale-105',
-                            'transition-[scale] duration-fast ease-move',
+                            'transition-[scale] duration-slow ease-move',
                         )}
                     />
                 </div>
