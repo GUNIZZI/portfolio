@@ -216,6 +216,37 @@ test('작업 카드에서 상세로 가면 본문과 메타가 있고, 다음 �
     await expect(page.getByRole('heading', { level: 1, name: '사내 통합 대시보드' })).toBeVisible();
 });
 
+test('작업 상세에서 헤더의 Projects 나 All Projects 를 누르면 목록의 맨 위로 간다', async ({
+    page,
+    isMobile,
+}) => {
+    await page.goto('/work');
+    const detailLink = page.getByRole('link', { name: /열기$/ }).first();
+
+    for (const goBack of ['header', 'backLink'] as const) {
+        await detailLink.click();
+        await expect(page).toHaveURL(/\/work\/[^/]+$/);
+        // 상세의 아래쪽에서 눌러도 목록은 맨 위에서 열린다
+        await page.getByRole('contentinfo').scrollIntoViewIfNeeded();
+
+        if (goBack === 'header') {
+            if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
+            const projects = page
+                .getByRole('navigation', { name: '주 메뉴' })
+                .getByRole('link', { name: 'Projects' });
+            await expect(projects).toHaveAttribute('aria-current', 'page');
+            await projects.click();
+        } else {
+            await page.getByRole('link', { name: 'All Projects' }).click();
+        }
+
+        await expect(page).toHaveURL(/\/work$/);
+        await expect(
+            page.getByRole('heading', { level: 1, name: 'ALL PROJECTS' }),
+        ).toBeInViewport();
+    }
+});
+
 test('없는 작업의 주소로 들어오면 찾을 수 없다고 알린다', async ({ page }) => {
     await page.goto('/work/none');
     await expect(page.getByRole('heading', { name: '찾을 수 없음' })).toBeVisible();

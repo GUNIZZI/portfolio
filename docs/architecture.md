@@ -106,7 +106,7 @@ flowchart TD
 
 **위젯도 `model/` 을 가질 수 있다.**(2026-11-16 사용자 결정)
 모션 정의와 상수처럼 마크업과 변경 이유가 다른 것을 `model/` 에 둔다. 파일 이름은 `features` 의 `model/` 과 같은 규칙을 따른다.([conventions.md](./conventions.md) 2절)
-지금은 `widgets/header/model/header.motions.ts` 와 `widgets/backdrop/model/backdrop.constants.ts` 가 있다.
+지금은 `widgets/header/model/header.motions.ts` 와 `widgets/backdrop/model/backdrop.constants.ts`, `widgets/pageTransition/model/` 의 `pageTransition.constants.ts` · `pageTransition.utils.ts` 가 있다.
 컴포넌트는 `ui/` 로 나누지 않고 위젯 폴더 바로 아래에 둔다.(`src/widgets/header/`)
 
 **헤더는 레이아웃이 그린다.**(2026-11-18 사용자 결정)
@@ -232,8 +232,9 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 
 - feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` 다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
-- widget 은 `header` · `footer` · `backdrop` · `contact` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` 이다.
-- 관리 기능은 로그인 · 소개 · 경력까지 구현했다(2026-11-18). 작업의 원문은 아직 `content/` 에 있다. 저장소로 옮기면 1절의 데이터 행과 4절이 다시 바뀐다.(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 「데이터」)
+- widget 은 `header` · `footer` · `backdrop` · `contact` · `pageTransition` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` 이다.
+- 관리 기능은 로그인 · 소개 · 경력(2026-11-18)과 프로젝트(2026-11-19)까지 구현했다. 대시보드가 남았다.(`docs/plan/admin/README.md` 요구사항 24)
+- `content/projects.ts` 와 `public/images/projects/` 는 저장소로 옮기는 스크립트(`scripts/migrate-projects.mjs`)만 읽는다. 옮긴 뒤 스크립트와 함께 지운다.(`docs/plan/admin/README.md` 「기존 프로젝트 이전」)
 
 ## 확인방법
 

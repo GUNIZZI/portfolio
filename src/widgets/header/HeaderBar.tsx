@@ -45,7 +45,8 @@ interface OwnProps {
  * 좁은 화면에서는 메뉴와 action 을 버튼으로 여닫는 패널에 둔다.
  */
 export default function HeaderBar({ name, action }: OwnProps) {
-    const currentHref = findNavHref(usePathname());
+    const pathname = usePathname();
+    const currentHref = findNavHref(pathname);
     const headerRef = useRef<HTMLElement>(null);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
     /** 패널에서 고른 섹션. 패널이 다 닫힌 뒤에 이동한다 */
@@ -162,6 +163,7 @@ export default function HeaderBar({ name, action }: OwnProps) {
                                     key={item.href}
                                     href={item.href}
                                     isCurrent={isCurrent}
+                                    isSamePage={item.href === pathname}
                                     className={cn(
                                         // 배치와 모양. 아래 여백에 밑줄 자리를 미리 잡아 강조가 옮겨 가도 높이가 변하지 않는다
                                         'pt-2 pb-2.5 font-extrabold',
@@ -244,6 +246,7 @@ export default function HeaderBar({ name, action }: OwnProps) {
                                         key={item.href}
                                         href={item.href}
                                         isCurrent={isCurrent}
+                                        isSamePage={item.href === pathname}
                                         className={cn(
                                             'flex min-h-11 items-center',
                                             isCurrent && 'text-primary',

@@ -1,10 +1,9 @@
 'use client';
 
-import { useLayoutEffect, useRef, ViewTransition } from 'react';
+import { useEffect, useLayoutEffect, useRef, ViewTransition } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { gsap, useGSAP } from '@/shared/util/gsap';
-import { findNavHref, NAV_ITEMS } from '@/config/nav';
 
 import {
     BRUSHES,
@@ -13,6 +12,11 @@ import {
     PAINT_VIEW_BOX,
     TEMPO,
 } from './model/pageTransition.constants';
+import {
+    isLeftward,
+    type PageTransitionMode,
+    toTransitionMode,
+} from './model/pageTransition.utils';
 
 /** 몸통을 가려 두는 값. 선의 길이를 1 로 보고, 선 하나만큼 그리고 선 하나만큼 비운다 */
 const DASH_STYLE = { strokeDasharray: '1 1', strokeDashoffset: 1 } as const;
@@ -35,7 +39,7 @@ function getPaintTransform(): string {
     return `rotate(${-PAINT_ANGLE}deg) scale(${scaleX}, ${scaleY})`;
 }
 
-/** 페이지를 옮기는 동안 html 에 적어 두는 data 속성의 이름. `data-page-transition` 이 된다 */
+/** 페이지를 옮기는 동안 html 에 적어 두는 data 속성의 이름. `data-page-transition` 이 되고, 값은 연출의 이름이다 */
 const MOVING_KEY = 'pageTransition';
 
 /** 이전 화면이 새 화면으로 바뀌는 순간에 끝나는 CSS 애니메이션의 이름 (src/style/viewTransition.css) */
@@ -89,21 +93,11 @@ function readSeconds(name: string): number {
 }
 
 /**
- * 옮겨 가는 페이지가 메뉴에서 왼쪽에 있는가. 같은 메뉴 안에서는 상세에서 목록으로 돌아올 때다.
- * 참이면 붓질을 좌우로 뒤집어, 첫 획을 오른쪽에서 왼쪽으로 긋는다
- */
-function isLeftward(from: string, to: string): boolean {
-    const fromOrder = NAV_ITEMS.findIndex((item) => item.href === findNavHref(from));
-    const toOrder = NAV_ITEMS.findIndex((item) => item.href === findNavHref(to));
-    if (fromOrder !== toOrder) return toOrder < fromOrder;
-    return to.length < from.length;
-}
-
-/**
  * 페이지 전환. 붓으로 슥슥 5번 칠해 화면을 덮고, 덮인 동안 페이지가 바뀌고, 같은 길을 다시 그으며 지운다.
  * 붓질은 비스듬히 기울어 있고, 위에서 아래로 내려오며 좌우로 번갈아 긋는다. 획의 색은 옮길 때마다 새로 고른다.
  * 첫 획의 방향은 메뉴의 방향을 따른다.
  * 오른쪽 메뉴로 가면 왼쪽에서 오른쪽으로, 왼쪽 메뉴로 가면 반대로 시작한다.
+ * 같은 메뉴 안에서 옮길 때(작업 목록 ↔ 상세)는 붓질을 그리지 않고, 화면이 번지며 바뀌는 디졸브만 한다.(2026-11-20 사용자 결정)
  * 주소가 바뀌면 표식의 key 가 바뀌어 React 가 화면 전환을 시작한다. 브라우저는 (site) 레이아웃의 틀을 찍어
  * 다 칠할 때까지 이전 화면을 붙잡아 두고(style/viewTransition.css), 그동안 GSAP 이 붓질을 그린다.
  * 화면 전환을 지원하지 않는 브라우저와 동작 줄이기에서는 붓질 없이 페이지가 바로 바뀐다 (docs/motion.md 원칙 1)
@@ -117,14 +111,41 @@ export default function PageTransition() {
     const isReversedRef = useRef(false);
     /** 주소가 바뀌어 시작된 화면 전환을 기다리는 중인가. 새로고침한 뒤 저절로 시작되는 화면 전환과 구분한다 */
     const isMovingRef = useRef(false);
+    /** 이번에 옮길 때의 연출. 페이지를 옮길 때마다 다시 정한다 */
+    const modeRef = useRef<PageTransitionMode>('paint');
+    /** 브라우저의 뒤로 · 앞으로 가기로 옮기는 중인가 */
+    const isTraversingRef = useRef(false);
+
+    // 뒤로 · 앞으로 가기에서는 React 가 화면을 바로 바꾸고 화면 전환을 시작하지 않는다.
+    // 그때 표시를 켜 두면 지울 때가 오지 않아 계속 남고, 그 뒤에 늦게 도착한 부분이 그려질 때 붓질이 돈다
+    useEffect(() => {
+        function hndlPopState() {
+            if (window.location.pathname === prevPathnameRef.current) {
+                // 라우터가 이미 페이지를 바꿨다. 아래의 useLayoutEffect 가 방금 켠 표시를 지운다.
+                // 주소의 # 나 ? 만 바뀐 이동도 여기로 온다. 그때는 지울 표시가 없다
+                isMovingRef.current = false;
+                Reflect.deleteProperty(document.documentElement.dataset, MOVING_KEY);
+                return;
+            }
+            // 페이지가 조금 뒤에 바뀐다. 그때 표시를 켜지 않게 적어 둔다
+            isTraversingRef.current = true;
+        }
+        window.addEventListener('popstate', hndlPopState);
+        return () => {
+            window.removeEventListener('popstate', hndlPopState);
+        };
+    }, []);
 
     // 화면 전환이 준비되기 전에 방향과 기울기를 정해 둔다. hndlEnter 는 이 뒤에 불린다.
     // 기울기는 화면의 비율에 맞춰 옮길 때마다 다시 구한다. 그 사이에 창의 크기가 바뀌었을 수 있다
     useLayoutEffect(() => {
-        if (prevPathnameRef.current !== pathname) {
+        const isTraversing = isTraversingRef.current;
+        isTraversingRef.current = false;
+        if (prevPathnameRef.current !== pathname && !isTraversing) {
             isMovingRef.current = true;
-            // 본문의 연출은 이 표시가 있는 동안에만 걸린다 (src/style/viewTransition.css)
-            document.documentElement.dataset[MOVING_KEY] = '';
+            modeRef.current = toTransitionMode(prevPathnameRef.current, pathname);
+            // 본문의 연출은 이 표시가 있는 동안에만 걸리고, 적힌 값에 따라 달라진다 (src/style/viewTransition.css)
+            document.documentElement.dataset[MOVING_KEY] = modeRef.current;
         }
         isReversedRef.current = isLeftward(prevPathnameRef.current, pathname);
         prevPathnameRef.current = pathname;
@@ -218,6 +239,9 @@ export default function PageTransition() {
         function finish() {
             Reflect.deleteProperty(document.documentElement.dataset, MOVING_KEY);
         }
+
+        // 디졸브는 CSS 만으로 바뀐다. 붓질을 그리지 않는다
+        if (modeRef.current === 'dissolve') return finish;
 
         const timelines = timelinesRef.current;
         if (!timelines) return finish;

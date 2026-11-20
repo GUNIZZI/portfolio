@@ -9,6 +9,7 @@
     - 다른 모션 라이브러리(Lenis, three 등)를 추가하지 않는다. 필요하면 먼저 컨펌을 받는다.
     - 예외가 2곳 있다. 로더는 CSS 애니메이션으로 돈다. 화면의 연출이 아니라 진행 중임을 알리는 표시다.(2026-11-18 사용자 결정, `src/shared/ui/loader/Loader.tsx`)
     - 페이지 전환은 React 의 `<ViewTransition>` 이 시작하고, 브라우저가 CSS 애니메이션으로 이전 화면을 붙잡아 둔다. 나가는 화면을 붙잡아 둘 수 있는 것이 브라우저의 화면 전환뿐이다. 화면을 덮는 붓질은 GSAP 이 그린다.(2026-11-18 사용자 결정, `src/widgets/pageTransition/PageTransition.tsx` · `src/style/viewTransition.css`)
+    - 같은 메뉴 안에서 옮길 때(작업 목록 ↔ 상세, 상세 ↔ 상세)는 붓질을 그리지 않고, 화면이 번지며 바뀌는 디졸브만 한다.(2026-11-20 사용자 결정, `src/widgets/pageTransition/model/pageTransition.utils.ts` 의 `toTransitionMode`)
 2. **값은 토큰으로만 쓴다.** 지속시간·가속도·간격을 숫자로 적지 않는다.
 3. **동작 줄이기 설정을 따른다.** OS 에서 동작 줄이기를 켠 사용자에게는 움직임 없이 최종 상태를 보여 준다.
 4. **레이아웃을 밀지 않는 속성만 움직인다.** `transform` · `opacity` 가 기본이고 `clip-path` 도 해당한다.(2026-11-16 사용자 결정)
@@ -100,6 +101,7 @@ useGSAP(
 ```
 
 페이지 전환의 시간은 `src/style/viewTransition.css` 위쪽의 전용 변수(`--page-cover-duration` · `--page-uncover-duration`)가 정하고, GSAP 도 그 값을 읽는다.(`src/widgets/pageTransition/PageTransition.tsx`) 동작 줄이기에서는 그 파일이 두 값을 `0ms` 로 되돌리고 붓질은 그리지 않는다.
+붓질이 없는 디졸브의 시간은 지속시간 토큰(`--duration-fast` · `--duration-base`)을 쓴다.(`src/style/viewTransition.css`)
 화면 전환을 지원하지 않는 브라우저에서도 연출 없이 바로 바뀐다.
 
 e2e 는 `reduced-motion` 프로젝트로 같은 화면을 한 번 더 실행한다.(`playwright.config.ts`)

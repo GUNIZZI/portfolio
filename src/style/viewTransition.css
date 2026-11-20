@@ -1,6 +1,7 @@
 /*
  * 페이지 전환. 붓으로 슥슥 5번 칠해 화면을 덮고, 덮인 동안 페이지가 바뀌고, 같은 길을 다시 그으며 지운다.
  * 그 밑에서 이전 화면은 초점이 풀리듯 번지고, 새 화면은 초점이 맞듯 또렷해진다.
+ * 같은 메뉴 안에서 옮길 때(작업 목록 ↔ 상세)는 붓질 없이 번지며 바뀌는 디졸브만 한다.
  * React 의 <ViewTransition> 이 시작하고, 브라우저가 이전 화면을 붙잡아 두는 동안 GSAP 이 붓질을 그린다
  * (docs/motion.md 원칙 1 의 예외). 붓질은 widgets/pageTransition 이,
  * 본문과 헤더의 이름은 (site) 레이아웃과 widgets/header/HeaderBar.tsx 가 갖는다.
@@ -57,7 +58,8 @@
 /*
  * 페이지를 옮기지 않아도 화면 전환이 시작될 때가 있다. 새로고침한 뒤 늦게 도착한 부분이 그려질 때가 그렇다.
  * 그때는 본문을 움직이지 않고 새 화면을 바로 보여 준다. 아래의 연출은 페이지를 옮기는 동안에만 건다.
- * 옮기는 동안에는 widgets/pageTransition 이 html 에 data-page-transition 을 적어 둔다
+ * 옮기는 동안에는 widgets/pageTransition 이 html 에 data-page-transition 을 적어 둔다.
+ * 값은 연출의 이름이다. paint 는 붓질로 덮는 전환, dissolve 는 붓질이 없는 전환이다
  */
 ::view-transition-new(site-page) {
     animation: none;
@@ -65,19 +67,41 @@
 ::view-transition-old(site-page) {
     display: none;
 }
-:root[data-page-transition]::view-transition-old(site-page) {
+:root[data-page-transition='paint']::view-transition-old(site-page) {
     display: block;
     animation:
         page-hold-old var(--page-cover-duration) step-end both,
         page-blur-out var(--page-cover-duration) var(--ease-exit) both;
 }
-:root[data-page-transition]::view-transition-new(site-page) {
+:root[data-page-transition='paint']::view-transition-new(site-page) {
     animation:
         page-hold-new var(--page-cover-duration) step-end both,
         page-blur-in var(--page-uncover-duration) var(--ease-enter) var(--page-cover-duration) both;
 }
-:root[data-page-transition]::view-transition-group(site-page) {
+:root[data-page-transition='paint']::view-transition-group(site-page) {
     animation-duration: var(--page-cover-duration);
+    animation-timing-function: step-end;
+}
+
+/*
+ * 디졸브. 붓질이 가려 주지 않으므로 이전 화면을 번지며 사라지게 하고, 다 사라진 뒤에 새 화면을 번진 채로 드러낸다.
+ * 두 화면을 겹쳐 바꾸지 않는다. 스크롤해 둔 이전 화면과 맨 위에서 열리는 새 화면은 자리가 달라, 겹치면 한쪽이 밀려 보인다.
+ * 틀의 위치와 크기는 이전 화면이 다 사라진 순간에 바꾼다.
+ * 시간은 지속시간 토큰을 쓴다. 동작 줄이기에서는 토큰이 0ms 가 되어 바로 바뀐다 (src/style/tokens/motion.css)
+ */
+:root[data-page-transition='dissolve']::view-transition-old(site-page) {
+    display: block;
+    animation:
+        page-hold-old var(--duration-fast) var(--ease-exit) both,
+        page-blur-out var(--duration-fast) var(--ease-exit) both;
+}
+:root[data-page-transition='dissolve']::view-transition-new(site-page) {
+    animation:
+        page-hold-new var(--duration-base) var(--ease-enter) var(--duration-fast) both,
+        page-blur-in var(--duration-base) var(--ease-enter) var(--duration-fast) both;
+}
+:root[data-page-transition='dissolve']::view-transition-group(site-page) {
+    animation-duration: var(--duration-fast);
     animation-timing-function: step-end;
 }
 
@@ -99,6 +123,7 @@
     display: none;
 }
 
+/* 붓질 전환은 step-end 로 걸어 끝나는 순간에 한 번에 바뀌고, 디졸브는 가속도를 걸어 서서히 바뀐다 */
 @keyframes page-hold-old {
     from {
         opacity: 1;
