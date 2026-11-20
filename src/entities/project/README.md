@@ -20,7 +20,8 @@
 - 순서는 문서의 `order` 다. 작은 수가 앞이고, 새 프로젝트는 맨 뒤에 놓는다. 저장소가 주는 순서는 정해져 있지 않아 `services` 가 놓는다.(`services/project.services.ts` 의 `sortProjectList` · `createProject`)
 - 오류 문구는 스키마가 낸다. 폼은 따로 검사하지 않고 그 문구를 그린다.(`docs/architecture.md` 4.3절)
 - 폼은 기본 항목(제목 · 분류 · 요약 · 상세 주소 · 썸네일 · 공개 · 홈 노출)과 상세 항목(팀 · 역할 · 맡은 범위 · 기간 · 기술 · 링크 · 본문)을 함께 저장한다. 수정은 폼의 항목만 바꾸고 순서와 등록 시각은 남긴다.(`model/project.schemas.ts` 의 `ProjectContentSchema`, `repositories/project.repositories.ts` 의 `updateProject`, `docs/plan/admin/README.md` 요구사항 29)
-- 본문은 저장하기 전에 정제한다. 에디터가 내는 서식의 태그만 남기고, 글자가 없으면 저장하지 않는다.(`services/project.services.ts` 의 `sanitizeProjectBody`)
+- 본문은 저장하기 전에 정제한다. 에디터가 내는 서식의 태그만 남기고, 글자도 구분선도 이미지도 없으면 저장하지 않는다.(`services/project.services.ts` 의 `sanitizeProjectBody`)
+- 본문의 이미지는 이미지 저장소의 주소만 남긴다. 본문에서 뺀 이미지와 지운 프로젝트의 본문 이미지는 파일도 지운다.(`services/project.services.ts` 의 `sanitizeProjectBody` · `toBodyImageList` · `updateProject` · `deleteProject`)
 - 맡은 범위의 영역 · 단계 이름은 `model/project.constants.ts` 에 있다. 상세 화면과 관리 화면의 폼이 함께 쓴다.
 - 분류는 정해 둔 목록(`PROJECT_CATEGORIES`)의 값만 저장한다. 읽을 때는 글자이기만 하면 받는다. 목록에서 뺀 분류의 프로젝트도 화면에 그려야 한다.(`model/project.constants.ts`, `model/project.schemas.ts`, `docs/plan/admin/README.md` 요구사항 33)
 - 썸네일은 이미지 저장소의 주소만 받는다.(`model/project.schemas.ts` 의 `ProjectImageSchema`)

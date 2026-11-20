@@ -16,6 +16,7 @@ import {
     setProjectFeatured,
     setProjectPublished,
     sortProjectList,
+    toBodyImageList,
     toProjectData,
     toProjectDetailData,
     toProjectRowData,
@@ -362,12 +363,31 @@ describe('sanitizeProjectBody', () => {
         expect(sanitizeProjectBody(body)).toBe(body);
     });
 
-    it('스크립트 · 이미지 · 표와 이벤트 속성을 걷어 낸다', () => {
+    it('스크립트와 이벤트 속성을 걷어 낸다', () => {
         expect(
             sanitizeProjectBody(
-                '<p style="color:red" onclick="x()">글</p><img src="x" onerror="x()"><table><tr><td>칸</td></tr></table><iframe src="x"></iframe>',
+                '<p style="color:red" onclick="x()">글</p><script>x()</script><iframe src="x"></iframe>',
             ),
-        ).toBe('<p>글</p>칸');
+        ).toBe('<p>글</p>');
+    });
+
+    it('이미지는 이미지 저장소의 주소만 남긴다', () => {
+        const image =
+            '<img src="https://store.public.blob.vercel-storage.com/projects/a.webp" alt="화면" />';
+        expect(sanitizeProjectBody(`<p>${image}</p>`)).toBe(`<p>${image}</p>`);
+        expect(
+            sanitizeProjectBody('<p>글<img src="https://example.com/a.png" onerror="x()"></p>'),
+        ).toBe('<p>글</p>');
+    });
+
+    it('표는 칸의 병합만 남기고 모양 속성을 걷어 낸다', () => {
+        expect(
+            sanitizeProjectBody(
+                '<table style="min-width: 50px"><colgroup><col style="min-width: 25px"></colgroup><tbody><tr><th colspan="2" rowspan="1"><p>머리</p></th></tr><tr><td><p>칸</p></td><td><p>칸</p></td></tr></tbody></table>',
+            ),
+        ).toBe(
+            '<table><tbody><tr><th colspan="2" rowspan="1"><p>머리</p></th></tr><tr><td><p>칸</p></td><td><p>칸</p></td></tr></tbody></table>',
+        );
     });
 
     it('링크는 http · https 주소만 남긴다', () => {
@@ -383,6 +403,27 @@ describe('sanitizeProjectBody', () => {
         expect(sanitizeProjectBody('<h2>  </h2><p><br></p>')).toBeNull();
         expect(sanitizeProjectBody('<hr>')).not.toBeNull();
     });
+
+    it('글자 없이 이미지만 있어도 남긴다', () => {
+        expect(
+            sanitizeProjectBody(
+                '<p><img src="https://store.public.blob.vercel-storage.com/projects/a.webp" alt="화면"></p>',
+            ),
+        ).not.toBeNull();
+    });
+});
+
+describe('toBodyImageList', () => {
+    it('본문에 든 이미지 저장소의 주소를 겹치지 않게 낸다', () => {
+        const a = 'https://store.public.blob.vercel-storage.com/projects/a.webp';
+        const b = 'https://store.public.blob.vercel-storage.com/projects/b.webp';
+        expect(
+            toBodyImageList(
+                `<p><img src="${a}" alt=""></p><p>글</p><p><img src="${b}" alt=""><img src="${a}" alt=""></p><img src="https://example.com/c.png">`,
+            ),
+        ).toEqual([a, b]);
+        expect(toBodyImageList(undefined)).toEqual([]);
+    });
 });
 
 describe('updateProject', () => {
@@ -395,6 +436,17 @@ describe('updateProject', () => {
     it('썸네일을 바꾸거나 지우면 이전 파일을 지운다', async () => {
         repository.getProject.mockResolvedValue({ ...BASE, image: IMAGE });
         expect(await updateProject('a', CONTENT)).toBe(PROJECT_SAVE_STATUS.SAVED);
+        expect(repository.deleteImage).toHaveBeenCalledWith(IMAGE_SRC);
+    });
+
+    it('본문에서 뺀 이미지의 파일을 지운다', async () => {
+        const other = 'https://store.public.blob.vercel-storage.com/projects/b.png';
+        repository.getProject.mockResolvedValue({
+            ...BASE,
+            body: `<p><img src="${IMAGE_SRC}" alt=""></p><p><img src="${other}" alt=""></p>`,
+        });
+        await updateProject('a', { ...CONTENT, body: `<p><img src="${other}" alt=""></p>` });
+        expect(repository.deleteImage).toHaveBeenCalledTimes(1);
         expect(repository.deleteImage).toHaveBeenCalledWith(IMAGE_SRC);
     });
 
@@ -490,6 +542,15 @@ describe('deleteProject', () => {
         expect(repository.deleteImage).toHaveBeenCalledWith(IMAGE_SRC);
     });
 
+    it('본문 이미지의 파일도 함께 지운다', async () => {
+        repository.getProject.mockResolvedValue({
+            ...BASE,
+            body: `<p><img src="${IMAGE_SRC}" alt=""></p>`,
+        });
+        await deleteProject('a');
+        expect(repository.deleteImage).toHaveBeenCalledWith(IMAGE_SRC);
+    });
+
     it('그 id 의 프로젝트가 없으면 지우지 않는다', async () => {
         repository.getProject.mockResolvedValue(null);
         expect(await deleteProject('none')).toBe(PROJECT_SAVE_STATUS.NOT_FOUND);
@@ -502,6 +563,14 @@ describe('discardProjectImage', () => {
         repository.getProjectList.mockResolvedValue([BASE]);
         expect(await discardProjectImage(IMAGE_SRC)).toBe(PROJECT_SAVE_STATUS.SAVED);
         expect(repository.deleteImage).toHaveBeenCalledWith(IMAGE_SRC);
+    });
+
+    it('저장된 프로젝트가 본문에 쓰는 파일은 지우지 않는다', async () => {
+        repository.getProjectList.mockResolvedValue([
+            { ...BASE, body: `<p><img src="${IMAGE_SRC}" alt=""></p>` },
+        ]);
+        expect(await discardProjectImage(IMAGE_SRC)).toBe(PROJECT_SAVE_STATUS.INVALID);
+        expect(repository.deleteImage).not.toHaveBeenCalled();
     });
 
     it('저장된 프로젝트가 쓰는 파일은 지우지 않는다', async () => {

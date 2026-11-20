@@ -220,6 +220,7 @@ function toContent(project: ProjectResponse): ProjectEditorContent {
  * 본문에 남기는 태그. 관리 화면의 에디터가 내는 서식이다.(src/shared/ui/tiptapEditor/TiptapEditor.tsx)
  * 이 밖의 태그와 속성은 저장하기 전에 걷어 낸다. 읽는 화면은 본문을 정제하지 않고 그대로 그린다.
  * (src/shared/ui/tiptapViewer/TiptapViewer.tsx)
+ * 이미지와 표도 남긴다.(2026-11-20 사용자 결정)
  */
 const BODY_ALLOWED_TAGS = [
     'h2',
@@ -238,11 +239,46 @@ const BODY_ALLOWED_TAGS = [
     'ol',
     'li',
     'a',
+    'img',
+    'table',
+    'tbody',
+    'tr',
+    'th',
+    'td',
 ];
 
+/** 본문의 이미지로 받는 주소인가. 썸네일과 같이 이미지 저장소의 주소만 받는다 */
+function isBodyImageSrc(src: string | undefined): boolean {
+    return ProjectImageSchema.shape.src.safeParse(src).success;
+}
+
 /**
- * 본문을 정제한다. 에디터의 서식 태그만 남기고, 링크는 http · https 주소만 남긴다
- * @returns 정제한 HTML. 글자도 구분선도 없으면 null. 빈 에디터는 빈 문단 하나를 낸다
+ * 본문에 든 이미지의 주소. 정제한 본문에서 읽는다
+ * @param body - 저장된 본문. 없으면 빈 목록을 낸다
+ */
+export function toBodyImageList(body: string | undefined): string[] {
+    if (!body) {
+        return [];
+    }
+    const list: string[] = [];
+    sanitizeHtml(body, {
+        allowedTags: ['img'],
+        allowedAttributes: { img: ['src'] },
+        exclusiveFilter: (frame) => {
+            const src = frame.attribs['src'];
+            if (frame.tag === 'img' && src && isBodyImageSrc(src)) {
+                list.push(src);
+            }
+            return false;
+        },
+    });
+    return [...new Set(list)];
+}
+
+/**
+ * 본문을 정제한다. 에디터의 서식 태그만 남기고, 링크는 http · https 주소만 남긴다.
+ * 이미지는 이미지 저장소의 주소만 남긴다
+ * @returns 정제한 HTML. 글자도 구분선도 이미지도 없으면 null. 빈 에디터는 빈 문단 하나를 낸다
  */
 export function sanitizeProjectBody(body: string | undefined): string | null {
     if (body === undefined) {
@@ -250,11 +286,19 @@ export function sanitizeProjectBody(body: string | undefined): string | null {
     }
     const sanitized = sanitizeHtml(body, {
         allowedTags: BODY_ALLOWED_TAGS,
-        allowedAttributes: { a: ['href', 'target', 'rel'], ol: ['start'] },
+        allowedAttributes: {
+            a: ['href', 'target', 'rel'],
+            ol: ['start'],
+            img: ['src', 'alt', 'width', 'height'],
+            th: ['colspan', 'rowspan'],
+            td: ['colspan', 'rowspan'],
+        },
         allowedSchemes: ['http', 'https', 'mailto'],
+        exclusiveFilter: (frame) => frame.tag === 'img' && !isBodyImageSrc(frame.attribs['src']),
     }).trim();
     const text = sanitizeHtml(sanitized, { allowedTags: [], allowedAttributes: {} }).trim();
-    return text === '' && !sanitized.includes('<hr') ? null : sanitized;
+    const hasBlock = sanitized.includes('<hr') || sanitized.includes('<img');
+    return text === '' && !hasBlock ? null : sanitized;
 }
 
 /**
@@ -324,7 +368,8 @@ export async function createProject(content: unknown): Promise<ProjectSaveStatus
 }
 
 /**
- * 프로젝트 1건을 검증하고 고친다. 썸네일을 바꾸거나 지웠으면 이전 파일도 지운다
+ * 프로젝트 1건을 검증하고 고친다. 썸네일을 바꾸거나 지웠으면 이전 파일도 지운다.
+ * 본문에서 뺀 이미지의 파일도 지운다
  * @param id - 고칠 프로젝트의 id
  * @param content - 폼이 보낸 내용
  */
@@ -341,6 +386,9 @@ export async function updateProject(id: string, content: unknown): Promise<Proje
     if (previous.image && previous.image.src !== parsed.image?.src) {
         await removeImage(previous.image.src);
     }
+    const kept = toBodyImageList(parsed.body);
+    const dropped = toBodyImageList(previous.body).filter((src) => !kept.includes(src));
+    await Promise.all(dropped.map(removeImage));
     return PROJECT_SAVE_STATUS.SAVED;
 }
 
@@ -410,7 +458,7 @@ export async function reorderProjectList(ids: unknown): Promise<ProjectSaveStatu
 }
 
 /**
- * 프로젝트 1건을 지운다. 문서와 썸네일 파일을 함께 지운다
+ * 프로젝트 1건을 지운다. 문서와 썸네일 · 본문 이미지의 파일을 함께 지운다
  * @param id - 지울 프로젝트의 id
  */
 export async function deleteProject(id: string): Promise<ProjectSaveStatus> {
@@ -422,6 +470,7 @@ export async function deleteProject(id: string): Promise<ProjectSaveStatus> {
     if (previous.image) {
         await removeImage(previous.image.src);
     }
+    await Promise.all(toBodyImageList(previous.body).map(removeImage));
     return PROJECT_SAVE_STATUS.SAVED;
 }
 
@@ -438,7 +487,7 @@ export async function createProjectImageUploadToken(
 }
 
 /**
- * 올려 두고 저장하지 않은 썸네일 파일을 지운다. 저장된 프로젝트가 쓰는 파일은 지우지 않는다.
+ * 올려 두고 저장하지 않은 썸네일 파일을 지운다. 저장된 프로젝트가 썸네일이나 본문에 쓰는 파일은 지우지 않는다.
  * 그런 파일은 프로젝트를 고치거나 지울 때 함께 지운다
  * @param src - 지울 파일의 주소
  */
@@ -448,7 +497,12 @@ export async function discardProjectImage(src: unknown): Promise<ProjectSaveStat
         return PROJECT_SAVE_STATUS.INVALID;
     }
     const list = await projectRepository.getProjectList();
-    if (list.some((project) => project.image?.src === parsed.data)) {
+    const isUsed = list.some(
+        (project) =>
+            project.image?.src === parsed.data ||
+            toBodyImageList(project.body).includes(parsed.data),
+    );
+    if (isUsed) {
         return PROJECT_SAVE_STATUS.INVALID;
     }
     await projectRepository.deleteImage(parsed.data);

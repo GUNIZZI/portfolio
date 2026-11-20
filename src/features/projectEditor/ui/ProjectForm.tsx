@@ -13,7 +13,7 @@ import {
     discardProjectImageAction,
     updateProjectAction,
 } from '@/entities/project/actions/project.actions';
-import { PROJECT_CATEGORIES } from '@/entities/project/model/project.constants';
+import { PROJECT_CATEGORIES, PROJECT_IMAGE } from '@/entities/project/model/project.constants';
 import type { ProjectContentType } from '@/entities/project/model/project.schemas';
 import {
     PROJECT_SAVE_STATUS,
@@ -79,6 +79,8 @@ function ProjectFormBody({ project }: OwnProps) {
     const image = useWatch({ control, name: 'image' });
     const isPublished = useWatch({ control, name: 'published' });
     const { isUploading, error: uploadError, uploadImage, clearError } = useImageUpload();
+    /** 본문에 넣는 이미지. 썸네일과 따로 올리고 오류도 따로 보여 준다 */
+    const bodyUpload = useImageUpload();
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const toast = useToast();
@@ -108,7 +110,7 @@ function ProjectFormBody({ project }: OwnProps) {
     );
 
     const isEdit = project !== null;
-    const isBlocked = (isEdit && !isDirty) || !isValid || isUploading;
+    const isBlocked = (isEdit && !isDirty) || !isValid || isUploading || bodyUpload.isUploading;
 
     async function hndlImageSelect(file: File) {
         const uploaded = await uploadImage(file);
@@ -314,10 +316,13 @@ function ProjectFormBody({ project }: OwnProps) {
                                     value={field.value}
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}
+                                    onImageUpload={bodyUpload.uploadImage}
+                                    imageAccept={PROJECT_IMAGE.CONTENT_TYPES.join(',')}
                                     className="h-100 md:h-150"
                                 />
                             )}
                         />
+                        <FieldError>{bodyUpload.error}</FieldError>
                     </div>
                     <div className="flex flex-wrap items-center justify-end gap-2 py-5">
                         {project ? (

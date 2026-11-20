@@ -2,8 +2,18 @@
 
 import '../tiptapViewer/tiptapContent.css';
 
-import { type KeyboardEvent, type ReactNode, useEffect, useId, useState } from 'react';
+import {
+    type ChangeEvent,
+    type KeyboardEvent,
+    type ReactNode,
+    useEffect,
+    useId,
+    useRef,
+    useState,
+} from 'react';
 
+import Image from '@tiptap/extension-image';
+import { TableKit } from '@tiptap/extension-table';
 import { type Editor, EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {
@@ -11,6 +21,7 @@ import {
     Code,
     Heading2,
     Heading3,
+    ImagePlus,
     Link as LinkIcon,
     List,
     ListOrdered,
@@ -18,6 +29,7 @@ import {
     Quote,
     SquareCode,
     Strikethrough,
+    Table as TableIcon,
 } from 'lucide-react';
 
 import { cn } from '@/shared/util/cn';
@@ -25,6 +37,16 @@ import { cn } from '@/shared/util/cn';
 import { Button } from '../button/button';
 import { Input } from '../input/input';
 import { Separator } from '../separator/separator';
+
+/** 본문에 넣을 이미지 1장. 올린 뒤의 주소와 크기다 */
+export interface TiptapImage {
+    src: string;
+    width: number;
+    height: number;
+}
+
+/** 표를 처음 넣을 때의 크기. 첫 줄은 머리 줄이다 */
+const TABLE_INITIAL = { rows: 3, cols: 3, withHeaderRow: true };
 
 interface OwnProps {
     /** 본문의 HTML. 바깥에서 값을 바꾸면 에디터의 내용도 그 값으로 바꾼다 */
@@ -34,6 +56,13 @@ interface OwnProps {
     onBlur?: () => void;
     /** 편집 영역의 이름. 스크린 리더가 읽는다 */
     label: string;
+    /**
+     * 고른 파일을 올리고 그 주소와 크기를 낸다. 넘기지 않으면 이미지 버튼을 그리지 않는다.
+     * 올리지 못했으면 null 을 낸다. 이유를 알리는 일은 부르는 쪽이 한다
+     */
+    onImageUpload?: (file: File) => Promise<TiptapImage | null>;
+    /** 파일을 고르는 창이 받는 형식. `image/png,image/jpeg` */
+    imageAccept?: string;
     className?: string;
 }
 
@@ -44,6 +73,10 @@ const EXTENSIONS = [
         // 쓰는 동안 링크를 눌러도 열리지 않게 한다. 주소는 도구 줄에서 넣는다
         link: { openOnClick: false, autolink: true, defaultProtocol: 'https' },
     }),
+    // 이미지는 문단 사이에 한 줄을 차지한다. 주소는 올린 파일의 것만 넣는다
+    Image.configure({ inline: false, allowBase64: false }),
+    // 칸의 폭은 읽는 화면의 CSS 가 고르게 나눈다. 끌어서 폭을 바꾸지 않는다
+    TableKit.configure({ table: { resizable: false } }),
 ];
 
 interface ToolAttributes {
@@ -72,10 +105,15 @@ function Tool({ label, isActive, onClick, children }: ToolAttributes) {
 
 interface ToolbarAttributes {
     editor: Editor;
+    onImageUpload: OwnProps['onImageUpload'];
+    imageAccept: OwnProps['imageAccept'];
 }
 
-/** 서식 버튼의 줄. 링크는 주소를 적는 입력을 줄 아래에 펼친다 */
-function Toolbar({ editor }: ToolbarAttributes) {
+/**
+ * 서식 버튼의 줄. 링크는 주소를 적는 입력을 줄 아래에 펼친다.
+ * 이미지를 골랐으면 대체 텍스트 입력을, 표 안에 있으면 줄 · 칸을 고치는 버튼을 줄 아래에 펼친다
+ */
+function Toolbar({ editor, onImageUpload, imageAccept }: ToolbarAttributes) {
     const active = useEditorState({
         editor,
         selector: ({ editor: current }) => ({
@@ -89,8 +127,14 @@ function Toolbar({ editor }: ToolbarAttributes) {
             code: current.isActive('code'),
             codeBlock: current.isActive('codeBlock'),
             link: current.isActive('link'),
+            image: current.isActive('image'),
+            imageAlt: current.getAttributes('image')['alt'] as unknown,
+            table: current.isActive('table'),
         }),
     });
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const altInputId = useId();
     /** 링크 주소를 적는 중이면 그 값. 입력을 닫아 두었으면 null */
     const [linkDraft, setLinkDraft] = useState<string | null>(null);
     const linkInputId = useId();
@@ -124,6 +168,23 @@ function Toolbar({ editor }: ToolbarAttributes) {
         // 폼이 제출되지 않게 막는다
         event.preventDefault();
         hndlLinkApply();
+    }
+
+    async function hndlImageChange(event: ChangeEvent<HTMLInputElement>) {
+        const [file] = event.target.files ?? [];
+        // 같은 파일을 다시 골라도 change 가 오게 비운다
+        event.target.value = '';
+        if (!file || !onImageUpload) return;
+
+        setIsUploading(true);
+        try {
+            const image = await onImageUpload(file);
+            if (image) {
+                editor.chain().focus().setImage(image).run();
+            }
+        } finally {
+            setIsUploading(false);
+        }
     }
 
     return (
@@ -204,7 +265,111 @@ function Toolbar({ editor }: ToolbarAttributes) {
                 >
                     <Minus aria-hidden="true" />
                 </Tool>
+                <Separator orientation="vertical" className="mx-1 h-4" />
+                {onImageUpload ? (
+                    <>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept={imageAccept}
+                            hidden
+                            onChange={(event) => {
+                                void hndlImageChange(event);
+                            }}
+                        />
+                        <Button
+                            variant="ghost"
+                            size="2xs"
+                            aria-label="이미지"
+                            isLoading={isUploading}
+                            onClick={() => fileInputRef.current?.click()}
+                            className="w-7 items-center justify-center p-0"
+                        >
+                            <ImagePlus aria-hidden="true" />
+                        </Button>
+                    </>
+                ) : null}
+                <Tool
+                    label="표"
+                    isActive={active.table}
+                    onClick={() => editor.chain().focus().insertTable(TABLE_INITIAL).run()}
+                >
+                    <TableIcon aria-hidden="true" />
+                </Tool>
             </div>
+            {active.image ? (
+                <div className="flex items-center gap-2 px-2 pb-2">
+                    <label htmlFor={altInputId} className="text-caption text-muted-foreground">
+                        대체 텍스트
+                    </label>
+                    <Input
+                        id={altInputId}
+                        size="xs"
+                        placeholder="이미지가 보여 주는 것"
+                        value={typeof active.imageAlt === 'string' ? active.imageAlt : ''}
+                        onChange={(event) => {
+                            editor.commands.updateAttributes('image', { alt: event.target.value });
+                        }}
+                        className="max-w-80"
+                    />
+                </div>
+            ) : null}
+            {active.table ? (
+                <div
+                    role="toolbar"
+                    aria-label="표"
+                    className="flex flex-wrap items-center gap-1 px-2 pb-2"
+                >
+                    <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => editor.chain().focus().addRowAfter().run()}
+                        className="items-center"
+                    >
+                        줄 더하기
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => editor.chain().focus().deleteRow().run()}
+                        className="items-center"
+                    >
+                        줄 지우기
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => editor.chain().focus().addColumnAfter().run()}
+                        className="items-center"
+                    >
+                        칸 더하기
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => editor.chain().focus().deleteColumn().run()}
+                        className="items-center"
+                    >
+                        칸 지우기
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+                        className="items-center"
+                    >
+                        머리 줄
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => editor.chain().focus().deleteTable().run()}
+                        className="items-center"
+                    >
+                        표 지우기
+                    </Button>
+                </div>
+            ) : null}
             {linkDraft === null ? null : (
                 <div className="flex items-center gap-2 px-2 pb-2">
                     <label htmlFor={linkInputId} className="text-caption text-muted-foreground">
@@ -245,10 +410,18 @@ function Toolbar({ editor }: ToolbarAttributes) {
 /**
  * Tiptap 으로 본문을 쓰는 에디터. 내는 값은 HTML 이다.
  * 편집 영역은 읽는 화면(TiptapViewer)과 같은 서식 클래스를 달아, 쓰면서 보던 모습 그대로 읽힌다.
- * 서식은 제목(h2 · h3) · 굵게 · 취소선 · 코드 · 링크 · 목록 · 인용 · 코드 블록 · 구분선이다.
- * 이미지와 표는 받지 않는다.(docs/plan/admin/README.md 「등록 · 수정」)
+ * 서식은 제목(h2 · h3) · 굵게 · 취소선 · 코드 · 링크 · 목록 · 인용 · 코드 블록 · 구분선 · 이미지 · 표다.
+ * (docs/plan/admin/README.md 「등록 · 수정」, 이미지와 표는 2026-11-20 사용자 결정)
  */
-export default function TiptapEditor({ value, onChange, onBlur, label, className }: OwnProps) {
+export default function TiptapEditor({
+    value,
+    onChange,
+    onBlur,
+    label,
+    onImageUpload,
+    imageAccept,
+    className,
+}: OwnProps) {
     const editor = useEditor({
         extensions: EXTENSIONS,
         content: value,
@@ -285,7 +458,9 @@ export default function TiptapEditor({ value, onChange, onBlur, label, className
                 className,
             )}
         >
-            {editor ? <Toolbar editor={editor} /> : null}
+            {editor ? (
+                <Toolbar editor={editor} onImageUpload={onImageUpload} imageAccept={imageAccept} />
+            ) : null}
             <EditorContent editor={editor} />
         </div>
     );
