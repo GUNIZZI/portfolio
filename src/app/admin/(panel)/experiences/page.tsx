@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
-import { AdminGuard } from '@/features/adminAuth';
+import { AdminGuard, AdminGuardFallback } from '@/features/adminAuth';
 import { ExperienceError, ExperienceList } from '@/features/experienceEditor';
 import type { ExperienceRowData } from '@/entities/experience/model/experience.types';
 import { getExperienceRowList } from '@/entities/experience/services/experience.services';
@@ -22,7 +22,7 @@ export default async function AdminExperienceListPage() {
     const experiences = await loadExperienceRowList();
 
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<AdminGuardFallback />}>
             <AdminGuard>
                 <main className="mx-auto flex max-w-page flex-col gap-8 px-gutter py-10">
                     <div>

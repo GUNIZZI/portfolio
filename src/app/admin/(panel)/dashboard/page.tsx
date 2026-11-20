@@ -1,13 +1,13 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
-import { AdminGuard } from '@/features/adminAuth';
+import { AdminGuard, AdminGuardFallback } from '@/features/adminAuth';
 
 export const metadata: Metadata = { title: '대시보드' };
 
 export default function AdminDashboardPage() {
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<AdminGuardFallback />}>
             <AdminGuard>
                 <main className="mx-auto max-w-page px-gutter py-10">
                     <h1 className="text-section font-bold text-strong">대시보드</h1>

@@ -21,9 +21,25 @@
     --animate-loader-slow: loader 2s linear infinite;
     --animate-loader-slower: loader 4s linear infinite;
 
+    /*
+     * 기다리는 틀. 내용이 올 자리를 그린 면 위로 옅은 빛이 왼쪽에서 오른쪽으로 지나가기를 되풀이한다.
+     * 로더처럼 진행 중임을 알리는 표시라 한 번 지나가는 시간을 여기 적는다. 빛의 자리만 옮기고 면의 크기는 그대로다.
+     * 동작 줄이기에서는 쓰는 쪽이 motion-safe 로 걸러 빛이 없는 면만 보인다 (src/features/adminAuth/ui/AdminGuardFallback.tsx)
+     */
+    --animate-skeleton: skeleton 1.6s var(--ease-move) infinite;
+
     @keyframes loader {
         to {
             rotate: 1turn;
+        }
+    }
+
+    @keyframes skeleton {
+        from {
+            translate: -100%;
+        }
+        to {
+            translate: 100%;
         }
     }
 

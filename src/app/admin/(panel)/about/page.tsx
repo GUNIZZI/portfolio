@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 import { AboutEditor, AboutEditorError } from '@/features/aboutEditor';
-import { AdminGuard } from '@/features/adminAuth';
+import { AdminGuard, AdminGuardFallback } from '@/features/adminAuth';
 import type { AboutEditorData } from '@/entities/about/model/about.types';
 import { getAboutEditor } from '@/entities/about/services/about.services';
 
@@ -22,7 +22,7 @@ export default async function AdminAboutPage() {
     const data = await loadAboutEditor();
 
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<AdminGuardFallback />}>
             <AdminGuard>
                 <main className="mx-auto flex max-w-page flex-col gap-8 px-gutter py-10">
                     <div>

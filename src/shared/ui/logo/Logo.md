@@ -18,5 +18,5 @@
 ## 이 컴포넌트를 고칠 때
 
 그림은 `public/images/logo/logo.svg`(다크)와 `logo-light.svg`(라이트) 2장이다. 글자색만 다르다.(`Logo.tsx` 의 `LOGO_IMAGES`)
-그림을 바꿀 때는 2장을 함께 바꾼다. 비율은 1312:364 이고, 높이는 `size` 가 정하며 폭은 비율을 따른다.(`Logo.tsx` 의 `LOGO_SIZE_CLASS`)
+그림을 바꿀 때는 2장을 함께 바꾼다. G 심볼을 바꾸면 심볼만 떼어 낸 `symbol.svg` 도 함께 바꾼다.(`src/shared/ui/logoLoader/LogoLoader.md`) 비율은 1312:364 이고, 높이는 `size` 가 정하며 폭은 비율을 따른다.(`Logo.tsx` 의 `LOGO_SIZE_CLASS`)
 직함 글자는 윤곽선(path)이다. 원본의 `Frontend Developer` 를 `Web Frontend Developer` 로 다시 짰다.(2026-11-16 사용자 결정)
