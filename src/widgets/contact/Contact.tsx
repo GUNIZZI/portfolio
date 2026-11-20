@@ -43,9 +43,14 @@ export default function Contact() {
                     <br />
                     언제든 편하게 메일 주세요.
                 </p>
-                <Button asChild effect="sweep" className="group self-start">
+                <Button
+                    asChild
+                    effect="sweep"
+                    arrow="end"
+                    icon={<Icon name="send" size={18} strokeWidth={2} />}
+                    className="group self-start"
+                >
                     <a href={mailto}>
-                        <Icon name="send" size={18} strokeWidth={2} />
                         {/*
                       두 문구를 같은 칸에 겹쳐 둔다. 문구가 바뀌어도 버튼 폭이 변하지 않는다.
                       마우스를 올리면 문구가 위로 말려 올라가고 메일 주소가 아래에서 올라온다.
@@ -73,7 +78,6 @@ export default function Contact() {
                                 {SITE.email}
                             </span>
                         </span>
-                        <Icon name="arrowRight" size={16} strokeWidth={2.2} />
                     </a>
                 </Button>
             </div>

@@ -16,7 +16,7 @@
 3. **동작 줄이기 설정을 따른다.** OS 에서 동작 줄이기를 켠 사용자에게는 움직임 없이 최종 상태를 보여 준다.
 4. **레이아웃을 밀지 않는 속성만 움직인다.** `transform` · `opacity` 가 기본이고 `clip-path` 도 해당한다.(2026-11-16 사용자 결정)
    `width` · `top` · `margin` 을 애니메이션하면 매 프레임 레이아웃을 다시 계산한다.
-    - `clip-path` 는 버튼의 면이 넓어지는 연출에 쓴다. 폭을 움직이지 않고 가려 둔 면을 드러낸다.(`src/shared/ui/button/button.tsx`)
+    - `clip-path` 를 쓰는 곳은 지금 없다. 버튼의 면이 넓어지는 연출에 썼으나 그 연출을 없앴다.(2026-11-20 사용자 결정, `src/shared/ui/button/button.md` 「sweep」)
     - `filter` 는 페이지 전환에서 화면이 번지는 연출에 쓴다. 레이아웃을 다시 계산하지 않는다.(2026-11-18 사용자 결정, `src/style/viewTransition.css`)
     - 예외가 2곳 있다. 작업 카드의 테두리 선은 `border-color` · `box-shadow` 를 움직인다.(아래 「미정리 항목」) 소개의 경력은 회사를 여닫을 때 프로젝트 목록과 회사 요약의 높이를 움직인다.(2026-11-16 사용자 결정, `src/features/experienceTimeline/ui/ExperienceTimeline.tsx`, `docs/plan/about/README.md` 「모션」)
 

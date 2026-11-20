@@ -1,6 +1,5 @@
 import { Button } from '@/shared/ui/button/button';
 import DrawnPath from '@/shared/ui/drawnPath/DrawnPath';
-import Icon from '@/shared/ui/icon/Icon';
 import { cn } from '@/shared/util/cn';
 import { SITE } from '@/config/site';
 
@@ -73,11 +72,8 @@ export default function Hero() {
                 </ul>
 
                 <div className="mt-2 flex flex-wrap gap-4">
-                    <Button asChild effect="sweep">
-                        <a href="#projects">
-                            View My Projects
-                            <Icon name="arrowRight" size={18} strokeWidth={2.2} />
-                        </a>
+                    <Button asChild effect="sweep" arrow="end">
+                        <a href="#projects">View My Projects</a>
                     </Button>
                 </div>
 

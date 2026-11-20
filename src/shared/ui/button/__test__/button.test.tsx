@@ -50,3 +50,36 @@ describe('Button 의 isLoading', () => {
         expect(hndlClick).toHaveBeenCalledOnce();
     });
 });
+
+describe('Button 의 arrow · icon', () => {
+    it('arrow="end" 는 글자 뒤에, arrow="start" 는 글자 앞에 화살표를 그린다', () => {
+        const { rerender } = render(<Button arrow="end">다음</Button>);
+        const content = () => screen.getByRole('button', { name: '다음' }).lastElementChild;
+
+        expect(content()?.lastElementChild).toHaveClass('lucide-arrow-right');
+
+        rerender(<Button arrow="start">다음</Button>);
+        expect(content()?.firstElementChild).toHaveClass('lucide-arrow-left');
+    });
+
+    it('sweep 에서 화살표만 밀리고, icon 과 자식으로 넣은 아이콘은 밀리지 않는다', () => {
+        render(
+            <Button effect="sweep" arrow="end" icon={<svg data-testid="icon" />}>
+                <svg data-testid="child" />
+                보내기
+            </Button>,
+        );
+        const arrow = screen.getByRole('button', { name: '보내기' }).querySelector('.lucide');
+
+        expect(arrow?.getAttribute('class')).toContain('translate-x-1');
+        expect(screen.getByTestId('icon').getAttribute('class') ?? '').not.toContain('translate');
+        expect(screen.getByTestId('child').getAttribute('class') ?? '').not.toContain('translate');
+    });
+
+    it('effect 를 주지 않으면 화살표도 밀리지 않는다', () => {
+        render(<Button arrow="end">다음</Button>);
+        const arrow = screen.getByRole('button', { name: '다음' }).querySelector('.lucide');
+
+        expect(arrow?.getAttribute('class')).not.toContain('translate');
+    });
+});

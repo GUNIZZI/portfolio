@@ -1,5 +1,4 @@
 import { Button } from '@/shared/ui/button/button';
-import Icon from '@/shared/ui/icon/Icon';
 import { SITE } from '@/config/site';
 
 import HeaderBar from './HeaderBar';
@@ -14,11 +13,8 @@ export default function Header() {
             name={SITE.name}
             action={
                 // 연락 섹션은 모든 페이지에 있다(widgets/contact)
-                <Button asChild variant="brand" size="md" effect="sweep">
-                    <a href="#contact">
-                        Contact
-                        <Icon name="arrowRight" size={16} strokeWidth={2} />
-                    </a>
+                <Button asChild variant="brand" size="md" effect="sweep" arrow="end">
+                    <a href="#contact">Contact</a>
                 </Button>
             }
         />

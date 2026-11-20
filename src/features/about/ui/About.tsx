@@ -71,12 +71,10 @@ export default function About({ about }: OwnProps) {
                         variant="outlineBrand"
                         size="md"
                         effect="sweep"
+                        arrow="end"
                         className="self-start"
                     >
-                        <a href="/about">
-                            More About Me
-                            <Icon name="arrowRight" size={16} strokeWidth={2} />
-                        </a>
+                        <a href="/about">More About Me</a>
                     </Button>
                 </div>
 
