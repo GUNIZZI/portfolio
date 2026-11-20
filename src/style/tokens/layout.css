@@ -29,6 +29,11 @@
     height: calc(100dvh - var(--header-height, 0px));
 }
 
+/* 붙은 헤더 아래의 첫 화면을 채우는 최소 높이. 404 화면이 쓴다 */
+@utility min-h-below-header {
+    min-height: calc(100dvh - var(--header-height, 0px));
+}
+
 /* 좌우 여백. 좁은 화면 16px 에서 넓은 화면 40px 까지 */
 @utility px-gutter {
     padding-inline: clamp(16px, 4vw, 40px);

@@ -17,6 +17,7 @@ const twMerge = extendTailwindMerge({
                 'hand-sm',
                 'hand',
                 'hero',
+                'error-code',
                 'hero-sub',
                 'greeting',
                 'role',

@@ -249,5 +249,5 @@ test('작업 상세에서 헤더의 Projects 나 All Projects 를 누르면 목�
 
 test('없는 작업의 주소로 들어오면 찾을 수 없다고 알린다', async ({ page }) => {
     await page.goto('/work/none');
-    await expect(page.getByRole('heading', { name: '찾을 수 없음' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /Page Not Found/ })).toBeVisible();
 });

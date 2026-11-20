@@ -1,30 +1,10 @@
 import '@/style/global.css';
 
 import type { Metadata, Viewport } from 'next';
-import { Caveat, Noto_Sans_KR, Permanent_Marker } from 'next/font/google';
 
+import { FONT_CLASS } from '@/_app/fonts';
 import Providers from '@/_app/Providers';
-import { cn } from '@/shared/util/cn';
 import { SITE } from '@/config/site';
-
-// 서체 선택의 근거는 docs/design.md 2절이 갖는다
-const notoSansKr = Noto_Sans_KR({
-    variable: '--font-noto-sans-kr',
-    subsets: ['latin'],
-    display: 'swap',
-});
-const permanentMarker = Permanent_Marker({
-    variable: '--font-permanent-marker',
-    weight: '400',
-    subsets: ['latin'],
-    display: 'swap',
-});
-const caveat = Caveat({
-    variable: '--font-caveat',
-    weight: '700',
-    subsets: ['latin'],
-    display: 'swap',
-});
 
 export const metadata: Metadata = {
     title: { default: SITE.title, template: `%s — ${SITE.name}` },
@@ -48,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             data-scroll-behavior="smooth"
             // next-themes 가 React 보다 먼저 html 에 data-theme 을 적는다. html 한 요소의 속성 차이만 넘긴다
             suppressHydrationWarning
-            className={cn(notoSansKr.variable, permanentMarker.variable, caveat.variable)}
+            className={FONT_CLASS}
         >
             {/*
               브라우저 확장 프로그램이 body 에 속성을 덧붙이면(ColorZilla 의 cz-shortcut-listen 등)

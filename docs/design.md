@@ -89,6 +89,7 @@
 구현은 원본이 지정한 Noto Sans KR 을 실제로 불러온다. 한글 굵기가 원본 화면과 조금 다른 이유다.
 
 `clamp()` 로 커지는 크기는 `text-hero` · `text-section` 처럼 이름을 붙였다. 값은 원본 그대로다.
+`text-error-code` 는 원본에 없다. 404 화면의 숫자에 쓰고, 값은 404 시안에서 가져왔다.(2026-11-20 사용자가 준 시안, `src/features/statusScreen/ui/StatusScreen.tsx`)
 
 ## 3. 배치
 

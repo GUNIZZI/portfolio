@@ -34,7 +34,7 @@ portfolio/
 ├── docs/             규칙 문서
 ├── e2e/              Playwright
 └── src/
-    ├── _app/         Provider·전역 리스너
+    ├── _app/         Provider·전역 리스너·서체
     ├── app/          App Router 라우트
     ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact, pageTransition, adminHeader)
     ├── features/     기능 단위 (hero, featuredProjects, …)
@@ -59,8 +59,8 @@ portfolio/
 ## 3. 계층
 
 ```
-app/          라우트. page/layout/error, opengraph-image, sitemap 만. 로직 금지
-_app/         Provider. app/ 만 import 한다
+app/          라우트. page/layout/error/global-error/not-found, opengraph-image, sitemap, route 만. 로직 금지
+_app/         Provider · 서체. app/ 만 import 한다
 widgets/      여러 feature 를 조합하거나 모든 페이지에 붙는 UI. 컴포넌트 + index.ts, 필요하면 model/
 features/     기능 단위. ui/ + model/ + index.ts
 entities/     도메인 데이터. model/ · services/ · repositories/, 필요하면 actions/
@@ -230,7 +230,7 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 
 ## 미정리 항목
 
-- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` 다.
+- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` · `projectEditor`, 404 와 에러 화면의 `statusScreen` 이다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
 - widget 은 `header` · `footer` · `backdrop` · `contact` · `pageTransition` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` 이다.
 - 관리 기능은 로그인 · 소개 · 경력(2026-11-18)과 프로젝트(2026-11-19)까지 구현했다. 대시보드가 남았다.(`docs/plan/admin/README.md` 요구사항 24)
