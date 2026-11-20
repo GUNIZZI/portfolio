@@ -15,6 +15,7 @@ import {
 } from '@/entities/about/services/about.services';
 import { getExperienceList } from '@/entities/experience/services/experience.services';
 import { getProjectIdList } from '@/entities/project/services/project.services';
+import ErrorBoundary from '@/shared/ui/errorBoundary/ErrorBoundary';
 
 export const metadata: Metadata = { title: '소개' };
 
@@ -35,9 +36,24 @@ export default async function AboutPage() {
             <div className="relative z-raised">
                 <main>
                     <AboutIntro intro={intro} />
-                    <ExperienceTimeline experiences={experiences} />
-                    <WorkPrinciples principles={principles} />
-                    <SkillGroups groups={skillGroups} />
+                    <ErrorBoundary
+                        message="경력을 불러오지 못했어요."
+                        className="mx-auto mt-10 max-w-page px-gutter"
+                    >
+                        <ExperienceTimeline experiences={experiences} />
+                    </ErrorBoundary>
+                    <ErrorBoundary
+                        message="일하는 방식을 불러오지 못했어요."
+                        className="mx-auto mt-12 max-w-page px-gutter"
+                    >
+                        <WorkPrinciples principles={principles} />
+                    </ErrorBoundary>
+                    <ErrorBoundary
+                        message="기술 목록을 불러오지 못했어요."
+                        className="mx-auto mt-12 max-w-page px-gutter"
+                    >
+                        <SkillGroups groups={skillGroups} />
+                    </ErrorBoundary>
                     <Contact />
                 </main>
                 <Footer />
