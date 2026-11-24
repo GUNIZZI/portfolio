@@ -1,7 +1,6 @@
 'use client';
 
 import { type MouseEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
@@ -191,15 +190,17 @@ export default function HeaderBar({ name, action }: OwnProps) {
                         */}
                         <div className="flex items-center xl:absolute xl:left-full">
                             <ThemeToggle className="size-7" />
-                            <Link
+                            {/* 새 탭에서 연다. 보던 사이트는 그대로 남는다.(2026-11-24 사용자 결정) */}
+                            <a
                                 href={ADMIN_HREF}
-                                prefetch={false}
-                                aria-label="관리 화면"
-                                title="관리 화면"
+                                target="_blank"
+                                rel="noreferrer"
+                                aria-label="관리 화면 (새 탭)"
+                                title="관리 화면 (새 탭)"
                                 className="flex size-7 items-center justify-center text-muted-foreground hover:text-strong"
                             >
                                 <LockKeyhole aria-hidden="true" className="size-4" />
-                            </Link>
+                            </a>
                         </div>
                         <button
                             ref={menuButtonRef}
