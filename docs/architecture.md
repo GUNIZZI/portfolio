@@ -44,7 +44,8 @@ portfolio/
     ├── style/        global.css, tokens/
     ├── asset/        코드가 import 하는 정적 자원 (SVG 등)
     ├── types/        .d.ts 앰비언트 선언
-    └── proxy.ts      요청을 페이지보다 먼저 받는 Next 의 파일. 관리 화면의 1차 검사 (4.2절)
+    ├── proxy.ts      요청을 페이지보다 먼저 받는 Next 의 파일. 관리 화면의 1차 검사 (4.2절)
+    └── instrumentation-client.ts   페이지를 옮기기 시작할 때 Next 가 부르는 파일. 붓질과 관리 화면의 진행 선에 그 순간을 알린다 (`src/shared/util/routeStart.ts`)
 ```
 
 ### 2.1 그림 파일을 두는 곳

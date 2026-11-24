@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef, ViewTransition } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { gsap, useGSAP } from '@/shared/util/gsap';
+import { subscribeRouteStart } from '@/shared/util/routeStart';
+import { DURATION } from '@/style/tokens/motion';
 
 import {
     BRUSHES,
@@ -15,6 +17,7 @@ import {
 import {
     isLeftward,
     type PageTransitionMode,
+    shouldCoverEarly,
     toTransitionMode,
 } from './model/pageTransition.utils';
 
@@ -41,6 +44,12 @@ function getPaintTransform(): string {
 
 /** 페이지를 옮기는 동안 html 에 적어 두는 data 속성의 이름. `data-page-transition` 이 되고, 값은 연출의 이름이다 */
 const MOVING_KEY = 'pageTransition';
+
+/**
+ * 이전 화면을 붙잡아 두는 시간을 적는 CSS 변수 (src/style/viewTransition.css).
+ * 링크를 누른 순간부터 칠했으면, 새 페이지가 왔을 때 다 칠하기까지 남은 시간만 붙잡는다
+ */
+const HOLD_VAR = '--page-hold-duration';
 
 /** 이전 화면이 새 화면으로 바뀌는 순간에 끝나는 CSS 애니메이션의 이름 (src/style/viewTransition.css) */
 const SWAP_ANIMATION = 'page-hold-old';
@@ -84,6 +93,39 @@ function pickTones(count: number): string[] {
     return tones;
 }
 
+interface TimelineData {
+    cover: gsap.core.Timeline;
+    uncover: gsap.core.Timeline;
+}
+
+/** 붓질의 방향과 기울기, 획의 색을 정하고 칠하기 시작한다 */
+function playCover(
+    { cover, uncover }: TimelineData,
+    root: SVGSVGElement | null,
+    strokes: SVGGElement | null,
+    isReversed: boolean,
+) {
+    // 기울기는 화면의 비율에 맞춰 칠할 때마다 다시 구한다. 그 사이에 창의 크기가 바뀌었을 수 있다
+    if (root) root.style.transform = getPaintTransform();
+    if (isReversed) strokes?.setAttribute('transform', MIRROR);
+    else strokes?.removeAttribute('transform');
+    // 획의 색. 몸통과 붓털은 획의 색을 물려받는다
+    const tones = pickTones(BRUSHES.length);
+    strokes?.querySelectorAll('[data-stroke]').forEach((stroke, index) => {
+        stroke.classList.remove(...PAINT_TONES);
+        stroke.classList.add(tones[index] ?? PAINT_TONES[0]);
+    });
+    uncover.pause();
+    cover.eventCallback('onComplete', null);
+    cover.restart();
+}
+
+/** 지우기 시작한다. 다 칠하기 전이면 다 칠한 뒤에 지운다 */
+function playUncover({ cover, uncover }: TimelineData) {
+    if (cover.progress() < 1) cover.eventCallback('onComplete', () => uncover.restart());
+    else uncover.restart();
+}
+
 /** CSS 의 시간 값(`400ms` · `0.4s`)을 초로 읽는다 */
 function readSeconds(name: string): number {
     const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -98,8 +140,10 @@ function readSeconds(name: string): number {
  * 첫 획의 방향은 메뉴의 방향을 따른다.
  * 오른쪽 메뉴로 가면 왼쪽에서 오른쪽으로, 왼쪽 메뉴로 가면 반대로 시작한다.
  * 같은 메뉴 안에서 옮길 때(작업 목록 ↔ 상세)는 붓질을 그리지 않고, 화면이 번지며 바뀌는 디졸브만 한다.(2026-11-20 사용자 결정)
- * 주소가 바뀌면 표식의 key 가 바뀌어 React 가 화면 전환을 시작한다. 브라우저는 (site) 레이아웃의 틀을 찍어
- * 다 칠할 때까지 이전 화면을 붙잡아 두고(style/viewTransition.css), 그동안 GSAP 이 붓질을 그린다.
+ * 붓질은 링크를 누른 순간에 시작한다. 새 페이지가 늦으면 다 덮은 채로 기다린다.(2026-11-24 사용자 결정)
+ * 새 페이지가 와 주소가 바뀌면 표식의 key 가 바뀌어 React 가 화면 전환을 시작한다. 브라우저는 (site) 레이아웃의 틀을 찍어
+ * 다 칠할 때까지 남은 시간만큼 이전 화면을 붙잡아 두고(style/viewTransition.css), 다 칠한 순간부터 지운다.
+ * 누른 순간을 알 수 없는 이동(메뉴 밖의 주소)은 새 페이지가 온 뒤에 칠하기 시작한다.
  * 화면 전환을 지원하지 않는 브라우저와 동작 줄이기에서는 붓질 없이 페이지가 바로 바뀐다 (docs/motion.md 원칙 1)
  */
 export default function PageTransition() {
@@ -107,14 +151,65 @@ export default function PageTransition() {
     const rootRef = useRef<SVGSVGElement>(null);
     const strokesRef = useRef<SVGGElement>(null);
     const prevPathnameRef = useRef(pathname);
-    /** 붓질을 좌우로 뒤집는가. 페이지를 옮길 때마다 다시 정한다 */
-    const isReversedRef = useRef(false);
     /** 주소가 바뀌어 시작된 화면 전환을 기다리는 중인가. 새로고침한 뒤 저절로 시작되는 화면 전환과 구분한다 */
     const isMovingRef = useRef(false);
     /** 이번에 옮길 때의 연출. 페이지를 옮길 때마다 다시 정한다 */
     const modeRef = useRef<PageTransitionMode>('paint');
+    /** 이번에 옮길 때 붓질을 좌우로 뒤집는가 */
+    const isReversedRef = useRef(false);
     /** 브라우저의 뒤로 · 앞으로 가기로 옮기는 중인가 */
     const isTraversingRef = useRef(false);
+    /** 붓질을 칠하기 시작했고 아직 지우지 않았는가 */
+    const isCoveredRef = useRef(false);
+    /** 링크를 누른 순간에 칠하기 시작한 시각(ms). 새 페이지가 오면 비운다 */
+    const earlyCoverAtRef = useRef<number | null>(null);
+    /** 화면 전환이 시작되지 않을 때를 대비해 걸어 둔 타이머 */
+    const fallbackTimerRef = useRef<number | null>(null);
+    /** 칠하는 움직임과 지우는 움직임. 동작 줄이기에서는 만들지 않는다 */
+    const timelinesRef = useRef<TimelineData | null>(null);
+
+    /** 지운다. 이미 지웠으면 아무것도 하지 않는다 */
+    function erase() {
+        if (!isCoveredRef.current) return;
+        isCoveredRef.current = false;
+        if (timelinesRef.current) playUncover(timelinesRef.current);
+    }
+
+    /** 페이지를 옮기는 동안 html 에 적어 둔 표시를 지운다 */
+    function finish() {
+        Reflect.deleteProperty(document.documentElement.dataset, MOVING_KEY);
+        document.documentElement.style.removeProperty(HOLD_VAR);
+    }
+
+    // 링크를 누른 순간부터 칠한다. 새 페이지를 기다리는 동안 화면이 멈춘 것처럼 보이지 않는다
+    useEffect(() => {
+        const unsubscribe = subscribeRouteStart(({ pathname: to, type }) => {
+            const from = prevPathnameRef.current;
+            if (earlyCoverAtRef.current !== null) {
+                // 덮은 채로 기다리다가 뒤로 가기로 제자리에 돌아왔다. 새 페이지는 오지 않으므로 지운다
+                if (type === 'traverse' && to === from) {
+                    earlyCoverAtRef.current = null;
+                    erase();
+                }
+                return;
+            }
+            // 뒤로 · 앞으로 가기는 React 가 화면을 바로 바꾼다. 붓질을 그리지 않는다
+            if (type === 'traverse' || isCoveredRef.current) return;
+            if (!shouldCoverEarly(from, to)) return;
+            // 화면 전환을 지원하지 않는 브라우저에서는 붓질 없이 페이지가 바로 바뀐다
+            if (!('startViewTransition' in document)) return;
+            const timelines = timelinesRef.current;
+            if (!timelines) return;
+
+            playCover(timelines, rootRef.current, strokesRef.current, isLeftward(from, to));
+            isCoveredRef.current = true;
+            earlyCoverAtRef.current = performance.now();
+        });
+        return () => {
+            unsubscribe();
+            if (fallbackTimerRef.current !== null) window.clearTimeout(fallbackTimerRef.current);
+        };
+    }, []);
 
     // 뒤로 · 앞으로 가기에서는 React 가 화면을 바로 바꾸고 화면 전환을 시작하지 않는다.
     // 그때 표시를 켜 두면 지울 때가 오지 않아 계속 남고, 그 뒤에 늦게 도착한 부분이 그려질 때 붓질이 돈다
@@ -124,7 +219,7 @@ export default function PageTransition() {
                 // 라우터가 이미 페이지를 바꿨다. 아래의 useLayoutEffect 가 방금 켠 표시를 지운다.
                 // 주소의 # 나 ? 만 바뀐 이동도 여기로 온다. 그때는 지울 표시가 없다
                 isMovingRef.current = false;
-                Reflect.deleteProperty(document.documentElement.dataset, MOVING_KEY);
+                finish();
                 return;
             }
             // 페이지가 조금 뒤에 바뀐다. 그때 표시를 켜지 않게 적어 둔다
@@ -136,25 +231,48 @@ export default function PageTransition() {
         };
     }, []);
 
-    // 화면 전환이 준비되기 전에 방향과 기울기를 정해 둔다. hndlEnter 는 이 뒤에 불린다.
-    // 기울기는 화면의 비율에 맞춰 옮길 때마다 다시 구한다. 그 사이에 창의 크기가 바뀌었을 수 있다
+    // 새 페이지가 왔다. 화면 전환이 준비되기 전에 연출과 붙잡아 둘 시간을 정해 둔다. hndlEnter 는 이 뒤에 불린다
     useLayoutEffect(() => {
+        const from = prevPathnameRef.current;
         const isTraversing = isTraversingRef.current;
+        const earlyCoverAt = earlyCoverAtRef.current;
         isTraversingRef.current = false;
-        if (prevPathnameRef.current !== pathname && !isTraversing) {
-            isMovingRef.current = true;
-            modeRef.current = toTransitionMode(prevPathnameRef.current, pathname);
-            // 본문의 연출은 이 표시가 있는 동안에만 걸리고, 적힌 값에 따라 달라진다 (src/style/viewTransition.css)
-            document.documentElement.dataset[MOVING_KEY] = modeRef.current;
-        }
-        isReversedRef.current = isLeftward(prevPathnameRef.current, pathname);
+        earlyCoverAtRef.current = null;
         prevPathnameRef.current = pathname;
-        if (rootRef.current) rootRef.current.style.transform = getPaintTransform();
+        if (from === pathname) return;
+
+        if (isTraversing) {
+            // 덮은 채로 기다리다가 뒤로 · 앞으로 가기로 다른 페이지에 왔다. 화면 전환이 없으므로 여기서 지운다
+            erase();
+            return;
+        }
+
+        isMovingRef.current = true;
+        isReversedRef.current = isLeftward(from, pathname);
+        // 이미 칠하고 있으면 같은 메뉴 안의 이동이어도 붓질로 마친다
+        modeRef.current = earlyCoverAt === null ? toTransitionMode(from, pathname) : 'paint';
+        const root = document.documentElement;
+        // 본문의 연출은 이 표시가 있는 동안에만 걸리고, 적힌 값에 따라 달라진다 (src/style/viewTransition.css)
+        root.dataset[MOVING_KEY] = modeRef.current;
+        if (earlyCoverAt === null) return;
+
+        // 누른 순간부터 칠했다. 다 칠하기까지 남은 시간만 이전 화면을 붙잡는다. 이미 다 칠했으면 바로 바꾼다
+        const coverMs = readSeconds('--page-cover-duration') * 1000;
+        const holdMs = Math.max(0, coverMs - (performance.now() - earlyCoverAt));
+        root.style.setProperty(HOLD_VAR, `${holdMs}ms`);
+        // 탭이 가려져 있으면 브라우저가 화면 전환을 시작하지 않아 hndlEnter 가 불리지 않는다. 그때는 여기서 지운다
+        if (fallbackTimerRef.current !== null) window.clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = window.setTimeout(
+            () => {
+                fallbackTimerRef.current = null;
+                if (!isMovingRef.current) return;
+                isMovingRef.current = false;
+                erase();
+                finish();
+            },
+            holdMs + DURATION.base * 1000,
+        );
     }, [pathname]);
-    /** 칠하는 움직임과 지우는 움직임. 동작 줄이기에서는 만들지 않는다 */
-    const timelinesRef = useRef<{ cover: gsap.core.Timeline; uncover: gsap.core.Timeline } | null>(
-        null,
-    );
 
     useGSAP(
         () => {
@@ -234,10 +352,9 @@ export default function PageTransition() {
         // 페이지를 옮기지 않았는데 시작된 화면 전환이다. 새로고침한 뒤 늦게 도착한 부분이 그려질 때 생긴다
         if (!isMovingRef.current) return;
         isMovingRef.current = false;
-
-        /** 화면 전환이 끝나면 표시를 지운다 */
-        function finish() {
-            Reflect.deleteProperty(document.documentElement.dataset, MOVING_KEY);
+        if (fallbackTimerRef.current !== null) {
+            window.clearTimeout(fallbackTimerRef.current);
+            fallbackTimerRef.current = null;
         }
 
         // 디졸브는 CSS 만으로 바뀐다. 붓질을 그리지 않는다
@@ -246,27 +363,12 @@ export default function PageTransition() {
         const timelines = timelinesRef.current;
         if (!timelines) return finish;
 
-        const { cover, uncover } = timelines;
-        if (isReversedRef.current) strokesRef.current?.setAttribute('transform', MIRROR);
-        else strokesRef.current?.removeAttribute('transform');
-        // 획의 색. 몸통과 붓털은 획의 색을 물려받는다
-        const tones = pickTones(BRUSHES.length);
-        strokesRef.current?.querySelectorAll('[data-stroke]').forEach((stroke, index) => {
-            stroke.classList.remove(...PAINT_TONES);
-            stroke.classList.add(tones[index] ?? PAINT_TONES[0]);
-        });
-        uncover.pause();
-        cover.eventCallback('onComplete', null);
-        cover.restart();
-
-        let hasErased = false;
-        /** 새 화면이 나온 순간부터 지운다. 다 칠하기 전에 나왔으면 다 칠한 뒤에 지운다 */
-        function erase() {
-            if (hasErased) return;
-            hasErased = true;
-            if (cover.progress() < 1) cover.eventCallback('onComplete', () => uncover.restart());
-            else uncover.restart();
+        // 누른 순간에 칠하기 시작하지 못한 이동이다. 지금부터 칠한다
+        if (!isCoveredRef.current) {
+            playCover(timelines, rootRef.current, strokesRef.current, isReversedRef.current);
+            isCoveredRef.current = true;
         }
+        // 새 화면이 나온 순간부터 지운다
         waitForSwap(erase);
 
         // 바뀌는 순간을 놓쳤더라도 화면 전환이 끝나면 지운다

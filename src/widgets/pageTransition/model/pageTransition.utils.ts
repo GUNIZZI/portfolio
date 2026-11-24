@@ -23,3 +23,12 @@ export function isLeftward(from: string, to: string): boolean {
     if (fromOrder !== toOrder) return toOrder < fromOrder;
     return to.length < from.length;
 }
+
+/**
+ * 링크를 누른 순간부터 붓질을 칠해도 되는가.
+ * 메뉴에 속한 다른 페이지로 붓질 전환을 할 때만 참이다.
+ * 메뉴 밖의 주소(관리 화면 등)는 이 레이아웃을 벗어나 붓질을 지울 수 없으므로 칠하지 않는다
+ */
+export function shouldCoverEarly(from: string, to: string): boolean {
+    return from !== to && findNavHref(to) !== null && toTransitionMode(from, to) === 'paint';
+}
