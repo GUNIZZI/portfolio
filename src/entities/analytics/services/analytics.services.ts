@@ -23,6 +23,7 @@ import {
     type AnalyticsPageViewData,
     type AnalyticsPeriodData,
     type AnalyticsProjectViewData,
+    type AnalyticsRealtimeData,
     type AnalyticsRefreshStatus,
     type AnalyticsSummaryData,
     type AnalyticsTotalsResponse,
@@ -297,6 +298,15 @@ export async function getAnalyticsProjectViewList(
 
     const period = await getAnalyticsPeriod(days);
     return toProjectViewList(await analyticsRepository.getProjectPageList(period.current));
+}
+
+/**
+ * 지금 접속자. 간직하지 않고 부를 때마다 GA 에서 받는다.
+ * (docs/plan/admin/dashboard/README.md 「갱신」)
+ * @throws GA 에서 받지 못했을 때
+ */
+export async function getAnalyticsRealtime(): Promise<AnalyticsRealtimeData> {
+    return { activeUsers: await analyticsRepository.getRealtimeActiveUsers() };
 }
 
 /**

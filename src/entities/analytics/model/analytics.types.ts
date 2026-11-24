@@ -115,6 +115,11 @@ export interface AnalyticsProjectViewData {
     durationText: string | null;
 }
 
+/** 지금 접속자. 최근 30분에 사이트를 본 사람 수다 */
+export interface AnalyticsRealtimeData {
+    activeUsers: number;
+}
+
 export const ANALYTICS_REFRESH_STATUS = {
     REFRESHED: 'REFRESHED',
     /** GA 에서 받지 못했다. 간직하던 값은 그대로다 */

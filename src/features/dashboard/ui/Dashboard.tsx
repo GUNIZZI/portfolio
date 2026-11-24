@@ -13,6 +13,7 @@ import DashboardError from './DashboardError';
 import PageViews from './PageViews';
 import PeriodTabs from './PeriodTabs';
 import ProjectViews from './ProjectViews';
+import RealtimeVisitors from './RealtimeVisitors';
 import RefreshButton from './RefreshButton';
 import SummaryCards from './SummaryCards';
 import VisitorTrend from './VisitorTrend';
@@ -24,7 +25,7 @@ interface OwnProps {
 
 /**
  * 대시보드(S-01). 사이트의 방문 통계를 읽어 요약한다. 고치는 기능은 없다.
- * 1차 블록 4개를 그린다. 블록마다 따로 받아, 하나를 받지 못해도 나머지는 그대로 그린다.
+ * 1차 블록 4개와 지금 접속자를 그린다. 블록마다 따로 받아, 하나를 받지 못해도 나머지는 그대로 그린다.
  * 주소 쿼리를 읽으므로 Suspense 안에 둔다.(docs/plan/admin/dashboard/README.md 「구성」)
  */
 export default async function Dashboard({ searchParams }: OwnProps) {
@@ -57,6 +58,17 @@ export default async function Dashboard({ searchParams }: OwnProps) {
                         </div>
                     ) : null}
                 </div>
+                {isConfigured ? (
+                    <Suspense
+                        fallback={
+                            <p role="status" className="text-caption text-muted-foreground">
+                                {DASHBOARD_MESSAGE.LOADING}
+                            </p>
+                        }
+                    >
+                        <RealtimeVisitors />
+                    </Suspense>
+                ) : null}
                 <p className="rounded-card border border-border bg-card px-4 py-3 text-caption text-muted-foreground">
                     {DASHBOARD_MESSAGE.NOTICE}
                 </p>

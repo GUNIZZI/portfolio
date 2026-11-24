@@ -53,6 +53,14 @@ export interface AnalyticsRepository {
      * @see {@link AnalyticsPageResponse}
      */
     getProjectPageList(range: AnalyticsDateRange): Promise<AnalyticsPageResponse[]>;
+
+    /**
+     * 최근 30분에 사이트를 본 사람 수를 받는다. GA 의 실시간 보고서를 읽는다.
+     * 실시간 보고서에는 주소 차원이 없어 관리 화면의 주소를 빼지 못한다
+     * @returns 본 사람이 없으면 0
+     * @throws GA 속성 id 가 없거나 GA 에 닿지 못했을 때
+     */
+    getRealtimeActiveUsers(): Promise<number>;
 }
 
 type ReportRequest = protos.google.analytics.data.v1beta.IRunReportRequest;
@@ -97,15 +105,19 @@ function getClient(): BetaAnalyticsDataClient {
 }
 
 async function runReport(request: Omit<ReportRequest, 'property'>): Promise<ReportRow[]> {
+    const [response] = await getClient().runReport({
+        ...request,
+        property: getPropertyName(),
+    });
+    return response.rows ?? [];
+}
+
+function getPropertyName(): string {
     const propertyId = getServerEnv().GA_PROPERTY_ID;
     if (!propertyId) {
         throw new Error('GA_PROPERTY_ID 가 없어 통계를 받을 수 없다');
     }
-    const [response] = await getClient().runReport({
-        ...request,
-        property: `properties/${propertyId}`,
-    });
-    return response.rows ?? [];
+    return `properties/${propertyId}`;
 }
 
 function getDimension(row: ReportRow, index: number): string {
@@ -200,5 +212,15 @@ export const analyticsRepository: AnalyticsRepository = {
             limit: PAGE_ROW_LIMIT,
         });
         return rows.map(toPageResponse);
+    },
+
+    async getRealtimeActiveUsers() {
+        // 구간을 주지 않으면 GA 가 최근 30분을 센다. 본 사람이 없으면 줄이 오지 않는다
+        const [response] = await getClient().runRealtimeReport({
+            property: getPropertyName(),
+            metrics: [{ name: 'activeUsers' }],
+        });
+        const [row] = response.rows ?? [];
+        return row ? getMetric(row, 0) : 0;
     },
 };

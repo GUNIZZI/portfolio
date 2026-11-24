@@ -2,6 +2,7 @@ import { ANALYTICS_REFRESH_STATUS, ANALYTICS_TREND } from '../../model/analytics
 import type { AnalyticsRepository } from '../../repositories/analytics.repositories';
 import {
     checkAnalyticsRefresh,
+    getAnalyticsRealtime,
     getAnalyticsSummary,
     parseAnalyticsPeriodDays,
     toAnalyticsPeriod,
@@ -18,6 +19,7 @@ const repository = vi.hoisted(() => ({
     getDailyList: vi.fn<AnalyticsRepository['getDailyList']>(),
     getPageList: vi.fn<AnalyticsRepository['getPageList']>(),
     getProjectPageList: vi.fn<AnalyticsRepository['getProjectPageList']>(),
+    getRealtimeActiveUsers: vi.fn<AnalyticsRepository['getRealtimeActiveUsers']>(),
 }));
 
 vi.mock('../../repositories/analytics.repositories', () => ({
@@ -192,6 +194,23 @@ describe('getAnalyticsSummary', () => {
         await getAnalyticsSummary(7);
         const [ranges] = repository.getTotalsList.mock.calls[0] ?? [];
         expect(ranges).toHaveLength(2);
+    });
+});
+
+describe('getAnalyticsRealtime', () => {
+    it('최근 30분의 접속자 수를 낸다', async () => {
+        repository.getRealtimeActiveUsers.mockResolvedValue(2);
+        expect(await getAnalyticsRealtime()).toEqual({ activeUsers: 2 });
+    });
+
+    it('접속자가 없으면 0이다', async () => {
+        repository.getRealtimeActiveUsers.mockResolvedValue(0);
+        expect(await getAnalyticsRealtime()).toEqual({ activeUsers: 0 });
+    });
+
+    it('GA 에 닿지 못하면 던진다', async () => {
+        repository.getRealtimeActiveUsers.mockRejectedValue(new Error('unavailable'));
+        await expect(getAnalyticsRealtime()).rejects.toThrow('unavailable');
     });
 });
 
