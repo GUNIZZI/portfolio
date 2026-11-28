@@ -11,6 +11,7 @@ test('로그인하지 않고 관리 화면에 들어가면 로그인 화면으�
         '/admin/experiences',
         '/admin/experiences/new',
         '/admin/experiences/1',
+        '/admin/colophon',
     ]) {
         await page.goto(path);
         await expect(page).toHaveURL(/\/admin\/login$/);

@@ -28,10 +28,11 @@ export function findNavHref(pathname: string): NavHref | null {
     return current?.href ?? null;
 }
 
-/** 관리 화면의 메뉴. 순서와 주소는 docs/plan/admin/dashboard/README.md 요구사항 6 */
+/** 관리 화면의 메뉴. 순서와 주소는 docs/plan/admin/dashboard/README.md 「GNB」 */
 export const ADMIN_NAV_ITEMS = [
     { label: '대시보드', href: '/admin/dashboard' },
     { label: '프로젝트', href: '/admin/projects' },
     { label: '소개', href: '/admin/about' },
     { label: '경력', href: '/admin/experiences' },
+    { label: '제작 과정', href: '/admin/colophon' },
 ] as const;

@@ -11,7 +11,7 @@ import { cn } from '@/shared/util/cn';
 import { ADMIN_NAV_ITEMS } from '@/config/nav';
 
 /**
- * 관리 화면의 메뉴 4개. 지금 주소가 속한 메뉴를 강조하고, 밑줄 하나가 그 메뉴로 옮겨 간다.
+ * 관리 화면의 메뉴 5개. 지금 주소가 속한 메뉴를 강조하고, 밑줄 하나가 그 메뉴로 옮겨 간다.
  * 머리는 레이아웃에 있어 화면을 옮겨도 다시 그려지지 않으므로, 주소는 여기서 직접 읽는다.
  */
 export default function AdminNav() {

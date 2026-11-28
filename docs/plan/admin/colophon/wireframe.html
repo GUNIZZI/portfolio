@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>제작 과정 관리 와이어프레임</title>
+<link rel="stylesheet" href="../../wireframe.css" />
+</head>
+<body>
+<header class="top">
+  <nav aria-label="화면 바로가기">
+    <a href="#flow">유저 플로우</a><a href="#s01">S-01 제작 과정 수정</a><a href="#s02">S-02 예외 상태</a><a href="#p01">P-01 토스트</a>
+  </nav>
+</header>
+<main>
+
+<div class="intro">
+  <h1>제작 과정 관리 (/admin/colophon)</h1>
+  <p>「제작 과정」 페이지와 홈의 제작 과정 섹션에 표시할 글과 표를 관리한다. 페이지 소개, 전체 과정, 디자인, 개발 과정, 품질을 지키는 방법, 제가 한 일, 기술과 폰트를 섹션별로 편집한다.</p>
+  <p>화면의 배치와 상태별 동작을 보여 준다. 화면 스타일은 소개 관리 와이어프레임(<span class="mono">../about/wireframe.html</span>)과 같게 둔다. 정책과 입력 규칙은 <span class="mono">README.md</span>에, 사용자 흐름은 <span class="mono">userflow.md</span>에 정리했다. 공통 메뉴는 대시보드 와이어프레임(<span class="mono">../dashboard/wireframe.html</span>)에 있다.</p>
+  <div class="legend">
+    <span><span class="m">1</span> 설명 번호</span>
+  </div>
+  <div class="spec-block">
+    <h4>화면 목록</h4>
+    <div class="spec-tw"><table class="spec-t">
+      <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#s01">S-01</a></td><td>제작 과정 수정</td><td>페이지</td><td><code>/admin/colophon</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>예외 상태</td><td>S-01 의 상태</td><td><code>/admin/colophon</code></td></tr>
+        <tr><td><a href="#p01">P-01</a></td><td>토스트</td><td>토스트</td><td>S-01</td></tr>
+      </tbody>
+    </table></div>
+    <p class="spec-note">컴포넌트 이름은 src/shared/ui/ · src/widgets/ · src/features/ 에 있는 것만 적었다.</p>
+  </div>
+</div>
+
+<!-- userflow:start -->
+<!-- scripts/build-plan-index.js 가 userflow.md 에서 넣은 구간이다. 손으로 고치지 않는다 -->
+<section class="flow" id="flow">
+  <div class="screen-h"><h2>유저 플로우</h2><span class="route">userflow.md</span></div>
+  <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
+</section>
+<script type="text/markdown" id="userflow-src">
+# 제작 과정 관리 — 유저 플로우
+
+[README.md](./README.md) 의 정책을 기준으로 관리자 동작을 흐름으로 옮겼다.
+화면 ID(`S-01` 등)는 [wireframe.html](./wireframe.html) 의 ID 와 같다.
+
+## 1. 전체 흐름
+
+```mermaid
+flowchart TD
+    IN["GNB 의 제작 과정"]:::step --> SS{"세션이 있는가"}:::decision
+    SS -->|"아니요"| LG(["로그인으로"]):::done
+    SS -->|"예"| GET[/"내용을 읽음"/]:::api
+    GET --> R{"읽었는가"}:::decision
+    R -->|"아니요"| ERR["S-02 조회 실패"]:::warn
+    ERR -.->|"다시 시도"| GET
+    R -->|"예"| D{"저장한 섹션인가"}:::decision
+    D -->|"예"| CO["S-01 제작 과정 수정"]:::screen
+    D -->|"아니요"| DEF["처음 값으로 채움"]:::step
+    DEF --> CO
+    CO -->|"섹션 저장"| PUB[/"공개 화면 캐시 지움"/]:::api
+    CO -->|"GNB 의 메뉴 · 로고"| OUT(["누른 화면으로"]):::done
+```
+
+- 세션 검사와 로그인은 [로그인의 흐름](../login/userflow.md)과 같다.
+- 섹션에는 등록과 삭제가 없다. 섹션 안의 목록은 더하고 뺀다.
+- 저장한 섹션인지는 섹션마다 따로 본다. 저장소에 그 섹션의 문서가 없으면 처음 값을 그리고 수정 일시를 적지 않는다.([README.md](./README.md) 「처음 값」)
+- 저장하지 않은 섹션이 있어도 GNB 를 누르면 묻지 않고 옮긴다. 그 섹션의 내용은 남지 않는다.
+
+## 2. 내용 수정
+
+```mermaid
+flowchart TD
+    A["S-01 제작 과정 수정"]:::screen --> IN["섹션의 항목 입력"]:::step
+    IN --> V{"그 섹션의 항목이 규칙에 맞는가"}:::decision
+    V -->|"아니요"| FE["항목 오류 문구 · 그 섹션의 저장 비활성"]:::warn
+    FE -.-> IN
+    V -->|"예"| SV[/"그 섹션만 서버 액션으로 저장"/]:::api
+    SV --> R{"저장했는가"}:::decision
+    R -->|"예"| T("P-01 저장됨 토스트"):::dialog
+    R -->|"아니요"| TE("P-01 실패 토스트"):::dialog
+    TE -.-> IN
+    T -.-> A
+    IN -->|"GNB · 다른 화면"| OUT(["누른 곳으로 이동"]):::done
+```
+
+- 섹션은 페이지 소개, 전체 과정, 디자인, 개발 과정, 품질을 지키는 방법, 제가 한 일, 기술과 폰트까지 7개다. 각 섹션에서 개별적으로 저장한다.
+- 항목 입력에는 목록의 항목을 더하고 빼고 옮기는 것도 들어간다. 섹션마다의 목록은 [README.md](./README.md) 「목록」 표에 있다.
+- 항목을 더하면 빈 항목이 생긴다. 필수 항목을 채우기 전에는 그 섹션을 저장할 수 없다.
+- 역할 · 이어지는 섹션 · 견본 글꼴은 선택 상자로 고른다. 비울 수 없어 오류 문구가 없다.
+- 저장 후에도 현재 화면에 머문다. 다른 섹션에서 편집 중인 내용은 유지한다.
+- 변경 사항이 없는 섹션은 저장 버튼을 비활성화한다.
+- 저장에 실패하면 입력한 내용을 그대로 둔다.
+- 세션이 만료된 뒤 저장을 누르면 로그인 화면으로 이동한다. 입력한 내용은 저장되지 않는다.
+</script>
+<script src="../../userflow.js"></script>
+<!-- userflow:end -->
+
+<!-- ============ S-01 제작 과정 수정 ============ -->
+<section class="screen" id="s01">
+  <div class="screen-h"><span class="id">S-01</span><h2>제작 과정 수정</h2><span class="route">/admin/colophon</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t">대시보드</span><span class="t">프로젝트</span><span class="t">소개</span><span class="t">경력</span><span class="t on">제작 과정</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
+      <div class="ph"><div><h4>제작 과정</h4><p>「제작 과정」 페이지와 홈의 제작 과정 섹션에 보이는 내용을 고친다</p></div></div>
+
+      <div class="ph rel"><span class="m abs">2</span><div><h4>페이지 소개</h4><p>페이지의 머리 · 한 줄 요약은 홈의 제작 과정 섹션에도 보인다 · 수정 일시 2026.11.27 (10:12)</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">한 줄 요약</div>
+        <div class="fv"><div class="ta">컨셉은 내가 정하고, 디자인은 GPT 가, 개발은 Claude 가 했습니다.</div></div>
+        <div class="sepx"></div>
+        <div class="fl req">숫자 1</div>
+        <div class="fv rel"><span class="m abs">3</span><div class="row"><div class="inp val">시작한 날</div><div class="inp val">2026.11.12</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div><div class="info">ⓘ 이름 · 값 순이다. 값은 단위까지 글로 적는다</div></div>
+        <div class="fl">숫자 2 · 3</div>
+        <div class="fv"><span class="muted">숫자 1 과 같다</span><div class="row"><span class="btn sm">+ 숫자 더하기</span></div></div>
+        <div class="fl req">집계 기준일</div>
+        <div class="fv"><div class="inp val">2026.11.26</div></div>
+      </div>
+      <div class="btn-row rel"><span class="m abs">4</span><span class="sp"></span><span class="btn pri dis" aria-disabled="true">머리 저장</span></div>
+
+      <div class="ph rel"><span class="m abs">11</span><div><h4>과정</h4><p>PROCESS 섹션 · 홈의 제작 과정 섹션</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">1단계</div>
+        <div class="fv"><div class="row"><div class="inp val">컨셉을 정한다</div><div class="inp val">나 ▾</div><div class="inp val">디자인 ▾</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div><div class="info">ⓘ 이름 · 역할 · 이어지는 섹션 순이다</div></div>
+        <div class="fl req">2 ~ 3단계</div>
+        <div class="fv"><span class="muted">1단계와 같다</span></div>
+        <div class="fl req">4단계</div>
+        <div class="fv"><div class="row"><div class="inp val">개발한다</div><div class="inp val">Claude ▾</div><div class="inp val">개발 과정 ▾</div><span class="btn sm">↑</span><span class="btn sm dis">↓</span><span class="btn sm ghost">빼기</span></div></div>
+        <div class="fl"></div>
+        <div class="fv"><div class="row"><span class="btn sm">+ 단계 더하기</span></div></div>
+      </div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri dis" aria-disabled="true">과정 저장</span></div>
+
+      <div class="ph rel"><span class="m abs">5</span><div><h4>디자인</h4><p>DESIGN 섹션</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">1 제목 · 역할</div>
+        <div class="fv"><div class="row"><div class="inp val">컨셉 정하기</div><div class="inp val">나 ▾</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div></div>
+        <div class="fl req">1 설명</div>
+        <div class="fv"><div class="rel"><span class="ferr">설명을 입력해 주세요.</span><div class="ta err"></div></div></div>
+        <div class="sepx"></div>
+        <div class="fl">2 ~ 4</div>
+        <div class="fv"><span class="muted">1 과 같다</span><div class="row"><span class="btn sm">+ 단락 더하기</span></div></div>
+      </div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri dis" aria-disabled="true">디자인 저장</span></div>
+
+      <div class="ph rel"><span class="m abs">6</span><div><h4>개발 과정</h4><p>DEVELOP 섹션</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">1 제목</div>
+        <div class="fv"><div class="row"><div class="inp val">기획</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div></div>
+        <div class="fl req">1 작업 내용</div>
+        <div class="fv"><div class="ta">기획 스킬로 요구사항 정의서, 사용자 흐름도, 와이어프레임을 작성했습니다.</div></div>
+        <div class="fl req">1 대시보드 적용 사례</div>
+        <div class="fv"><div class="ta">대시보드 기획 문서 3종</div></div>
+        <div class="fl">1 링크</div>
+        <div class="fv rel"><span class="m abs">7</span>
+          <div class="row"><div class="inp val">와이어프레임 보기</div><div class="inp val">/plan/index.html#admin/dashboard</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div>
+          <div class="row"><div class="inp val">docs/plan/admin/dashboard</div><div class="rel"><span class="ferr">주소는 https:// 나 / 로 시작해야 합니다.</span><div class="inp err">github.com/…</div></div><span class="btn sm">↑</span><span class="btn sm dis">↓</span><span class="btn sm ghost">빼기</span></div>
+          <div class="row"><span class="btn sm">+ 링크 더하기</span></div>
+        </div>
+        <div class="sepx"></div>
+        <div class="fl">2 ~ 5</div>
+        <div class="fv"><span class="muted">1 과 같다. 링크가 없는 단계에는 「+ 링크 더하기」 만 있다</span><div class="row"><span class="btn sm">+ 단계 더하기</span></div></div>
+      </div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri dis" aria-disabled="true">개발 과정 저장</span></div>
+
+      <div class="ph rel"><span class="m abs">8</span><div><h4>품질을 지키는 방법</h4><p>GUARDRAILS 섹션</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">1 이름 · 개수</div>
+        <div class="fv"><div class="row"><div class="inp val">규칙 문서</div><div class="inp val">CLAUDE.md 와 9개</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div></div>
+        <div class="fl req">1 점검 항목</div>
+        <div class="fv"><div class="inp val">사람과 Claude가 같은 프로젝트 규칙을 참고하는지</div></div>
+        <div class="fl req">1 적용 예</div>
+        <div class="fv"><div class="ta">CLAUDE.md와 규칙 문서 9개를 함께 참고합니다.</div></div>
+        <div class="sepx"></div>
+        <div class="fl">2 ~ 5</div>
+        <div class="fv"><span class="muted">1 과 같다</span><div class="row"><span class="btn sm">+ 장치 더하기</span></div></div>
+      </div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri dis" aria-disabled="true">장치 저장</span></div>
+
+      <div class="ph rel"><span class="m abs">9</span><div><h4>제가 한 일</h4><p>HUMAN 섹션</p></div></div>
+      <div class="form-grid">
+        <div class="fl">1 ~ 3</div>
+        <div class="fv"><span class="muted">디자인(5)에서 역할을 뺀 것과 같다. 제목과 설명이 한 쌍이다</span><div class="row"><span class="btn sm">+ 항목 더하기</span></div></div>
+      </div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri dis" aria-disabled="true">사람이 한 일 저장</span></div>
+
+      <div class="ph rel"><span class="m abs">10</span><div><h4>기술과 폰트</h4><p>STACK 섹션</p></div></div>
+      <div class="form-grid">
+        <div class="fl req">기술</div>
+        <div class="fv">
+          <div class="pf-chips"><span class="pf-chip">Next.js 16 ×</span><span class="pf-chip">React 19 ×</span><span class="pf-chip">TypeScript ×</span></div>
+          <div class="info">드래그해서 순서를 변경.</div>
+          <div class="row"><div class="inp">기술 이름</div><span class="btn sm dis">+ 추가</span></div>
+        </div>
+        <div class="sepx"></div>
+        <div class="fl req">폰트 1</div>
+        <div class="fv"><div class="row"><div class="inp val">Permanent Marker</div><div class="inp val">Permanent Marker ▾</div><span class="btn sm dis">↑</span><span class="btn sm">↓</span><span class="btn sm ghost">빼기</span></div><div class="row"><div class="inp val">이름, 섹션 제목</div><div class="inp val">Apache License 2.0</div></div><div class="info">ⓘ 이름 · 견본 글꼴 · 쓰는 곳 · 라이선스 순이다</div></div>
+        <div class="fl">폰트 2 · 3</div>
+        <div class="fv"><span class="muted">폰트 1 과 같다</span><div class="row"><span class="btn sm">+ 폰트 더하기</span></div></div>
+      </div>
+      <div class="btn-row"><span class="sp"></span><span class="btn pri">기술과 폰트 저장</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>명세는 대시보드 와이어프레임(../dashboard/wireframe.html)의 「GNB」 표가 갖는다. 이 화면에서는 「제작 과정」 을 강조한다. 저장하지 않은 섹션이 있어도 메뉴 · 로고를 누르면 묻지 않고 옮긴다</p></div></li>
+      <li><span class="m">2</span><div><b>섹션 제목</b> <code>features/colophonEditor</code> SectionShell<p>섹션은 머리 · 과정 · 디자인 · 개발 과정 · 장치 · 사람이 한 일 · 기술과 폰트 순이다. 공개 화면의 어디에 보이는지와 그 섹션의 수정 일시를 적는다. 저장한 적이 없는 섹션은 처음 값을 그리고 수정 일시를 적지 않는다</p></div></li>
+      <li><span class="m">3</span><div><b>숫자</b> <code>features/colophonEditor</code> RowActions<p>1개 이상이다. 이름과 값은 모두 필수다. 값은 숫자로 검사하지 않는다. 항목마다 ↑ · ↓ · 빼기 버튼이 있다. 첫 항목의 ↑ 와 끝 항목의 ↓ 는 비활성. 최소 개수만 남으면 빼기는 비활성. 더하면 맨 아래에 빈 항목이 생긴다. 이 버튼은 이 화면의 모든 목록이 같다. 규칙은 README.md 「목록」 이 갖는다</p></div></li>
+      <li><span class="m">4</span><div><b>Button</b> <code>shared/ui/button</code><p>저장 버튼은 섹션마다 있다. 고친 내용이 없거나 규칙에 맞지 않으면 비활성이다. 저장하는 동안에도 비활성. 저장하면 화면에 머물고 <a href="#p01">P-01</a></p></div></li>
+      <li><span class="m">5</span><div><b>디자인</b> · <b>Select</b> <code>shared/ui/select</code><p>단락은 1개 이상이다. 제목과 설명은 모두 필수다. 역할은 나 · GPT · Claude 가운데 고른다. 버튼은 숫자(3)와 같다. 그림은 설명을 비운 채 벗어난 상태다</p></div></li>
+      <li><span class="m">6</span><div><b>개발 과정</b><p>단계는 1개 이상이다. 제목 · 작업 내용 · 대시보드 적용 사례는 모두 필수다. 버튼은 숫자(3)와 같다. 단계를 옮기면 그 단계의 링크도 함께 옮긴다</p></div></li>
+      <li><span class="m">7</span><div><b>링크</b> <code>features/colophonEditor</code> LinkFields<p>단계마다 0개 이상이다. 이름과 주소가 한 쌍이고 둘 다 필수다. 주소는 https:// 나 / 로 시작해야 한다. 줄마다 ↑ · ↓ · 빼기 버튼이 있고, 모두 빼도 된다. 더하면 맨 아래에 빈 줄이 생긴다. 그림의 2번째 줄은 주소가 규칙에 맞지 않는 상태다. 규칙은 README.md 「링크」 가 갖는다</p></div></li>
+      <li><span class="m">8</span><div><b>품질을 지키는 방법</b><p>1개 이상이다. 이름 · 개수 · 점검 항목 · 적용 예는 모두 필수다. 개수는 「3개」 · 「경계 규칙」 처럼 글로 적는다. 버튼은 숫자(3)와 같다</p></div></li>
+      <li><span class="m">9</span><div><b>제가 한 일</b><p>1개 이상이다. 제목과 설명은 모두 필수다. 버튼은 숫자(3)와 같다</p></div></li>
+      <li><span class="m">10</span><div><b>기술과 폰트</b> <code>shared/ui/chipListField</code> ChipListField · <b>Select</b> <code>shared/ui/select</code><p>기술 이름은 칩 목록이고 1개 이상이다. 고치는 방식은 소개 관리 README.md 「목록 고치기」 의 칩 목록과 같다. 폰트는 1개 이상이고 이름 · 쓰는 곳 · 라이선스가 모두 필수다. 견본 글꼴은 Permanent Marker · Caveat · Noto Sans KR 가운데 고른다. 페이지는 폰트의 이름을 그 글꼴로 적는다. 새 폰트의 견본 글꼴은 Noto Sans KR 로 시작한다. 버튼은 숫자(3)와 같다</p></div></li>
+      <li><span class="m">11</span><div><b>과정</b> <code>features/colophonEditor</code> ProcessForm · <b>Select</b> <code>shared/ui/select</code><p>단계는 1개 이상이다. 단계마다 이름 · 역할 · 이어지는 섹션이 있다. 역할은 나 · GPT · Claude, 이어지는 섹션은 디자인 · 개발 과정 · 장치 · 사람이 한 일 · 기술과 폰트 가운데 고른다. 버튼은 숫자(3)와 같다. 새 단계의 역할은 「나」, 이어지는 섹션은 「디자인」 으로 시작한다. 홈의 제작 과정 섹션도 같은 단계를 그린다. 규칙은 README.md 「과정」 이 갖는다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>오류 문구 (초안)</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>항목</th><th>상황</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td>필수 항목</td><td>비었다</td><td>&lt;항목&gt;을 입력해 주세요. 항목은 한 줄 요약 · 이름 · 값 · 센 날 · 단계의 이름 · 제목 · 설명 · 작업 내용 · 적용 사례 · 적용 예 · 링크 이름 · 개수 · 점검 항목 · 폰트 이름 · 쓰는 곳 · 라이선스다</td></tr>
+          <tr><td>링크의 주소</td><td>비었거나 https:// 나 / 로 시작하지 않는다</td><td>주소는 https:// 나 / 로 시작해야 합니다.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">입력 규칙은 README.md의 「내용」, 「목록」, 「링크」에서 확인할 수 있다. 역할 · 이어지는 섹션 · 견본 글꼴은 선택 상자라 오류 문구가 없다. 문구는 초안이다. README.md 검토 필요 사항의 「문구」</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S-02 예외 상태 ============ -->
+<section class="screen" id="s02">
+  <div class="screen-h"><span class="id">S-02</span><h2>예외 상태</h2><span class="route">/admin/colophon</span></div>
+  <div class="state-grid">
+    <div class="state">
+      <div class="lab">조회 실패</div>
+      <div class="err-page">
+        <b>내용을 불러오지 못했습니다</b>잠시 뒤에 다시 시도해 주세요.
+        <div class="row"><span class="btn sm">다시 시도</span></div>
+      </div>
+      <div class="help">섹션을 그리지 않는다. GNB 는 그대로 둔다</div>
+    </div>
+    <div class="state">
+      <div class="lab">저장한 적이 없는 섹션</div>
+      <div class="ph"><div><h4>페이지 소개</h4><p>페이지의 머리 · 한 줄 요약은 홈의 제작 과정 섹션에도 보인다</p></div></div>
+      <div class="help">저장소에 그 섹션의 문서가 없다. 코드의 처음 값을 그리고 수정 일시를 적지 않는다. 오류가 아니다</div>
+    </div>
+    <div class="state">
+      <div class="lab">섹션 저장 실패</div>
+      <div class="row"><span class="btn pri">머리 저장</span></div>
+      <div class="help">입력한 내용을 그대로 둔다. P-01 실패 토스트를 띄운다. 저장 버튼은 다시 누를 수 있다</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P-01 토스트 ============ -->
+<section class="screen" id="p01">
+  <div class="screen-h"><span class="id">P-01</span><h2>토스트</h2><span class="route">S-01</span></div>
+  <div class="wrap">
+    <div class="frame">
+      <div class="row rel"><span class="m abs">1</span><span class="toast">✓ 머리를 저장했습니다</span></div>
+    </div>
+    <aside class="notes"><h3>화면 명세</h3><ol>
+      <li><span class="m">1</span><div><b>Toast</b> <code>shared/ui/toast</code><p><code>role="status"</code>. 모양 · 위치 · 사라지는 시간은 프로젝트 관리 와이어프레임(../wireframe.html)의 토스트와 같다</p></div></li>
+    </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>토스트 문구 (초안)</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>상황</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td>섹션 저장</td><td>&lt;섹션 이름&gt;을 저장했습니다</td></tr>
+          <tr><td>실패</td><td>저장하지 못했습니다. 다시 시도해 주세요</td></tr>
+        </tbody>
+      </table></div>
+      <p class="spec-note">소개 관리와 같은 문구 초안을 사용한다. 자세한 내용은 README.md의 검토 필요 사항 중 「문구」를 참고한다.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

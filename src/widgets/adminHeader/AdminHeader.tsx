@@ -12,7 +12,7 @@ import AdminNavProgress from './AdminNavProgress';
 /**
  * 관리 화면의 머리. 로그인을 뺀 모든 관리 화면에 같은 모양으로 붙는다.
  * 레이아웃이 한 번 그리고, 화면을 옮겨도 그대로 남는다.(src/app/admin/(panel)/layout.tsx)
- * 로고 · 메뉴 4개 · 사이트 보기 · 로그아웃 · 테마 버튼이 있다. 메뉴의 밑줄이 옮겨 가는 것 말고는 연출을 두지 않는다.
+ * 로고 · 메뉴 5개 · 테마 버튼 · 사이트 보기 · 로그아웃이 있다. 메뉴의 밑줄이 옮겨 가는 것 말고는 연출을 두지 않는다.
  * 화면을 옮기는 동안에는 아래 테두리에 진행 선이 지나간다.
  */
 export default function AdminHeader() {
