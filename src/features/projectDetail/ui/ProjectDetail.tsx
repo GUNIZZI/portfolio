@@ -21,7 +21,7 @@ export default function ProjectDetail({ project }: OwnProps) {
     return (
         <article className="mx-auto flex max-w-page flex-col gap-10 px-gutter pt-6 pb-16">
             <Link
-                href="/work"
+                href="/project"
                 className="inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-semibold text-primary"
             >
                 <Icon name="arrowRight" size={16} strokeWidth={2} className="rotate-180" />
@@ -52,10 +52,10 @@ export default function ProjectDetail({ project }: OwnProps) {
                     ) : (
                         <div
                             role="img"
-                            aria-label="썸네일 이미지 자리"
+                            aria-label="대표 이미지 없음"
                             className="flex aspect-[2/1] w-full items-center justify-center rounded-card bg-linear-135 from-doodle-indigo to-brand text-caption text-brand-foreground"
                         >
-                            [썸네일 이미지 교체]
+                            대표 이미지가 없습니다.
                         </div>
                     )}
                 </div>
@@ -68,7 +68,7 @@ export default function ProjectDetail({ project }: OwnProps) {
                         <TiptapViewer content={project.body} />
                     ) : (
                         <p className="text-body text-muted-foreground">
-                            아직 작성한 내용이 없습니다.
+                            아직 프로젝트 상세 내용이 없습니다.
                         </p>
                     )}
                 </Panel>

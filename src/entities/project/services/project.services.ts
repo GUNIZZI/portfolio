@@ -38,7 +38,7 @@ import {
 
 /** 작업 상세의 주소 */
 function toDetailHref(id: string): string {
-    return `/work/${id}`;
+    return `/project/${id}`;
 }
 
 export function toProjectData(project: ProjectResponse): ProjectData {

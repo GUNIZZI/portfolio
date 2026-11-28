@@ -76,7 +76,7 @@ describe('toExperienceData', () => {
             ],
         };
         const data = toExperienceData(experience, ['q']);
-        expect(data.projects.map((project) => project.href)).toEqual([null, '/work/q', null]);
+        expect(data.projects.map((project) => project.href)).toEqual([null, '/project/q', null]);
     });
 
     it('비공개이거나 지워진 프로젝트에 이은 줄은 주소 없이 이름만 낸다', () => {

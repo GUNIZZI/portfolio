@@ -8,7 +8,7 @@ import { ProjectExplorer } from '@/features/projectExplorer';
 import { WorkDoodles } from '@/features/workDoodles';
 import { getProjectList } from '@/entities/project/services/project.services';
 
-export const metadata: Metadata = { title: '작업' };
+export const metadata: Metadata = { title: '프로젝트' };
 
 export default async function WorkPage() {
     const projects = await getProjectList();

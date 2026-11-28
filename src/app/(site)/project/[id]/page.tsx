@@ -23,12 +23,12 @@ export async function generateStaticParams() {
     return (ids.length > 0 ? ids : [PLACEHOLDER_ID]).map((id) => ({ id }));
 }
 
-export async function generateMetadata({ params }: PageProps<'/work/[id]'>): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<'/project/[id]'>): Promise<Metadata> {
     const { id } = await params;
     const project = await getProject(id);
     return project
         ? { title: project.title, description: project.summary }
-        : { title: '작업 상세' };
+        : { title: '프로젝트 상세' };
 }
 
 /**
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps<'/work/[id]'>): Pro
  * 미리 그려 둔 작업은 빌드할 때 이 안까지 다 그려지므로 기다리는 화면이 보이지 않는다.
  * 빌드한 뒤에 공개한 작업은 처음 열 때 본문 자리에 로고 로더가 보인다
  */
-async function WorkDetailContent({ params }: Pick<PageProps<'/work/[id]'>, 'params'>) {
+async function WorkDetailContent({ params }: Pick<PageProps<'/project/[id]'>, 'params'>) {
     const { id } = await params;
     const project = await getProject(id);
     if (!project) notFound();
@@ -45,7 +45,7 @@ async function WorkDetailContent({ params }: Pick<PageProps<'/work/[id]'>, 'para
     return <ProjectDetail project={project} />;
 }
 
-export default function WorkDetailPage({ params }: PageProps<'/work/[id]'>) {
+export default function WorkDetailPage({ params }: PageProps<'/project/[id]'>) {
     return (
         <>
             <Backdrop>

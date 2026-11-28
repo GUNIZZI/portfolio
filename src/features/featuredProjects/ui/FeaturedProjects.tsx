@@ -26,7 +26,7 @@ export default function FeaturedProjects({ projects }: OwnProps) {
                     </div>
                 </div>
                 <Link
-                    href="/work"
+                    href="/project"
                     className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-primary"
                 >
                     View All Projects
@@ -42,7 +42,7 @@ export default function FeaturedProjects({ projects }: OwnProps) {
             ) : (
                 // 홈에 올린 프로젝트가 없어도 섹션은 감추지 않는다.(docs/plan/admin/README.md 「공개 화면 반영」)
                 <p className="py-10 text-center text-body text-muted-foreground">
-                    아직 등록된 프로젝트가 없습니다
+                    아직 소개할 프로젝트가 없어요.
                 </p>
             )}
         </div>

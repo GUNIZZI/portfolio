@@ -1,4 +1,4 @@
-/** 주소에 고른 분류를 남기는 이름 — /work?category=Dashboard */
+/** 주소에 고른 분류를 남기는 이름 — /project?category=Dashboard */
 export const CATEGORY_PARAM = 'category';
 
 /** 작업들에 있는 분류를 처음 나온 순서대로, 중복 없이 낸다 */

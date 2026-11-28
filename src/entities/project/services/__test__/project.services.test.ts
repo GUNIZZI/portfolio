@@ -79,7 +79,7 @@ const CONTENT = {
 
 describe('toProjectData', () => {
     it('상세 주소가 없으면 작업 상세를 가리킨다', () => {
-        expect(toProjectData(BASE).href).toBe('/work/a');
+        expect(toProjectData(BASE).href).toBe('/project/a');
     });
 
     it('상세 주소가 있으면 그대로 쓴다', () => {
@@ -151,7 +151,7 @@ describe('공개 화면의 목록', () => {
 
         const first = await getProject('first');
         expect(first?.prev).toBeNull();
-        expect(first?.next).toEqual({ title: 'A', href: '/work/second' });
+        expect(first?.next).toEqual({ title: 'A', href: '/project/second' });
     });
 });
 
@@ -202,8 +202,8 @@ describe('toProjectDetailData', () => {
 
     it('앞뒤 작업은 목록의 순서를 따른다', () => {
         const data = toProjectDetailData(list, 1);
-        expect(data?.prev).toEqual({ title: 'A', href: '/work/a' });
-        expect(data?.next).toEqual({ title: 'C', href: '/work/c' });
+        expect(data?.prev).toEqual({ title: 'A', href: '/project/a' });
+        expect(data?.next).toEqual({ title: 'C', href: '/project/c' });
     });
 
     it('첫 작업에는 이전이, 마지막 작업에는 다음이 없다', () => {

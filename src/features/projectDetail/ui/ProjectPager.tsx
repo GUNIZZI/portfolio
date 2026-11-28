@@ -23,23 +23,23 @@ export default function ProjectPager({ prev, next }: OwnProps) {
     if (!prev && !next) return null;
 
     return (
-        <nav aria-label="다른 작업" className="flex flex-wrap gap-4">
+        <nav aria-label="다른 프로젝트" className="flex flex-wrap gap-4">
             {prev ? (
                 <Link href={prev.href} className={CARD_CLASS}>
                     <span className="flex items-center gap-1.5 text-caption text-muted-foreground">
                         <Icon name="arrowRight" size={14} strokeWidth={2} className="rotate-180" />
-                        이전 작업
+                        이전 프로젝트
                     </span>
                     <span className="text-body font-bold">{prev.title}</span>
                 </Link>
             ) : (
-                // 다음 작업이 오른쪽에 놓이도록 자리를 비워 둔다
+                // 다음 프로젝트가 오른쪽에 놓이도록 자리를 비워 둔다
                 <span aria-hidden="true" className="flex-[1_1_240px] max-md:hidden" />
             )}
             {next ? (
                 <Link href={next.href} className={cn(CARD_CLASS, 'items-end text-right')}>
                     <span className="flex items-center gap-1.5 text-caption text-muted-foreground">
-                        다음 작업
+                        다음 프로젝트
                         <Icon name="arrowRight" size={14} strokeWidth={2} />
                     </span>
                     <span className="text-body font-bold">{next.title}</span>

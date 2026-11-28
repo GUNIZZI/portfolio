@@ -48,7 +48,7 @@ test('메뉴로 페이지를 옮기면 그 페이지의 메뉴를 강조한다',
 
     for (const [name, url, heading] of [
         ['About', /\/about$/, 'ABOUT ME'],
-        ['Projects', /\/work$/, 'ALL PROJECTS'],
+        ['Projects', /\/project$/, 'ALL PROJECTS'],
     ] as const) {
         await menu.getByRole('link', { name }).click();
         await expect(page).toHaveURL(url);
@@ -133,11 +133,11 @@ test('어느 페이지에서든 Contact 를 누르면 그 페이지의 연락 �
     isMobile,
 }) => {
     // 작업 상세의 주소는 저장소가 발급한 id 라 고정하지 않는다. 목록의 첫 카드에서 읽는다
-    await page.goto('/work');
+    await page.goto('/project');
     const detailPath = await page.getByRole('link', { name: /열기$/ }).first().getAttribute('href');
-    expect(detailPath).toMatch(/^\/work\/[^/]+$/);
+    expect(detailPath).toMatch(/^\/project\/[^/]+$/);
 
-    for (const path of ['/', '/about', '/work', detailPath ?? '']) {
+    for (const path of ['/', '/about', '/project', detailPath ?? '']) {
         await page.goto(path);
         if (isMobile) await page.getByRole('button', { name: '메뉴 열기' }).click();
         const scope = isMobile
@@ -152,7 +152,7 @@ test('어느 페이지에서든 Contact 를 누르면 그 페이지의 연락 �
     }
 });
 
-test('홈의 More About Me 로 소개 페이지에 간다', async ({ page }) => {
+test('홈에서 More About Me를 눌러 소개 페이지에 간다', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('link', { name: 'More About Me' }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'ABOUT ME' })).toBeVisible();
@@ -176,7 +176,7 @@ test('소개 페이지에서 경력을 한 번에 모두 펼치고 닫는다', a
 test('작업 목록을 분류로 거르면 주소에 남고, 그 주소로 열면 같은 목록이 나온다', async ({
     page,
 }) => {
-    await page.goto('/work');
+    await page.goto('/project');
     const cards = page.getByRole('main').getByRole('article');
     await expect(cards.first()).toBeVisible();
     const total = await cards.count();
@@ -204,7 +204,7 @@ test('작업 목록을 분류로 거르면 주소에 남고, 그 주소로 열�
 
     await page.getByRole('button', { name: '전체' }).click();
     await expect(cards).toHaveCount(total);
-    await expect(page).toHaveURL(/\/work$/);
+    await expect(page).toHaveURL(/\/project$/);
 
     // 다시 눌러도 주소로 열었을 때와 같은 목록이 나온다
     await page.getByRole('button', { name, exact: true }).click();
@@ -212,39 +212,36 @@ test('작업 목록을 분류로 거르면 주소에 남고, 그 주소로 열�
 });
 
 test('작업 카드에서 상세로 가면 제목과 메타가 있고, 다음 작업으로 넘어간다', async ({ page }) => {
-    await page.goto('/work');
+    await page.goto('/project');
     const cards = page.getByRole('main').getByRole('article');
     await expect(cards.first()).toBeVisible();
     const total = await cards.count();
     const title = (await cards.first().getByRole('heading', { level: 3 }).textContent()) ?? '';
 
     await cards.first().getByRole('link', { name: /열기$/ }).click();
-    await expect(page).toHaveURL(/\/work\/[^/]+$/);
+    await expect(page).toHaveURL(/\/project\/[^/]+$/);
     const firstUrl = page.url();
     await expect(page.getByRole('heading', { level: 1, name: title, exact: true })).toBeVisible();
     await expect(page.getByRole('main').locator('dl').first()).toBeVisible();
 
     // 첫 작업이라 이전은 없다. 작업이 하나뿐이면 다음도 없다
-    const pager = page.getByRole('navigation', { name: '다른 작업' });
-    await expect(pager.getByRole('link', { name: /이전 작업/ })).toHaveCount(0);
+    const pager = page.getByRole('navigation', { name: '다른 프로젝트' });
+    await expect(pager.getByRole('link', { name: /이전 프로젝트/ })).toHaveCount(0);
     if (total < 2) return;
 
-    await pager.getByRole('link', { name: /다음 작업/ }).click();
+    await pager.getByRole('link', { name: /다음 프로젝트/ }).click();
     await expect(page).not.toHaveURL(firstUrl);
-    await expect(page).toHaveURL(/\/work\/[^/]+$/);
+    await expect(page).toHaveURL(/\/project\/[^/]+$/);
     await expect(page.getByRole('heading', { level: 1 })).not.toHaveText(title);
 });
 
-test('작업 상세에서 헤더의 Projects 나 All Projects 를 누르면 목록의 맨 위로 간다', async ({
-    page,
-    isMobile,
-}) => {
-    await page.goto('/work');
+test('프로젝트 상세에서 목록으로 돌아가면 목록의 맨 위로 간다', async ({ page, isMobile }) => {
+    await page.goto('/project');
     const detailLink = page.getByRole('link', { name: /열기$/ }).first();
 
     for (const goBack of ['header', 'backLink'] as const) {
         await detailLink.click();
-        await expect(page).toHaveURL(/\/work\/[^/]+$/);
+        await expect(page).toHaveURL(/\/project\/[^/]+$/);
         // 상세의 아래쪽에서 눌러도 목록은 맨 위에서 열린다
         await page.getByRole('contentinfo').scrollIntoViewIfNeeded();
 
@@ -259,7 +256,7 @@ test('작업 상세에서 헤더의 Projects 나 All Projects 를 누르면 목�
             await page.getByRole('link', { name: 'All Projects' }).click();
         }
 
-        await expect(page).toHaveURL(/\/work$/);
+        await expect(page).toHaveURL(/\/project$/);
         await expect(
             page.getByRole('heading', { level: 1, name: 'ALL PROJECTS' }),
         ).toBeInViewport();
@@ -267,6 +264,6 @@ test('작업 상세에서 헤더의 Projects 나 All Projects 를 누르면 목�
 });
 
 test('없는 작업의 주소로 들어오면 찾을 수 없다고 알린다', async ({ page }) => {
-    await page.goto('/work/none');
+    await page.goto('/project/none');
     await expect(page.getByRole('heading', { level: 1, name: /Page Not Found/ })).toBeVisible();
 });

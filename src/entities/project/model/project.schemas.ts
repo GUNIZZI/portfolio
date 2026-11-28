@@ -84,7 +84,7 @@ export const ProjectContentSchema = z.object({
     /** 정해 둔 분류 가운데 하나 */
     category: z.enum(PROJECT_CATEGORIES, { error: PROJECT_FIELD_ERROR.CATEGORY }),
     summary: z.string().trim().min(1, { error: PROJECT_FIELD_ERROR.SUMMARY }),
-    /** 상세 화면 주소. 없으면 프로젝트 상세(`/work/<id>`)를 가리킨다 */
+    /** 상세 화면 주소. 없으면 프로젝트 상세(`/project/<id>`)를 가리킨다 */
     href: z.string().trim().min(1).optional(),
     /** 썸네일. 없으면 자리표시를 그린다 */
     image: ProjectImageSchema.nullable(),

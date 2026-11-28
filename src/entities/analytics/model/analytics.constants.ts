@@ -9,11 +9,11 @@ export const DEFAULT_ANALYTICS_PERIOD_DAYS: AnalyticsPeriodDays = 30;
  * 페이지별 조회수가 세는 주소. 공개 화면의 메뉴 4개다.
  * 프로젝트 상세는 프로젝트별 조회수가 따로 센다.(docs/plan/admin/dashboard/README.md 「블록별 규칙」)
  */
-export const ANALYTICS_PAGE_PATHS = ['/', '/work', '/about', '/colophon'] as const;
+export const ANALYTICS_PAGE_PATHS = ['/', '/project', '/about', '/colophon'] as const;
 export type AnalyticsPagePath = (typeof ANALYTICS_PAGE_PATHS)[number];
 
 /** 프로젝트 상세 주소의 앞부분. 뒤에 프로젝트의 id 가 붙는다 */
-export const ANALYTICS_PROJECT_PATH_PREFIX = '/work/';
+export const ANALYTICS_PROJECT_PATH_PREFIX = '/project/';
 
 /** 수집하지 않는 주소의 앞부분. 관리 화면이다.(docs/plan/admin/dashboard/README.md 요구사항 9) */
 export const ANALYTICS_EXCLUDED_PATH_PREFIX = '/admin';

@@ -21,7 +21,7 @@ export const ExperienceProjectSchema = z.object({
     /** 쓴 기술과 맡은 일 */
     tags: z.array(z.string().trim().min(1)),
     /**
-     * 이은 프로젝트(entity project)의 id. 그 프로젝트의 상세(`/work/<id>`)로 간다.
+     * 이은 프로젝트(entity project)의 id. 그 프로젝트의 상세(`/project/<id>`)로 간다.
      * (docs/plan/admin/experiences/README.md 「등록 · 수정」)
      */
     projectId: z.string().min(1).optional(),

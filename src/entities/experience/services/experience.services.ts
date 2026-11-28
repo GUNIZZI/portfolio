@@ -60,7 +60,7 @@ export function toExperienceData(
             tags: project.tags,
             href:
                 project.projectId && linkableProjectIds.includes(project.projectId)
-                    ? `/work/${project.projectId}`
+                    ? `/project/${project.projectId}`
                     : null,
         })),
     };

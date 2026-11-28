@@ -14,7 +14,7 @@
 
 서버에서만 실행한다. 클라이언트 컴포넌트는 `actions` 의 서버 액션과 `model` 만 가져온다.(`docs/architecture.md` 4절)
 
-- 프로젝트는 저장소가 발급한 `id` 로 구분한다. 상세 주소도 `id` 를 쓴다(`/work/<id>`).(`docs/plan/admin/README.md` 요구사항 10)
+- 프로젝트는 저장소가 발급한 `id` 로 구분한다. 상세 주소도 `id` 를 쓴다(`/project/<id>`).(`docs/plan/admin/README.md` 요구사항 10)
 - 공개 화면은 공개한 프로젝트만 그린다. 홈은 그 가운데 홈 노출을 켠 것만 그린다.(`services/project.services.ts` 의 `getProjectList` · `getFeaturedProjectList`, `docs/plan/admin/README.md` 요구사항 26)
 - 비공개 프로젝트는 홈 노출을 켤 수 없고, 비공개로 바꾸면 홈 노출도 함께 꺼진다. 서버가 저장할 때 맞춘다.(`services/project.services.ts` 의 `parseContent` · `setProjectPublished` · `setProjectFeatured`)
 - 순서는 문서의 `order` 다. 작은 수가 앞이고, 새 프로젝트는 맨 뒤에 놓는다. 저장소가 주는 순서는 정해져 있지 않아 `services` 가 놓는다.(`services/project.services.ts` 의 `sortProjectList` · `createProject`)
