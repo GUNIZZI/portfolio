@@ -12,6 +12,7 @@ import DashboardBlock from './DashboardBlock';
 import DashboardError from './DashboardError';
 import PageViews from './PageViews';
 import PeriodTabs from './PeriodTabs';
+import PlanViews from './PlanViews';
 import ProjectViews from './ProjectViews';
 import RealtimeVisitors from './RealtimeVisitors';
 import RefreshButton from './RefreshButton';
@@ -25,7 +26,7 @@ interface OwnProps {
 
 /**
  * 대시보드(S-01). 사이트의 방문 통계를 읽어 요약한다. 고치는 기능은 없다.
- * 1차 블록 4개와 지금 접속자를 그린다. 블록마다 따로 받아, 하나를 받지 못해도 나머지는 그대로 그린다.
+ * 1차 블록 4개와 기획 문서별 조회수, 지금 접속자를 그린다. 블록마다 따로 받아, 하나를 받지 못해도 나머지는 그대로 그린다.
  * 주소 쿼리를 읽으므로 Suspense 안에 둔다.(docs/plan/admin/dashboard/README.md 「구성」)
  */
 export default async function Dashboard({ searchParams }: OwnProps) {
@@ -85,14 +86,23 @@ export default async function Dashboard({ searchParams }: OwnProps) {
                     >
                         <SummaryCards days={days} />
                     </Suspense>
-                    <DashboardBlock title="방문자 추이" description="일별 방문자와 조회수">
+                    <DashboardBlock title="방문자 추이" description="일별 방문자 수와 조회수">
                         <VisitorTrend days={days} />
                     </DashboardBlock>
-                    <DashboardBlock title="페이지별 조회수" description="공개 화면의 메뉴 4개">
+                    <DashboardBlock title="페이지별 조회수" description="공개 페이지별 조회수">
                         <PageViews days={days} />
                     </DashboardBlock>
-                    <DashboardBlock title="프로젝트별 조회수" description="프로젝트 상세의 조회수">
+                    <DashboardBlock
+                        title="프로젝트별 조회수"
+                        description="프로젝트 상세 페이지 조회수"
+                    >
                         <ProjectViews days={days} />
+                    </DashboardBlock>
+                    <DashboardBlock
+                        title="기획 문서별 조회수"
+                        description="기획 문서 뷰어에서 집계한 조회수"
+                    >
+                        <PlanViews days={days} />
                     </DashboardBlock>
                 </>
             ) : (

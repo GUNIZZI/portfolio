@@ -11,7 +11,9 @@ import {
 } from '@/shared/ui/table/table';
 
 import { DASHBOARD_MESSAGE, toPeriodHref } from '../model/dashboard.constants';
+import { toTrendChart } from '../model/dashboard.utils';
 import BlockError from './BlockError';
+import TrendChart from './TrendChart';
 
 /** 받지 못하면 null 을 낸다. 화면은 이 블록만 오류로 그린다 */
 async function loadTrend(days: AnalyticsPeriodDays): Promise<AnalyticsTrendData | null> {
@@ -29,8 +31,8 @@ interface OwnProps {
 
 /**
  * 방문자 추이. 일별 방문자와 조회수다. 값이 없는 날은 0으로 적는다.
- * 그래프의 자리는 비워 두고 같은 값의 표만 그린다. 그래프를 만드는 방법을 정하지 않았다.
- * (2026-11-20 사용자 결정, docs/plan/admin/dashboard/README.md 검토 필요 사항 10번)
+ * 꺾은선 그래프로 그리고, 같은 값을 표로도 제공한다. 표는 접어 두고 「표로 보기」 를 누르면 편다.
+ * (docs/plan/admin/dashboard/README.md 「접근성 · 성능 고려」, wireframe.html S-01 6번)
  */
 export default async function VisitorTrend({ days }: OwnProps) {
     const trend = await loadTrend(days);
@@ -43,12 +45,8 @@ export default async function VisitorTrend({ days }: OwnProps) {
 
     return (
         <>
-            {/* 그래프가 올 자리 */}
-            <div
-                aria-hidden="true"
-                className="h-60 rounded-card border border-dashed border-border"
-            />
-            <details open>
+            <TrendChart chart={toTrendChart(trend.days)} />
+            <details>
                 <summary className="cursor-pointer text-caption text-muted-foreground">
                     표로 보기
                 </summary>

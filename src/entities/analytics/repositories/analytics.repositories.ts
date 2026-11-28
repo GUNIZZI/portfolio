@@ -7,6 +7,7 @@ import { getServerEnv } from '@/shared/util/serverEnv';
 
 import {
     ANALYTICS_EXCLUDED_PATH_PREFIX,
+    ANALYTICS_PLAN_PATH_PREFIX,
     ANALYTICS_PROJECT_PATH_PREFIX,
 } from '../model/analytics.constants';
 import type {
@@ -47,12 +48,20 @@ export interface AnalyticsRepository {
     ): Promise<AnalyticsPageResponse[]>;
 
     /**
-     * 프로젝트 상세(/work/<id>)의 값을 주소마다 받는다
+     * 프로젝트 상세(/project/<id>)의 값을 주소마다 받는다
      * @returns 조회가 있는 주소만 온다
      * @throws GA 속성 id 가 없거나 GA 에 닿지 못했을 때
      * @see {@link AnalyticsPageResponse}
      */
     getProjectPageList(range: AnalyticsDateRange): Promise<AnalyticsPageResponse[]>;
+
+    /**
+     * 기획 뷰어에서 본 문서(/plan/<기획 폴더>)의 값을 주소마다 받는다
+     * @returns 조회가 있는 주소만 온다
+     * @throws GA 속성 id 가 없거나 GA 에 닿지 못했을 때
+     * @see {@link AnalyticsPageResponse}
+     */
+    getPlanPageList(range: AnalyticsDateRange): Promise<AnalyticsPageResponse[]>;
 
     /**
      * 최근 30분에 사이트를 본 사람 수를 받는다. GA 의 실시간 보고서를 읽는다.
@@ -67,7 +76,7 @@ type ReportRequest = protos.google.analytics.data.v1beta.IRunReportRequest;
 type ReportRow = protos.google.analytics.data.v1beta.IRow;
 type FilterExpression = protos.google.analytics.data.v1beta.IFilterExpression;
 
-/** 프로젝트가 늘어도 넉넉한 줄 수. GA 의 처음 값은 10,000 줄이다 */
+/** 프로젝트와 기획 문서가 늘어도 넉넉한 줄 수. GA 의 처음 값은 10,000 줄이다 */
 const PAGE_ROW_LIMIT = 500;
 
 /** GA 가 구간에 붙이는 이름의 앞부분. 뒤에 물은 순서가 붙는다 */
@@ -147,6 +156,26 @@ const EXCLUDE_ADMIN_FILTER: FilterExpression = {
     },
 };
 
+/** 주소가 prefix 로 시작하는 페이지의 값을 주소마다 받는다 */
+async function runPrefixReport(
+    range: AnalyticsDateRange,
+    prefix: string,
+): Promise<AnalyticsPageResponse[]> {
+    const rows = await runReport({
+        dateRanges: [range],
+        dimensions: [{ name: 'pagePath' }],
+        metrics: PAGE_METRICS,
+        dimensionFilter: {
+            filter: {
+                fieldName: 'pagePath',
+                stringFilter: { matchType: 'BEGINS_WITH', value: prefix },
+            },
+        },
+        limit: PAGE_ROW_LIMIT,
+    });
+    return rows.map(toPageResponse);
+}
+
 export const analyticsRepository: AnalyticsRepository = {
     async getTotalsList(ranges) {
         const rows = await runReport({
@@ -196,22 +225,11 @@ export const analyticsRepository: AnalyticsRepository = {
     },
 
     async getProjectPageList(range) {
-        const rows = await runReport({
-            dateRanges: [range],
-            dimensions: [{ name: 'pagePath' }],
-            metrics: PAGE_METRICS,
-            dimensionFilter: {
-                filter: {
-                    fieldName: 'pagePath',
-                    stringFilter: {
-                        matchType: 'BEGINS_WITH',
-                        value: ANALYTICS_PROJECT_PATH_PREFIX,
-                    },
-                },
-            },
-            limit: PAGE_ROW_LIMIT,
-        });
-        return rows.map(toPageResponse);
+        return runPrefixReport(range, ANALYTICS_PROJECT_PATH_PREFIX);
+    },
+
+    async getPlanPageList(range) {
+        return runPrefixReport(range, ANALYTICS_PLAN_PATH_PREFIX);
     },
 
     async getRealtimeActiveUsers() {

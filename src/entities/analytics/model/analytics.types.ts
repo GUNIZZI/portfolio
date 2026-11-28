@@ -115,6 +115,15 @@ export interface AnalyticsProjectViewData {
     durationText: string | null;
 }
 
+/** 기획 문서 하나의 조회수. 이름은 화면이 기획 문서의 목록과 이어 붙인다 */
+export interface AnalyticsPlanViewData {
+    /** 기획 폴더의 경로 — `admin/dashboard` */
+    key: string;
+    pageViews: number;
+    /** 평균 참여 시간 — `2분 10초`. 세션이 없으면 null */
+    durationText: string | null;
+}
+
 /** 지금 접속자. 최근 30분에 사이트를 본 사람 수다 */
 export interface AnalyticsRealtimeData {
     activeUsers: number;

@@ -15,6 +15,12 @@ export type AnalyticsPagePath = (typeof ANALYTICS_PAGE_PATHS)[number];
 /** 프로젝트 상세 주소의 앞부분. 뒤에 프로젝트의 id 가 붙는다 */
 export const ANALYTICS_PROJECT_PATH_PREFIX = '/project/';
 
+/**
+ * 기획 뷰어에서 본 문서의 주소 앞부분. 뒤에 기획 폴더의 경로가 붙는다(/plan/admin/dashboard).
+ * 뷰어의 추적 코드가 이 주소로 조회를 보낸다.(scripts/publish-plan-viewer.mjs 의 PLAN_PATH_PREFIX)
+ */
+export const ANALYTICS_PLAN_PATH_PREFIX = '/plan/';
+
 /** 수집하지 않는 주소의 앞부분. 관리 화면이다.(docs/plan/admin/dashboard/README.md 요구사항 9) */
 export const ANALYTICS_EXCLUDED_PATH_PREFIX = '/admin';
 

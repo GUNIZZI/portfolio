@@ -8,6 +8,7 @@ import { getServerEnv } from '@/shared/util/serverEnv';
 import {
     ANALYTICS_PAGE_PATHS,
     ANALYTICS_PERIOD_DAYS,
+    ANALYTICS_PLAN_PATH_PREFIX,
     ANALYTICS_PROJECT_PATH_PREFIX,
     type AnalyticsPeriodDays,
     DEFAULT_ANALYTICS_PERIOD_DAYS,
@@ -22,6 +23,7 @@ import {
     type AnalyticsPageResponse,
     type AnalyticsPageViewData,
     type AnalyticsPeriodData,
+    type AnalyticsPlanViewData,
     type AnalyticsProjectViewData,
     type AnalyticsRealtimeData,
     type AnalyticsRefreshStatus,
@@ -219,6 +221,38 @@ export function toProjectViewList(
     }));
 }
 
+/**
+ * 기획 뷰어에서 본 주소를 기획 폴더의 경로로 바꾼다. 같은 문서의 주소가 여러 개면 합친다.
+ * 뷰어 파일의 주소(/plan/index.html)와 와이어프레임을 바로 연 주소는 문서의 조회가 아니라 뺀다
+ */
+export function toPlanViewList(
+    pageList: readonly AnalyticsPageResponse[],
+): AnalyticsPlanViewData[] {
+    const byKey = new Map<string, Omit<AnalyticsPageResponse, 'path'>>();
+    for (const page of pageList) {
+        const key = page.path.slice(ANALYTICS_PLAN_PATH_PREFIX.length).replace(/\/$/, '');
+        // 추적 코드는 기획 폴더의 경로만 보낸다. 파일의 주소는 GA 가 스스로 모은 것이다
+        if (!key || key.endsWith('.html')) {
+            continue;
+        }
+        const sum = byKey.get(key) ?? { pageViews: 0, sessions: 0, engagementSeconds: 0 };
+        byKey.set(key, {
+            pageViews: sum.pageViews + page.pageViews,
+            sessions: sum.sessions + page.sessions,
+            engagementSeconds: sum.engagementSeconds + page.engagementSeconds,
+        });
+    }
+
+    return [...byKey].map(([key, sum]) => ({
+        key,
+        pageViews: sum.pageViews,
+        durationText:
+            sum.sessions > 0
+                ? toDurationText(toAverageSeconds(sum.engagementSeconds, sum.sessions))
+                : null,
+    }));
+}
+
 /** GA 속성 id 를 적어 두었는가. 없으면 GA 를 부르지 않고 연결 실패로 그린다 */
 export function isAnalyticsConfigured(): boolean {
     return Boolean(getServerEnv().GA_PROPERTY_ID);
@@ -298,6 +332,21 @@ export async function getAnalyticsProjectViewList(
 
     const period = await getAnalyticsPeriod(days);
     return toProjectViewList(await analyticsRepository.getProjectPageList(period.current));
+}
+
+/**
+ * 기획 문서별 조회수. 조회가 있는 문서만 있고 순서는 정해져 있지 않다
+ * @throws GA 에서 받지 못했을 때
+ */
+export async function getAnalyticsPlanViewList(
+    days: AnalyticsPeriodDays,
+): Promise<AnalyticsPlanViewData[]> {
+    'use cache';
+    cacheTag(toAnalyticsCacheTag(days));
+    cacheLife('hours');
+
+    const period = await getAnalyticsPeriod(days);
+    return toPlanViewList(await analyticsRepository.getPlanPageList(period.current));
 }
 
 /**

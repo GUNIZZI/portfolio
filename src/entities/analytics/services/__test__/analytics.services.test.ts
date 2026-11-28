@@ -9,6 +9,7 @@ import {
     toChangeData,
     toDurationText,
     toPageViewList,
+    toPlanViewList,
     toProjectViewList,
     toSummaryData,
     toTrendData,
@@ -156,7 +157,7 @@ describe('toPageViewList', () => {
 
     it('메뉴 4개를 조회수가 많은 순으로 놓고 비율을 적는다', () => {
         const list = toPageViewList([page('/about', 25), page('/', 75)]);
-        expect(list.map((row) => row.path)).toEqual(['/', '/about', '/work', '/colophon']);
+        expect(list.map((row) => row.path)).toEqual(['/', '/about', '/project', '/colophon']);
         expect(list.map((row) => row.shareText)).toEqual(['75%', '25%', '0%', '0%']);
     });
 
@@ -165,12 +166,37 @@ describe('toPageViewList', () => {
     });
 });
 
+describe('toPlanViewList', () => {
+    it('주소를 기획 폴더의 경로로 바꾸고, 같은 문서의 주소는 합친다', () => {
+        const list = toPlanViewList([
+            { path: '/plan/admin/dashboard', pageViews: 10, sessions: 4, engagementSeconds: 240 },
+            { path: '/plan/admin/dashboard/', pageViews: 2, sessions: 2, engagementSeconds: 120 },
+            { path: '/plan/home', pageViews: 3, sessions: 0, engagementSeconds: 0 },
+        ]);
+
+        expect(list).toEqual([
+            { key: 'admin/dashboard', pageViews: 12, durationText: '1분 00초' },
+            { key: 'home', pageViews: 3, durationText: null },
+        ]);
+    });
+
+    it('뷰어 파일과 와이어프레임을 바로 연 주소는 뺀다', () => {
+        const list = toPlanViewList([
+            { path: '/plan/index.html', pageViews: 40, sessions: 9, engagementSeconds: 90 },
+            { path: '/plan/home/wireframe.html', pageViews: 5, sessions: 1, engagementSeconds: 9 },
+            { path: '/plan/', pageViews: 1, sessions: 1, engagementSeconds: 1 },
+        ]);
+
+        expect(list).toEqual([]);
+    });
+});
+
 describe('toProjectViewList', () => {
     it('주소를 프로젝트의 id 로 바꾸고 같은 프로젝트의 주소를 합친다', () => {
         const list = toProjectViewList([
-            { path: '/work/a', pageViews: 50, sessions: 20, engagementSeconds: 2000 },
-            { path: '/work/a/', pageViews: 8, sessions: 5, engagementSeconds: 1250 },
-            { path: '/work/b', pageViews: 3, sessions: 0, engagementSeconds: 0 },
+            { path: '/project/a', pageViews: 50, sessions: 20, engagementSeconds: 2000 },
+            { path: '/project/a/', pageViews: 8, sessions: 5, engagementSeconds: 1250 },
+            { path: '/project/b', pageViews: 3, sessions: 0, engagementSeconds: 0 },
         ]);
         expect(list).toEqual([
             // 3250초 / 25번 = 130초
@@ -181,8 +207,8 @@ describe('toProjectViewList', () => {
 
     it('상세보다 깊은 주소와 id 가 없는 주소는 뺀다', () => {
         const list = toProjectViewList([
-            { path: '/work/', pageViews: 1, sessions: 1, engagementSeconds: 1 },
-            { path: '/work/a/edit', pageViews: 1, sessions: 1, engagementSeconds: 1 },
+            { path: '/project/', pageViews: 1, sessions: 1, engagementSeconds: 1 },
+            { path: '/project/a/edit', pageViews: 1, sessions: 1, engagementSeconds: 1 },
         ]);
         expect(list).toEqual([]);
     });

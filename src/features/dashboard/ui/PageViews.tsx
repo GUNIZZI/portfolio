@@ -31,8 +31,8 @@ interface OwnProps {
 
 /**
  * 페이지별 조회수. 공개 화면의 메뉴 4개를 조회수가 많은 순으로 적는다.
- * 비율은 숫자로만 적는다. 가로 막대는 그래프를 만드는 방법을 정한 뒤에 더한다.
- * (2026-11-20 사용자 결정, docs/plan/admin/dashboard/README.md 검토 필요 사항 10번)
+ * 비율은 숫자로만 적는다. 가로 막대는 아직 만들지 않았다.
+ * (docs/plan/admin/dashboard/README.md 검토 필요 사항 10번)
  */
 export default async function PageViews({ days }: OwnProps) {
     const pages = await loadPageViewList(days);

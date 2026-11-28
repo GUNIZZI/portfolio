@@ -31,9 +31,8 @@ export default async function RealtimeVisitors() {
     return (
         <p className="flex flex-wrap items-baseline gap-2 text-caption text-muted-foreground">
             <span className="text-body font-semibold text-strong tabular-nums">
-                지금 접속자 {realtime.activeUsers.toLocaleString('ko-KR')}명
+                최근 30분 방문자 {realtime.activeUsers.toLocaleString('ko-KR')}명
             </span>
-            최근 30분
         </p>
     );
 }
