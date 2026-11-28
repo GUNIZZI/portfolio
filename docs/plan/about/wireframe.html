@@ -16,7 +16,7 @@
 
 <div class="intro">
   <h1>소개 (/about)</h1>
-  <p>코드에 있는 그대로다. 문구는 임시이고 사용자가 바꾼다. 헤더 · 푸터 · 연락 섹션은 홈과 같다.</p>
+  <p>구현된 소개 페이지를 보여 준다. 소개 문구는 임시이며 관리 화면에서 수정할 수 있다. 헤더와 푸터, 연락 섹션은 홈과 같다.</p>
   <div class="spec-block">
     <h4>화면 목록</h4>
     <div class="spec-tw"><table class="spec-t">
@@ -38,7 +38,7 @@
 <script type="text/markdown" id="userflow-src">
 # 소개 — 유저 플로우
 
-[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다.
+[README.md](./README.md) 의 정책을 기준으로 방문자가 페이지를 탐색하는 순서를 정리했다.
 
 ## 1. 전체 흐름
 
@@ -66,7 +66,7 @@ flowchart TD
     R -.->|"회사를 누름"| O
     OPEN -.->|"다시 누름"| O
     R --> L{"작업 상세가 있는가"}:::decision
-    L -->|"예"| WD(["작업 상세 /work/slug"]):::done
+    L -->|"예"| WD(["작업 상세 /project/slug"]):::done
     L -->|"아니요"| TXT["이름만 표시"]:::step
 ```
 

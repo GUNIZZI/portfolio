@@ -1,6 +1,6 @@
 # 소개 — 유저 플로우
 
-[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다.
+[README.md](./README.md) 의 정책을 기준으로 방문자가 페이지를 탐색하는 순서를 정리했다.
 
 ## 1. 전체 흐름
 
@@ -28,7 +28,7 @@ flowchart TD
     R -.->|"회사를 누름"| O
     OPEN -.->|"다시 누름"| O
     R --> L{"작업 상세가 있는가"}:::decision
-    L -->|"예"| WD(["작업 상세 /work/slug"]):::done
+    L -->|"예"| WD(["작업 상세 /project/slug"]):::done
     L -->|"아니요"| TXT["이름만 표시"]:::step
 ```
 

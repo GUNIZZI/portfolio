@@ -17,8 +17,8 @@
 
 <div class="intro">
   <h1>프로젝트 관리 (/admin/projects)</h1>
-  <p>포트폴리오에 싣는 프로젝트를 등록 · 수정 · 삭제하고 공개 여부 · 홈 노출 · 순서를 정하는 관리 화면의 와이어프레임이다. 관리자 1명만 들어온다.</p>
-  <p>관리 화면은 디자인 원본이 없다. 여기서는 배치 · 순서 · 상태만 그리고, 모양은 지금의 토큰으로 표와 폼을 단순하게 그린다. 정책과 입력 규칙은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. 로그인 화면은 로그인 와이어프레임(<span class="mono">login/wireframe.html</span>)에 있다.</p>
+  <p>포트폴리오에 소개할 프로젝트를 등록·수정·삭제한다. 공개 여부와 홈 표시 여부, 표시 순서도 여기에서 설정한다. 관리자 1명만 접근할 수 있다.</p>
+  <p>화면의 배치와 순서, 상태별 동작을 보여 준다. 표와 입력 폼에는 현재 디자인 토큰을 적용했다. 정책과 입력 규칙은 <span class="mono">README.md</span>에, 사용자 흐름은 <span class="mono">userflow.md</span>에 정리했다. 로그인 화면은 로그인 와이어프레임(<span class="mono">login/wireframe.html</span>)에 있다.</p>
   <div class="legend">
     <span><span class="m">1</span> 설명 번호</span>
   </div>
@@ -70,7 +70,7 @@ flowchart TD
 
 - 세션은 `/admin` 아래의 모든 화면에서 서버가 검사한다. 수정 화면의 주소로 바로 들어와도 같다.
 - 로그인과 로그아웃의 흐름은 [로그인 기획](./login/userflow.md)에 있다.
-- 공개 화면은 저장한 직후의 내용을 그린다. 흐름은 [홈](../home/userflow.md)에 있다.
+- 공개 화면에는 저장한 내용을 즉시 반영한다. 흐름은 [홈](../home/userflow.md)에 있다.
 
 ## 2. 프로젝트 등록 · 수정
 
@@ -101,8 +101,8 @@ flowchart TD
 - 기본 항목 · 상세 항목 · 본문은 저장 버튼 하나로 함께 저장한다. 상세 항목과 본문은 비워 둘 수 있다.
 - 본문은 서버가 저장하기 전에 정제한다.(제안)
 - 저장에 실패하면 입력한 내용을 그대로 둔다.
-- 취소하거나 다른 화면으로 가면 묻지 않고 나간다. 고친 내용은 남지 않는다.
-- 세션이 끝난 뒤 저장을 누르면 저장하지 않고 로그인으로 보낸다. 입력하던 내용은 남지 않는다.
+- 취소하거나 다른 화면으로 이동하면 확인창 없이 편집을 종료한다. 저장하지 않은 변경 사항은 사라진다.
+- 세션이 만료된 뒤 저장을 누르면 로그인 화면으로 이동한다. 입력한 내용은 저장되지 않는다.
 
 ## 3. 순서 · 공개 · 홈 노출 바꾸기
 
@@ -110,7 +110,7 @@ flowchart TD
 flowchart TD
     LS["S-01 프로젝트 목록"]:::screen --> W{"무엇을 바꾸는가"}:::decision
     W -->|"공개 스위치"| SW[/"곧바로 저장"/]:::api
-    W -->|"홈 노출 스위치"| PB{"공개인가"}:::decision
+    W -->|"홈 표시 스위치"| PB{"공개인가"}:::decision
     PB -->|"아니요"| DIS["스위치 비활성"]:::warn
     PB -->|"예"| SW
     W -->|"행의 위 아래 버튼"| SW
@@ -122,8 +122,8 @@ flowchart TD
 ```
 
 - 순서는 위 · 아래 버튼을 누른 때 저장한다. 끌기는 없다.
-- 공개를 끄면 그 프로젝트의 홈 노출도 함께 꺼진다.
-- 홈 노출을 바꾸면 홈만, 공개와 순서를 바꾸면 홈과 작업 목록이 함께 바뀐다.
+- 프로젝트를 비공개로 전환하면 홈에서도 숨긴다.
+- 홈 표시 여부를 바꾸면 홈에만 반영한다. 공개 여부나 순서를 바꾸면 홈과 프로젝트 목록에 함께 반영한다.
 
 ## 4. 프로젝트 삭제
 
@@ -152,13 +152,13 @@ flowchart TD
       <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t">대시보드</span><span class="t on">프로젝트</span><span class="t">소개</span><span class="t">경력</span><span class="sp"></span><span class="rel"><span class="m abs">2</span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></span></div>
       <div class="ph"><div><h4>프로젝트</h4><p>포트폴리오에 싣는 프로젝트를 관리한다</p></div></div>
       <div class="tbar">
-        <span class="row rel"><span class="m abs">5</span><span class="muted">전체 4건 · 공개 3건 · 홈 노출 2건</span></span>
+        <span class="row rel"><span class="m abs">5</span><span class="muted">전체 4건 · 공개 3건 · 홈에 표시 2건</span></span>
         <span class="sp"></span>
         <span class="row rel"><span class="m abs">3</span><span class="btn pri">등록</span></span>
       </div>
       <div class="tw rel"><span class="m abs">4</span>
         <table>
-          <thead><tr><th class="c">순서</th><th>썸네일</th><th>제목</th><th>분류</th><th>공개</th><th>홈 노출</th><th class="c">수정 일시</th><th class="c">삭제</th></tr></thead>
+          <thead><tr><th class="c">순서</th><th>대표 이미지</th><th>제목</th><th>분류</th><th>공개</th><th>홈에 표시</th><th class="c">수정 일시</th><th class="c">삭제</th></tr></thead>
           <tbody>
             <tr class="hover"><td class="c"><span class="row"><span class="muted">1</span><span class="updown"><span class="btn sm dis">↑</span><span class="btn sm">↓</span></span></span></td><td><span class="thumb"></span></td><td class="title"><b>KOZIPSA 플랫폼 관리 시스템</b></td><td><span class="badge b-type">Admin</span></td><td><span class="sw on"></span></td><td><span class="sw on"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
             <tr><td class="c"><span class="row"><span class="muted">2</span><span class="updown"><span class="btn sm">↑</span><span class="btn sm">↓</span></span></span></td><td><span class="thumb"></span></td><td class="title"><b>사내 통합 대시보드</b></td><td><span class="badge b-type">Dashboard</span></td><td><span class="sw on"></span></td><td><span class="sw"></span></td><td><div class="cell2">2026.11.12<small>(10:12)</small></div></td><td class="c"><span class="btn sm ghost">삭제</span></td></tr>
@@ -172,7 +172,7 @@ flowchart TD
       <li><span class="m">2</span><div><b>사이트 보기 · 로그아웃</b><p>GNB 의 오른쪽 끝에 있다. 사이트 보기는 <code>/</code> 를 새 탭으로 연다. 로그아웃하면 세션을 지우고 로그인(login/wireframe.html)으로 간다</p></div></li>
       <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>등록 → <a href="#s02">S-02</a></p></div></li>
       <li><span class="m">4</span><div><b>표</b> <code>shared/ui/dataTable</code><p>경력 목록과 같은 표다. 공개 · 비공개를 모두 순서대로 그린다. 순서는 이 표에서 바로 바꾼다. 검색 · 페이지 나누기 · 정렬은 없다. 열의 명세는 아래 표</p></div></li>
-      <li><span class="m">5</span><div><b>건수</b><p>전체 · 공개 · 홈 노출 건수다. 공개 · 홈 노출 스위치를 바꾸면 바로 바뀐다. 저장에 실패해 스위치를 되돌리면 건수도 되돌린다</p></div></li>
+      <li><span class="m">5</span><div><b>건수</b><p>전체 프로젝트 수와 공개 프로젝트 수, 홈에 표시되는 프로젝트 수를 보여 준다. 스위치를 바꾸면 즉시 반영하고 저장에 실패하면 이전 건수로 되돌린다.</p></div></li>
     </ol></aside>
   </div>
   <div class="spec">
@@ -186,7 +186,7 @@ flowchart TD
           <tr><td>제목</td><td><code>title</code></td><td>누르면 <a href="#s03">S-03</a></td></tr>
           <tr><td>분류</td><td><code>category</code></td><td>—</td></tr>
           <tr><td>공개</td><td>스위치 <code>shared/ui/switch</code></td><td>누르면 곧바로 저장하고 <a href="#p02">P-02</a>. 실패하면 되돌린다. 끄면 홈 노출도 함께 꺼진다</td></tr>
-          <tr><td>홈 노출</td><td>스위치 <code>shared/ui/switch</code></td><td>누르면 곧바로 저장하고 <a href="#p02">P-02</a>. 실패하면 되돌린다. 비공개 행에서는 비활성</td></tr>
+          <tr><td>홈에 표시</td><td>스위치 <code>shared/ui/switch</code></td><td>누르면 곧바로 저장하고 <a href="#p02">P-02</a>. 실패하면 되돌린다. 비공개 행에서는 비활성</td></tr>
           <tr><td>수정 일시</td><td><code>updatedAt</code>. <code>2026.11.12 (10:12)</code></td><td>—</td></tr>
           <tr><td>삭제</td><td>버튼</td><td><a href="#p01">P-01</a></td></tr>
         </tbody>
@@ -260,7 +260,7 @@ flowchart TD
         <div class="fl">공개</div>
         <div class="fv"><div class="row rel"><span class="m abs">7</span><span class="sw"></span><span>비공개</span></div></div>
         <div class="sepx"></div>
-        <div class="fl">홈 노출</div>
+        <div class="fl">홈에 표시</div>
         <div class="fv"><div class="row rel"><span class="m abs">8</span><span class="sw ro"></span><span>노출 안 함</span></div><div class="info">ⓘ 공개를 켜야 켤 수 있다</div></div>
       </div>
       <div class="btn-row rel"><span class="m abs">9</span><span class="muted small">필수 항목을 입력해 주세요</span><span class="sp"></span><span class="btn">취소</span><span class="btn pri dis" aria-disabled="true">등록</span></div>
@@ -273,7 +273,7 @@ flowchart TD
       <li><span class="m">5</span><div><b>썸네일</b> <code>image</code> (컴포넌트 없음)<p>고르면 크기를 줄여 바로 올리고 미리보기 · 파일 이름 · 크기를 보여 준다. 긴 변을 1000px 이하로 줄이고 WebP 로 바꾼다. 크기는 줄인 뒤의 값이다. 삭제하면 올린 파일을 지운다</p></div></li>
       <li><span class="m">6</span><div><b>대체 텍스트</b> <code>image.alt</code><p>썸네일을 지우면 항목도 감춘다</p></div></li>
       <li><span class="m">7</span><div><b>공개</b> <code>published</code> (스위치)<p>처음 값은 비공개다</p></div></li>
-      <li><span class="m">8</span><div><b>홈 노출</b> <code>featured</code> (스위치)<p>공개가 꺼져 있으면 비활성이다. 공개를 끄면 함께 꺼진다</p></div></li>
+      <li><span class="m">8</span><div><b>홈에 표시</b> <code>featured</code> (스위치)<p>공개가 꺼져 있으면 비활성이다. 공개를 끄면 함께 꺼진다</p></div></li>
       <li><span class="m">10</span><div><b>팀</b> <code>team</code> (제안)<p>파트 이름과 인원을 한 줄씩 더한다. ↑ · ↓ 로 옮기고 빼기로 뺀다. 한 줄도 없으면 상세의 메타에 팀을 그리지 않는다</p></div></li>
       <li><span class="m">11</span><div><b>역할</b> <code>role</code><p>선택 항목이다</p></div></li>
       <li><span class="m">12</span><div><b>맡은 범위</b> <code>scope</code> <code>shared/ui/select</code> (제안)<p>영역 4개마다 없음 · 전담 · 주도 · 참여 중 하나를 고른다. 처음 값은 모두 없음이다. 없음인 영역은 저장하지 않는다</p></div></li>
@@ -421,8 +421,8 @@ flowchart TD
           <tr><td>삭제</td><td>프로젝트를 삭제했습니다</td></tr>
           <tr><td>공개로 바꿈</td><td>프로젝트를 공개했습니다</td></tr>
           <tr><td>비공개로 바꿈</td><td>프로젝트를 비공개로 바꿨습니다</td></tr>
-          <tr><td>홈 노출을 켬</td><td>홈에 노출했습니다</td></tr>
-          <tr><td>홈 노출을 끔</td><td>홈에서 내렸습니다</td></tr>
+          <tr><td>홈 노출을 켬</td><td>홈에 표시했습니다</td></tr>
+          <tr><td>홈 노출을 끔</td><td>홈에서 숨겼습니다</td></tr>
           <tr><td>순서 저장</td><td>순서를 저장했습니다</td></tr>
           <tr><td>실패</td><td>저장하지 못했습니다. 다시 시도해 주세요</td></tr>
         </tbody>

@@ -16,8 +16,8 @@
 
 <div class="intro">
   <h1>소개 관리 (/admin/about)</h1>
-  <p>소개 페이지와 홈의 소개 섹션에 보이는 문구를 고치는 관리 화면의 와이어프레임이다. 인트로 · 일하는 방식 · Skill 관리 · 홈 소개를 한 화면에서 섹션별로 고친다.</p>
-  <p>관리 화면은 디자인 원본이 없다. 여기서는 배치 · 순서 · 상태만 그리고, 모양은 지금의 토큰으로 표와 폼을 단순하게 그린다. 정책과 입력 규칙은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. GNB 의 명세는 대시보드 와이어프레임(<span class="mono">../dashboard/wireframe.html</span>)에 있다.</p>
+  <p>소개 페이지와 홈의 소개 문구를 관리한다. 소개 첫 화면, 일하는 방식, Skill 관리, 홈 소개를 한 화면에서 섹션별로 편집할 수 있다.</p>
+  <p>화면의 배치와 순서, 상태별 동작을 보여 준다. 표와 입력 폼에는 현재 디자인 토큰을 적용했다. 정책과 입력 규칙은 <span class="mono">README.md</span>에, 사용자 흐름은 <span class="mono">userflow.md</span>에 정리했다. 공통 메뉴는 대시보드 와이어프레임(<span class="mono">../dashboard/wireframe.html</span>)에 있다.</p>
   <div class="legend">
     <span><span class="m">1</span> 설명 번호</span>
   </div>
@@ -85,10 +85,10 @@ flowchart TD
 
 - 섹션은 인트로 · 일하는 방식 · Skill 관리 · 홈 소개 4개다. 저장 버튼이 섹션마다 있다.
 - 항목 입력에는 목록을 고치는 것도 들어간다. 소개 문단은 줄 목록, 성장 경로와 Skill 이름은 칩 목록이다.([README.md](./README.md) 「목록 고치기」)
-- 저장해도 화면을 옮기지 않는다. 다른 섹션에 고친 내용이 있으면 그대로 남는다.
-- 고친 내용이 없는 섹션의 저장 버튼은 비활성이다.
+- 저장 후에도 현재 화면에 머문다. 다른 섹션에서 편집 중인 내용은 유지한다.
+- 변경 사항이 없는 섹션은 저장 버튼을 비활성화한다.
 - 저장에 실패하면 입력한 내용을 그대로 둔다.
-- 세션이 끝난 뒤 저장을 누르면 저장하지 않고 로그인으로 보낸다. 입력하던 내용은 남지 않는다.
+- 세션이 만료된 뒤 저장을 누르면 로그인 화면으로 이동한다. 입력한 내용은 저장되지 않는다.
 </script>
 <script src="../../userflow.js"></script>
 <!-- userflow:end -->
@@ -101,7 +101,7 @@ flowchart TD
       <div class="tabs rel"><span class="m abs">1</span><b>GUNI</b><span class="t">대시보드</span><span class="t">프로젝트</span><span class="t on">소개</span><span class="t">경력</span><span class="sp"></span><span class="btn ghost">사이트 보기 ↗</span><span class="btn ghost">로그아웃</span></div>
       <div class="ph"><div><h4>소개</h4><p>소개 페이지와 홈의 소개 섹션에 보이는 내용을 고친다</p></div></div>
 
-      <div class="ph rel"><span class="m abs">2</span><div><h4>인트로</h4><p>소개 페이지 · 수정 일시 2026.11.17 (10:12)</p></div></div>
+      <div class="ph rel"><span class="m abs">2</span><div><h4>소개 첫 화면</h4><p>소개 페이지 · 수정 일시 2026.11.17 (10:12)</p></div></div>
       <div class="form-grid">
         <div class="fl req">소개 문단</div>
         <div class="fv rel"><span class="m abs">3</span>
@@ -166,8 +166,8 @@ flowchart TD
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>GNB</b> <code>widgets/adminHeader</code><p>명세는 대시보드 와이어프레임(../dashboard/wireframe.html)의 「GNB」 표가 갖는다. 이 화면에서는 「소개」 를 강조한다. 저장하지 않은 섹션이 있어도 메뉴 · 로고를 누르면 묻지 않고 옮긴다</p></div></li>
-      <li><span class="m">2</span><div><b>섹션 머리</b><p>섹션은 인트로 · 일하는 방식 · Skill 관리 · 홈 소개 순이다. 어느 페이지에 보이는지와 그 섹션의 수정 일시를 적는다</p></div></li>
-      <li><span class="m">3</span><div><b>줄 목록</b> <code>features/aboutEditor</code> ListField<p>소개 문단에 쓴다. 줄마다 ↑ · ↓ · 빼기 버튼이 있다. 첫 줄의 ↑ 와 끝 줄의 ↓ 는 비활성. 최소 개수만 남으면 빼기는 비활성. 더하면 맨 아래에 빈 줄이 생긴다</p></div></li>
+      <li><span class="m">2</span><div><b>섹션 제목</b><p>소개 첫 화면, 일하는 방식, Skill 관리, 홈 소개 순이다. 섹션마다 표시 위치와 마지막 수정 시각을 안내한다.</p></div></li>
+      <li><span class="m">3</span><div><b>줄 목록</b> <code>features/aboutEditor</code> ListField<p>소개 문단마다 위로, 아래로, 빼기 버튼을 제공한다. 첫 문단은 위로, 마지막 문단은 아래로 이동할 수 없다. 문단이 최소 개수만 남으면 빼기 버튼을 비활성화한다. 새 문단은 목록 끝에 추가한다.</p></div></li>
       <li><span class="m">4</span><div><b>칩 목록</b> <code>features/aboutEditor</code> ChipListField<p>성장 경로와 Skill 이름에 쓴다. 이름을 옆으로 늘어놓고 끌어서 순서를 바꾼다. 마우스를 올리면 테두리와 면의 색이 바뀐다. 키보드로는 순서를 바꾸지 않는다. 놓을 자리는 이름 사이에 선으로 보여 준다. 이름마다 × 가 있고, 최소 개수만 남으면 비활성. 아래 입력에 적고 「+ 추가」 나 Enter 로 맨 끝에 더한다. 그림은 입력이 비어 「+ 추가」 가 비활성인 상태다. 규칙은 README.md 「목록 고치기」 가 갖는다</p></div></li>
       <li><span class="m">5</span><div><b>Button</b> <code>shared/ui/button</code><p>저장 버튼은 섹션마다 있다. 고친 내용이 없거나 규칙에 맞지 않으면 비활성이다. 이유는 따로 적지 않고 항목의 오류 문구로 알린다. 저장하는 동안에도 비활성. 저장하면 화면에 머물고 <a href="#p01">P-01</a></p></div></li>
       <li><span class="m">6</span><div><b>일하는 방식</b><p>4개로 고정한다. 제목과 설명은 모두 필수다. 오류 문구는 그 항목을 고치거나 입력을 벗어난 뒤에 보여 준다. 그림은 설명을 비운 채 벗어난 상태다</p></div></li>

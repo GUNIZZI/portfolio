@@ -17,7 +17,7 @@ flowchart TD
 
 - 상세 위의 All Projects 는 필터를 고르지 않은 전체 목록으로 간다. 브라우저의 뒤로 가기로 돌아가면 고른 필터가 남아 있다.
 
-## 2. 분류로 거르기
+## 2. 분류로 필터링
 
 ```mermaid
 flowchart TD

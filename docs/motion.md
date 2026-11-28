@@ -9,7 +9,7 @@
     - 다른 모션 라이브러리(Lenis, three 등)를 추가하지 않는다. 필요하면 먼저 컨펌을 받는다.
     - 예외가 4곳 있다. 로더 · 관리 화면의 기다리는 틀 · 작업 카드의 테두리 선 · 페이지 전환이다. 로더는 CSS 애니메이션으로 돈다. 화면의 연출이 아니라 진행 중임을 알리는 표시다.(2026-11-18 사용자 결정, `src/shared/ui/loader/Loader.tsx`)
       관리 화면의 기다리는 틀도 CSS 애니메이션이다. 면 위로 옅은 빛이 왼쪽에서 오른쪽으로 지나가기를 되풀이한다.(2026-11-20 사용자 결정, `src/features/adminAuth/ui/AdminGuardFallback.tsx`)
-      관리 화면을 옮기는 동안 머리 아래에 지나가는 진행 선도 같은 애니메이션(`--animate-skeleton`)을 쓴다.(2026-11-24 사용자 결정, `src/widgets/adminHeader/AdminNavProgress.tsx`)
+      관리 페이지를 이동할 때 헤더 아래에 표시되는 진행 표시줄도 같은 애니메이션(`--animate-skeleton`)을 쓴다.(2026-11-24 사용자 결정, `src/widgets/adminHeader/AdminNavProgress.tsx`)
     - 작업 카드의 테두리 선도 CSS 애니메이션이다. 보라색과 하늘색 사이를 오가기를 되풀이한다. 한 색에 2초 머물고 3초에 걸쳐 바뀐다. 선은 포인터의 불빛이 닿는 곳에서만 보인다.(2026-11-20 사용자 결정, `src/features/featuredProjects/ui/ProjectCardFrame.tsx`)
     - 페이지 전환은 React 의 `<ViewTransition>` 이 시작하고, 브라우저가 CSS 애니메이션으로 이전 화면을 붙잡아 둔다. 나가는 화면을 붙잡아 둘 수 있는 것이 브라우저의 화면 전환뿐이다. 화면을 덮는 붓질은 GSAP 이 그린다.(2026-11-18 사용자 결정, `src/widgets/pageTransition/PageTransition.tsx` · `src/style/viewTransition.css`)
     - 붓질은 링크를 누른 순간에 칠하기 시작한다. 새 페이지가 늦으면 다 덮은 채로 기다리고, 새 페이지가 오면 다 칠하기까지 남은 시간만 이전 화면을 붙잡는다.(2026-11-24 사용자 결정, `src/widgets/pageTransition/PageTransition.tsx` · `src/instrumentation-client.ts`)

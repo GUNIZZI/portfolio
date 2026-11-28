@@ -15,15 +15,15 @@
 <main>
 
 <div class="intro">
-  <h1>작업 목록 · 상세 (/work)</h1>
-  <p>코드에 있는 그대로다. 헤더 · 푸터와 섹션 제목 스타일은 홈과 같다. 케이스 스터디의 내용은 임시 문구다.</p>
+  <h1>작업 목록 · 상세 (/project)</h1>
+  <p>구현된 프로젝트 목록과 상세 화면을 보여 준다. 헤더와 푸터, 섹션 제목 스타일은 홈과 같다. 케이스 스터디 본문에는 작성용 문구를 넣었다.</p>
   <div class="spec-block">
     <h4>화면 목록</h4>
     <div class="spec-tw"><table class="spec-t">
       <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
       <tbody>
-        <tr><td><a href="#s01">S-01</a></td><td>작업 목록</td><td>페이지</td><td><code>/work?category=</code></td></tr>
-        <tr><td><a href="#s02">S-02</a></td><td>작업 상세</td><td>페이지</td><td><code>/work/[id]</code></td></tr>
+        <tr><td><a href="#s01">S-01</a></td><td>작업 목록</td><td>페이지</td><td><code>/project?category=</code></td></tr>
+        <tr><td><a href="#s02">S-02</a></td><td>작업 상세</td><td>페이지</td><td><code>/project/[id]</code></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -55,7 +55,7 @@ flowchart TD
 
 - 상세 위의 All Projects 는 필터를 고르지 않은 전체 목록으로 간다. 브라우저의 뒤로 가기로 돌아가면 고른 필터가 남아 있다.
 
-## 2. 분류로 거르기
+## 2. 분류로 필터링
 
 ```mermaid
 flowchart TD
@@ -73,7 +73,7 @@ flowchart TD
 <!-- userflow:end -->
 
 <section class="screen" id="s01">
-  <div class="screen-h"><span class="id">S-01</span><h2>작업 목록</h2><span class="route">/work</span></div>
+  <div class="screen-h"><span class="id">S-01</span><h2>작업 목록</h2><span class="route">/project</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span>
@@ -99,13 +99,13 @@ flowchart TD
 </section>
 
 <section class="screen" id="s02">
-  <div class="screen-h"><span class="id">S-02</span><h2>작업 상세</h2><span class="route">/work/[id]</span></div>
+  <div class="screen-h"><span class="id">S-02</span><h2>작업 상세</h2><span class="route">/project/[id]</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span>
         <div class="pf-split">
           <div class="pf-stack"><span class="pf-chip">Enterprise</span><span class="pf-display">KOZIPSA 플랫폼 관리 시스템</span><span class="muted small">Kocom · Admin Platform</span></div>
-          <div class="img-ph pf-wide">머리 이미지</div>
+          <div class="img-ph pf-wide">대표 이미지</div>
         </div>
       </div>
       <div class="pf-sec rel"><span class="pf-lab">meta</span><span class="m abs">2</span>

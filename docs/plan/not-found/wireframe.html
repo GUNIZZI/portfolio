@@ -16,7 +16,7 @@
 
 <div class="intro">
   <h1>찾을 수 없음 (404) — 초안</h1>
-  <p>제안으로 채운 초안이다. 헤더 · 푸터는 홈과 같다.</p>
+  <p>제안 단계의 초안이다. 헤더와 푸터는 홈과 같다.</p>
   <div class="spec-block">
     <h4>화면 목록</h4>
     <div class="spec-tw"><table class="spec-t">
@@ -37,13 +37,13 @@
 <script type="text/markdown" id="userflow-src">
 # 찾을 수 없음 — 유저 플로우
 
-[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 초안이라 모든 흐름이 `제안` 이다.
+[README.md](./README.md) 의 정책을 기준으로 방문자가 페이지를 찾지 못했을 때의 이동 흐름을 제안한다.
 
 ## 1. 전체 흐름
 
 ```mermaid
 flowchart TD
-    BAD["잘못된 주소 · 없는 작업"]:::warn --> NF["S-01 찾을 수 없음"]:::screen
+    BAD["잘못된 주소 또는 존재하지 않는 프로젝트"]:::warn --> NF["S-01 찾을 수 없음"]:::screen
     NF -->|"홈으로"| HOME(["홈"]):::done
     NF -->|"작업 보기"| WORK{"작업 목록이 있는가"}:::decision
     WORK -->|"예"| WL(["작업 목록"]):::done
@@ -66,7 +66,7 @@ flowchart TD
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>본문</b> (제안)<p>제목은 <code>h1</code>. 캐릭터는 새 그림, 없으면 <code>characters/peace.png</code></p></div></li>
-      <li><span class="m">2</span><div><b>Button</b><p>홈으로 → <code>/</code>. 작업 보기 → <code>/work</code>, 없으면 <code>/#projects</code></p></div></li>
+      <li><span class="m">2</span><div><b>Button</b><p>홈으로 → <code>/</code>. 작업 보기 → <code>/project</code>, 없으면 <code>/#projects</code></p></div></li>
     </ol></aside>
   </div>
 </section>

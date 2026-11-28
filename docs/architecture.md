@@ -38,9 +38,9 @@ portfolio/
     ├── app/          App Router 라우트
     ├── widgets/      여러 기능을 조합하거나 모든 페이지에 붙는 UI (header, footer, backdrop, contact, pageTransition, adminHeader)
     ├── features/     기능 단위 (hero, featuredProjects, …)
-    ├── entities/     도메인 데이터 (project, experience, session, about, analytics)
+    ├── entities/     도메인 데이터 (project, experience, session, about, colophon, analytics)
     ├── shared/       앱 공용 (ui/, util/)
-    ├── config/       사이트 정보, 내비게이션
+    ├── config/       사이트 정보, 내비게이션, 기획 문서의 목록(planDocs.ts 는 `pnpm plan-index` 가 만든다)
     ├── style/        global.css, tokens/
     ├── asset/        코드가 import 하는 정적 자원 (SVG 등)
     ├── types/        .d.ts 앰비언트 선언
@@ -56,6 +56,8 @@ portfolio/
 | -------------------------------------------- | ---------------- | --------------------------------------------- |
 | `import` 로 가져와 번들에 포함한다           | `src/asset/`     | 아직 없다                                     |
 | `/images/...` 주소로 불러 쓴다(`next/image`) | `public/images/` | `characters` · `logo` · `projects` · `skills` |
+
+`public/plan/` 은 기획 뷰어의 복사본이다. `scripts/publish-plan-viewer.mjs` 가 만들고 저장소에 올리지 않는다.(`docs/plan/README.md` 1번)
 
 ## 3. 계층
 
@@ -84,7 +86,7 @@ flowchart TD
 ```
 
 **`entities` 끼리도 서로 import 하지 않는다.** 조합이 필요하면 상위인 `features` 에서 합친다.(Kozipsa 3절)
-**예외는 `session` 하나다.** 변경 요청을 받는 서버 액션은 세션을 다시 검사해야 하므로, entity 는 `session` 을 import 할 수 있다.(`eslint.config.mjs` 의 `boundaries/dependencies`, `src/entities/about/actions/about.actions.ts` · `src/entities/experience/actions/experience.actions.ts`)
+**예외는 `session` 하나다.** 변경 요청을 받는 서버 액션은 세션을 다시 검사해야 하므로, entity 는 `session` 을 import 할 수 있다.(`eslint.config.mjs` 의 `boundaries/dependencies`, `src/entities/about/actions/about.actions.ts` · `src/entities/experience/actions/experience.actions.ts` · `src/entities/colophon/actions/colophon.actions.ts`)
 
 **`features` 끼리, `widgets` 끼리도 서로 import 하지 않는다.** 슬라이스 사이의 조합은 한 단계 위에서 한다.
 
@@ -111,13 +113,13 @@ flowchart TD
 컴포넌트는 `ui/` 로 나누지 않고 위젯 폴더 바로 아래에 둔다.(`src/widgets/header/`)
 
 **헤더는 레이아웃이 그린다.**(2026-11-18 사용자 결정)
-헤더가 있는 공개 페이지(홈 · 작업 · 소개)를 `(site)` 로 묶고, 그 레이아웃이 헤더와 페이지 맨 위(`#top`)의 틀을 갖는다.(`src/app/(site)/layout.tsx`)
+헤더가 있는 공개 페이지(홈 · 작업 · 소개 · 제작 과정)를 `(site)` 로 묶고, 그 레이아웃이 헤더와 페이지 맨 위(`#top`)의 틀을 갖는다.(`src/app/(site)/layout.tsx`)
 페이지는 배경과 본문 · 푸터를 채운다. 페이지를 옮겨도 헤더는 다시 그려지지 않아, 지금 메뉴는 헤더가 주소에서 읽는다.(`src/widgets/header/HeaderBar.tsx`)
 관리 화면도 같은 방식이다.(4.2절)
 
 **배경은 공통과 페이지 전용으로 나눈다.**(2026-11-16 사용자 결정)
 점 무늬와 가장자리 붓 자국은 모든 페이지가 같아 `widgets/backdrop` 에 둔다.
-낙서는 페이지의 섹션 배치에 맞춰 자리를 잡으므로 페이지마다 따로 둔다. 홈은 `features/homeDoodles`, 소개는 `features/aboutDoodles`, 작업은 `features/workDoodles` 다.
+낙서는 페이지의 섹션 배치에 맞춰 자리를 잡으므로 페이지마다 따로 둔다. 홈은 `features/homeDoodles`, 소개는 `features/aboutDoodles`, 작업은 `features/workDoodles`, 제작 과정은 `features/colophonDoodles` 다.
 `app` 의 페이지가 `<Backdrop>` 안에 그 페이지의 낙서를 넣어 조합한다. 배경은 `(site)` 레이아웃의 틀에 기대어 헤더 뒤까지 깔린다. 낙서 하나를 그리는 것은 `shared/ui/doodle` 이다.
 
 ### 3.2 공통 컴포넌트를 두는 곳
@@ -159,7 +161,7 @@ page(서버 컴포넌트) → <e>.services.ts → <e>.repositories.ts → 저장
 
 **변경 요청은 `actions` 의 서버 액션으로 받는다.**(2026-11-12 사용자 결정, `docs/plan/admin/README.md` 요구사항 7)
 파일 첫 줄에 `'use server';` 를 둔다. 클라이언트 컴포넌트가 entity 에서 직접 가져올 수 있는 것은 서버 액션과 `model` 뿐이다.
-지금은 `session` · `about` · `experience` · `project` 에 있다.(`src/entities/session/actions/` · `src/entities/about/actions/` · `src/entities/experience/actions/` · `src/entities/project/actions/`)
+지금은 `session` · `about` · `experience` · `project` · `colophon` 에 있다.(`src/entities/session/actions/` · `src/entities/about/actions/` · `src/entities/experience/actions/` · `src/entities/project/actions/` · `src/entities/colophon/actions/`)
 
 ```
 폼(클라이언트) → <e>.actions.ts → <e>.services.ts → <e>.repositories.ts → 저장소
@@ -172,6 +174,7 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 - 읽은 결과는 `services` 가 `'use cache'` 로 캐시하고 태그를 붙인다. 공개 화면이 요청마다 저장소를 부르지 않는다.(`src/entities/about/services/about.services.ts`)
 - 저장한 서버 액션이 그 태그의 캐시를 지운다. 공개 화면은 저장한 직후의 내용을 그린다.(`src/entities/about/actions/about.actions.ts`)
 - 저장한 시각은 서버가 기록한다. 캐시에 담을 수 있게 문자열로 바꿔 읽는다.(`src/entities/about/repositories/about.repositories.ts`)
+- 문서가 없을 수 있는 섹션은 `repositories` 가 null 로 내고, `services` 가 코드의 처음 값으로 채운다. 저장소에 옮기는 단계 없이 화면이 열린다.(`src/entities/colophon/repositories/colophon.repositories.ts` · `src/entities/colophon/services/colophon.services.ts`)
 - 여러 건을 두는 컬렉션은 문서 1개가 1건이고, 문서의 id 는 저장소가 발급한다. 순서는 `services` 가 정한다.(`src/entities/experience/repositories/experience.repositories.ts` · `src/entities/experience/services/experience.services.ts`)
 - 빌드할 때도 저장소를 읽는다. 빌드하는 곳에 환경 변수 5개가 있어야 한다.(`src/shared/util/serverEnv.ts`)
 - 순서를 정해 두는 컬렉션은 문서에 `order` 를 두고, `services` 가 그 값으로 놓는다.(`src/entities/project/services/project.services.ts` 의 `sortProjectList`)
@@ -200,8 +203,8 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 - 비밀번호는 서버에서 Firebase Auth REST 로 확인한다. 브라우저에는 Firebase SDK 를 싣지 않는다.
 - `src/proxy.ts` 는 쿠키가 있는지만 본다. 값의 검증은 페이지의 `AdminGuard`(`src/features/adminAuth`)와 서버 액션이 `requireSession` 으로 한다.
 - `/admin` 은 화면을 그리지 않는다. 세션이 있으면 대시보드로, 없으면 로그인으로 보낸다.(`src/features/adminAuth/ui/AdminEntry.tsx`)
-- 관리 화면의 머리는 `widgets/adminHeader` 다. 메뉴 항목은 `src/config/nav.ts` 의 `ADMIN_NAV_ITEMS` 에 있다.
-- 머리는 페이지가 아니라 레이아웃이 그린다. 로그인을 뺀 관리 화면을 `(panel)` 로 묶어, 메뉴를 옮겨도 머리는 남고 본문만 바뀐다.(`src/app/admin/(panel)/layout.tsx`)
+- 관리 화면의 헤더는 `widgets/adminHeader` 에서 관리한다. 메뉴 항목은 `src/config/nav.ts` 의 `ADMIN_NAV_ITEMS` 에 있다.
+- 레이아웃에서 헤더를 렌더링한다. 로그인을 뺀 관리 화면을 `(panel)` 로 묶어, 페이지를 이동해도 헤더는 계속 표시되고 본문만 바뀐다.(`src/app/admin/(panel)/layout.tsx`)
 - 토스트도 그 레이아웃에 하나만 둔다. 저장하고 다른 화면으로 옮긴 뒤에도 문구가 남는다.(`src/app/admin/(panel)/layout.tsx`, `src/shared/ui/toast/ToastProvider.tsx`)
 - 확인 창을 그리는 곳도 그 레이아웃에 하나만 둔다. 화면은 `addConfirmDialog` 를 불러 띄운다.(`src/app/admin/(panel)/layout.tsx`, `src/shared/ui/alertDialog/ConfirmDialogProvider.tsx`)
 - 레이아웃은 화면을 옮길 때 다시 실행되지 않는다. 그래서 레이아웃과 페이지가 각각 `AdminGuard` 를 두고, 강조할 메뉴는 `AdminNav` 가 주소에서 읽는다.(`src/widgets/adminHeader/AdminNav.tsx`)
@@ -212,7 +215,7 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 
 ### 4.3 폼의 검증
 
-**검증은 zod 스키마가 하고, 오류 문구도 스키마가 낸다.** 폼은 따로 검사하지 않고 스키마가 낸 문구를 그 항목 아래에 그린다.(2026-11-18 사용자 결정, Kozipsa `docs/form.md`)
+**검증은 zod 스키마가 하고, 오류 문구도 스키마가 낸다.** 폼은 스키마 검증 결과에 따라 해당 입력란 아래에 오류 메시지를 표시한다.(2026-11-18 사용자 결정, Kozipsa `docs/form.md`)
 
 - 폼은 `react-hook-form` 의 `useForm` 에 `zodResolver` 를 걸어 만든다.(`src/features/experienceEditor/ui/ExperienceForm.tsx` · `src/features/aboutEditor/model/useSectionForm.ts`)
 - 규칙과 문구는 entity 의 스키마에 둔다. 서버 액션도 같은 스키마로 다시 검증한다.(`src/entities/experience/model/experience.schemas.ts` 와 `EXPERIENCE_FIELD_ERROR`, `src/entities/about/model/about.schemas.ts` 와 `ABOUT_FIELD_ERROR`)
@@ -222,15 +225,18 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 
 대시보드가 읽는 방문 통계는 entity `analytics` 가 다룬다. 저장소는 Google Analytics(GA)다.(2026-11-17 사용자 결정, `docs/plan/admin/dashboard/README.md`)
 
-| 하는 일                              | 위치                                                    |
-| ------------------------------------ | ------------------------------------------------------- |
-| 공개 화면에 추적 코드를 넣는다       | `src/_app/SiteAnalytics.tsx`                            |
-| GA Data API 를 부른다                | `src/entities/analytics/repositories/`                  |
-| 기간을 정하고 블록의 모양으로 바꾼다 | `src/entities/analytics/services/analytics.services.ts` |
-| 새로 고침으로 캐시를 지운다          | `src/entities/analytics/actions/analytics.actions.ts`   |
-| 프로젝트 제목과 조회수를 잇는다      | `src/features/dashboard/model/dashboard.utils.ts`       |
+| 하는 일                              | 위치                                                                         |
+| ------------------------------------ | ---------------------------------------------------------------------------- |
+| 공개 화면에 추적 코드를 넣는다       | `src/_app/SiteAnalytics.tsx`                                                 |
+| GA Data API 를 부른다                | `src/entities/analytics/repositories/`                                       |
+| 기간을 정하고 블록의 모양으로 바꾼다 | `src/entities/analytics/services/analytics.services.ts`                      |
+| 새로 고침으로 캐시를 지운다          | `src/entities/analytics/actions/analytics.actions.ts`                        |
+| 프로젝트 제목과 조회수를 잇는다      | `src/features/dashboard/model/dashboard.utils.ts`                            |
+| 기획 뷰어에 추적 코드를 넣는다       | `scripts/publish-plan-viewer.mjs`                                            |
+| 기획 문서의 이름과 조회수를 잇는다   | `src/features/dashboard/model/dashboard.utils.ts` · `src/config/planDocs.ts` |
 
-- 추적 코드는 `(site)` 레이아웃과 그 밖에 있는 `colophon` 페이지에만 둔다. 관리 화면에는 두지 않는다.(`src/app/(site)/layout.tsx` · `src/app/colophon/page.tsx`)
+- 추적 코드는 `(site)` 레이아웃에만 둔다. 관리 화면에는 두지 않는다.(`src/app/(site)/layout.tsx`)
+- 기획 뷰어는 Next 밖의 정적 파일이라 레이아웃의 추적 코드가 닿지 않는다. 배포할 파일을 만들 때 뷰어의 복사본에 따로 넣고, 보는 문서마다 `/plan/<기획 폴더>` 로 조회를 보낸다. 이 주소의 앞부분은 스크립트와 entity 2곳에 적혀 있어 함께 고친다.(`scripts/publish-plan-viewer.mjs` 의 `PLAN_PATH_PREFIX`, `src/entities/analytics/model/analytics.constants.ts` 의 `ANALYTICS_PLAN_PATH_PREFIX`)
 - GA 는 Firebase 서비스 계정으로 부른다. 환경 변수는 서버의 `GA_PROPERTY_ID` 와 공개 화면의 `NEXT_PUBLIC_GA_MEASUREMENT_ID` 2개다. 둘 다 없어도 빌드와 다른 화면은 동작한다.(`src/shared/util/serverEnv.ts` · `src/_app/SiteAnalytics.tsx`)
 - 받은 값은 기간마다 `cacheLife('hours')` 로 간직한다. 받지 못해 던진 것은 간직하지 않는다.(`src/entities/analytics/services/analytics.services.ts`)
 - 블록은 서버 컴포넌트가 저마다 `services` 를 불러 `<Suspense>` 안에서 그린다.(`src/features/dashboard/ui/DashboardBlock.tsx`)
@@ -248,10 +254,12 @@ Firestore 를 부르는 곳은 `repositories` 다. 서버만 읽고 쓴다.(`src
 
 ## 미정리 항목
 
-- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` · `projectEditor` · `dashboard`, 404 와 에러 화면의 `statusScreen` 이다.
+- feature 는 홈의 `hero` · `featuredProjects` · `skills` · `about` · `homeDoodles`, 소개의 `aboutIntro` · `experienceTimeline` · `workPrinciples` · `skillGroups` · `aboutDoodles`, 작업의 `projectExplorer` · `projectDetail` · `workDoodles`, 제작 과정의 `colophon` · `colophonDoodles`, 관리의 `adminAuth` · `aboutEditor` · `experienceEditor` · `projectEditor` · `colophonEditor` · `dashboard`, 404 와 에러 화면의 `statusScreen` 이다.
 - 홈의 `featuredProjects` 는 작업 카드(`ProjectCard`)도 공개한다. 작업 목록 페이지가 같은 카드를 쓴다.
-- widget 은 `header` · `footer` · `backdrop` · `contact` · `pageTransition` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` · `analytics` 이다.
-- 관리 기능은 로그인 · 소개 · 경력(2026-11-18)과 프로젝트(2026-11-19), 대시보드 1차(2026-11-20)까지 구현했다. 대시보드의 그래프와 2차 블록이 남았다.(`docs/plan/admin/dashboard/README.md` 검토 필요 사항 10번 · 요구사항 3)
+- `colophon` 은 페이지의 본문(`Colophon`)과 홈의 제작 과정 섹션(`ColophonTeaser`)을 함께 공개한다. 두 화면이 같은 4단계를 읽는다.(`src/features/colophon/index.ts`)
+- `colophonEditor` 의 `SectionShell` · `useSectionForm` · `ColophonEditorError` 는 `aboutEditor` 의 같은 파일과 하는 일이 같다. 2번째 사용처가 생겼지만 아직 위로 올리지 않았다. 3개다.(원칙 2, `src/features/colophonEditor/` · `src/features/aboutEditor/`)
+- widget 은 `header` · `footer` · `backdrop` · `contact` · `pageTransition` · `adminHeader`, entity 는 `project` · `experience` · `session` · `about` · `colophon` · `analytics` 이다.
+- 관리 기능은 로그인 · 소개 · 경력(2026-11-18)과 프로젝트(2026-11-19), 대시보드 1차(2026-11-20), 제작 과정(2026-11-27)까지 구현했다. 대시보드는 방문자 추이의 꺾은선 그래프(2026-11-25)와 지금 접속자(2026-11-24)까지 만들었다. 페이지별 조회수의 가로 막대와 2차 블록 3개가 남았다.(`docs/plan/admin/dashboard/README.md` 검토 필요 사항 10번 · 요구사항 3)
 - `content/projects.ts` 와 `public/images/projects/` 는 저장소로 옮기는 스크립트(`scripts/migrate-projects.mjs`)만 읽는다. 옮긴 뒤 스크립트와 함께 지운다.(`docs/plan/admin/README.md` 「기존 프로젝트 이전」)
 
 ## 확인방법

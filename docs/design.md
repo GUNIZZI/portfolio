@@ -79,11 +79,13 @@
 
 토큰 파일: `src/style/tokens/typography.css`
 
-| 폰트             | 토큰          | 쓰는 곳                  |
-| ---------------- | ------------- | ------------------------ |
-| Permanent Marker | `font-marker` | 이름, 직함, 섹션 제목    |
-| Caveat           | `font-hand`   | Hey, 말풍선, 손글씨 메모 |
-| Noto Sans KR     | `font-sans`   | 그 밖 전부               |
+| 폰트             | 토큰          | 쓰는 곳                  | 라이선스                  |
+| ---------------- | ------------- | ------------------------ | ------------------------- |
+| Permanent Marker | `font-marker` | 이름, 직함, 섹션 제목    | Apache License 2.0        |
+| Caveat           | `font-hand`   | Hey, 말풍선, 손글씨 메모 | SIL Open Font License 1.1 |
+| Noto Sans KR     | `font-sans`   | 그 밖 전부               | SIL Open Font License 1.1 |
+
+라이선스는 `google/fonts` 저장소의 폰트마다의 `METADATA.pb` 와 라이선스 파일에서 확인했다.(2026-11-26, `apache/permanentmarker` · `ofl/caveat` · `ofl/notosanskr`)
 
 원본 파일에는 Noto Sans KR 이 들어 있지 않아 macOS 에서는 시스템 폰트로 보인다.
 구현은 원본이 지정한 Noto Sans KR 을 실제로 불러온다. 한글 굵기가 원본 화면과 조금 다른 이유다.

@@ -16,8 +16,8 @@
 
 <div class="intro">
   <h1>로그인 (/admin · /admin/login)</h1>
-  <p>관리 화면에 들어오는 곳의 와이어프레임이다. 관리자 1명이 이메일과 비밀번호로 로그인한다.</p>
-  <p>이미 구현한 화면이다. 여기서는 배치 · 순서 · 상태만 그린다. 정책은 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다. 로그아웃 버튼은 프로젝트 관리 와이어프레임(<span class="mono">../wireframe.html</span>)의 프로젝트 목록에 있다.</p>
+  <p>관리자는 이메일과 비밀번호로 관리 화면에 로그인한다. 사용 계정은 1개다.</p>
+  <p>구현된 로그인 화면의 배치와 입력 순서, 상태별 동작을 보여 준다. 정책은 <span class="mono">README.md</span>에, 사용자 흐름은 <span class="mono">userflow.md</span>에 정리했다. 프로젝트 목록의 로그아웃 버튼은 프로젝트 관리 와이어프레임(<span class="mono">../wireframe.html</span>)에서 확인할 수 있다.</p>
   <div class="legend">
     <span><span class="m">1</span> 설명 번호</span>
   </div>
@@ -97,21 +97,21 @@ flowchart TD
     DEL --> L(["S-01 로그인"]):::done
 ```
 
-- 로그아웃 버튼은 관리 화면마다 페이지 머리에 있다.([대시보드 와이어프레임](../dashboard/wireframe.html#s01))
+- 로그아웃 버튼은 각 관리 화면의 헤더에 있다.([대시보드 와이어프레임](../dashboard/wireframe.html#s01))
 - 확인 창을 거치지 않는다.
 
-## 4. 세션이 끝남
+## 4. 세션 만료
 
 ```mermaid
 flowchart TD
     USE["관리 화면을 쓰는 중"]:::step --> T{"로그인한 지 2시간이 지났는가"}:::decision
     T -->|"아니요"| KEEP(["그대로 쓴다"]):::done
-    T -->|"예"| ACT["화면을 옮기거나 저장을 누름"]:::step
+    T -->|"예"| ACT["다른 화면으로 이동하거나 저장을 누름"]:::step
     ACT --> L(["S-01 로그인"]):::done
 ```
 
 - 세션은 쓰는 동안에도 늘어나지 않는다.
-- 저장을 누른 것이면 저장하지 않고 보낸다. 입력하던 내용은 남지 않는다.
+- 저장 버튼을 누른 경우에는 입력한 내용을 저장하지 않고 로그인 화면으로 이동한다.
 - 시간이 다 됐다고 미리 알리지 않는다.
 </script>
 <script src="../../userflow.js"></script>
@@ -144,11 +144,11 @@ flowchart TD
       <div class="spec-tw"><table class="spec-t">
         <thead><tr><th>주소</th><th>상황</th><th>동작</th></tr></thead>
         <tbody>
-          <tr><td><code>/admin/login</code></td><td>세션이 없거나 끝났다</td><td>이 화면을 그린다</td></tr>
+          <tr><td><code>/admin/login</code></td><td>세션이 없거나 만료됐다</td><td>로그인 화면을 표시한다</td></tr>
           <tr><td><code>/admin/login</code></td><td>세션이 있다</td><td>대시보드(<code>/admin/dashboard</code>)로 보낸다</td></tr>
-          <tr><td><code>/admin</code></td><td>세션이 없거나 끝났다</td><td><code>/admin/login</code> 으로 보낸다</td></tr>
+          <tr><td><code>/admin</code></td><td>세션이 없거나 만료됐다</td><td><code>/admin/login</code> 으로 보낸다</td></tr>
           <tr><td><code>/admin</code></td><td>세션이 있다</td><td>대시보드로 보낸다</td></tr>
-          <tr><td>그 밖의 <code>/admin/…</code></td><td>세션이 없거나 끝났다</td><td><code>/admin/login</code> 으로 보낸다</td></tr>
+          <tr><td>그 밖의 <code>/admin/…</code></td><td>세션이 없거나 만료됐다</td><td><code>/admin/login</code> 으로 보낸다</td></tr>
         </tbody>
       </table></div>
     </div>
