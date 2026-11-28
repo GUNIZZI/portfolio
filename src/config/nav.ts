@@ -28,6 +28,12 @@ export function findNavHref(pathname: string): NavHref | null {
     return current?.href ?? null;
 }
 
+/**
+ * 기획 뷰어의 주소. scripts/publish-plan-viewer.mjs 가 docs/plan 을 public/plan 에 둔다.
+ * Next 의 페이지가 아니라 정적 파일이라 <a> 로 새 탭에 연다.(docs/plan/README.md 1번)
+ */
+export const PLAN_VIEWER_HREF = '/plan/index.html';
+
 /** 관리 화면의 메뉴. 순서와 주소는 docs/plan/admin/dashboard/README.md 「GNB」 */
 export const ADMIN_NAV_ITEMS = [
     { label: '대시보드', href: '/admin/dashboard' },

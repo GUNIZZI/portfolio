@@ -3,8 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
+        "dev": "pnpm plan-publish && next dev",
+        "build": "pnpm plan-publish && next build",
         "start": "next start",
         "lint": "eslint . --max-warnings=0",
         "lint:fix": "eslint . --fix",
@@ -16,7 +16,8 @@
         "test:e2e": "playwright test",
         "check": "pnpm tc && pnpm lint && pnpm format:check && pnpm test",
         "prepare": "husky",
-        "plan-index": "node scripts/build-plan-index.mjs"
+        "plan-index": "node scripts/build-plan-index.mjs",
+        "plan-publish": "node scripts/publish-plan-viewer.mjs"
     },
     "dependencies": {
         "@google-analytics/data": "^7.3.0",

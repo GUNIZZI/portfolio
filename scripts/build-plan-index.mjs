@@ -16,6 +16,12 @@
  * 링크의 target 을 <iframe> 이름으로 걸어 오른쪽에 연다. 와이어프레임처럼 파일을 더블클릭해 열어도 되게 하기 위해서다.
  * 주소 해시로 보던 화면을 공유하는 일은 인라인 <script> 가 한다. 스크립트가 없어도 링크는 그대로 연다.
  *
+ * 보는 문서가 바뀌면 뷰어가 `plan:view` 이벤트를 낸다. 배포본에 넣는 추적 코드가 이 이벤트로 조회를 센다.
+ * (scripts/publish-plan-viewer.mjs)
+ *
+ * 같은 목록을 src/config/planDocs.ts 로도 낸다. 대시보드의 기획 문서별 조회수가 문서의 이름을 여기서 읽는다.
+ * 이 파일도 결과물이므로 손으로 고치지 않는다.
+ *
  * 같은 실행에서 각 wireframe.html 의 「유저 플로우」 구간도 채운다.
  * <!-- userflow:start --> 와 <!-- userflow:end --> 사이를 userflow.md 본문으로 바꾼다.
  * .md 는 배포하지 않으므로 와이어프레임에 담아 보낸다. 그리는 일은 plan/userflow.js 가 한다.
@@ -28,6 +34,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const planDir = path.join(__dirname, '../docs/plan');
+const planDocsPath = path.join(__dirname, '../src/config/planDocs.ts');
 
 const escapeHtml = (text) =>
     text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -138,10 +145,16 @@ ${renderNav(plans)}
     const links = [...document.querySelectorAll('nav a[data-key]')];
     const byKey = new Map(links.map(a => [a.dataset.key, a]));
 
+    // 보는 문서가 바뀔 때 한 번 알린다. 같은 문서 안에서 화면을 옮기는 것은 알리지 않는다
+    let viewedKey = null;
     const mark = key => {
       for (const a of links) a.removeAttribute('aria-current');
       byKey.get(key)?.setAttribute('aria-current', 'page');
       byKey.get(key)?.scrollIntoView({ block: 'nearest' });
+      if (key !== viewedKey) {
+        viewedKey = key;
+        window.dispatchEvent(new CustomEvent('plan:view', { detail: { key } }));
+      }
     };
 
     // 마지막 마디가 기획 폴더가 아니면 화면 ID 로 본다
@@ -199,6 +212,33 @@ for (const { folder, scope } of plans) {
 
 fs.writeFileSync(path.join(planDir, 'index.html'), renderPage(plans));
 console.warn(`[plan-index] docs/plan/index.html — 기획 문서 ${plans.length}건`);
+
+// 작은따옴표 문자열로 적는다. Prettier 의 모양과 같게 내 포맷 검사에 걸리지 않게 한다
+const toTsString = (text) => `'${text.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+
+const renderPlanDocs = (list) => `/**
+ * 기획 문서의 목록. scripts/build-plan-index.mjs 가 docs/plan/README.md 「구조」 표에서 만든다.
+ * 손으로 고치지 않는다. 표를 고치고 \`pnpm plan-index\` 를 다시 실행한다.
+ * 순서는 기획 뷰어의 왼쪽 메뉴와 같다.
+ */
+export const PLAN_DOCS = [
+${list
+    .map(
+        ({ folder, scope, route }) => `    {
+        /** 기획 폴더의 경로. 뷰어의 주소 해시이고, 조회를 모으는 주소의 끝부분이다 */
+        key: ${toTsString(folder)},
+        name: ${toTsString(scope.join(' > '))},
+        route: ${toTsString(route)},
+    },`,
+    )
+    .join('\n')}
+] as const;
+
+export type PlanDoc = (typeof PLAN_DOCS)[number];
+`;
+
+fs.writeFileSync(planDocsPath, renderPlanDocs(plans));
+console.warn(`[plan-index] src/config/planDocs.ts — 기획 문서 ${plans.length}건`);
 
 const FLOW_START = '<!-- userflow:start -->';
 const FLOW_END = '<!-- userflow:end -->';

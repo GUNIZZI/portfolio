@@ -20,6 +20,9 @@
 # production
 /build
 
+# 기획 뷰어의 복사본. scripts/publish-plan-viewer.mjs 가 docs/plan 에서 만든다
+/public/plan/
+
 # misc
 .DS_Store
 *.pem

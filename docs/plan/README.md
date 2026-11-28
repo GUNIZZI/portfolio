@@ -11,13 +11,13 @@ Kozipsa(`admin-next/apps/kozipsa/docs/plan/`)의 기획 체계를 가져왔다.(
 **라우트와 같은 폴더 구조로 두고, 페이지 하나가 폴더 하나다.**(Kozipsa `plan/README.md` 1번에서 가져옴)
 목록과 상세처럼 한 흐름으로 읽어야 하는 페이지는 한 폴더에 둔다. Kozipsa 의 팝업 관리가 목록 · 등록 · 상세를 한 폴더에 둔 것과 같다.
 
-| 대상                             | 문서                                |
-| -------------------------------- | ----------------------------------- |
-| 홈 (`/`)                         | [home/](./home/README.md)           |
-| 작업 목록 · 상세 (`/work`)       | [work/](./work/README.md)           |
-| 소개 (`/about`)                  | [about/](./about/README.md)         |
-| 이 사이트는 이렇게 (`/colophon`) | [colophon/](./colophon/README.md)   |
-| 찾을 수 없음 (404)               | [not-found/](./not-found/README.md) |
+| 대상                          | 문서                                |
+| ----------------------------- | ----------------------------------- |
+| 홈 (`/`)                      | [home/](./home/README.md)           |
+| 작업 목록 · 상세 (`/project`) | [work/](./work/README.md)           |
+| 소개 (`/about`)               | [about/](./about/README.md)         |
+| 제작 과정 (`/colophon`)       | [colophon/](./colophon/README.md)   |
+| 찾을 수 없음 (404)            | [not-found/](./not-found/README.md) |
 
 **관리 화면의 기획은 공개 화면과 따로 둔다.**(2026-11-12 사용자 결정)
 구역은 `관리` 이고 `admin/` 아래에 둔다.
@@ -29,6 +29,7 @@ Kozipsa(`admin-next/apps/kozipsa/docs/plan/`)의 기획 체계를 가져왔다.(
 | 프로젝트 관리 (`/admin/projects`)  | [admin/](./admin/README.md)                         |
 | 소개 관리 (`/admin/about`)         | [admin/about/](./admin/about/README.md)             |
 | 경력 관리 (`/admin/experiences`)   | [admin/experiences/](./admin/experiences/README.md) |
+| 제작 과정 관리 (`/admin/colophon`) | [admin/colophon/](./admin/colophon/README.md)       |
 
 **와이어프레임은 [index.html](./index.html) 한 곳에서 모두 본다.**
 왼쪽 메뉴에 기획 문서마다 스코프(`작업 > 목록 · 상세`)와 라우트가 있고, 누르면 오른쪽에 그 와이어프레임이 열린다.
@@ -39,12 +40,25 @@ Kozipsa(`admin-next/apps/kozipsa/docs/plan/`)의 기획 체계를 가져왔다.(
 `pnpm plan-index` 로 만든다.(Kozipsa 1번에서 가져옴)
 스코프의 첫 항목(구역)은 커밋 영역 표기를 따른다.(근거: `docs/commit.md` 「영역」)
 
+**`plan-index` 는 같은 목록을 `src/config/planDocs.ts`에도 생성한다. 변경할 때는 원본 표를 수정한다.**
+대시보드의 기획 문서별 조회수가 문서의 이름을 여기서 읽는다.(2026-11-28 사용자 결정, `scripts/build-plan-index.mjs` · `src/features/dashboard/ui/PlanViews.tsx`)
+
 **`plan-index` 는 각 `wireframe.html` 의 `<!-- userflow:start -->` ~ `<!-- userflow:end -->` 구간에 `userflow.md` 본문을 넣는다.**
 이 구간은 손으로 고치지 않는다.(근거: `scripts/build-plan-index.mjs` 가 실행마다 구간 전체를 바꾼다)
-`userflow.md` 나 이 표를 고쳤다면 `plan-index` 를 실행한 결과까지 커밋한다.
+`userflow.md` 나 이 표를 고쳤다면 `plan-index` 를 실행한 결과까지 커밋한다. `src/config/planDocs.ts` 도 그 결과다.
 
 사이트는 Vercel 에 배포한다. `main` 에 push 하면 Vercel 이 다시 배포한다.(2026-11-16 사용자가 프로젝트를 연결하고 배포를 확인함)
-Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다. 기획 뷰어(`index.html`)는 따로 배포하지 않는다.
+Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다.
+
+**기획 뷰어는 사이트와 함께 배포하고 누구나 볼 수 있다. 주소는 `/plan/index.html` 이다.**(2026-11-26 사용자 결정)
+이 사이트를 어떻게 만들었는지 보여 주는 자료다. 관리 화면의 기획도 함께 공개한다.
+
+- `pnpm plan-publish` 가 이 폴더의 `.html` · `.css` · `.js` 를 `public/plan/` 으로 복사한다. `pnpm dev` 와 `pnpm build` 가 먼저 실행한다.(`scripts/publish-plan-viewer.mjs`, `package.json`)
+- `.md` 는 복사하지 않는다. 유저 플로우는 `plan-index` 가 와이어프레임에 담아 둔다.(`scripts/build-plan-index.mjs`)
+- `public/plan/` 은 저장소에 올리지 않고 손으로 고치지 않는다. 원본은 이 폴더 하나다.(`.gitignore`)
+- 뷰어는 검색 색인에서 뺀다. `/plan` 아래의 응답에 `X-Robots-Tag: noindex` 를 붙인다.(2026-11-26 사용자 결정, `next.config.ts`)
+- 배포본의 뷰어에는 방문을 모으는 추적 코드를 넣는다. `plan-publish` 가 `index.html` 의 복사본에만 넣고, 측정 id 가 없으면 넣지 않는다. 보는 문서를 바꿀 때마다 `/plan/<기획 폴더>` 로 조회 1번을 보낸다.(2026-11-28 사용자 결정, `scripts/publish-plan-viewer.mjs`, [대시보드 기획](./admin/dashboard/README.md) 「수집」)
+- 들어오는 곳은 「제작 과정」 페이지 한 곳이다.([colophon/](./colophon/README.md) 「Claude 가 개발」)
 
 ## 2. 문서 구성
 
@@ -53,7 +67,7 @@ Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다. 기획 뷰어(
 | 파일             | 내용                                                                                       |
 | ---------------- | ------------------------------------------------------------------------------------------ |
 | `README.md`      | 요구사항 정의서(PRD). 개요 · 용어 · 정책 · 기능 정의 · 데이터 · 검토 필요 사항             |
-| `userflow.md`    | 유저 플로우. mermaid `flowchart` 로 그린다. 와이어프레임의 「유저 플로우」 구간으로 보인다 |
+| `userflow.md`    | 유저 플로우. mermaid `flowchart` 로 그린다. 와이어프레임의 「유저 플로우」 구간에 표시한다 |
 | `wireframe.html` | 와이어프레임과 화면 설계 명세. 브라우저로 연다                                             |
 
 **정책은 `README.md`, 흐름은 `userflow.md`, 화면 명세는 `wireframe.html` 에 적는다.**
@@ -73,7 +87,7 @@ Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다. 기획 뷰어(
 | 신규 화면      | 사용자가 준 요구사항, 디자인 원본(`sample/`), 앱 공통 문서 | 요구사항에 없는 것에 붙인다 |
 | 이미 있는 화면 | 실제 코드(`src/app/` · `features/` · `widgets/`)           | 붙이지 않는다               |
 
-**이미 있는 화면은 코드가 기준이다.** 코드에서 확인할 수 없는 것만 검토 필요 사항으로 보낸다.(근거: `docs/index.md` 우선순위 2)
+**구현된 화면은 코드를 기준으로 문서화한다.** 코드로 확인할 수 없는 내용은 검토 필요 사항에 정리한다.(근거: `docs/index.md` 우선순위 2)
 **이미 있는 화면에 새 동작을 더하는 기획에는 2가지가 섞인다.** 코드에 있는 구조는 표시 없이 적고, 더할 동작 가운데 요구사항에 없는 것에 `제안` 을 붙인다.(2026-11-12 사용자 결정, 홈 기획)
 
 ### 3.2 `제안` 표기
@@ -139,7 +153,7 @@ Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다. 기획 뷰어(
 
 - **`classDef` 는 도표에 적지 않는다.** `plan/userflow.js` 의 `CLASS_DEF` 가 도표마다 붙인다.
 - **앞 단계로 돌아가는 선은 점선(`-.->`)으로 그린다.**
-- **마름모에는 짧은 질문만 넣고, 조건의 상세는 도표 아래 불릿으로 보낸다.**
+- **마름모에는 짧은 질문을 넣고, 세부 조건은 도표 아래 목록에 적는다.**
 
 ### 3.6 `wireframe.html`
 
@@ -149,7 +163,7 @@ Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다. 기획 뷰어(
 - **시각 디자인을 다시 그리지 않는다.** 배치 · 순서 · 상태만 그리고, 모양은 디자인 원본(`sample/`)을 가리킨다.
   이 사이트는 완성 디자인이 있어서, 와이어프레임에 그림을 다시 그리면 같은 내용이 2곳에 생긴다.(2026-11-12 기획 체계 검토에서 제안, 사용자 컨펌 대기)
 - **움직이는 요소에는 `.mo` 모션 주석을 붙인다.** 명세는 화면 아래 모션 표에 적는다.
-- **변형 화면은 앞 화면과 달라지는 부분만 그린다.** 같은 칸은 「데스크톱과 같다」 처럼 적는다.
+- **변형 화면에는 앞 화면과 달라지는 부분만 표시한다.** 같은 부분은 「데스크톱과 같다」로 표기한다.
 - **요소 하나를 한 줄에 쓴다.** 고칠 때 바뀌는 줄을 줄이기 위해서다.(Kozipsa 3.6에서 가져옴)
 - **머리말(`.intro`)에 화면 목록 표를 둔다.** 열은 `ID · 화면 · 형태 · 라우트` 다.
 - **화면은 `section.screen` 하나에 하나다.** `id` 를 붙여 화면 목록에서 링크한다.
@@ -164,15 +178,17 @@ Kozipsa 의 Vercel 배포 워크플로는 가져오지 않았다. 기획 뷰어(
 
 ## 금지사항
 
-| 금지                                       | 대신                                       | 근거                           |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------ |
-| 요구사항에 없는 정책을 표시 없이 적기      | `제안` 을 붙이고 검토 필요 사항으로 보내기 | 3.2, 루트 `CLAUDE.md` `# 규칙` |
-| 이미 있는 화면에서 코드와 다른 동작을 적기 | 코드대로 적고 어긋남은 따로 보고하기       | `docs/index.md` 우선순위 2     |
-| 같은 정책을 PRD 와 와이어프레임에 2번 적기 | 한쪽에 적고 링크하기                       | 2번                            |
-| 와이어프레임에 시각 디자인을 다시 그리기   | `sample/` 을 가리키기                      | 3.6                            |
-| `index.html` 을 손으로 고치기              | 표를 고치고 `plan-index` 를 다시 실행하기  | 1번, 같은 내용이 2곳에 생긴다  |
-| `wireframe.html` 에 `<style>` 을 두기      | `wireframe.css` 에 클래스를 추가하기       | 3.6                            |
-| 모션 값을 숫자로 적기                      | `docs/motion.md` 의 토큰 이름              | 3.4                            |
+| 금지                                       | 대신                                        | 근거                             |
+| ------------------------------------------ | ------------------------------------------- | -------------------------------- |
+| 요구사항에 없는 정책을 표시 없이 적기      | `제안` 을 붙이고 검토 필요 사항으로 보내기  | 3.2, 루트 `CLAUDE.md` `# 규칙`   |
+| 이미 있는 화면에서 코드와 다른 동작을 적기 | 코드대로 적고 어긋남은 따로 보고하기        | `docs/index.md` 우선순위 2       |
+| 같은 정책을 PRD 와 와이어프레임에 2번 적기 | 한쪽에 적고 링크하기                        | 2번                              |
+| 와이어프레임에 시각 디자인을 다시 그리기   | `sample/` 을 가리키기                       | 3.6                              |
+| `index.html` 을 손으로 고치기              | 표를 고치고 `plan-index` 를 다시 실행하기   | 1번, 같은 내용이 2곳에 생긴다    |
+| `public/plan/` 을 손으로 고치기            | 이 폴더를 고치고 `plan-publish` 를 실행하기 | 1번, 실행마다 비우고 다시 채운다 |
+| `src/config/planDocs.ts` 를 손으로 고치기  | 표를 고치고 `plan-index` 를 다시 실행하기   | 1번, 실행마다 통째로 바꾼다      |
+| `wireframe.html` 에 `<style>` 을 두기      | `wireframe.css` 에 클래스를 추가하기        | 3.6                              |
+| 모션 값을 숫자로 적기                      | `docs/motion.md` 의 토큰 이름               | 3.4                              |
 
 ## 미정리 항목
 

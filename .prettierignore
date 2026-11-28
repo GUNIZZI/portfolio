@@ -12,3 +12,6 @@ test-results
 docs/plan/**/*.html
 docs/plan/*.js
 docs/plan/*.css
+
+# 기획 뷰어의 복사본 (scripts/publish-plan-viewer.mjs)
+public/plan

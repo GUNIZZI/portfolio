@@ -38,6 +38,8 @@ export default defineConfig([
         'next-env.d.ts',
         // 기획 문서의 와이어프레임 렌더러. 브라우저에서 단독으로 도는 산출물이다
         'docs/plan/**',
+        // 그 복사본. scripts/publish-plan-viewer.mjs 가 만든다
+        'public/plan/**',
     ]),
 
     js.configs.recommended,
