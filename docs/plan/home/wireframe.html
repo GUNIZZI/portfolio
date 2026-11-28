@@ -17,8 +17,8 @@
 
 <div class="intro">
   <h1>홈 (/)</h1>
-  <p>사이트 첫 화면의 와이어프레임이다. 섹션 구성 · 문구 · 모션 · 헤더 고정 · 모바일 메뉴 모두 코드에 있는 그대로다.</p>
-  <p>시각 디자인은 다시 그리지 않는다. 모양은 디자인 원본 <span class="mono">sample/HYOSUNG 포트폴리오.html</span> 을 따르고, 여기서는 배치 · 순서 · 상태만 그린다. 정책과 모션 표는 <span class="mono">README.md</span>, 흐름은 <span class="mono">userflow.md</span> 가 갖는다.</p>
+  <p>홈의 섹션 구성과 문구, 모션을 보여 준다. 고정 헤더와 모바일 메뉴도 구현된 동작을 기준으로 정리했다.</p>
+  <p>스타일은 디자인 원본 <span class="mono">sample/HYOSUNG 포트폴리오.html</span>을 따른다. 이 와이어프레임에서는 배치와 순서, 화면 상태를 확인할 수 있다. 정책과 모션 값은 <span class="mono">README.md</span>에, 사용자 흐름은 <span class="mono">userflow.md</span>에 정리했다.</p>
   <div class="legend">
     <span><span class="m">1</span> 설명 번호</span>
     <span class="mo">모션</span>
@@ -62,14 +62,15 @@ flowchart TD
     H -->|"메뉴 About"| AB
     H -->|"스크롤"| ST["S-02 헤더 고정"]:::screen
     ST -.->|"맨 위로"| H
-    H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
-    H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/id"]):::done
+    H -->|"View All Projects"| WL(["작업 목록 /project"]):::done
+    H -->|"카드 열기 아이콘"| WD(["작업 상세 /project/id"]):::done
     H -->|"More About Me"| AB(["소개 /about"]):::done
+    H -->|"See How It's Built"| CO(["제작 과정 /colophon"]):::done
     H -->|"GitHub"| EXT[/"외부 프로필 새 탭"/]:::api
     H -->|"연락"| C["연락하기"]:::step
 ```
 
-- 작업 목록 · 상세 · 소개는 다른 기획 문서에 있다. [work/](../work/README.md) · [about/](../about/README.md)
+- 작업 목록 · 상세 · 소개 · 제작 과정은 다른 기획 문서에 있다. [work/](../work/README.md) · [about/](../about/README.md) · [colophon/](../colophon/README.md)
 - 같은 페이지 안의 이동은 `scroll-behavior: smooth` 로 부드럽게 이동한다. 동작 줄이기면 바로 이동한다.(`src/style/global.css`)
 
 ## 2. 처음 들어옴
@@ -104,13 +105,13 @@ flowchart TD
     PICK -->|"열기 아이콘"| WD(["작업 상세로 이동"]):::done
 ```
 
-- 카드의 주소는 `/work/<slug>` 다. 작업 원문에 `href` 가 있으면 그 주소로 간다.(`src/entities/project/services/project.services.ts`)
+- 카드의 주소는 `/project/<slug>` 다. 작업 원문에 `href` 가 있으면 그 주소로 간다.(`src/entities/project/services/project.services.ts`)
 
 ## 4. 연락하기
 
 ```mermaid
 flowchart TD
-    C["S-01 연락 섹션"]:::screen -->|"Get in Touch 에 마우스 오버 · 초점"| ADDR["문구가 메일 주소로 바뀜"]:::step
+    C["S-01 연락 섹션"]:::screen -->|"Get in Touch 버튼에 마우스를 올리거나 키보드로 초점을 이동"| ADDR["문구가 메일 주소로 바뀜"]:::step
     ADDR -->|"누름"| MAIL[/"메일 앱"/]:::api
     C -->|"터치 화면에서 누름"| MAIL
 ```
@@ -186,6 +187,13 @@ flowchart TD
         </div>
       </div>
 
+      <div class="pf-sec rel"><span class="pf-lab">#colophon</span><span class="m abs">10</span><span class="mo abs">하나씩 나타남</span>
+        <div class="pf-stack"><span class="pf-h">HOW THIS SITE IS BUILT</span><span class="muted small">사이트의 콘셉트는 제가 정했고, GPT가 디자인을, Claude가 개발을 맡았습니다.</span>
+          <div class="row"><span class="pf-chip">1 콘셉트 정하기 · 나</span><span>→</span><span class="pf-chip">2 참고 이미지 전달하기 · 나</span><span>→</span><span class="pf-chip">3 시안 만들기 · GPT</span><span>→</span><span class="pf-chip">4 구현하기 · Claude</span></div>
+          <div class="row"><span class="btn">See How It's Built →</span></div>
+        </div>
+      </div>
+
       <div class="pf-sec rel"><span class="pf-lab">#contact</span><span class="m abs">8</span>
         <div class="row"><span class="pf-h">Get in Touch!</span><span class="sp"></span><span class="btn pri">Get in Touch →</span></div>
       </div>
@@ -200,11 +208,12 @@ flowchart TD
       <li><span class="m">2</span><div><b>Hero</b> <code>features/hero</code><p>이름은 <code>h1</code>. 등장 연출은 <a href="#s04">S-04</a>, 값은 README 「모션」 표</p></div></li>
       <li><span class="m">3</span><div><b>Button</b> <code>shared/ui/button</code><p>View My Projects → <code>#projects</code>. 이력서 버튼은 두지 않는다</p></div></li>
       <li><span class="m">4</span><div><b>HeroVisual</b><p>캐릭터는 처음 화면 이미지라 미리 불러온다(<code>loading="eager"</code>). 손글씨는 <code>aria-hidden</code>. 낙서는 포인터 반대쪽으로 밀린다</p></div></li>
-      <li><span class="m">5</span><div><b>FeaturedProjects · ProjectCard</b><p>카드는 <code>content/projects.ts</code> 순서. 카드 어디를 눌러도 <code>/work/&lt;slug&gt;</code>. View All Projects → <code>/work</code></p></div></li>
+      <li><span class="m">5</span><div><b>FeaturedProjects · ProjectCard</b><p>카드는 <code>content/projects.ts</code> 순서. 카드 어디를 눌러도 <code>/project/&lt;slug&gt;</code>. View All Projects → <code>/project</code></p></div></li>
       <li><span class="m">6</span><div><b>Skills</b><p>타일 14개. hover 때 아이콘이 흔들린다</p></div></li>
       <li><span class="m">7</span><div><b>About</b><p>숫자 3개는 원본 값이고 나중에 바꾼다. More About Me → <code>/about</code></p></div></li>
       <li><span class="m">8</span><div><b>Contact</b><p>버튼은 Get in Touch 1개 → <code>mailto:</code>. 마우스 오버 · 초점 때 문구가 메일 주소로 바뀐다.</p></div></li>
       <li><span class="m">9</span><div><b>Footer</b> <code>widgets/footer</code><p>GitHub 는 프로필 주소로 새 탭. 메뉴는 Home · Projects · About · Contact</p></div></li>
+      <li><span class="m">10</span><div><b>ColophonTeaser</b> <code>features/colophon</code><p>소개와 연락 사이에 둔다. 4단계와 역할은 콜로폰 페이지의 「과정 한눈에」 와 같은 값이고 누를 수 없다. See How It's Built → <code>/colophon</code>. 4단계는 화면에 처음 들어올 때 왼쪽부터 하나씩 나타난다. 값은 README 「모션」 표. 버튼은 <code>shared/ui/button</code>. 정책은 README 「제작 과정 섹션」</p></div></li>
     </ol></aside>
   </div>
 </section>
@@ -240,11 +249,15 @@ flowchart TD
       <div class="pf-sec rel"><span class="pf-lab">#projects</span><span class="m abs">3</span>
         <div class="pf-stack"><div class="pf-card"><div class="img-ph">썸네일</div><div class="b"><b>작업 이름</b></div></div><span class="muted small">카드가 한 열로 쌓인다</span></div>
       </div>
+      <div class="pf-sec rel"><span class="pf-lab">#colophon</span><span class="m abs">4</span>
+        <div class="pf-stack"><span class="pf-h">HOW THIS SITE IS BUILT</span><span class="pf-chip">1 콘셉트 정하기 · 나</span><span class="pf-chip">2 참고 이미지 전달하기 · 나</span><span class="pf-chip">3 시안 만들기 · GPT</span><span class="pf-chip">4 구현하기 · Claude</span><span class="btn">See How It's Built →</span></div>
+      </div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
       <li><span class="m">1</span><div><b>헤더</b><p>768px 미만에서는 로고와 테마 버튼 · 관리 버튼 · 메뉴 버튼만 한 줄에 둔다. 메뉴 버튼 → <a href="#p01">P-01</a></p></div></li>
       <li><span class="m">2</span><div><b>히어로</b><p>캐릭터가 글 아래로 내려간다</p></div></li>
       <li><span class="m">3</span><div><b>작업 · 기술</b><p>카드는 한 열, 기술 타일은 세 열</p></div></li>
+      <li><span class="m">4</span><div><b>제작 과정</b><p>4단계가 위에서 아래로 쌓인다. 소개와 연락 사이에 있고, 그 사이의 섹션은 그리지 않았다</p></div></li>
     </ol></aside>
   </div>
 </section>
@@ -257,7 +270,7 @@ flowchart TD
     <div class="state"><div class="lab">2. 낙서가 그려짐</div><div class="pf-stack"><span class="mo">선 그리기</span><span class="muted small">왕관 · 밑줄 · 번개</span></div></div>
     <div class="state"><div class="lab">3. 이름이 칠해짐</div><div class="pf-stack"><span class="mo">왼쪽부터 드러남</span><span class="pf-display">GUNI</span></div></div>
     <div class="state"><div class="lab">4. 말풍선</div><div class="pf-stack"><span class="mo">튀어나옴</span><span class="muted small">Build Better Together!</span></div></div>
-    <div class="state"><div class="lab">동작 줄이기</div><div class="pf-stack"><span class="pf-display">GUNI</span><span class="muted small">처음부터 4번 상태로 그린다. 포인터 시차도 없다</span></div></div>
+    <div class="state"><div class="lab">동작 줄이기</div><div class="pf-stack"><span class="pf-display">GUNI</span><span class="muted small">처음부터 4번 상태를 표시하고 포인터에 따른 시차 효과를 적용하지 않는다.</span></div></div>
   </div>
   <div class="spec">
     <div class="spec-block">

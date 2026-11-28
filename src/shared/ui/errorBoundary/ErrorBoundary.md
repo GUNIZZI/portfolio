@@ -43,7 +43,7 @@ import ErrorBoundary from '@/shared/ui/errorBoundary/ErrorBoundary';
 | --------------------------------------- | -------------------------- | ------------------------------------ |
 | `ErrorBoundary` 로 감싼 부분            | 그 `ErrorBoundary`         | 그 자리에만 대신 칸. 나머지는 그대로 |
 | 감싸지 않은 공개 화면(홈 · 작업 · 소개) | `src/app/(site)/error.tsx` | 헤더는 남고 본문이 에러 화면으로     |
-| 그 밖의 페이지(관리 화면 · colophon)    | `src/app/error.tsx`        | 페이지 전체가 에러 화면으로          |
+| 그 밖의 페이지(관리 화면)               | `src/app/error.tsx`        | 페이지 전체가 에러 화면으로          |
 | 루트 레이아웃 · 전역 Provider           | `src/app/global-error.tsx` | 문서 전체가 에러 화면으로            |
 
 - `notFound()` 와 `redirect()` 는 에러로 잡히지 않고 그대로 지나간다.(`catchError.md`)

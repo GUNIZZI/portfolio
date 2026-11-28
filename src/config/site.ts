@@ -3,10 +3,13 @@ export const SITE = {
     name: 'GUNI',
     role: 'Web Frontend Developer',
     title: 'GUNI — Web Frontend Developer',
-    description: '모던하고 확장성 있으며, 쓰는 즐거움이 있는 웹 경험을 만듭니다.',
+    description: '쓰는 재미가 있고, 기능을 하나씩 더해 가기 좋은 웹사이트를 만듭니다.',
     email: 'h2dlhs@naver.com',
     locale: 'ko_KR',
 } as const;
+
+/** 이 사이트의 공개 저장소. 「제작 과정」 페이지가 연다 */
+export const REPOSITORY_URL = 'https://github.com/GUNIZZI/portfolio';
 
 /**
  * 외부 링크. http 로 시작하는 주소는 푸터가 새 탭으로 연다.

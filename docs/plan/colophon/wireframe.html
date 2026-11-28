@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>이 사이트는 이렇게 와이어프레임</title>
+<title>제작 과정 와이어프레임</title>
 <link rel="stylesheet" href="../wireframe.css" />
 </head>
 <body>
@@ -15,14 +15,14 @@
 <main>
 
 <div class="intro">
-  <h1>이 사이트는 이렇게 (/colophon) — 초안</h1>
-  <p>제안으로 채운 초안이다. 헤더 · 푸터는 홈과 같다.</p>
+  <h1>제작 과정 (/colophon)</h1>
+  <p>제작 과정 페이지는 7개 섹션으로 구성한다. 세부 정책은 README.md의 「정책」에 정리했다. 공개 사이트의 (site) 레이아웃과 홈과 동일한 헤더를 사용한다.</p>
   <div class="spec-block">
     <h4>화면 목록</h4>
     <div class="spec-tw"><table class="spec-t">
       <thead><tr><th>ID</th><th>화면</th><th>형태</th><th>라우트</th></tr></thead>
       <tbody>
-        <tr><td><a href="#s01">S-01</a></td><td>콜로폰 (제안)</td><td>페이지</td><td><code>/colophon</code></td></tr>
+        <tr><td><a href="#s01">S-01</a></td><td>콜로폰</td><td>페이지</td><td><code>/colophon</code></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -35,46 +35,88 @@
   <div class="flow-body">유저 플로우를 불러오는 중이다.</div>
 </section>
 <script type="text/markdown" id="userflow-src">
-# 이 사이트는 이렇게 — 유저 플로우
+# 제작 과정 — 유저 플로우
 
-[README.md](./README.md) 의 정책을 기준으로 방문자 동작을 흐름으로 옮겼다. 초안이라 모든 흐름이 `제안` 이다.
+[README.md](./README.md) 의 정책을 기준으로 방문자가 제작 과정 페이지를 탐색하는 순서를 정리했다. 홈의 제작 과정 섹션에서 이 페이지를 열 수 있다.([홈 기획](../home/README.md) 「제작 과정 섹션」)
 
 ## 1. 전체 흐름
 
 ```mermaid
 flowchart TD
-    FOOT["푸터 · 이 사이트는 이렇게"]:::step --> C["S-01 콜로폰"]:::screen
+    FOOT["홈의 제작 과정 섹션 · See How It's Built"]:::step --> C["S-01 콜로폰"]:::screen
+    C -->|"과정 그림의 단계"| SEC["해당 섹션으로 스크롤"]:::step
     C -->|"저장소"| GH[/"저장소 새 탭"/]:::api
+    C -->|"대시보드의 문서 · 코드"| GHD[/"저장소의 해당 경로를 새 탭에서 열기"/]:::api
+    C -->|"대시보드의 와이어프레임"| PV[/"기획 뷰어 새 탭"/]:::api
     C -.->|"로고"| HOME(["홈"]):::done
 ```
+
+- 과정 그림의 단계마다 이어지는 섹션은 [README.md](./README.md) 「과정 한눈에」 표에 있다.
+- 대시보드의 관리 화면으로는 가지 않는다. 링크를 걸지 않는다.
 </script>
 <script src="../userflow.js"></script>
 <!-- userflow:end -->
 
 <section class="screen" id="s01">
-  <div class="screen-h"><span class="id">S-01</span><h2>콜로폰 (제안)</h2><span class="route">/colophon</span></div>
+  <div class="screen-h"><span class="id">S-01</span><h2>콜로폰</h2><span class="route">/colophon</span></div>
   <div class="wrap">
     <div class="frame">
       <div class="pf-sec rel"><span class="pf-lab">head</span><span class="m abs">1</span>
         <div class="row"><span class="pf-h">HOW THIS SITE IS BUILT</span><span class="sp"></span><span class="btn">저장소 ↗</span></div>
+        <span class="muted small">한 줄 요약 · 만든 기간 · 커밋 수</span>
       </div>
-      <div class="pf-sec rel"><span class="pf-lab">stack</span><span class="m abs">2</span>
+      <div class="pf-sec rel"><span class="pf-lab">process</span><span class="m abs">2</span><span class="mo abs">하나씩 나타남</span>
+        <div class="row"><span class="pf-chip">1 콘셉트 정하기 · 나</span><span>→</span><span class="pf-chip">2 참고 이미지 전달하기 · 나</span><span>→</span><span class="pf-chip">3 시안 만들기 · GPT</span><span>→</span><span class="pf-chip">4 구현하기 · Claude</span></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">design</span><span class="m abs">3</span>
+        <div class="dl"><div>컨셉 정하기</div><div>원래 좋아하던 스트릿 · 그라피티. 형광 마커 · 손글씨 · 낙서 · 캐릭터 일러스트</div><div>레퍼런스 모으기</div><div>핀터레스트 같은 곳에서 검색</div><div>GPT 가 디자인</div><div>레퍼런스 · 컨셉 · 구성 요소를 주고 시안을 요청. 반응형 페이지 1개를 받음. 그림 없이 글로만</div><div>토큰으로 옮김</div><div>색 · 글자 크기 · 모서리에 이름을 붙임</div></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">develop</span><span class="m abs">4</span>
+        <div class="row"><span class="pf-chip">기획</span><span>→</span><span class="pf-chip">플랜 승인</span><span>→</span><span class="pf-chip">구현</span><span>→</span><span class="pf-chip">검증</span><span>→</span><span class="pf-chip">커밋</span></div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>단계</th><th>하는 일</th><th>대시보드의 예</th></tr></thead>
+            <tbody>
+              <tr><td class="title"><b>기획</b></td><td>/plan-write 로 3종을 쓴다</td><td class="muted">docs/plan/admin/dashboard/</td></tr>
+              <tr><td class="title"><b>플랜 승인</b></td><td>검토 필요 사항을 사람이 확정한다</td><td class="muted">12개 항목</td></tr>
+              <tr><td class="title"><b>구현</b></td><td>승인받은 범위 안에서 만든다</td><td class="muted">src/features/dashboard/</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">guards</span><span class="m abs">5</span>
+        <div class="dl"><div>규칙 문서</div><div>사람과 AI 가 같은 규칙을 읽는다</div><div>훅 3개</div><div>토큰 밖 값 · 포맷 · 평문 커밋</div><div>스킬 7개</div><div>같은 일은 같은 순서로</div><div>에이전트 2개</div><div>훅과 린트가 검사하지 못하는 어긋남</div><div>ESLint</div><div>계층을 거슬러 가져오는 것</div></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">human</span><span class="m abs">6</span>
+        <div class="dl"><div>정한 것</div><div>컨셉 · 디자인 채택 · 검토 필요 사항</div><div>승인한 것</div><div>플랜</div><div>다듬은 것</div><div>디테일은 직접 수정하거나 요청하면서 진행</div></div>
+      </div>
+      <div class="pf-sec rel"><span class="pf-lab">stack</span><span class="m abs">7</span><span class="mo abs">화살표 그려짐</span>
         <div class="pf-chips"><span class="pf-chip">Next.js 16</span><span class="pf-chip">React 19</span><span class="pf-chip">TypeScript</span><span class="pf-chip">Tailwind v4</span><span class="pf-chip">framer-motion</span><span class="pf-chip">GSAP</span></div>
-      </div>
-      <div class="pf-sec rel"><span class="pf-lab">architecture</span><span class="m abs">3</span><span class="mo abs">화살표 그려짐</span>
         <div class="pf-stack c"><span class="pf-chip">app</span><span>↓</span><span class="pf-chip">widgets</span><span>↓</span><span class="pf-chip">features</span><span>↓</span><span class="pf-chip">entities</span><span>↓</span><span class="pf-chip">shared</span></div>
+        <span class="muted small">폰트 3개 · 이름과 라이선스</span>
       </div>
-      <div class="pf-sec rel"><span class="pf-lab">ax</span><span class="m abs">4</span>
-        <div class="dl"><div>CLAUDE.md · docs/</div><div>사람과 AI 가 같은 규칙을 읽는다</div><div>format 훅</div><div>쓰자마자 Prettier</div><div>guard_tokens 훅</div><div>토큰 밖 값을 그 자리에서 알림</div><div>guard-commit 훅</div><div>커밋은 스킬로만</div></div>
-      </div>
-      <div class="pf-sec"><span class="pf-lab">design · plan</span><span class="muted small">디자인 원본 · 토큰 · 폰트 라이선스 · 기획 뷰어</span></div>
     </div>
     <aside class="notes"><h3>화면 명세</h3><ol>
-      <li><span class="m">1</span><div><b>머리</b> (제안)<p>저장소 링크는 공개 저장소일 때만</p></div></li>
-      <li><span class="m">2</span><div><b>기술</b> (제안)<p><code>package.json</code> 기준</p></div></li>
-      <li><span class="m">3</span><div><b>구조 그림</b> (제안)<p>SVG. <code>role="img"</code> 와 <code>aria-label</code></p></div></li>
-      <li><span class="m">4</span><div><b>AX 환경</b> (제안)<p>장치마다 무엇을 막는지 한 줄</p></div></li>
+      <li><span class="m">1</span><div><b>머리</b><p>제목은 「HOW THIS SITE IS BUILT」이다. 제작 기간과 커밋 수는 집계 기준일의 수치를 사용한다. 저장소 링크는 새 탭에서 열린다.</p></div></li>
+      <li><span class="m">2</span><div><b>과정 한눈에</b> (컴포넌트 없음)<p>순서 있는 목록이다. 단계마다 역할을 글자로 적는다. 단계를 누르면 이어지는 섹션으로 스크롤한다. 모바일에서는 위에서 아래로 쌓는다</p></div></li>
+      <li><span class="m">3</span><div><b>디자인</b><p>단락 4개다. 시안은 그림 없이 글로만 설명한다. 레퍼런스로 삼은 사이트의 이름과 화면은 싣지 않는다</p></div></li>
+      <li><span class="m">4</span><div><b>Claude 가 개발</b><p>5단계를 한 줄로 보이고 아래 표에서 대시보드를 예로 따라간다. 그림은 3줄까지만 그렸다. 기획 문서와 코드 폴더는 GitHub 저장소의 그 경로를 새 탭으로 연다. 기획 단계에는 기획 뷰어의 대시보드 와이어프레임을 새 탭으로 여는 링크도 둔다. 관리 화면으로는 링크를 걸지 않는다</p></div></li>
+      <li><span class="m">5</span><div><b>AI 가 틀리지 않게 한 장치</b><p>장치마다 무엇을 막는지 한 줄과 실제로 걸리는 예 하나. 목록은 README.md 「AI 가 틀리지 않게 한 장치」 표</p></div></li>
+      <li><span class="m">6</span><div><b>사람이 한 일</b><p>문서의 「사용자 결정」 기록을 근거로 쓴다</p></div></li>
+      <li><span class="m">7</span><div><b>기술과 구조</b> (컴포넌트 없음)<p>글은 앞의 섹션보다 짧다. 기술은 이름만 적는다. 구조 그림은 순서 있는 목록이고 화살표만 SVG 다. 그림의 모양은 구현할 때 사용자가 확인한다. 폰트는 이름과 라이선스를 적는다</p></div></li>
     </ol></aside>
+  </div>
+  <div class="spec">
+    <div class="spec-block">
+      <h4>모션</h4>
+      <div class="spec-tw"><table class="spec-t">
+        <thead><tr><th>요소</th><th>계기</th><th>연출</th><th>토큰</th><th>동작 줄이기</th></tr></thead>
+        <tbody>
+          <tr><td>과정 그림</td><td>화면에 들어옴</td><td>4단계가 왼쪽부터 하나씩 나타난다</td><td><code>DURATION.slow</code> · <code>EASE.enter</code></td><td>다 나타난 상태</td></tr>
+          <tr><td>구조 그림</td><td>화면에 들어옴</td><td>의존 화살표가 위에서 아래로 그려진다</td><td><code>DURATION.slow</code> · <code>EASE.enter</code></td><td>다 그려진 상태</td></tr>
+        </tbody>
+      </table></div>
+    </div>
   </div>
 </section>
 

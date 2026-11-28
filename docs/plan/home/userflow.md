@@ -14,14 +14,15 @@ flowchart TD
     H -->|"메뉴 About"| AB
     H -->|"스크롤"| ST["S-02 헤더 고정"]:::screen
     ST -.->|"맨 위로"| H
-    H -->|"View All Projects"| WL(["작업 목록 /work"]):::done
-    H -->|"카드 열기 아이콘"| WD(["작업 상세 /work/id"]):::done
+    H -->|"View All Projects"| WL(["작업 목록 /project"]):::done
+    H -->|"카드 열기 아이콘"| WD(["작업 상세 /project/id"]):::done
     H -->|"More About Me"| AB(["소개 /about"]):::done
+    H -->|"See How It's Built"| CO(["제작 과정 /colophon"]):::done
     H -->|"GitHub"| EXT[/"외부 프로필 새 탭"/]:::api
     H -->|"연락"| C["연락하기"]:::step
 ```
 
-- 작업 목록 · 상세 · 소개는 다른 기획 문서에 있다. [work/](../work/README.md) · [about/](../about/README.md)
+- 작업 목록 · 상세 · 소개 · 제작 과정은 다른 기획 문서에 있다. [work/](../work/README.md) · [about/](../about/README.md) · [colophon/](../colophon/README.md)
 - 같은 페이지 안의 이동은 `scroll-behavior: smooth` 로 부드럽게 이동한다. 동작 줄이기면 바로 이동한다.(`src/style/global.css`)
 
 ## 2. 처음 들어옴
@@ -56,13 +57,13 @@ flowchart TD
     PICK -->|"열기 아이콘"| WD(["작업 상세로 이동"]):::done
 ```
 
-- 카드의 주소는 `/work/<slug>` 다. 작업 원문에 `href` 가 있으면 그 주소로 간다.(`src/entities/project/services/project.services.ts`)
+- 카드의 주소는 `/project/<slug>` 다. 작업 원문에 `href` 가 있으면 그 주소로 간다.(`src/entities/project/services/project.services.ts`)
 
 ## 4. 연락하기
 
 ```mermaid
 flowchart TD
-    C["S-01 연락 섹션"]:::screen -->|"Get in Touch 에 마우스 오버 · 초점"| ADDR["문구가 메일 주소로 바뀜"]:::step
+    C["S-01 연락 섹션"]:::screen -->|"Get in Touch 버튼에 마우스를 올리거나 키보드로 초점을 이동"| ADDR["문구가 메일 주소로 바뀜"]:::step
     ADDR -->|"누름"| MAIL[/"메일 앱"/]:::api
     C -->|"터치 화면에서 누름"| MAIL
 ```

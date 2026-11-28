@@ -2,17 +2,23 @@ import { Backdrop } from '@/widgets/backdrop';
 import { Contact } from '@/widgets/contact';
 import { Footer } from '@/widgets/footer';
 import { About } from '@/features/about';
+import { ColophonTeaser } from '@/features/colophon';
 import { FeaturedProjects } from '@/features/featuredProjects';
 import { Hero } from '@/features/hero';
 import { HomeDoodles } from '@/features/homeDoodles';
 import { Skills } from '@/features/skills';
 import { getAboutHome } from '@/entities/about/services/about.services';
+import { getColophonTeaser } from '@/entities/colophon/services/colophon.services';
 import { getFeaturedProjectList } from '@/entities/project/services/project.services';
 import ErrorBoundary from '@/shared/ui/errorBoundary/ErrorBoundary';
 import Panel from '@/shared/ui/panel/Panel';
 
 export default async function HomePage() {
-    const [projects, about] = await Promise.all([getFeaturedProjectList(), getAboutHome()]);
+    const [projects, about, colophonTeaser] = await Promise.all([
+        getFeaturedProjectList(),
+        getAboutHome(),
+        getColophonTeaser(),
+    ]);
 
     return (
         <>
@@ -41,6 +47,7 @@ export default async function HomePage() {
                     >
                         <About about={about} />
                     </ErrorBoundary>
+                    <ColophonTeaser teaser={colophonTeaser} />
                     <Contact />
                 </main>
                 <Footer isHome />
