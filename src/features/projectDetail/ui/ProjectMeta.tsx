@@ -55,7 +55,7 @@ export default function ProjectMeta({ project }: OwnProps) {
                 ) : null}
                 {hasScope ? (
                     <div className="flex flex-col gap-2">
-                        <dt className={TERM_CLASS}>맡은 범위</dt>
+                        <dt className={TERM_CLASS}>담당 범위</dt>
                         <dd>
                             <ul className="flex flex-col gap-1.5">
                                 {project.scope.map((item) => (

@@ -24,7 +24,10 @@ export default function ProjectFilterGridView({ items, categories, selected, onS
     const visible = selected ? items.filter((item) => item.category === selected) : items;
     const options: { label: string; value: string | null }[] = [
         { label: '전체', value: null },
-        ...categories.map((category) => ({ label: category, value: category })),
+        ...categories.map((category) => ({
+            label: category,
+            value: category,
+        })),
     ];
 
     return (
@@ -32,7 +35,7 @@ export default function ProjectFilterGridView({ items, categories, selected, onS
             {/* 좁은 화면에서는 버튼 줄을 가로로 민다 */}
             <div
                 role="group"
-                aria-label="분류로 거르기"
+                aria-label="프로젝트 분류 선택"
                 className="flex gap-2 overflow-x-auto py-1"
             >
                 {options.map((option) => {

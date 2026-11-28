@@ -54,7 +54,7 @@ export default function IntroForm({ data }: OwnProps) {
                 name="growthPath"
                 render={({ field }) => (
                     <ChipListField
-                        label="성장 경로"
+                        label="지나온 길"
                         items={field.value}
                         onChange={field.onChange}
                         min={ABOUT_COUNT.GROWTH_PATH_MIN}

@@ -62,9 +62,9 @@ function getTitles() {
         .map((row) => within(row).getByRole('link').textContent);
 }
 
-/** 표 위에 적힌 공개 · 홈 노출 건수 */
+/** 표 위에 적힌 공개 · 홈에 표시 건수 */
 function getCountText() {
-    return screen.getByText(/홈 노출/, { selector: 'p' }).textContent;
+    return screen.getByText(/홈에 표시/, { selector: 'p' }).textContent;
 }
 
 describe('ProjectList', () => {
@@ -84,10 +84,10 @@ describe('ProjectList', () => {
         vi.clearAllMocks();
     });
 
-    it('전체 · 공개 · 홈 노출 건수를 보여 준다', () => {
+    it('전체 · 공개 · 홈에 표시 건수를 보여 준다', () => {
         render(<ProjectList projects={ROWS} />);
         expect(screen.getByText('전체').parentElement?.textContent).toBe('전체3');
-        expect(getCountText()).toBe('공개 2건 · 홈 노출 1건');
+        expect(getCountText()).toBe('공개 2건 · 홈에 표시 1건');
     });
 
     it('프로젝트가 없으면 없다고 알린다', () => {
@@ -136,24 +136,24 @@ describe('ProjectList', () => {
         expect(toast.error).toHaveBeenCalledWith('저장하지 못했습니다. 다시 시도해 주세요');
     });
 
-    it('비공개 프로젝트의 홈 노출 스위치는 누를 수 없다', () => {
+    it('비공개 프로젝트의 홈에 표시 스위치는 누를 수 없다', () => {
         render(<ProjectList projects={ROWS} />);
-        expect(screen.getByRole('switch', { name: 'C 홈 노출' })).toBeDisabled();
-        expect(screen.getByRole('switch', { name: 'B 홈 노출' })).toBeEnabled();
+        expect(screen.getByRole('switch', { name: 'C 홈에 표시' })).toBeDisabled();
+        expect(screen.getByRole('switch', { name: 'B 홈에 표시' })).toBeEnabled();
     });
 
-    it('홈 노출을 켜면 곧바로 저장하고 건수가 바뀐다', async () => {
+    it('홈에 표시를 켜면 곧바로 저장하고 건수가 바뀐다', async () => {
         const user = userEvent.setup();
         render(<ProjectList projects={ROWS} />);
 
-        await user.click(screen.getByRole('switch', { name: 'B 홈 노출' }));
+        await user.click(screen.getByRole('switch', { name: 'B 홈에 표시' }));
 
         expect(setProjectFeaturedAction).toHaveBeenCalledWith('b', true);
-        expect(toast.success).toHaveBeenCalledWith('홈에 노출했습니다');
-        expect(getCountText()).toBe('공개 2건 · 홈 노출 2건');
+        expect(toast.success).toHaveBeenCalledWith('홈에 표시했습니다');
+        expect(getCountText()).toBe('공개 2건 · 홈에 표시 2건');
     });
 
-    it('공개를 끄면 홈 노출도 함께 꺼지고 스위치가 비활성이 된다', async () => {
+    it('공개를 끄면 홈에 표시도 함께 꺼지고 스위치가 비활성이 된다', async () => {
         const user = userEvent.setup();
         render(<ProjectList projects={ROWS} />);
 
@@ -161,9 +161,9 @@ describe('ProjectList', () => {
 
         expect(setProjectPublishedAction).toHaveBeenCalledWith('a', false);
         expect(toast.success).toHaveBeenCalledWith('프로젝트를 비공개로 바꿨습니다');
-        expect(screen.getByRole('switch', { name: 'A 홈 노출' })).not.toBeChecked();
-        expect(screen.getByRole('switch', { name: 'A 홈 노출' })).toBeDisabled();
-        expect(getCountText()).toBe('공개 1건 · 홈 노출 0건');
+        expect(screen.getByRole('switch', { name: 'A 홈에 표시' })).not.toBeChecked();
+        expect(screen.getByRole('switch', { name: 'A 홈에 표시' })).toBeDisabled();
+        expect(getCountText()).toBe('공개 1건 · 홈에 표시 0건');
     });
 
     it('공개 전환을 저장하지 못하면 스위치와 건수를 되돌린다', async () => {
@@ -174,8 +174,8 @@ describe('ProjectList', () => {
         await user.click(screen.getByRole('switch', { name: 'A 공개' }));
 
         expect(screen.getByRole('switch', { name: 'A 공개' })).toBeChecked();
-        expect(screen.getByRole('switch', { name: 'A 홈 노출' })).toBeChecked();
-        expect(getCountText()).toBe('공개 2건 · 홈 노출 1건');
+        expect(screen.getByRole('switch', { name: 'A 홈에 표시' })).toBeChecked();
+        expect(getCountText()).toBe('공개 2건 · 홈에 표시 1건');
         expect(toast.error).toHaveBeenCalled();
     });
 });

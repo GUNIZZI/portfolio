@@ -16,8 +16,8 @@ export const EDITOR_MESSAGE = {
     DELETED: '경력을 삭제했습니다',
     SAVE_FAILED: '저장하지 못했습니다. 다시 시도해 주세요',
     DELETE_FAILED: '삭제하지 못했습니다. 다시 시도해 주세요',
-    NOT_FOUND: '경력을 찾지 못했습니다. 이미 삭제된 경력입니다',
+    NOT_FOUND: '경력 항목을 찾을 수 없습니다. 목록에서 다시 확인해 주세요.',
     EMPTY: '등록한 경력이 없습니다.',
     LOAD_FAILED_TITLE: '경력을 불러오지 못했습니다',
-    LOAD_FAILED_DESCRIPTION: '잠시 뒤에 다시 시도해 주세요.',
+    LOAD_FAILED_DESCRIPTION: '잠시 후 다시 시도해 주세요.',
 } as const;

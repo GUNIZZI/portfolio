@@ -22,7 +22,7 @@ export default function ServerError({ onRetry }: OwnProps) {
         <StatusScreen
             code="500"
             title="Something Broke"
-            description="일시적인 문제가 생겼어요. 잠시 후 다시 시도해 주세요."
+            description="페이지를 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
             actions={
                 <>
                     <Button asChild variant="outline" effect="sweep" arrow="start">

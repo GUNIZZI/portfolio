@@ -12,7 +12,7 @@ export default function NotFound() {
         <StatusScreen
             code="404"
             title="Page Not Found"
-            description="요청하신 페이지를 찾을 수 없어요."
+            description="주소를 다시 확인하거나 홈으로 돌아가 주세요."
             actions={
                 <Button asChild effect="sweep" arrow="start">
                     <Link href="/">Back to Home</Link>

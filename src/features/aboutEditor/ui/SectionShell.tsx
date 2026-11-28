@@ -43,7 +43,7 @@ export default function SectionShell({
                         </h2>
                         {updatedAtText ? (
                             <span className="text-xs text-muted-foreground">
-                                수정. {updatedAtText}
+                                마지막 수정 {updatedAtText}
                             </span>
                         ) : null}
                     </div>

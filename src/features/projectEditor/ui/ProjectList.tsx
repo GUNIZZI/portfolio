@@ -110,13 +110,13 @@ function PublishedCell({ row }: CellAttributes) {
     );
 }
 
-/** 홈 노출 칸. 비공개 프로젝트는 켤 수 없다 */
+/** 홈 표시 스위치. 비공개 프로젝트는 켤 수 없다 */
 function FeaturedCell({ row }: CellAttributes) {
     const { onFeaturedChange } = useListActions();
 
     return (
         <Switch
-            aria-label={`${row.title} 홈 노출`}
+            aria-label={`${row.title} 홈에 표시`}
             checked={row.isFeatured}
             disabled={!row.isPublished}
             onCheckedChange={(checked) => {
@@ -140,7 +140,7 @@ const COLUMNS: ColumnDef<ProjectRowData>[] = [
     },
     {
         id: 'image',
-        header: '썸네일',
+        header: '대표 이미지',
         meta: { className: 'px-4 text-center md:w-24' },
         cell: ({ row }) =>
             row.original.image ? (
@@ -183,7 +183,7 @@ const COLUMNS: ColumnDef<ProjectRowData>[] = [
     },
     {
         id: 'featured',
-        header: '홈 노출',
+        header: '홈에 표시',
         meta: { className: 'px-4 md:w-20 text-center' },
         cell: ({ row }) => <FeaturedCell row={row.original} />,
     },
@@ -220,7 +220,7 @@ interface OwnProps {
 
 /**
  * 프로젝트 목록(S-01). 공개 · 비공개를 모두 순서대로 보여 준다.
- * 순서 · 공개 · 홈 노출은 여기서 바로 바꾸고, 바꾸면 곧바로 저장한다.
+ * 순서, 공개 여부, 홈 표시 설정은 여기서 바로 바꾸고, 바꾸면 곧바로 저장한다.
  * 화면을 먼저 바꿔 두고, 저장하지 못하면 바꾸기 전으로 되돌린다.(docs/plan/admin/README.md 「목록」 · 「순서」 · 「홈 노출」)
  * 순서는 행의 위 · 아래 버튼으로 옮긴다. 끌기는 없다.(docs/plan/admin/README.md 요구사항 30)
  * 검색 · 페이지 나누기 · 정렬은 없다. page 를 주지 않아 페이저를 그리지 않는다.
@@ -332,13 +332,13 @@ export default function ProjectList({ projects }: OwnProps) {
                     emptyMessage={EDITOR_MESSAGE.EMPTY}
                     rightSlot={
                         <div className="flex items-center gap-4">
-                            {/* 「전체 N」 은 표가 왼쪽에 그린다. 공개와 홈 노출 건수를 이어 적는다 */}
+                            {/* 「전체 N」 은 표가 왼쪽에 그린다. 공개 건수와 홈에 표시하는 프로젝트 수를 이어 적는다 */}
                             <p className="text-xs text-muted-foreground tabular-nums">
                                 공개{' '}
                                 <strong className="font-semibold text-strong">
                                     {counts.published}
                                 </strong>
-                                건 · 홈 노출{' '}
+                                건 · 홈에 표시{' '}
                                 <strong className="font-semibold text-strong">
                                     {counts.featured}
                                 </strong>

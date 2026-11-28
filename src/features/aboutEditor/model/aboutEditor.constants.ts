@@ -2,7 +2,7 @@ import { ABOUT_SECTION, type AboutSection } from '@/entities/about/model/about.c
 
 /** 섹션의 이름. 화면의 제목과 토스트 문구에 쓴다 */
 export const SECTION_LABEL = {
-    [ABOUT_SECTION.INTRO]: '인트로',
+    [ABOUT_SECTION.INTRO]: '소개 첫 화면',
     [ABOUT_SECTION.PRINCIPLES]: '일하는 방식',
     [ABOUT_SECTION.SKILL_GROUPS]: 'Skill 관리',
     [ABOUT_SECTION.HOME]: '홈 소개',
@@ -20,5 +20,5 @@ export const SECTION_PLACE = {
 export const EDITOR_MESSAGE = {
     SAVE_FAILED: '저장하지 못했습니다. 다시 시도해 주세요',
     LOAD_FAILED_TITLE: '소개 내용을 불러오지 못했습니다',
-    LOAD_FAILED_DESCRIPTION: '잠시 뒤에 다시 시도해 주세요.',
+    LOAD_FAILED_DESCRIPTION: '잠시 후 다시 시도해 주세요.',
 } as const;

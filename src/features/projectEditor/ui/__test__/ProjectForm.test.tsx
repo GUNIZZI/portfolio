@@ -98,10 +98,10 @@ describe('ProjectForm', () => {
         vi.clearAllMocks();
     });
 
-    it('새 프로젝트는 비공개로 시작하고, 홈 노출은 켤 수 없다', () => {
+    it('새 프로젝트는 비공개로 시작하고, 홈 표시를 켤 수 없다', () => {
         render(<ProjectForm project={null} />);
         expect(screen.getByRole('switch', { name: '공개' })).not.toBeChecked();
-        expect(screen.getByRole('switch', { name: '홈 노출' })).toBeDisabled();
+        expect(screen.getByRole('switch', { name: '홈에 표시' })).toBeDisabled();
         expect(screen.getByRole('button', { name: '등록' })).toBeDisabled();
     });
 
@@ -137,15 +137,15 @@ describe('ProjectForm', () => {
             stack: [],
             links: [],
             // 본문에는 절 제목 템플릿이 들어 있다
-            body: '<h2>개요</h2><p></p><h2>문제</h2><p></p><h2>해결</h2><p></p><h2>결과</h2><p></p><h2>회고</h2><p></p>',
+            body: '<h2>프로젝트 소개</h2><p></p><h2>해결해야 했던 문제</h2><p></p><h2>해결 과정</h2><p></p><h2>결과</h2><p></p><h2>배운 점</h2><p></p>',
         });
     });
 
-    it('공개를 켜야 홈 노출을 켤 수 있고, 공개를 끄면 홈 노출도 함께 꺼진다', async () => {
+    it('공개를 켜야 홈 표시를 켤 수 있고, 공개를 끄면 홈에 표시도 함께 꺼진다', async () => {
         const user = userEvent.setup();
         render(<ProjectForm project={null} />);
         const published = screen.getByRole('switch', { name: '공개' });
-        const featured = screen.getByRole('switch', { name: '홈 노출' });
+        const featured = screen.getByRole('switch', { name: '홈에 표시' });
 
         await user.click(published);
         expect(featured).toBeEnabled();
@@ -156,7 +156,7 @@ describe('ProjectForm', () => {
         expect(featured).not.toBeChecked();
         expect(featured).toBeDisabled();
 
-        // 다시 공개해도 홈 노출은 꺼져 있다
+        // 다시 공개해도 홈 표시가 꺼져 있다
         await user.click(published);
         expect(featured).not.toBeChecked();
     });
@@ -230,18 +230,18 @@ describe('ProjectForm', () => {
         render(<ProjectForm project={PROJECT} />);
         const save = screen.getByRole('button', { name: '저장' });
 
-        await user.click(screen.getByRole('button', { name: '+ 파트 추가' }));
+        await user.click(screen.getByRole('button', { name: '팀 역할 추가' }));
         // 새 줄의 첫 입력으로 포커스가 간다
         expect(getInput('team.1.part')).toHaveFocus();
         await user.tab();
-        expect(screen.getByText('파트를 입력해 주세요.')).toBeInTheDocument();
+        expect(screen.getByText('역할을 입력해 주세요.')).toBeInTheDocument();
         expect(save).toBeDisabled();
 
         await user.type(getInput('team.1.part'), '디자이너');
         await user.type(getInput('team.1.count'), '1');
         expect(save).toBeEnabled();
 
-        await user.click(screen.getByRole('button', { name: '1번째 파트 빼기' }));
+        await user.click(screen.getByRole('button', { name: '1번째 팀 역할 빼기' }));
         await user.click(save);
         expect(updateProjectAction).toHaveBeenCalledWith('a', {
             ...PROJECT.content,
@@ -255,7 +255,7 @@ describe('ProjectForm', () => {
 
         await user.click(screen.getByRole('switch', { name: '진행 중' }));
         await user.type(getInput('period.end'), '2025.01');
-        expect(screen.getByText('끝은 시작보다 앞설 수 없습니다.')).toBeInTheDocument();
+        expect(screen.getByText('종료일은 시작일보다 빠를 수 없습니다.')).toBeInTheDocument();
 
         await user.clear(getInput('period.end'));
         await user.type(getInput('period.end'), '2026.01');
@@ -293,7 +293,7 @@ describe('ProjectForm', () => {
         const user = userEvent.setup();
         render(<ProjectForm project={PROJECT} />);
 
-        await user.click(screen.getByRole('button', { name: '썸네일 지우기' }));
+        await user.click(screen.getByRole('button', { name: '대표 이미지 삭제' }));
         expect(document.querySelector('input[name="image.alt"]')).toBeNull();
         await user.click(screen.getByRole('button', { name: '저장' }));
 

@@ -39,7 +39,10 @@ import ProjectDeleteButton from './ProjectDeleteButton';
 import ThumbnailField from './ThumbnailField';
 
 /** 분류 셀렉트의 항목. 정해 둔 분류다 */
-const CATEGORY_LIST = PROJECT_CATEGORIES.map((category) => ({ code: category, name: category }));
+const CATEGORY_LIST = PROJECT_CATEGORIES.map((category) => ({
+    code: category,
+    name: category,
+}));
 
 interface OwnProps {
     /** 고칠 프로젝트. 등록 화면이면 null */
@@ -132,7 +135,7 @@ function ProjectFormBody({ project }: OwnProps) {
 
     function hndlPublishedChange(checked: boolean) {
         setValue('published', checked, { shouldDirty: true, shouldValidate: true });
-        // 비공개로 바꾸면 홈 노출도 함께 끈다.(docs/plan/admin/README.md 「홈 노출」)
+        // 비공개로 바꾸면 홈에서도 숨긴다.(docs/plan/admin/README.md 「홈 노출」)
         if (!checked) {
             setValue('featured', false, { shouldDirty: true, shouldValidate: true });
         }
@@ -176,11 +179,11 @@ function ProjectFormBody({ project }: OwnProps) {
                         {/* 수정 일시의 모양은 소개 · 경력 수정과 같다.(src/features/aboutEditor/ui/SectionShell.tsx) */}
                         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 pb-3">
                             <h2 className="text-2xl font-bold text-strong">기본 정보</h2>
-                            {/* 공개 · 홈 노출은 제목 줄의 오른쪽 끝에 둔다. 긴 폼을 내려가지 않고 바꾼다.(2026-11-20 사용자 결정) */}
+                            {/* 공개 여부와 홈 표시 설정은 제목 줄의 오른쪽 끝에 둔다. 긴 폼을 내려가지 않고 바꾼다.(2026-11-20 사용자 결정) */}
                             <div className="flex flex-wrap items-center justify-end gap-x-6 gap-y-2">
                                 {project?.updatedAtText ? (
                                     <span className="text-xs text-muted-foreground">
-                                        수정. {project.updatedAtText}
+                                        마지막 수정 {project.updatedAtText}
                                     </span>
                                 ) : null}
                                 <div className="flex items-center gap-2">
@@ -209,7 +212,7 @@ function ProjectFormBody({ project }: OwnProps) {
                                         htmlFor={`${formId}-featured`}
                                         className="cursor-pointer text-caption font-medium text-muted-foreground"
                                     >
-                                        홈 노출
+                                        홈에 표시
                                     </label>
                                     <Controller
                                         control={control}
@@ -271,14 +274,14 @@ function ProjectFormBody({ project }: OwnProps) {
                         </div>
                         <TextField
                             beforeLabel="상세 주소"
-                            placeholder="비우면 프로젝트 상세를 가리킨다"
+                            placeholder="비워 두면 프로젝트 상세 페이지로 연결됩니다."
                             {...register('href')}
                             error={errors.href?.message}
                         />
                     </div>
                     <Separator />
                     <fieldset className="flex flex-col gap-1">
-                        <legend className="mb-3 text-lg font-semibold">썸네일</legend>
+                        <legend className="mb-3 text-lg font-semibold">대표 이미지</legend>
                         <ThumbnailField
                             image={image}
                             isUploading={isUploading}
@@ -304,7 +307,7 @@ function ProjectFormBody({ project }: OwnProps) {
                         <h3 id={`${formId}-body`} className="text-lg font-semibold">
                             본문
                             <span className="ml-2 text-caption font-normal text-muted-foreground">
-                                케이스 스터디. 상세 화면에 그대로 나온다
+                                입력한 내용은 프로젝트 상세 페이지에 표시됩니다.
                             </span>
                         </h3>
                         <Controller

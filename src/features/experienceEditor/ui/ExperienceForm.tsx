@@ -195,7 +195,7 @@ function ExperienceFormBody({ experience, projects }: OwnProps) {
                             <h2 className="text-2xl font-bold text-strong">회사</h2>
                             {experience?.updatedAtText ? (
                                 <span className="text-xs text-muted-foreground">
-                                    수정. {experience.updatedAtText}
+                                    마지막 수정 {experience.updatedAtText}
                                 </span>
                             ) : null}
                         </div>

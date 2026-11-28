@@ -108,7 +108,7 @@ export default function ThumbnailField({
                     </>
                 ) : (
                     <p className="flex-1 text-caption text-muted-foreground">
-                        썸네일 파일을 고르거나 여기로 끌어다 놓으세요.
+                        이미지 파일을 선택하거나 이곳에 끌어다 놓으세요.
                         <br />
                         PNG · JPG · WebP (최대 5MB)
                     </p>
@@ -123,13 +123,13 @@ export default function ThumbnailField({
                         className="items-center gap-1.5"
                     >
                         <ImageUp aria-hidden="true" />
-                        {image ? '썸네일 바꾸기' : '썸네일 올리기'}
+                        {image ? '대표 이미지 바꾸기' : '대표 이미지 올리기'}
                     </Button>
                     {image ? (
                         <Button
                             variant="destructive"
                             size="xs"
-                            aria-label="썸네일 지우기"
+                            aria-label="대표 이미지 삭제"
                             disabled={isUploading}
                             onClick={onRemove}
                             className="flex w-6.5 items-center justify-center p-0"

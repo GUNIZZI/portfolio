@@ -39,9 +39,9 @@ export default function Contact() {
 
             <div className="flex min-w-0 flex-[2_1_420px] flex-col gap-5">
                 <p className="text-body leading-relaxed text-foreground">
-                    프로젝트 제안도, 가벼운 인사도 좋아요.
+                    함께 하고 싶은 프로젝트가 있나요?
                     <br />
-                    언제든 편하게 메일 주세요.
+                    가벼운 인사도 좋아요. 편하게 메일 주세요.
                 </p>
                 <Button
                     asChild

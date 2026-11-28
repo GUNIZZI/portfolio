@@ -76,7 +76,7 @@ describe('toFormValue', () => {
 
     it('등록 화면의 본문에는 절 제목 5개가 템플릿으로 들어 있다', () => {
         expect(toFormValue(null).body).toBe(
-            '<h2>개요</h2><p></p><h2>문제</h2><p></p><h2>해결</h2><p></p><h2>결과</h2><p></p><h2>회고</h2><p></p>',
+            '<h2>프로젝트 소개</h2><p></p><h2>해결해야 했던 문제</h2><p></p><h2>해결 과정</h2><p></p><h2>결과</h2><p></p><h2>배운 점</h2><p></p>',
         );
         expect(toFormValue(CONTENT).body).toBe('');
     });

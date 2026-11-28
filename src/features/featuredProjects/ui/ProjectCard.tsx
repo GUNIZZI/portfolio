@@ -37,7 +37,7 @@ export default function ProjectCard({ project }: OwnProps) {
             ) : (
                 <div
                     role="img"
-                    aria-label="썸네일 이미지 자리"
+                    aria-label="대표 이미지 없음"
                     className="flex aspect-[2/1] w-full items-center justify-center bg-linear-135 from-doodle-indigo to-brand text-caption text-brand-foreground"
                 >
                     [썸네일 이미지 교체]

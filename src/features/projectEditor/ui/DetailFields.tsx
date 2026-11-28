@@ -23,7 +23,7 @@ import type { ProjectFormValue } from '../model/projectEditor.types';
 import { createEmptyLink, createEmptyTeamPart, SCOPE_AREAS } from '../model/projectEditor.utils';
 
 /**
- * 맡은 범위에서 「없음」 을 고르는 항목의 값. 폼에는 빈 문자열로 둔다.
+ * 담당 범위에서 「없음」 을 고르는 항목의 값. 폼에는 빈 문자열로 둔다.
  * Select 의 항목은 빈 값을 가질 수 없어 목록 안에서만 이 값을 쓴다
  */
 const NO_SCOPE_CODE = '__none__';
@@ -106,7 +106,7 @@ function useRowFocus(listId: string, rows: readonly unknown[]) {
 interface RowActionsAttributes {
     listId: string;
     index: number;
-    /** 줄의 이름. 버튼의 이름 앞에 붙는다 — `1번째 파트` */
+    /** 줄의 이름. 버튼의 이름 앞에 붙는다 — `1번째 팀 역할` */
     name: string;
     isFirst: boolean;
     isLast: boolean;
@@ -171,7 +171,7 @@ interface OwnProps {
 }
 
 /**
- * 프로젝트의 상세 항목. 팀 · 역할 · 맡은 범위 · 기간 · 기술 · 링크다. 공개 화면의 상세가 메타로 그린다.
+ * 프로젝트의 상세 항목. 팀 · 역할 · 담당 범위 · 기간 · 기술 · 링크다. 공개 화면의 상세가 메타로 그린다.
  * 모두 비워 둘 수 있고, 비운 항목은 상세가 그리지 않는다.(docs/plan/admin/README.md 「등록 · 수정」)
  * 값과 오류 문구는 감싼 폼(FormProvider)에서 읽는다.(ProjectForm.tsx)
  */
@@ -213,19 +213,19 @@ export default function DetailFields({ formId }: OwnProps) {
                 <legend className="mb-3 text-lg font-semibold">
                     팀
                     <span className="ml-2 text-caption font-normal text-muted-foreground">
-                        파트와 인원
+                        역할별 인원
                     </span>
                 </legend>
                 <ol className="flex flex-col gap-2">
                     {team.fields.map((field, index) => {
-                        const name = `${index + 1}번째 파트`;
+                        const name = `${index + 1}번째 팀 역할`;
                         return (
                             // 줄을 옮겨도 입력 중인 내용이 따라가게, 자리가 아니라 줄에 붙은 id 를 쓴다
                             <li key={field.id} className={ROW_CLASS_NAME}>
                                 <TextField
                                     id={toTargetId(teamListId, index, ROW_TARGET.FIRST)}
                                     aria-label={`${name} 이름`}
-                                    afterLabel="파트"
+                                    afterLabel="역할"
                                     placeholder="프론트엔드"
                                     {...register(`team.${index}.part`)}
                                     error={errors.team?.[index]?.part?.message}
@@ -270,7 +270,7 @@ export default function DetailFields({ formId }: OwnProps) {
                         }}
                         className="items-center px-10"
                     >
-                        + 파트 추가
+                        팀 역할 추가
                     </Button>
                 </div>
             </fieldset>
@@ -285,7 +285,7 @@ export default function DetailFields({ formId }: OwnProps) {
                 />
                 <div className="flex flex-col gap-1 md:flex-row md:items-start">
                     <TextField
-                        beforeLabel="시작"
+                        beforeLabel="시작일"
                         placeholder="2025.06"
                         inputMode="decimal"
                         maxLength={7}
@@ -299,7 +299,7 @@ export default function DetailFields({ formId }: OwnProps) {
                         name="period.end"
                         render={({ field, fieldState }) => (
                             <TextField
-                                beforeLabel="끝"
+                                beforeLabel="종료일"
                                 placeholder={isOngoing ? '진행 중' : '2026.01'}
                                 inputMode="decimal"
                                 maxLength={7}
@@ -348,9 +348,9 @@ export default function DetailFields({ formId }: OwnProps) {
 
             <fieldset className="flex flex-col gap-3">
                 <legend className="mb-3 text-lg font-semibold">
-                    맡은 범위
+                    담당 범위
                     <span className="ml-2 text-caption font-normal text-muted-foreground">
-                        손댄 영역만 고른다
+                        직접 맡은 항목을 선택해 주세요.
                     </span>
                 </legend>
                 <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
